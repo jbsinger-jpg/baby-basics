@@ -1,8 +1,10 @@
-import { Box, HStack, Image, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, HStack, Image, Skeleton, SkeletonCircle, SkeletonText, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
 export default function HomePage() {
     const [dummyArray, setDummyArray] = useState([]);
+    const [isDataLoaded, setIsDataLoaded] = useState(false);
+
     useEffect(() => {
         let options = [];
         for (let i = 0; i < 50; i++) {
@@ -34,21 +36,26 @@ export default function HomePage() {
                             {dummyArray.map(option => {
                                 return (
                                     <VStack spacing="3" paddingBottom="10">
-                                        <Image
-                                            src="https://www.istockphoto.com/resources/images/PhotoFTLP/P2%20-%20MAR-%20iStock%20-1398043762.jpg"
-                                            size="sm"
-                                            alt="Alternate Text"
-                                            style={{ width: 50, height: 70, resizeMode: 'cover' }}
-                                        />
-                                        <VStack spacing="-0.5">
-                                            <Text color="white">Title</Text>
-                                            <Text color="white">Price</Text>
-                                            <Text color="white">Baby Age</Text>
-                                        </VStack>
+                                        <Skeleton isLoaded={isDataLoaded} startColor='white' endColor='gray.400'>
+                                            <VStack>
+                                                <Image
+                                                    src="https://www.istockphoto.com/resources/images/PhotoFTLP/P2%20-%20MAR-%20iStock%20-1398043762.jpg"
+                                                    size="sm"
+                                                    alt="Alternate Text"
+                                                    style={{ width: 50, height: 70, resizeMode: 'cover' }}
+                                                />
+                                                <VStack spacing="-0.5">
+                                                    <Text color="white">Title</Text>
+                                                    <Text color="white">Price</Text>
+                                                    <Text color="white">Baby Age</Text>
+                                                </VStack>
+                                            </VStack>
+                                        </Skeleton>
                                     </VStack>
                                 );
                             })}
                         </HStack>
+                        <Button onClick={() => { setIsDataLoaded(!isDataLoaded); }}>trigger skelly</Button>
                     </TabPanel>
                     <TabPanel>
                         <HStack flexWrap={"wrap"} top="20" position="absolute">
@@ -115,6 +122,6 @@ export default function HomePage() {
                     </TabPanel>
                 </TabPanels>
             </Tabs>
-        </Box>
+        </Box >
     );
 }
