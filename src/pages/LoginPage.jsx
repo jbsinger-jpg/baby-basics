@@ -91,36 +91,86 @@ export default function LoginPage() {
             <Card w="40vw" h="60vh" bg={"gray.400"}>
                 <Tabs variant='enclosed' isFitted>
                     <TabList>
-                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>Sign-In</Tab>
-                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.100' }}>Sign-Up</Tab>
+                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                            Sign-In
+                        </Tab>
+                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.100' }}>
+                            Sign-Up
+                        </Tab>
                     </TabList>
                     <TabPanels>
                         <TabPanel>
                             <Box display="flex" flexDir="column" justifyContent={"space-evenly"} alignContent="center" gap="2" position="absolute" top="20" width="100%" paddingRight="8">
                                 <Input placeholder='email' value={email} onChange={(event) => { setEmail(event.target.value); }} />
                                 <HStack>
-                                    <Input type={passwordVisible ? "text" : "password"} placeholder='password' value={password} onChange={(event) => { setPassword(event.target.value); }} />
-                                    <IconButton icon={passwordVisible ? <ViewIcon /> : <ViewOffIcon />} onClick={() => { setPasswordVisible(!passwordVisible); }} variant="unstyled" />
+                                    <Input
+                                        type={passwordVisible ? "text" : "password"}
+                                        placeholder='password'
+                                        value={password}
+                                        onChange={(event) => { setPassword(event.target.value); }}
+                                    />
+                                    <IconButton
+                                        icon={passwordVisible ? <ViewIcon /> : <ViewOffIcon />}
+                                        onClick={() => { setPasswordVisible(!passwordVisible); }}
+                                        variant="unstyled"
+                                    />
                                 </HStack>
                                 <HStack display="flex" justifyContent={"flex-end"}>
-                                    <Button onClick={() => sendPasswordResetEmail(email)}>Forgot Password?</Button>
-                                    <Button onClick={handleSignOut}>Sign out</Button>
+                                    <Button
+                                        onClick={() => sendPasswordResetEmail(email)}
+                                    >
+                                        Forgot Password?
+                                    </Button>
+                                    <Button
+                                        onClick={handleSignOut}>
+                                        Sign out
+                                    </Button>
                                 </HStack>
                             </Box>
                             <Box display="flex" flexDir="column" justifyContent={"space-evenly"} alignContent="center" gap="2" position="absolute" bottom="20" width="100%" paddingRight="8">
-                                <Button onClick={handleSignIn}>Sign-in</Button>
+                                <Button
+                                    onClick={handleSignIn}
+                                >
+                                    Sign-in
+                                </Button>
                             </Box>
                         </TabPanel>
                         <TabPanel>
                             <VStack justifyContent={"flex-start"} position="absolute" top="20" width="100%" paddingRight="8">
-                                <Input placeholder='first name' />
-                                <Input placeholder='last name' />
-                                <Input placeholder='email' value={email} onChange={(event) => { setEmail(event.target.value); }} />
+                                <Input
+                                    placeholder='first name'
+                                />
+                                <Input
+                                    placeholder='last name'
+                                />
+                                <Input
+                                    placeholder='email'
+                                    value={email}
+                                    onChange={(event) => { setEmail(event.target.value); }}
+                                />
                                 <HStack w="100%">
-                                    <Input type={passwordVisible ? "text" : "password"} placeholder='password' value={password} onChange={(event) => { setPassword(event.target.value); }} />
-                                    <IconButton icon={passwordVisible ? <ViewIcon /> : <ViewOffIcon />} onClick={() => { setPasswordVisible(!passwordVisible); }} variant="unstyled" />
-                                    <Input type={confirmPasswordVisible ? "text" : "password"} placeholder='confirm password' value={confirmPassword} onChange={(event) => { setConfirmPassword(event.target.value); }} />
-                                    <IconButton icon={confirmPasswordVisible ? <ViewIcon /> : <ViewOffIcon />} onClick={() => { setConfirmPasswordVisible(!confirmPasswordVisible); }} variant="unstyled" />
+                                    <Input
+                                        type={passwordVisible ? "text" : "password"}
+                                        placeholder='password'
+                                        value={password}
+                                        onChange={(event) => { setPassword(event.target.value); }}
+                                    />
+                                    <IconButton
+                                        icon={passwordVisible ? <ViewIcon /> : <ViewOffIcon />}
+                                        onClick={() => { setPasswordVisible(!passwordVisible); }}
+                                        variant="unstyled"
+                                    />
+                                    <Input
+                                        type={confirmPasswordVisible ? "text" : "password"}
+                                        placeholder='confirm password'
+                                        value={confirmPassword}
+                                        onChange={(event) => { setConfirmPassword(event.target.value); }}
+                                    />
+                                    <IconButton
+                                        icon={confirmPasswordVisible ? <ViewIcon /> : <ViewOffIcon />}
+                                        onClick={() => { setConfirmPasswordVisible(!confirmPasswordVisible); }}
+                                        variant="unstyled"
+                                    />
                                 </HStack>
                             </VStack>
                             <Box display="flex" flexDir="column" justifyContent={"space-evenly"} alignContent="center" gap="2" position="absolute" bottom="20" width="100%" paddingRight="8">
