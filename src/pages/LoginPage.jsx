@@ -1,4 +1,6 @@
-import { Box, Button, Card, HStack, Input, Tab, TabList, TabPanel, TabPanels, Tabs, VStack, useToast } from '@chakra-ui/react';
+import { Box, Button, Card, HStack, Input, Tab, TabList, TabPanel, TabPanels, Tabs, VStack, useToast, IconButton } from '@chakra-ui/react';
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+
 import React, { useState } from 'react';
 import validator from 'validator';
 import { auth } from '../firebaseConfig';
@@ -6,7 +8,9 @@ import { auth } from '../firebaseConfig';
 export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [passwordVisible, setPasswordVisible] = useState(false);
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
     const toast = useToast();
 
     const sendPasswordResetEmail = (email) => {
@@ -94,7 +98,10 @@ export default function LoginPage() {
                         <TabPanel>
                             <Box display="flex" flexDir="column" justifyContent={"space-evenly"} alignContent="center" gap="2" position="absolute" top="20" width="100%" paddingRight="8">
                                 <Input placeholder='email' value={email} onChange={(event) => { setEmail(event.target.value); }} />
-                                <Input placeholder='password' value={password} onChange={(event) => { setPassword(event.target.value); }} />
+                                <HStack>
+                                    <Input type={passwordVisible ? "text" : "password"} placeholder='password' value={password} onChange={(event) => { setPassword(event.target.value); }} />
+                                    <IconButton icon={passwordVisible ? <ViewIcon /> : <ViewOffIcon />} onClick={() => { setPasswordVisible(!passwordVisible); }} variant="unstyled" />
+                                </HStack>
                                 <HStack display="flex" justifyContent={"flex-end"}>
                                     <Button onClick={() => sendPasswordResetEmail(email)}>Forgot Password?</Button>
                                     <Button onClick={handleSignOut}>Sign out</Button>
@@ -110,8 +117,10 @@ export default function LoginPage() {
                                 <Input placeholder='last name' />
                                 <Input placeholder='email' value={email} onChange={(event) => { setEmail(event.target.value); }} />
                                 <HStack w="100%">
-                                    <Input placeholder='password' value={password} onChange={(event) => { setPassword(event.target.value); }} />
-                                    <Input placeholder='confirm password' value={confirmPassword} onChange={(event) => { setConfirmPassword(event.target.value); }} />
+                                    <Input type={passwordVisible ? "text" : "password"} placeholder='password' value={password} onChange={(event) => { setPassword(event.target.value); }} />
+                                    <IconButton icon={passwordVisible ? <ViewIcon /> : <ViewOffIcon />} onClick={() => { setPasswordVisible(!passwordVisible); }} variant="unstyled" />
+                                    <Input type={confirmPasswordVisible ? "text" : "password"} placeholder='confirm password' value={confirmPassword} onChange={(event) => { setConfirmPassword(event.target.value); }} />
+                                    <IconButton icon={confirmPasswordVisible ? <ViewIcon /> : <ViewOffIcon />} onClick={() => { setConfirmPasswordVisible(!confirmPasswordVisible); }} variant="unstyled" />
                                 </HStack>
                             </VStack>
                             <Box display="flex" flexDir="column" justifyContent={"space-evenly"} alignContent="center" gap="2" position="absolute" bottom="20" width="100%" paddingRight="8">
