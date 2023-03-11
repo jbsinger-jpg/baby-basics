@@ -1,8 +1,11 @@
 import { Box, Button, Card, HStack, Input, Tab, TabList, TabPanel, TabPanels, Tabs, VStack, useToast, IconButton } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-
 import React, { useState } from 'react';
 import validator from 'validator';
+import { useNavigate } from 'react-router-dom';
+
+
+// firebase
 import { auth } from '../firebaseConfig';
 import { GoogleAuthProvider } from "firebase/auth";
 
@@ -13,6 +16,7 @@ export default function LoginPage() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
     const toast = useToast();
+    const navigate = useNavigate();
 
     const sendPasswordResetEmail = (email) => {
         if (validator.isEmail(email)) {
@@ -55,6 +59,13 @@ export default function LoginPage() {
             .then((userCredential) => {
                 // Handle successful sign-in
                 console.log("User Credentials: ", userCredential);
+                toast({
+                    title: 'Successful Sign In!',
+                    status: 'success',
+                    duration: 9000,
+                    isClosable: true,
+                });
+                navigate("/home");
             })
             .catch((error) => {
                 // Handle sign-in error
@@ -67,6 +78,7 @@ export default function LoginPage() {
 
         auth.signInWithPopup(provider).then((result) => {
             console.log(result);
+            navigate("/home");
             const token = result.credential.accessToken;
 
             toast({
@@ -95,6 +107,7 @@ export default function LoginPage() {
                 .then((userCredential) => {
                     // Handle successful sign-up
                     console.log("User Credentials: ", userCredential);
+                    navigate("/home");
                 })
                 .catch((error) => {
                     // Handle sign-up error
