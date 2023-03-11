@@ -4,6 +4,7 @@ import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import React, { useState } from 'react';
 import validator from 'validator';
 import { auth } from '../firebaseConfig';
+import { GoogleAuthProvider } from "firebase/auth";
 
 export default function LoginPage() {
     const [email, setEmail] = useState("");
@@ -61,23 +62,65 @@ export default function LoginPage() {
             });
     };
 
+    const handleSignInGoogle = () => {
+        const provider = new GoogleAuthProvider();
+
+        auth.signInWithPopup(provider).then((result) => {
+            console.log(result);
+            const token = result.credential.accessToken;
+
+            toast({
+                title: 'Successful Sign In',
+                description: "We were able to sign in to the account token \n" + token,
+                status: 'success',
+                duration: 9000,
+                isClosable: true,
+            });
+
+        }).catch((error) => {
+            toast({
+                title: 'Unable to sign in',
+                description: "We were unable sign in to the account " + email + " provided error code " + error,
+                status: 'error',
+                duration: 9000,
+                isClosable: true,
+            });
+        });
+    };
+
     const handleSignUp = (event) => {
         event.preventDefault();
-        auth.createUserWithEmailAndPassword(email, password)
-            .then((userCredential) => {
-                // Handle successful sign-up
-                console.log("User Credentials: ", userCredential);
-            })
-            .catch((error) => {
-                // Handle sign-up error
-                console.error(error);
+        if (password === confirmPassword) {
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Handle successful sign-up
+                    console.log("User Credentials: ", userCredential);
+                })
+                .catch((error) => {
+                    // Handle sign-up error
+                    console.error(error);
+                });
+        }
+        else {
+            toast({
+                title: 'Passwords not the same',
+                status: 'error',
+                duration: 9000,
+                isClosable: true,
             });
+        }
     };
 
     const handleSignOut = () => {
         auth.signOut()
             .then(() => {
                 // Handle successful sign-out
+                toast({
+                    title: 'Signed Out',
+                    status: 'success',
+                    duration: 9000,
+                    isClosable: true,
+                });
                 console.log("Signed out!");
             })
             .catch((error) => {
@@ -117,6 +160,11 @@ export default function LoginPage() {
                                 </HStack>
                                 <HStack display="flex" justifyContent={"flex-end"}>
                                     <Button
+                                        onClick={handleSignIn}
+                                    >
+                                        Sign-in
+                                    </Button>
+                                    <Button
                                         onClick={() => sendPasswordResetEmail(email)}
                                     >
                                         Forgot Password?
@@ -128,11 +176,20 @@ export default function LoginPage() {
                                 </HStack>
                             </Box>
                             <Box display="flex" flexDir="column" justifyContent={"space-evenly"} alignContent="center" gap="2" position="absolute" bottom="20" width="100%" paddingRight="8">
-                                <Button
-                                    onClick={handleSignIn}
-                                >
-                                    Sign-in
-                                </Button>
+                                <VStack display="flex" justifyContent={"center"} spacing={"6"}>
+                                    <IconButton
+                                        border="2px"
+                                        variant="ghost"
+                                        width="20"
+                                        height="20"
+                                        icon={
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="300px" height="120px" viewBox="0 0 220.9 200.3">
+                                                <path d="M0,105C0,47.103,47.103,0,105,0c23.383,0,45.515,7.523,64.004,21.756l-24.4,31.696C133.172,44.652,119.477,40,105,40  c-35.841,0-65,29.159-65,65s29.159,65,65,65c28.867,0,53.398-18.913,61.852-45H105V85h105v20c0,57.897-47.103,105-105,105  S0,162.897,0,105z"></path>
+                                            </svg>
+                                        }
+                                        onClick={handleSignInGoogle}
+                                    />
+                                </VStack>
                             </Box>
                         </TabPanel>
                         <TabPanel>
