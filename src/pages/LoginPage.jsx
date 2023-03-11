@@ -44,6 +44,43 @@ export default function LoginPage() {
         }
     };
 
+    const handleSignIn = (event) => {
+        event.preventDefault();
+        auth.signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                // Handle successful sign-in
+                console.log("User Credentials: ", userCredential);
+            })
+            .catch((error) => {
+                // Handle sign-in error
+                console.error(error);
+            });
+    };
+
+    const handleSignUp = (event) => {
+        event.preventDefault();
+        auth.createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                // Handle successful sign-up
+                console.log("User Credentials: ", userCredential);
+            })
+            .catch((error) => {
+                // Handle sign-up error
+                console.error(error);
+            });
+    };
+
+    const handleSignOut = () => {
+        auth.signOut()
+            .then(() => {
+                // Handle successful sign-out
+                console.log("Signed out!");
+            })
+            .catch((error) => {
+                // Handle sign-out error
+                console.error(error);
+            });
+    };
 
     return (
         <Box w="100vw" h="100vh" display="flex" alignItems="center" justifyContent="center" bg="blackAlpha.900">
@@ -58,12 +95,13 @@ export default function LoginPage() {
                             <Box display="flex" flexDir="column" justifyContent={"space-evenly"} alignContent="center" gap="2" position="absolute" top="20" width="100%" paddingRight="8">
                                 <Input placeholder='email' value={email} onChange={(event) => { setEmail(event.target.value); }} />
                                 <Input placeholder='password' value={password} onChange={(event) => { setPassword(event.target.value); }} />
-                                <Box display="flex" justifyContent={"flex-end"}>
-                                    <Button onClick={() => sendPasswordResetEmail(email)}>Forgot Password? </Button>
-                                </Box>
+                                <HStack display="flex" justifyContent={"flex-end"}>
+                                    <Button onClick={() => sendPasswordResetEmail(email)}>Forgot Password?</Button>
+                                    <Button onClick={handleSignOut}>Sign out</Button>
+                                </HStack>
                             </Box>
                             <Box display="flex" flexDir="column" justifyContent={"space-evenly"} alignContent="center" gap="2" position="absolute" bottom="20" width="100%" paddingRight="8">
-                                <Button>Sign-in</Button>
+                                <Button onClick={handleSignIn}>Sign-in</Button>
                             </Box>
                         </TabPanel>
                         <TabPanel>
@@ -77,7 +115,7 @@ export default function LoginPage() {
                                 </HStack>
                             </VStack>
                             <Box display="flex" flexDir="column" justifyContent={"space-evenly"} alignContent="center" gap="2" position="absolute" bottom="20" width="100%" paddingRight="8">
-                                <Button>Sign-up</Button>
+                                <Button onClick={handleSignUp}>Sign-up</Button>
                             </Box>
                         </TabPanel>
                     </TabPanels>
