@@ -1,8 +1,8 @@
 import { Box, Button, Card, HStack, Input, Tab, TabList, TabPanel, TabPanels, Tabs, VStack, useToast, IconButton } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-
 import React, { useState } from 'react';
 import validator from 'validator';
+
 import { auth } from '../firebaseConfig';
 
 export default function LoginPage() {
@@ -66,7 +66,7 @@ export default function LoginPage() {
         auth.createUserWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 // Handle successful sign-up
-                console.log("User Credentials: ", userCredential);
+                // console.log("User Credentials: ", userCredential);
             })
             .catch((error) => {
                 // Handle sign-up error
