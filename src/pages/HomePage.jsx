@@ -1,4 +1,4 @@
-import { Button, HStack, Image, Skeleton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack } from '@chakra-ui/react';
+import { Box, Button, HStack, Image, Skeleton, SkeletonCircle, SkeletonText, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
 export default function HomePage() {
@@ -34,22 +34,25 @@ export default function HomePage() {
                     <HStack flexWrap={"wrap"} top="20" position="absolute">
                         {dummyArray.map(option => {
                             return (
-                                <VStack spacing="3" paddingBottom="10">
-                                    <Skeleton isLoaded={isDataLoaded} startColor='white' endColor='gray.400'>
-                                        <VStack>
-                                            <Image
-                                                src="https://www.istockphoto.com/resources/images/PhotoFTLP/P2%20-%20MAR-%20iStock%20-1398043762.jpg"
-                                                size="sm"
-                                                alt="Alternate Text"
-                                                style={{ width: 150, height: 270, resizeMode: 'cover' }}
-                                            />
-                                            <VStack spacing="-0.5">
-                                                <Text>Title</Text>
-                                                <Text>Price</Text>
-                                                <Text>Baby Age</Text>
+                                <VStack spacing="3" padding="6">
+                                    <SkeletonCircle size='10' isLoaded={isDataLoaded} />
+                                    <SkeletonText isLoaded={isDataLoaded}>
+                                        <Box onClick={() => console.log("Clicked! " + option)}>
+                                            <VStack>
+                                                <Image
+                                                    src="https://www.istockphoto.com/resources/images/PhotoFTLP/P2%20-%20MAR-%20iStock%20-1398043762.jpg"
+                                                    size="sm"
+                                                    alt="Alternate Text"
+                                                    style={{ width: 150, height: 270, resizeMode: 'cover' }}
+                                                />
+                                                <VStack spacing="-0.5">
+                                                    <Text>Title</Text>
+                                                    <Text>Price</Text>
+                                                    <Text>Baby Age</Text>
+                                                </VStack>
                                             </VStack>
-                                        </VStack>
-                                    </Skeleton>
+                                        </Box>
+                                    </SkeletonText>
                                 </VStack>
                             );
                         })}

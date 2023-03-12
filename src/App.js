@@ -7,9 +7,9 @@ function App() {
   return (
     <Routes>
       {/* TODO: Change back when page is done being designed */}
-      <Route index element={<LoginPage />} />
-      <Route path="home" element={<HomePage />} />
-      {/* <Route index element={<HomePage />} /> */}
+      {/* <Route index element={<LoginPage />} />
+      <Route path="home" element={<HomePage />} /> */}
+      <Route index element={<HomePage />} />
     </Routes>
   );
 }
