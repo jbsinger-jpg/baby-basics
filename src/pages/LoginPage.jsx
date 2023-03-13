@@ -1,4 +1,4 @@
-import { Box, Button, Card, HStack, Input, Tab, TabList, TabPanel, TabPanels, Tabs, VStack, useToast, IconButton, useColorMode, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Card, HStack, Input, Tab, TabList, TabPanel, TabPanels, Tabs, VStack, useToast, IconButton, useColorModeValue } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import React, { useState } from 'react';
 import validator from 'validator';
@@ -17,16 +17,6 @@ export default function LoginPage() {
     const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
     const toast = useToast();
     const navigate = useNavigate();
-
-    function ColorModeToggleButton() {
-        const { toggleColorMode } = useColorMode();
-
-        return (
-            <Button onClick={toggleColorMode}>
-                Toggle {useColorModeValue("Dark", "Light")} Mode
-            </Button>
-        );
-    }
 
     const sendPasswordResetEmail = (email) => {
         if (validator.isEmail(email)) {
@@ -153,12 +143,8 @@ export default function LoginPage() {
     };
 
     return (
-        <Box w="100vw" h="100vh" display="flex" alignItems="center" justifyContent="center">
-            <Box position="absolute" top="10" w="100%" paddingLeft="10">
-                <ColorModeToggleButton />
-
-            </Box>
-            <Card w="40vw" h="60vh" bg={"gray.400"}>
+        <Box w="100vw" h="100vh" display="flex" alignItems="center" justifyContent="center" bg={useColorModeValue("Dark", "Light") === "Dark" ? "gray.300" : null}>
+            <Card w="40vw" h="60vh" bg={useColorModeValue("Dark", "Light") === "Dark" ? "gray.400" : null}>
                 <Tabs variant='enclosed' isFitted>
                     <TabList>
                         <Tab _selected={{ bg: 'blackAlpha.400' }}>
