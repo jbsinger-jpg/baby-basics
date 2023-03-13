@@ -1,4 +1,4 @@
-import { ChatIcon, MoonIcon, SunIcon, UnlockIcon } from '@chakra-ui/icons';
+import { CalendarIcon, ChatIcon, MoonIcon, SunIcon, UnlockIcon } from '@chakra-ui/icons';
 import { Avatar, AvatarBadge, AvatarGroup, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, HStack, IconButton, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, SkeletonCircle, SkeletonText, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
@@ -14,6 +14,10 @@ export default function HomePage() {
 
     const handleLogin = () => {
         navigate("/login");
+    };
+
+    const handleForumPage = () => {
+        navigate("/forum");
     };
 
     const ColorModeToggleButton = () => {
@@ -39,113 +43,94 @@ export default function HomePage() {
 
     return (
         <>
-            {currentUser ?
-                <Drawer
-                    isOpen={isOpen}
-                    placement='left'
-                    onClose={onClose}
-                >
-                    <DrawerOverlay />
-                    <DrawerContent>
-                        <DrawerCloseButton />
-                        <DrawerHeader>Message Other Parents!</DrawerHeader>
-                        <DrawerBody>
-                            <Tabs align='start' variant='enclosed' w="100%" h="100%" isFitted>
-                                <TabList>
-                                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                                        DM
-                                    </Tab>
-                                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                                        Forums
-                                    </Tab>
-                                </TabList>
-                                <TabPanels>
-                                    <TabPanel>
-                                        <VStack w="100%" alignItems="start" spacing="5">
-                                            <HStack>
-                                                <Avatar name='Jan Levinson' bg="orange">
-                                                    <AvatarBadge boxSize='1.25em' bg='green.500' />
-                                                </Avatar>
-                                                <VStack spacing="-0.5" alignItems="start">
-                                                    <Text>Jan Levinson</Text>
-                                                    <Text>Online</Text>
-                                                </VStack>
-                                            </HStack>
-                                            <HStack>
-                                                <Avatar name='Michael Scott' bg="orange">
-                                                    <AvatarBadge boxSize='1.25em' bg='green.500' />
-                                                </Avatar>
-                                                <VStack spacing="-0.5" alignItems="start">
-                                                    <Text>Michael Scott</Text>
-                                                    <Text>Online</Text>
-                                                </VStack>
-                                            </HStack>
-                                            <HStack>
-                                                <Avatar name='Holly Flax' bg="orange">
-                                                    <AvatarBadge boxSize='1.25em' bg='red.500' />
-                                                </Avatar>
-                                                <VStack spacing="-0.5" alignItems="start">
-                                                    <Text>Holly Flax</Text>
-                                                    <Text>Offline</Text>
-                                                </VStack>
-                                            </HStack>
-                                        </VStack>
-                                    </TabPanel>
-                                    <TabPanel>
-                                        <VStack w="100%" alignItems="start" spacing="5">
-                                            <HStack>
-                                                <AvatarGroup size='md' max={3}>
-                                                    <Avatar name='Ryan Florence' src='https://bit.ly/ryan-florence' />
-                                                    <Avatar name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
-                                                    <Avatar name='Kent Dodds' src='https://bit.ly/kent-c-dodds' />
-                                                    <Avatar name='Prosper Otemuyiwa' src='https://bit.ly/prosper-baba' />
-                                                    <Avatar name='Christian Nwamba' src='https://bit.ly/code-beast' />
-                                                </AvatarGroup>
-                                                <Text>Saturday's for the Boys</Text>
-                                            </HStack>
-                                            <HStack>
-                                                <AvatarGroup size='md' max={3}>
-                                                    <Avatar name='Ryan Florence' src='https://bit.ly/ryan-florence' />
-                                                    <Avatar name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
-                                                    <Avatar name='Kent Dodds' src='https://bit.ly/kent-c-dodds' />
-                                                    <Avatar name='Prosper Otemuyiwa' src='https://bit.ly/prosper-baba' />
-                                                    <Avatar name='Christian Nwamba' src='https://bit.ly/code-beast' />
-                                                </AvatarGroup>
-                                                <Text>Cool peeps</Text>
-                                            </HStack>
-                                        </VStack>
-                                    </TabPanel>
-                                </TabPanels>
-                            </Tabs>
-                        </DrawerBody>
-                        <DrawerFooter>
-                            <Button variant='outline' mr={3} onClick={onClose}>
-                                Cancel
-                            </Button>
-                            <Button>
-                                Message
-                            </Button>
-                        </DrawerFooter>
-                    </DrawerContent>
-                </Drawer>
-                :
-                <Modal isOpen={isOpen} onClose={onClose}>
-                    <ModalOverlay />
-                    <ModalContent>
-                        <ModalHeader>Login Required</ModalHeader>
-                        <ModalCloseButton />
-                        <ModalBody>
-                            <div>Please Login to Chat with Others</div>
-                        </ModalBody>
-                        <ModalFooter>
-                            <Button colorScheme='blue' mr={3} onClick={onClose}>
-                                Close
-                            </Button>
-                            <Button onClick={() => navigate("/login")} variant='ghost'>Login</Button>
-                        </ModalFooter>
-                    </ModalContent>
-                </Modal>
-            }
+            <Drawer
+                isOpen={isOpen}
+                placement='left'
+                onClose={onClose}
+            >
+                <DrawerOverlay />
+                <DrawerContent>
+                    <DrawerCloseButton />
+                    <DrawerHeader>Message Other Parents!</DrawerHeader>
+                    <DrawerBody>
+                        <Tabs align='start' variant='enclosed' w="100%" h="100%" isFitted>
+                            <TabList>
+                                <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                                    DM
+                                </Tab>
+                                <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                                    Forums
+                                </Tab>
+                            </TabList>
+                            <TabPanels>
+                                <TabPanel>
+                                    <VStack w="100%" alignItems="start" spacing="5">
+                                        <HStack>
+                                            <Avatar name='Jan Levinson' bg="orange">
+                                                <AvatarBadge boxSize='1.25em' bg='green.500' />
+                                            </Avatar>
+                                            <VStack spacing="-0.5" alignItems="start">
+                                                <Text>Jan Levinson</Text>
+                                                <Text>Online</Text>
+                                            </VStack>
+                                        </HStack>
+                                        <HStack>
+                                            <Avatar name='Michael Scott' bg="orange">
+                                                <AvatarBadge boxSize='1.25em' bg='green.500' />
+                                            </Avatar>
+                                            <VStack spacing="-0.5" alignItems="start">
+                                                <Text>Michael Scott</Text>
+                                                <Text>Online</Text>
+                                            </VStack>
+                                        </HStack>
+                                        <HStack>
+                                            <Avatar name='Holly Flax' bg="orange">
+                                                <AvatarBadge boxSize='1.25em' bg='red.500' />
+                                            </Avatar>
+                                            <VStack spacing="-0.5" alignItems="start">
+                                                <Text>Holly Flax</Text>
+                                                <Text>Offline</Text>
+                                            </VStack>
+                                        </HStack>
+                                    </VStack>
+                                </TabPanel>
+                                <TabPanel>
+                                    <VStack w="100%" alignItems="start" spacing="5">
+                                        <HStack>
+                                            <AvatarGroup size='md' max={3}>
+                                                <Avatar name='Ryan Florence' src='https://bit.ly/ryan-florence' />
+                                                <Avatar name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
+                                                <Avatar name='Kent Dodds' src='https://bit.ly/kent-c-dodds' />
+                                                <Avatar name='Prosper Otemuyiwa' src='https://bit.ly/prosper-baba' />
+                                                <Avatar name='Christian Nwamba' src='https://bit.ly/code-beast' />
+                                            </AvatarGroup>
+                                            <Text>Saturday's for the Boys</Text>
+                                        </HStack>
+                                        <HStack>
+                                            <AvatarGroup size='md' max={3}>
+                                                <Avatar name='Ryan Florence' src='https://bit.ly/ryan-florence' />
+                                                <Avatar name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
+                                                <Avatar name='Kent Dodds' src='https://bit.ly/kent-c-dodds' />
+                                                <Avatar name='Prosper Otemuyiwa' src='https://bit.ly/prosper-baba' />
+                                                <Avatar name='Christian Nwamba' src='https://bit.ly/code-beast' />
+                                            </AvatarGroup>
+                                            <Text>Cool peeps</Text>
+                                        </HStack>
+                                    </VStack>
+                                </TabPanel>
+                            </TabPanels>
+                        </Tabs>
+                    </DrawerBody>
+                    <DrawerFooter>
+                        <Button variant='outline' mr={3} onClick={onClose}>
+                            Cancel
+                        </Button>
+                        <Button>
+                            Message
+                        </Button>
+                    </DrawerFooter>
+                </DrawerContent>
+            </Drawer>
             <Tabs align='start' variant='enclosed' w="90vw" h="100vh">
                 <TabList display="flex" justifyContent="space-between" w="99vw">
                     <HStack spacing="-1">
@@ -167,9 +152,18 @@ export default function HomePage() {
                         <Tooltip label="Log in">
                             <IconButton icon={<UnlockIcon />} onClick={handleLogin} />
                         </Tooltip>
-                        <Tooltip label="Chat with peeps">
-                            <IconButton icon={<ChatIcon />} onClick={onOpen} />
-                        </Tooltip>
+                        {currentUser ?
+                            <>
+                                <Tooltip label="Chat with peeps">
+                                    <IconButton icon={<ChatIcon />} onClick={onOpen} />
+                                </Tooltip>
+                                <Tooltip label="View forums">
+                                    <IconButton icon={<CalendarIcon />} onClick={handleForumPage} />
+                                </Tooltip>
+                            </>
+                            :
+                            null
+                        }
                         <ColorModeToggleButton />
                     </HStack>
                 </TabList>
