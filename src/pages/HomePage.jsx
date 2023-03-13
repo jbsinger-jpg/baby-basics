@@ -1,5 +1,5 @@
 import { ChatIcon, MoonIcon, SunIcon, UnlockIcon } from '@chakra-ui/icons';
-import { Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, HStack, IconButton, Image, Input, SkeletonCircle, SkeletonText, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
+import { Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, HStack, IconButton, Image, SkeletonCircle, SkeletonText, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
@@ -41,7 +41,6 @@ export default function HomePage() {
                 <DrawerContent>
                     <DrawerCloseButton />
                     <DrawerHeader>Message Other Parents!</DrawerHeader>
-
                     <DrawerBody>
                         <Tabs align='start' variant='enclosed' w="100%" h="100%" isFitted>
                             <TabList >
@@ -64,8 +63,8 @@ export default function HomePage() {
                     </DrawerFooter>
                 </DrawerContent>
             </Drawer>
-            <Tabs align='start' variant='enclosed' w="100vw" h="100vh">
-                <TabList display="flex" justifyContent="space-between" paddingRight="10">
+            <Tabs align='start' variant='enclosed' w="90vw" h="100vh">
+                <TabList display="flex" justifyContent="space-between" w="99vw">
                     <HStack spacing="-1">
                         <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
                             Diapers

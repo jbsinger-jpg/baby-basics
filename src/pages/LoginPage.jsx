@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import validator from 'validator';
 import { useNavigate } from 'react-router-dom';
 
-
 // firebase
 import { auth } from '../firebaseConfig';
 import { GoogleAuthProvider } from "firebase/auth";
