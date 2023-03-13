@@ -1,5 +1,5 @@
 import { ChatIcon, MoonIcon, SunIcon, UnlockIcon } from '@chakra-ui/icons';
-import { Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, HStack, IconButton, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, SkeletonCircle, SkeletonText, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
+import { Avatar, AvatarBadge, AvatarGroup, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, HStack, IconButton, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, SkeletonCircle, SkeletonText, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
@@ -13,15 +13,6 @@ export default function HomePage() {
     const navigate = useNavigate();
 
     const handleLogin = () => {
-        // // UNCOMMENT CODE TO VERIFY USER
-        // const currentUser = auth.currentUser;
-
-        // if (currentUser) {
-        //     console.log("Current user:", currentUser);
-        // } else {
-        //     console.log("No user is currently logged in.");
-        // }
-
         navigate("/login");
     };
 
@@ -60,7 +51,7 @@ export default function HomePage() {
                         <DrawerHeader>Message Other Parents!</DrawerHeader>
                         <DrawerBody>
                             <Tabs align='start' variant='enclosed' w="100%" h="100%" isFitted>
-                                <TabList >
+                                <TabList>
                                     <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
                                         DM
                                     </Tab>
@@ -68,6 +59,63 @@ export default function HomePage() {
                                         Forums
                                     </Tab>
                                 </TabList>
+                                <TabPanels>
+                                    <TabPanel>
+                                        <VStack w="100%" alignItems="start" spacing="5">
+                                            <HStack>
+                                                <Avatar name='Jan Levinson' bg="orange">
+                                                    <AvatarBadge boxSize='1.25em' bg='green.500' />
+                                                </Avatar>
+                                                <VStack spacing="-0.5" alignItems="start">
+                                                    <Text>Jan Levinson</Text>
+                                                    <Text>Online</Text>
+                                                </VStack>
+                                            </HStack>
+                                            <HStack>
+                                                <Avatar name='Michael Scott' bg="orange">
+                                                    <AvatarBadge boxSize='1.25em' bg='green.500' />
+                                                </Avatar>
+                                                <VStack spacing="-0.5" alignItems="start">
+                                                    <Text>Michael Scott</Text>
+                                                    <Text>Online</Text>
+                                                </VStack>
+                                            </HStack>
+                                            <HStack>
+                                                <Avatar name='Holly Flax' bg="orange">
+                                                    <AvatarBadge boxSize='1.25em' bg='red.500' />
+                                                </Avatar>
+                                                <VStack spacing="-0.5" alignItems="start">
+                                                    <Text>Holly Flax</Text>
+                                                    <Text>Offline</Text>
+                                                </VStack>
+                                            </HStack>
+                                        </VStack>
+                                    </TabPanel>
+                                    <TabPanel>
+                                        <VStack w="100%" alignItems="start" spacing="5">
+                                            <HStack>
+                                                <AvatarGroup size='md' max={3}>
+                                                    <Avatar name='Ryan Florence' src='https://bit.ly/ryan-florence' />
+                                                    <Avatar name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
+                                                    <Avatar name='Kent Dodds' src='https://bit.ly/kent-c-dodds' />
+                                                    <Avatar name='Prosper Otemuyiwa' src='https://bit.ly/prosper-baba' />
+                                                    <Avatar name='Christian Nwamba' src='https://bit.ly/code-beast' />
+                                                </AvatarGroup>
+                                                <Text>Saturday's for the Boys</Text>
+                                            </HStack>
+                                            <HStack>
+                                                <AvatarGroup size='md' max={3}>
+                                                    <Avatar name='Ryan Florence' src='https://bit.ly/ryan-florence' />
+                                                    <Avatar name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
+                                                    <Avatar name='Kent Dodds' src='https://bit.ly/kent-c-dodds' />
+                                                    <Avatar name='Prosper Otemuyiwa' src='https://bit.ly/prosper-baba' />
+                                                    <Avatar name='Christian Nwamba' src='https://bit.ly/code-beast' />
+                                                </AvatarGroup>
+                                                <Text>Cool peeps</Text>
+                                            </HStack>
+                                        </VStack>
+                                    </TabPanel>
+                                </TabPanels>
                             </Tabs>
                         </DrawerBody>
                         <DrawerFooter>
@@ -89,7 +137,6 @@ export default function HomePage() {
                         <ModalBody>
                             <div>Please Login to Chat with Others</div>
                         </ModalBody>
-
                         <ModalFooter>
                             <Button colorScheme='blue' mr={3} onClick={onClose}>
                                 Close
