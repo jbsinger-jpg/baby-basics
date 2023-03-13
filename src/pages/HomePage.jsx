@@ -1,14 +1,29 @@
 import { ChatIcon, MoonIcon, SunIcon, UnlockIcon } from '@chakra-ui/icons';
-import { Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, HStack, IconButton, Image, SkeletonCircle, SkeletonText, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
+import { Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, HStack, IconButton, Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, SkeletonCircle, SkeletonText, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
+import { auth } from '../firebaseConfig';
 
 export default function HomePage() {
     const [dummyArray, setDummyArray] = useState([]);
     const [isDataLoaded, setIsDataLoaded] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const currentUser = auth.currentUser;
     const navigate = useNavigate();
+
+    const handleLogin = () => {
+        // // UNCOMMENT CODE TO VERIFY USER
+        // const currentUser = auth.currentUser;
+
+        // if (currentUser) {
+        //     console.log("Current user:", currentUser);
+        // } else {
+        //     console.log("No user is currently logged in.");
+        // }
+
+        navigate("/login");
+    };
 
     const ColorModeToggleButton = () => {
         const { toggleColorMode } = useColorMode();
@@ -24,6 +39,7 @@ export default function HomePage() {
 
     useEffect(() => {
         let options = [];
+
         for (let i = 0; i < 50; i++) {
             options.push(i);
         }
@@ -32,37 +48,57 @@ export default function HomePage() {
 
     return (
         <>
-            <Drawer
-                isOpen={isOpen}
-                placement='left'
-                onClose={onClose}
-            >
-                <DrawerOverlay />
-                <DrawerContent>
-                    <DrawerCloseButton />
-                    <DrawerHeader>Message Other Parents!</DrawerHeader>
-                    <DrawerBody>
-                        <Tabs align='start' variant='enclosed' w="100%" h="100%" isFitted>
-                            <TabList >
-                                <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                                    DM
-                                </Tab>
-                                <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                                    Forums
-                                </Tab>
-                            </TabList>
-                        </Tabs>
-                    </DrawerBody>
-                    <DrawerFooter>
-                        <Button variant='outline' mr={3} onClick={onClose}>
-                            Cancel
-                        </Button>
-                        <Button>
-                            Message
-                        </Button>
-                    </DrawerFooter>
-                </DrawerContent>
-            </Drawer>
+            {currentUser ?
+                <Drawer
+                    isOpen={isOpen}
+                    placement='left'
+                    onClose={onClose}
+                >
+                    <DrawerOverlay />
+                    <DrawerContent>
+                        <DrawerCloseButton />
+                        <DrawerHeader>Message Other Parents!</DrawerHeader>
+                        <DrawerBody>
+                            <Tabs align='start' variant='enclosed' w="100%" h="100%" isFitted>
+                                <TabList >
+                                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                                        DM
+                                    </Tab>
+                                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                                        Forums
+                                    </Tab>
+                                </TabList>
+                            </Tabs>
+                        </DrawerBody>
+                        <DrawerFooter>
+                            <Button variant='outline' mr={3} onClick={onClose}>
+                                Cancel
+                            </Button>
+                            <Button>
+                                Message
+                            </Button>
+                        </DrawerFooter>
+                    </DrawerContent>
+                </Drawer>
+                :
+                <Modal isOpen={isOpen} onClose={onClose}>
+                    <ModalOverlay />
+                    <ModalContent>
+                        <ModalHeader>Login Required</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody>
+                            <div>Please Login to Chat with Others</div>
+                        </ModalBody>
+
+                        <ModalFooter>
+                            <Button colorScheme='blue' mr={3} onClick={onClose}>
+                                Close
+                            </Button>
+                            <Button onClick={() => navigate("/login")} variant='ghost'>Login</Button>
+                        </ModalFooter>
+                    </ModalContent>
+                </Modal>
+            }
             <Tabs align='start' variant='enclosed' w="90vw" h="100vh">
                 <TabList display="flex" justifyContent="space-between" w="99vw">
                     <HStack spacing="-1">
@@ -82,7 +118,7 @@ export default function HomePage() {
                     <HStack>
                         <Button onClick={() => { setIsDataLoaded(!isDataLoaded); }}>trigger skelly</Button>
                         <Tooltip label="Log in">
-                            <IconButton icon={<UnlockIcon />} onClick={() => { navigate("/login"); }} />
+                            <IconButton icon={<UnlockIcon />} onClick={handleLogin} />
                         </Tooltip>
                         <Tooltip label="Chat with peeps">
                             <IconButton icon={<ChatIcon />} onClick={onOpen} />

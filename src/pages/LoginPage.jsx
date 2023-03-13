@@ -64,7 +64,7 @@ export default function LoginPage() {
                     duration: 9000,
                     isClosable: true,
                 });
-                navigate("/home");
+                navigate("/");
             })
             .catch((error) => {
                 // Handle sign-in error
@@ -77,7 +77,7 @@ export default function LoginPage() {
 
         auth.signInWithPopup(provider).then((result) => {
             console.log(result);
-            navigate("/home");
+            navigate("/");
             const token = result.credential.accessToken;
 
             toast({
@@ -106,7 +106,7 @@ export default function LoginPage() {
                 .then((userCredential) => {
                     // Handle successful sign-up
                     console.log("User Credentials: ", userCredential);
-                    navigate("/home");
+                    navigate("/");
                 })
                 .catch((error) => {
                     // Handle sign-up error
