@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
-import { auth, firestore, serverTimestamp, db } from '../firebaseConfig';
+import { auth, firestore, serverTimestamp } from '../firebaseConfig';
 
 function ForumPage() {
     const [text, setText] = useState('');
