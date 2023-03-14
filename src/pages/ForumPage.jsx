@@ -1,25 +1,68 @@
-import React, { useState, useRef } from 'react';
+import { Select } from '@chakra-ui/react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
-import { auth, firestore, serverTimestamp } from '../firebaseConfig';
+import { auth, firestore, serverTimestamp, db } from '../firebaseConfig';
 
 function ForumPage() {
     const [text, setText] = useState('');
+    const [selectedUser, setSelectedUser] = useState("");
     const scrollRef = useRef();
+    const [messages, setMessages] = useState(null);
 
-    const messagesRef = firestore.collection('messages');
-    const query = messagesRef.orderBy('createdAt').limit(25);
-    const [messages] = useCollectionData(query, { idField: 'id' });
+
+    useEffect(() => {
+        let options = [];
+
+        firestore.collection('messages')
+            .where("sender", "==", auth.currentUser.email)
+            .where("reciever", "==", selectedUser)
+            .get()
+            .then(querySnapshot => {
+                console.log(querySnapshot.docs);
+                querySnapshot.docs.map(doc => {
+                    options.push({ ...doc.data() });
+                });
+            })
+            .catch(error => {
+                console.log(error);
+            });
+
+        firestore.collection('messages')
+            .where("reciever", "==", auth.currentUser.email)
+            .where("sender", "==", selectedUser)
+            .get()
+            .then(querySnapshot => {
+                console.log(querySnapshot.docs);
+                querySnapshot.docs.map(doc => {
+                    options.push({ ...doc.data() });
+                });
+
+                setMessages(options);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+    }, [selectedUser]);
+
+    const usersRef = firestore.collection('users');
+    const [usersData] = useCollectionData(usersRef, { idField: 'id' });
+
+    const handleUserChange = (event) => {
+        setSelectedUser(event.target.value);
+        console.log(event.target.value);
+    };
 
     const sendMessage = async (e) => {
         e.preventDefault();
-
         const { uid, photoURL } = auth.currentUser;
 
-        await messagesRef.add({
-            text,
+        await firestore.collection('messages').add({
+            text: text,
             createdAt: serverTimestamp(),
-            uid,
-            photoURL,
+            uid: uid,
+            photoURL: photoURL,
+            sender: auth?.currentUser?.email,
+            reciever: selectedUser
         });
 
         setText('');
@@ -34,6 +77,9 @@ function ForumPage() {
                     ))}
             </div>
             <form onSubmit={sendMessage}>
+                <select placeholder='Select option' onChange={handleUserChange}>
+                    {usersData && usersData.map(user => <option value={user.email}>{user.first_name + " " + user.last_name}</option>)}
+                </select>
                 <input
                     value={text}
                     onChange={(e) => setText(e.target.value)}
@@ -50,7 +96,6 @@ function ForumPage() {
 
 function ChatMessage({ message }) {
     const { text, uid, photoURL } = message;
-
     const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
 
     return (
