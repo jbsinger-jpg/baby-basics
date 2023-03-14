@@ -1,4 +1,3 @@
-import { Select } from '@chakra-ui/react';
 import React, { useState, useRef, useEffect } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { auth, firestore, serverTimestamp, db } from '../firebaseConfig';
@@ -9,8 +8,7 @@ function ForumPage() {
     const scrollRef = useRef();
     const [messages, setMessages] = useState(null);
 
-
-    useEffect(() => {
+    const updateChatRoom = () => {
         let options = [];
 
         firestore.collection('messages')
@@ -18,9 +16,8 @@ function ForumPage() {
             .where("reciever", "==", selectedUser)
             .get()
             .then(querySnapshot => {
-                console.log(querySnapshot.docs);
                 querySnapshot.docs.map(doc => {
-                    options.push({ ...doc.data() });
+                    return options.push({ ...doc.data() });
                 });
             })
             .catch(error => {
@@ -34,14 +31,30 @@ function ForumPage() {
             .then(querySnapshot => {
                 console.log(querySnapshot.docs);
                 querySnapshot.docs.map(doc => {
-                    options.push({ ...doc.data() });
+                    return options.push({ ...doc.data() });
                 });
 
+                // sort options by the timestamp
+                options.sort((a, b) => {
+                    if (a.createdAt < b.createdAt) {
+                        return -1;
+                    }
+                    if (a.createdAt > b.createdAt) {
+                        return 1;
+                    }
+                    return 0;
+                });
                 setMessages(options);
             })
             .catch(error => {
                 console.log(error);
             });
+    };
+
+
+    useEffect(() => {
+        updateChatRoom();
+        // eslint-disable-next-line
     }, [selectedUser]);
 
     const usersRef = firestore.collection('users');
@@ -66,6 +79,7 @@ function ForumPage() {
         });
 
         setText('');
+        updateChatRoom();
     };
 
     return (
