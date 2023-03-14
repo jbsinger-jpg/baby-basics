@@ -1,9 +1,10 @@
-import { CalendarIcon, ChatIcon, MoonIcon, SunIcon, UnlockIcon } from '@chakra-ui/icons';
+import { ChatIcon, MoonIcon, SunIcon, UnlockIcon } from '@chakra-ui/icons';
 import { Avatar, AvatarBadge, AvatarGroup, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, HStack, IconButton, Image, SkeletonCircle, SkeletonText, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
+import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 import { useNavigate } from 'react-router-dom';
-import { auth } from '../firebaseConfig';
+import { auth, firestore } from '../firebaseConfig';
 
 export default function HomePage() {
     const [dummyArray, setDummyArray] = useState([]);
@@ -11,13 +12,11 @@ export default function HomePage() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const currentUser = auth.currentUser;
     const navigate = useNavigate();
+    const usersRef = firestore.collection('users');
+    const [userData] = useCollectionData(usersRef, { idField: 'id' });
 
     const handleLogin = () => {
         navigate("/login");
-    };
-
-    const handleForumPage = () => {
-        navigate("/forum");
     };
 
     const ColorModeToggleButton = () => {
@@ -30,6 +29,11 @@ export default function HomePage() {
                 </IconButton>
             </Tooltip>
         );
+    };
+
+    const handleDMPress = (user) => {
+        console.log(user);
+        // TODO: Pass the user to the message page
     };
 
     useEffect(() => {
@@ -65,33 +69,22 @@ export default function HomePage() {
                             <TabPanels>
                                 <TabPanel>
                                     <VStack w="100%" alignItems="start" spacing="5">
-                                        <HStack>
-                                            <Avatar name='Jan Levinson' bg="orange">
-                                                <AvatarBadge boxSize='1.25em' bg='green.500' />
-                                            </Avatar>
-                                            <VStack spacing="-0.5" alignItems="start">
-                                                <Text>Jan Levinson</Text>
-                                                <Text>Online</Text>
-                                            </VStack>
-                                        </HStack>
-                                        <HStack>
-                                            <Avatar name='Michael Scott' bg="orange">
-                                                <AvatarBadge boxSize='1.25em' bg='green.500' />
-                                            </Avatar>
-                                            <VStack spacing="-0.5" alignItems="start">
-                                                <Text>Michael Scott</Text>
-                                                <Text>Online</Text>
-                                            </VStack>
-                                        </HStack>
-                                        <HStack>
-                                            <Avatar name='Holly Flax' bg="orange">
-                                                <AvatarBadge boxSize='1.25em' bg='red.500' />
-                                            </Avatar>
-                                            <VStack spacing="-0.5" alignItems="start">
-                                                <Text>Holly Flax</Text>
-                                                <Text>Offline</Text>
-                                            </VStack>
-                                        </HStack>
+                                        {userData && userData.map(user => {
+                                            return (
+                                                <Button variant="unstyled" onClick={() => handleDMPress(user)}>
+                                                    <HStack>
+                                                        <Avatar name={user.first_name + " " + user.last_name} bg="orange">
+                                                            <AvatarBadge boxSize='1.25em' bg='green.500' />
+                                                        </Avatar>
+                                                        <VStack spacing="-0.5" alignItems="start">
+                                                            <Text>{user.first_name + " " + user.last_name}</Text>
+                                                            <Text>Online</Text>
+                                                        </VStack>
+                                                    </HStack>
+                                                </Button>
+
+                                            );
+                                        })}
                                     </VStack>
                                 </TabPanel>
                                 <TabPanel>
@@ -156,9 +149,6 @@ export default function HomePage() {
                             <>
                                 <Tooltip label="Chat with peeps">
                                     <IconButton icon={<ChatIcon />} onClick={onOpen} />
-                                </Tooltip>
-                                <Tooltip label="View forums">
-                                    <IconButton icon={<CalendarIcon />} onClick={handleForumPage} />
                                 </Tooltip>
                             </>
                             :

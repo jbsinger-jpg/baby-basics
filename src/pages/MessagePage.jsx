@@ -1,9 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { auth, firestore, serverTimestamp } from '../firebaseConfig';
-import { Avatar, Box, Button, HStack, Input, Select, Textarea } from '@chakra-ui/react';
+import { Avatar, Box, Button, HStack, Textarea } from '@chakra-ui/react';
 
-function ForumPage() {
+function MessagePage() {
     const [text, setText] = useState();
     const [selectedUser, setSelectedUser] = useState("");
     const scrollRef = useRef();
@@ -58,8 +57,7 @@ function ForumPage() {
         // eslint-disable-next-line
     }, [selectedUser]);
 
-    const usersRef = firestore.collection('users');
-    const [usersData] = useCollectionData(usersRef, { idField: 'id' });
+
 
     const handleUserChange = (event) => {
         setSelectedUser(event.target.value);
@@ -95,9 +93,6 @@ function ForumPage() {
                     ))}
             </div>
             <form onSubmit={sendMessage}>
-                <Select placeholder='Select option' onChange={handleUserChange}>
-                    {usersData && usersData.map(user => <option value={user.email}>{user.first_name + " " + user.last_name}</option>)}
-                </Select>
                 <Box position="absolute" bottom="10" w="100vw" paddingRight="10" paddingLeft="10">
                     <HStack>
                         <Textarea
@@ -131,4 +126,4 @@ function ChatMessage({ message }) {
     );
 }
 
-export default ForumPage;
+export default MessagePage;
