@@ -1,66 +1,51 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import { auth, firestore, serverTimestamp } from '../firebaseConfig';
 import { Avatar, Box, Button, HStack, Textarea } from '@chakra-ui/react';
+import { useCollectionData } from 'react-firebase-hooks/firestore';
+import Context from "../context/Context";
 
 function MessagePage() {
+    const { data: selectedUser } = useContext(Context);
     const [text, setText] = useState();
-    const [selectedUser, setSelectedUser] = useState("");
     const scrollRef = useRef();
-    const [messages, setMessages] = useState(null);
+    const [chatRoomMessagesRecieved] = useCollectionData(
+        firestore
+            .collection('messages')
+            .where("reciever", "==", auth.currentUser.email)
+            .where("sender", "==", selectedUser),
+        { idField: 'id' }
+    );
 
-    const updateChatRoom = () => {
+    const [chatRoomMessagesSent] = useCollectionData(
+        firestore
+            .collection('messages')
+            .where("reciever", "==", selectedUser)
+            .where("sender", "==", auth.currentUser.email),
+        { idField: 'id' }
+    );
+
+    const generateMessages = () => {
         let options = [];
 
-        firestore.collection('messages')
-            .where("sender", "==", auth.currentUser.email)
-            .where("reciever", "==", selectedUser)
-            .get()
-            .then(querySnapshot => {
-                querySnapshot.docs.map(doc => {
-                    return options.push({ ...doc.data() });
-                });
-            })
-            .catch(error => {
-                console.log(error);
-            });
+        for (const message of chatRoomMessagesRecieved) {
+            options.push(message);
+        }
 
-        firestore.collection('messages')
-            .where("reciever", "==", auth.currentUser.email)
-            .where("sender", "==", selectedUser)
-            .get()
-            .then(querySnapshot => {
-                console.log(querySnapshot.docs);
-                querySnapshot.docs.map(doc => {
-                    return options.push({ ...doc.data() });
-                });
+        for (const message of chatRoomMessagesSent) {
+            options.push(message);
+        }
 
-                // sort options by the timestamp
-                options.sort((a, b) => {
-                    if (a.createdAt < b.createdAt) {
-                        return -1;
-                    }
-                    if (a.createdAt > b.createdAt) {
-                        return 1;
-                    }
-                    return 0;
-                });
-                setMessages(options);
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    };
+        options.sort((a, b) => {
+            if (a.createdAt < b.createdAt) {
+                return -1;
+            }
+            if (a.createdAt > b.createdAt) {
+                return 1;
+            }
+            return 0;
+        });
 
-
-    useEffect(() => {
-        updateChatRoom();
-        // eslint-disable-next-line
-    }, [selectedUser]);
-
-
-
-    const handleUserChange = (event) => {
-        setSelectedUser(event.target.value);
+        return options;
     };
 
     const handleTextAreaChange = (e) => {
@@ -81,16 +66,18 @@ function MessagePage() {
         });
 
         setText('');
-        updateChatRoom();
+        // updateChatRoom();
     };
 
     return (
         <Box w="100vw" h="100vh">
             <div ref={scrollRef}>
-                {messages &&
-                    messages.map((msg) => (
-                        <ChatMessage key={msg.id} message={msg} />
-                    ))}
+                {(chatRoomMessagesRecieved && chatRoomMessagesSent) &&
+                    generateMessages()
+                        .map((msg) => {
+                            return (<ChatMessage key={msg.id} message={msg} />);
+                        })
+                }
             </div>
             <form onSubmit={sendMessage}>
                 <Box position="absolute" bottom="10" w="100vw" paddingRight="10" paddingLeft="10">

@@ -1,10 +1,11 @@
 import { ChatIcon, MoonIcon, SunIcon, UnlockIcon } from '@chakra-ui/icons';
 import { Avatar, AvatarBadge, AvatarGroup, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, HStack, IconButton, Image, SkeletonCircle, SkeletonText, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 import { useNavigate } from 'react-router-dom';
 import { auth, firestore } from '../firebaseConfig';
+import Context from '../context/Context';
 
 export default function HomePage() {
     const [dummyArray, setDummyArray] = useState([]);
@@ -14,6 +15,9 @@ export default function HomePage() {
     const navigate = useNavigate();
     const usersRef = firestore.collection('users');
     const [userData] = useCollectionData(usersRef, { idField: 'id' });
+    const { setData: setUser } = useContext(Context);
+
+
 
     const handleLogin = () => {
         navigate("/login");
@@ -34,6 +38,8 @@ export default function HomePage() {
     const handleDMPress = (user) => {
         console.log(user);
         // TODO: Pass the user to the message page
+        setUser(user.email);
+        navigate("/message");
     };
 
     useEffect(() => {
