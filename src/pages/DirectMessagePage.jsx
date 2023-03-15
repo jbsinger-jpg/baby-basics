@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from 'react';
+import React, { useState, useRef, useContext, useEffect } from 'react';
 import { auth, firestore, serverTimestamp } from '../firebaseConfig';
 import { Avatar, Box, Button, HStack, Textarea } from '@chakra-ui/react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
@@ -7,7 +7,8 @@ import Context from "../context/Context";
 function DirectMessagePage() {
     const { data: selectedUser } = useContext(Context);
     const [text, setText] = useState();
-    const scrollRef = useRef();
+    const messageBoxRef = useRef();
+
     const [chatRoomMessagesRecieved] = useCollectionData(
         firestore
             .collection('messages')
@@ -66,11 +67,20 @@ function DirectMessagePage() {
         });
 
         setText('');
+
+        window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth'
+        });
     };
 
+    useEffect(() => {
+        messageBoxRef.current.scrollTop = messageBoxRef.current.scrollHeight;
+    }, [chatRoomMessagesSent]);
+
     return (
-        <Box w="100vw" h="100vh">
-            <div ref={scrollRef}>
+        <Box>
+            <div style={{ height: 'calc(100vh - 100px)', overflowY: 'auto' }} ref={messageBoxRef}>
                 {(chatRoomMessagesRecieved && chatRoomMessagesSent) &&
                     generateMessages()
                         .map((msg) => {
@@ -79,7 +89,7 @@ function DirectMessagePage() {
                 }
             </div>
             <form onSubmit={sendMessage}>
-                <Box position="absolute" bottom="10" w="100vw" paddingRight="10" paddingLeft="10">
+                <Box w="100vw" padding="5" bottom="0" position="fixed">
                     <HStack>
                         <Textarea
                             value={text}

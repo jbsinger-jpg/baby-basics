@@ -16,9 +16,9 @@ export default function HomePage() {
     const usersRef = firestore.collection('users');
     const [userData] = useCollectionData(usersRef, { idField: 'id' });
     const { setData: setUser } = useContext(Context);
-    const [groups] = useCollectionData(
+    const [starterGroup] = useCollectionData(
         firestore
-            .collection('forum_groups')
+            .collection('starter_group')
             .where("users", "array-contains", auth?.currentUser?.email),
         { idField: 'id' }
     );
@@ -61,11 +61,11 @@ export default function HomePage() {
     }, []);
 
     useEffect(() => {
-        if (groups) {
+        if (starterGroup) {
             let options = [];
             let userOptions = [];
 
-            for (const group of groups) {
+            for (const group of starterGroup) {
                 for (let i = 0; i < group.users.length; i++) {
                     options.push(group.users[i]);
                 }
@@ -85,7 +85,7 @@ export default function HomePage() {
                     });
 
         }
-    }, [groups]);
+    }, [starterGroup]);
 
     return (
         <>
@@ -131,8 +131,8 @@ export default function HomePage() {
                                 </TabPanel>
                                 <TabPanel>
                                     <VStack w="100%" alignItems="start" spacing="12">
-                                        {groups &&
-                                            groups.map(group => {
+                                        {starterGroup &&
+                                            starterGroup.map(group => {
                                                 return (
                                                     <Button variant="unstyled" onClick={handleForumButtonPress}>
                                                         <HStack>

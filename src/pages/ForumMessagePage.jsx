@@ -1,20 +1,21 @@
-import React, { useState, useRef, useContext } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { auth, firestore, serverTimestamp } from '../firebaseConfig';
-import { Avatar, Box, Button, HStack, Textarea } from '@chakra-ui/react';
+import { Avatar, AvatarBadge, Box, Button, HStack, Textarea } from '@chakra-ui/react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
-import Context from "../context/Context";
 
 function ForumMessagePage() {
-    const { data: selectedUser } = useContext(Context);
     const [text, setText] = useState();
-    const scrollRef = useRef();
-
     const [messages] = useCollectionData(
         firestore
-            .collection('forum_messages')
+            .collection('starter_forum_messages')
             .orderBy("createdAt"),
         { idField: 'id' }
     );
+    const messageBoxRef = useRef();
+
+    useEffect(() => {
+        messageBoxRef.current.scrollTop = messageBoxRef.current.scrollHeight;
+    }, [messages]);
 
     const handleTextAreaChange = (e) => {
         setText(e.target.value);
@@ -24,13 +25,12 @@ function ForumMessagePage() {
         e.preventDefault();
         const { uid, photoURL } = auth.currentUser;
 
-        await firestore.collection('forum_messages').add({
+        await firestore.collection('starter_forum_messages').add({
             text: text,
             createdAt: serverTimestamp(),
             uid: uid,
             photoURL: photoURL,
             sender: auth?.currentUser?.email,
-            reciever: selectedUser
         });
 
         setText('');
@@ -38,7 +38,7 @@ function ForumMessagePage() {
 
     return (
         <Box w="100vw" h="100vh">
-            <div ref={scrollRef}>
+            <div style={{ height: 'calc(100vh - 100px)', overflowY: 'auto' }} ref={messageBoxRef}>
                 {(messages) &&
                     messages
                         .map((msg) => {
@@ -47,7 +47,7 @@ function ForumMessagePage() {
                 }
             </div>
             <form onSubmit={sendMessage}>
-                <Box position="absolute" bottom="10" w="100vw" paddingRight="10" paddingLeft="10">
+                <Box w="100vw" padding="5" bottom="0" position="fixed">
                     <HStack>
                         <Textarea
                             value={text}
