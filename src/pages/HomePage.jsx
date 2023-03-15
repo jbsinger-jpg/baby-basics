@@ -16,8 +16,13 @@ export default function HomePage() {
     const usersRef = firestore.collection('users');
     const [userData] = useCollectionData(usersRef, { idField: 'id' });
     const { setData: setUser } = useContext(Context);
-
-
+    const [groups] = useCollectionData(
+        firestore
+            .collection('forum_groups')
+            .where("users", "array-contains", auth.currentUser.email),
+        { idField: 'id' }
+    );
+    const [groupUsers, setGroupUsers] = useState(null);
 
     const handleLogin = () => {
         navigate("/login");
@@ -36,7 +41,6 @@ export default function HomePage() {
     };
 
     const handleDMPress = (user) => {
-        console.log(user);
         // TODO: Pass the user to the message page
         setUser(user.email);
         navigate("/message");
@@ -48,8 +52,36 @@ export default function HomePage() {
         for (let i = 0; i < 50; i++) {
             options.push(i);
         }
+
         setDummyArray(options);
     }, []);
+
+    useEffect(() => {
+        if (groups) {
+            let options = [];
+
+            for (const group of groups) {
+                for (let i = 0; i < group.users.length; i++) {
+                    options.push(group.users[i]);
+                }
+
+            }
+            let userOptions = [];
+
+            if (options.length > 0)
+                firestore.collection('users')
+                    .where("email", "in", options)
+                    .get()
+                    .then(snapshot => {
+                        snapshot.docs.forEach(doc => {
+                            userOptions.push({ ...doc.data() });
+                        });
+
+                        setGroupUsers(userOptions);
+                    });
+
+        }
+    }, [groups]);
 
     return (
         <>
@@ -94,27 +126,23 @@ export default function HomePage() {
                                     </VStack>
                                 </TabPanel>
                                 <TabPanel>
-                                    <VStack w="100%" alignItems="start" spacing="5">
-                                        <HStack>
-                                            <AvatarGroup size='md' max={3}>
-                                                <Avatar name='Ryan Florence' src='https://bit.ly/ryan-florence' />
-                                                <Avatar name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
-                                                <Avatar name='Kent Dodds' src='https://bit.ly/kent-c-dodds' />
-                                                <Avatar name='Prosper Otemuyiwa' src='https://bit.ly/prosper-baba' />
-                                                <Avatar name='Christian Nwamba' src='https://bit.ly/code-beast' />
-                                            </AvatarGroup>
-                                            <Text>Saturday's for the Boys</Text>
-                                        </HStack>
-                                        <HStack>
-                                            <AvatarGroup size='md' max={3}>
-                                                <Avatar name='Ryan Florence' src='https://bit.ly/ryan-florence' />
-                                                <Avatar name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
-                                                <Avatar name='Kent Dodds' src='https://bit.ly/kent-c-dodds' />
-                                                <Avatar name='Prosper Otemuyiwa' src='https://bit.ly/prosper-baba' />
-                                                <Avatar name='Christian Nwamba' src='https://bit.ly/code-beast' />
-                                            </AvatarGroup>
-                                            <Text>Cool peeps</Text>
-                                        </HStack>
+                                    <VStack w="100%" alignItems="start" spacing="12">
+                                        {groups &&
+                                            groups.map(group => {
+                                                return (
+                                                    <Button variant="unstyled">
+                                                        <HStack>
+                                                            <AvatarGroup size='md' max={3}>
+                                                                {groupUsers && groupUsers.map(user => {
+                                                                    return (<Avatar name={user.first_name + " " + user.last_name} />);
+                                                                })}
+                                                            </AvatarGroup>
+                                                        </HStack>
+                                                        <Text>{group.name}</Text>
+                                                    </Button>
+                                                );
+                                            })
+                                        }
                                     </VStack>
                                 </TabPanel>
                             </TabPanels>

@@ -66,7 +66,6 @@ function MessagePage() {
         });
 
         setText('');
-        // updateChatRoom();
     };
 
     return (
