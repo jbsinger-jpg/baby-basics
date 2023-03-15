@@ -19,7 +19,7 @@ export default function HomePage() {
     const [groups] = useCollectionData(
         firestore
             .collection('forum_groups')
-            .where("users", "array-contains", auth.currentUser.email),
+            .where("users", "array-contains", auth?.currentUser?.email),
         { idField: 'id' }
     );
     const [groupUsers, setGroupUsers] = useState(null);
@@ -46,6 +46,10 @@ export default function HomePage() {
         navigate("/message");
     };
 
+    const handleForumButtonPress = () => {
+        navigate("/forum");
+    };
+
     useEffect(() => {
         let options = [];
 
@@ -59,6 +63,7 @@ export default function HomePage() {
     useEffect(() => {
         if (groups) {
             let options = [];
+            let userOptions = [];
 
             for (const group of groups) {
                 for (let i = 0; i < group.users.length; i++) {
@@ -66,7 +71,6 @@ export default function HomePage() {
                 }
 
             }
-            let userOptions = [];
 
             if (options.length > 0)
                 firestore.collection('users')
@@ -130,7 +134,7 @@ export default function HomePage() {
                                         {groups &&
                                             groups.map(group => {
                                                 return (
-                                                    <Button variant="unstyled">
+                                                    <Button variant="unstyled" onClick={handleForumButtonPress}>
                                                         <HStack>
                                                             <AvatarGroup size='md' max={3}>
                                                                 {groupUsers && groupUsers.map(user => {

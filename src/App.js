@@ -2,7 +2,8 @@ import { Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
-import MessagePage from "./pages/MessagePage";
+import ForumMessagePage from "./pages/ForumMessagePage";
+import DirectMessagePage from "./pages/DirectMessagePage";
 import Context from './context/Context';
 
 
@@ -14,7 +15,8 @@ function App() {
       <Routes>
         <Route index element={<HomePage />} />
         <Route path="login" element={<LoginPage />} />
-        <Route path="message" element={<MessagePage />} />
+        <Route path="message" element={<DirectMessagePage />} />
+        <Route path="forum" element={<ForumMessagePage />} />
       </Routes>
     </Context.Provider>
 
