@@ -8,21 +8,31 @@ import { auth, firestore } from '../firebaseConfig';
 import Context from '../context/Context';
 
 export default function HomePage() {
-    const [dummyArray, setDummyArray] = useState([]);
     const [isDataLoaded, setIsDataLoaded] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const currentUser = auth.currentUser;
     const navigate = useNavigate();
-    const usersRef = firestore.collection('users');
-    const [userData] = useCollectionData(usersRef, { idField: 'id' });
+    const [userData] = useCollectionData(firestore.collection('users'), { idField: 'id' });
+    // TODO: Add in clothing data is loading state when ready to present to production and out of development.
+    const [clothingData] = useCollectionData(firestore.collection('clothing'), { idField: 'id' });
+    const [foodData, isFoodDataLoading] = useCollectionData(firestore.collection('food'), { idField: 'id' });
+    const [diaperData, isDiapersLoading] = useCollectionData(firestore.collection('diapers'), { idField: 'id' });
+    const [utilityData, isUtilitiesLoading] = useCollectionData(firestore.collection('utilities'), { idField: 'id' });
     const { setData: setUser } = useContext(Context);
-    const [starterGroup] = useCollectionData(
-        firestore
-            .collection('starter_group')
-            .where("users", "array-contains", auth?.currentUser?.email),
-        { idField: 'id' }
-    );
     const [groupUsers, setGroupUsers] = useState(null);
+
+    //-------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------
+    // if current user email doesn't exist don't prevent
+    // page from rendering
+    const currentUserEmail = auth?.currentUser?.email;
+    let starterGroupRef = firestore.collection('starter_group');
+    if (currentUserEmail) {
+        starterGroupRef = starterGroupRef.where("users", "array-contains", currentUserEmail);
+    }
+    const [starterGroup] = useCollectionData(starterGroupRef, { idField: 'id' });
+    //-------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------
 
     const handleLogin = () => {
         navigate("/login");
@@ -49,16 +59,6 @@ export default function HomePage() {
     const handleForumButtonPress = () => {
         navigate("/forum");
     };
-
-    useEffect(() => {
-        let options = [];
-
-        for (let i = 0; i < 50; i++) {
-            options.push(i);
-        }
-
-        setDummyArray(options);
-    }, []);
 
     useEffect(() => {
         if (starterGroup) {
@@ -131,21 +131,20 @@ export default function HomePage() {
                                 </TabPanel>
                                 <TabPanel>
                                     <VStack w="100%" alignItems="start" spacing="12">
-                                        {starterGroup &&
-                                            starterGroup.map(group => {
-                                                return (
-                                                    <Button variant="unstyled" onClick={handleForumButtonPress}>
-                                                        <HStack>
-                                                            <AvatarGroup size='md' max={3}>
-                                                                {groupUsers && groupUsers.map(user => {
-                                                                    return (<Avatar name={user.first_name + " " + user.last_name} />);
-                                                                })}
-                                                            </AvatarGroup>
-                                                        </HStack>
-                                                        <Text>{group.name}</Text>
-                                                    </Button>
-                                                );
-                                            })
+                                        {starterGroup && starterGroup.map(group => {
+                                            return (
+                                                <Button variant="unstyled" onClick={handleForumButtonPress}>
+                                                    <HStack>
+                                                        <AvatarGroup size='md' max={3}>
+                                                            {groupUsers && groupUsers.map(user => {
+                                                                return (<Avatar name={user.first_name + " " + user.last_name} />);
+                                                            })}
+                                                        </AvatarGroup>
+                                                    </HStack>
+                                                    <Text>{group.name}</Text>
+                                                </Button>
+                                            );
+                                        })
                                         }
                                     </VStack>
                                 </TabPanel>
@@ -166,13 +165,13 @@ export default function HomePage() {
                 <TabList display="flex" justifyContent="space-between" w="99vw">
                     <HStack spacing="-1">
                         <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                            Diapers
-                        </Tab>
-                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
                             Clothes
                         </Tab>
                         <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
                             Food
+                        </Tab>
+                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                            Diapers
                         </Tab>
                         <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
                             Utilities
@@ -198,23 +197,25 @@ export default function HomePage() {
                 <TabPanels>
                     <TabPanel>
                         <HStack flexWrap={"wrap"} top="20" position="absolute">
-                            {dummyArray.map(option => {
+                            {clothingData && clothingData.map(clothing => {
                                 return (
                                     <VStack spacing="3" padding="6">
-                                        <SkeletonCircle size='10' isLoaded={isDataLoaded} />
-                                        <SkeletonText isLoaded={isDataLoaded}>
-                                            <Box onClick={() => console.log("Clicked! " + option)}>
+                                        <SkeletonCircle size='10' isLoaded={!isDataLoaded} />
+                                        <SkeletonText isLoaded={!isDataLoaded}>
+                                            <Box>
                                                 <VStack>
                                                     <Image
-                                                        src="https://www.istockphoto.com/resources/images/PhotoFTLP/P2%20-%20MAR-%20iStock%20-1398043762.jpg"
+                                                        src={clothing.image}
                                                         size="sm"
                                                         alt="Alternate Text"
-                                                        style={{ width: 150, height: 270, resizeMode: 'cover' }}
+                                                        style={{ width: 150, height: 200, resizeMode: 'cover' }}
+                                                        cursor="pointer"
+                                                        onClick={() => console.log("Clicked! " + clothing.image)}
                                                     />
                                                     <VStack spacing="-0.5">
-                                                        <Text>Title</Text>
-                                                        <Text>Price</Text>
-                                                        <Text>Baby Age</Text>
+                                                        <Text>{clothing.brand + " " + clothing.type}</Text>
+                                                        <Text>{"$" + clothing.price}</Text>
+                                                        <Text>{"size: " + clothing.size}</Text>
                                                     </VStack>
                                                 </VStack>
                                             </Box>
@@ -226,20 +227,23 @@ export default function HomePage() {
                     </TabPanel>
                     <TabPanel>
                         <HStack flexWrap={"wrap"} top="20" position="absolute">
-                            {dummyArray.map(option => {
+                            {foodData && foodData.map(food => {
                                 return (
                                     <VStack spacing="3" paddingBottom="10">
-                                        <Image
-                                            src="https://media.istockphoto.com/id/1455966008/photo/drone-view-on-blue-collar-worker-stirring-in-soy-pod.jpg?s=612x612&w=0&k=20&c=p1xNhy3U6Kqdy0RxHyjW4oUYVZltRMgIsQGLEImIWyc="
-                                            size="sm"
-                                            alt="Alternate Text"
-                                            style={{ width: 50, height: 70, resizeMode: 'cover' }}
-                                        />
-                                        <VStack spacing="-0.5">
-                                            <Text>Title</Text>
-                                            <Text>Price</Text>
-                                            <Text>Baby Age</Text>
-                                        </VStack>
+                                        <SkeletonCircle size='10' isLoaded={!isFoodDataLoading} />
+                                        <SkeletonText isLoaded={!isFoodDataLoading}>
+                                            <Image
+                                                src={food.image}
+                                                size="sm"
+                                                alt="Alternate Text"
+                                                style={{ width: 150, height: 200, resizeMode: 'cover' }}
+                                            />
+                                            <VStack spacing="-0.5">
+                                                <Text>{food.type}</Text>
+                                                <Text>{food.price}</Text>
+                                                <Text>{food.age}</Text>
+                                            </VStack>
+                                        </SkeletonText>
                                     </VStack>
                                 );
                             })}
@@ -247,20 +251,23 @@ export default function HomePage() {
                     </TabPanel>
                     <TabPanel>
                         <HStack flexWrap={"wrap"} top="20" position="absolute">
-                            {dummyArray.map(option => {
+                            {diaperData && diaperData.map(diaper => {
                                 return (
                                     <VStack spacing="3" paddingBottom="10">
-                                        <Image
-                                            src="https://media.istockphoto.com/id/1368262824/photo/blurred-motion-of-blue-ocean-wave-crashing-in-golden-light.jpg?s=612x612&w=0&k=20&c=4p-iqR8G_oCXPtzMjU4C_ilAA3-BXYiLIHF2ILm4LFc="
-                                            size="sm"
-                                            alt="Alternate Text"
-                                            style={{ width: 50, height: 70, resizeMode: 'cover' }}
-                                        />
-                                        <VStack spacing="-0.5">
-                                            <Text>Title</Text>
-                                            <Text>Price</Text>
-                                            <Text>Baby Age</Text>
-                                        </VStack>
+                                        <SkeletonCircle size='10' isLoaded={!isDiapersLoading} />
+                                        <SkeletonText isLoaded={!isDiapersLoading}>
+                                            <Image
+                                                src={diaper.image}
+                                                size="sm"
+                                                alt="Alternate Text"
+                                                style={{ width: 150, height: 200, resizeMode: 'cover' }}
+                                            />
+                                            <VStack spacing="-0.5">
+                                                <Text>{diaper.brand}</Text>
+                                                <Text>{diaper.price}</Text>
+                                                <Text>{diaper.size}</Text>
+                                            </VStack>
+                                        </SkeletonText>
                                     </VStack>
                                 );
                             })}
@@ -268,20 +275,23 @@ export default function HomePage() {
                     </TabPanel>
                     <TabPanel>
                         <HStack flexWrap={"wrap"} top="20" position="absolute">
-                            {dummyArray.map(option => {
+                            {utilityData && utilityData.map(utility => {
                                 return (
                                     <VStack spacing="3" paddingBottom="10">
-                                        <Image
-                                            src="https://media.istockphoto.com/id/1289937778/photo/man-stands-in-front-of-a-big-maze-ready-to-take-on-the-challenge.jpg?s=612x612&w=0&k=20&c=xxDa5aYmfWM4o6qWF_QdDf9oj-3pYt883nRZyH9KGBQ="
-                                            size="sm"
-                                            alt="Alternate Text"
-                                            style={{ width: 50, height: 70, resizeMode: 'cover' }}
-                                        />
-                                        <VStack spacing="-0.5">
-                                            <Text>Title</Text>
-                                            <Text>Price</Text>
-                                            <Text>Baby Age</Text>
-                                        </VStack>
+                                        <SkeletonCircle size='10' isLoaded={!isUtilitiesLoading} />
+                                        <SkeletonText isLoaded={!isUtilitiesLoading}>
+                                            <Image
+                                                src={utility.image}
+                                                size="sm"
+                                                alt="Alternate Text"
+                                                style={{ width: 150, height: 200, resizeMode: 'cover' }}
+                                            />
+                                            <VStack spacing="-0.5">
+                                                <Text>{utility.type}</Text>
+                                                <Text>{utility.price}</Text>
+                                                <Text>{utility.age}</Text>
+                                            </VStack>
+                                        </SkeletonText>
                                     </VStack>
                                 );
                             })}
