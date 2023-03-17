@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage';
 import ForumMessagePage from "./pages/ForumMessagePage";
 import DirectMessagePage from "./pages/DirectMessagePage";
 import Context from './context/Context';
+import PurchasePage from "./pages/PurchasePage";
 
 
 function App() {
@@ -13,7 +14,8 @@ function App() {
   return (
     <Context.Provider value={{ data: state, setData: setState }}>
       <Routes>
-        <Route index element={<HomePage />} />
+        {/* <Route index element={<HomePage />} /> */}
+        <Route index element={<PurchasePage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="message" element={<DirectMessagePage />} />
         <Route path="forum" element={<ForumMessagePage />} />
