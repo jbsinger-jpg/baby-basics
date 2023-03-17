@@ -14,8 +14,8 @@ function App() {
   return (
     <Context.Provider value={{ data: state, setData: setState }}>
       <Routes>
-        {/* <Route index element={<HomePage />} /> */}
-        <Route index element={<PurchasePage />} />
+        <Route index element={<HomePage />} />
+        <Route path="purchase" element={<PurchasePage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="message" element={<DirectMessagePage />} />
         <Route path="forum" element={<ForumMessagePage />} />

@@ -2,6 +2,7 @@ import { ChatIcon, MoonIcon, SunIcon, UnlockIcon } from '@chakra-ui/icons';
 import { Avatar, AvatarBadge, AvatarGroup, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, HStack, IconButton, Image, SkeletonCircle, SkeletonText, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
+import { motion } from 'framer-motion';
 
 import { useNavigate } from 'react-router-dom';
 import { auth, firestore } from '../firebaseConfig';
@@ -253,22 +254,41 @@ export default function HomePage() {
                         <HStack flexWrap={"wrap"} top="20" position="absolute">
                             {diaperData && diaperData.map(diaper => {
                                 return (
-                                    <VStack spacing="3" paddingBottom="10">
-                                        <SkeletonCircle size='10' isLoaded={!isDiapersLoading} />
-                                        <SkeletonText isLoaded={!isDiapersLoading}>
-                                            <Image
-                                                src={diaper.image}
-                                                size="sm"
-                                                alt="Alternate Text"
-                                                style={{ width: 150, height: 200, resizeMode: 'cover' }}
-                                            />
-                                            <VStack spacing="-0.5">
-                                                <Text>{diaper.brand}</Text>
-                                                <Text>{diaper.price}</Text>
-                                                <Text>{diaper.size}</Text>
+                                    <motion.button
+                                        onClick={() => navigate("/purchase")}
+                                        whileTap={{
+                                            scale: 0.8,
+                                            borderRadius: "100%",
+                                        }}
+                                        // When the user uses their mouse
+                                        whileHover={{ scale: 1.2 }}
+                                        // When the user tabs
+                                        whileFocus={{ scale: 1.2 }}
+                                    >
+                                        {/* 
+                                            When user is tabbing through the page prevent the button from being focused on
+                                            tabIndex={-1} prevents the user from having to hit tab button twice to move to the
+                                            next component 
+                                        */}
+                                        <Button variant="unstyled" tabIndex={-1} >
+                                            <VStack spacing="3" paddingBottom="10">
+                                                <SkeletonCircle size='10' isLoaded={!isDiapersLoading} />
+                                                <SkeletonText isLoaded={!isDiapersLoading}>
+                                                    <Image
+                                                        src={diaper.image}
+                                                        size="sm"
+                                                        alt="Alternate Text"
+                                                        style={{ width: 150, height: 200, resizeMode: 'cover' }}
+                                                    />
+                                                    <VStack spacing="-0.5">
+                                                        <Text>{diaper.brand}</Text>
+                                                        <Text>{diaper.price}</Text>
+                                                        <Text>{diaper.size}</Text>
+                                                    </VStack>
+                                                </SkeletonText>
                                             </VStack>
-                                        </SkeletonText>
-                                    </VStack>
+                                        </Button>
+                                    </motion.button>
                                 );
                             })}
                         </HStack>
