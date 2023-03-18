@@ -18,9 +18,9 @@ export default function HomePage() {
     const currentUser = auth.currentUser;
     const navigate = useNavigate();
     const [userData] = useCollectionData(firestore.collection('users'), { idField: 'id' });
-    const [clothingData] = useCollectionData(firestore.collection('clothing'), { idField: 'id' });
-    const [foodData, isFoodDataLoading] = useCollectionData(firestore.collection('food'), { idField: 'id' });
-    const [diaperData, isDiapersLoading] = useCollectionData(firestore.collection('diapers'), { idField: 'id' });
+    const [clothingData] = useCollectionData(firestore.collection('clothing').orderBy('type'), { idField: 'id' });
+    const [foodData, isFoodDataLoading] = useCollectionData(firestore.collection('food').orderBy('stage'), { idField: 'id' });
+    const [diaperData, isDiapersLoading] = useCollectionData(firestore.collection('diapers').orderBy('size'), { idField: 'id' });
     const [utilityData, isUtilitiesLoading] = useCollectionData(firestore.collection('utilities'), { idField: 'id' });
     const { setData: setUser } = useContext(Context);
     const [groupUsers, setGroupUsers] = useState(null);
