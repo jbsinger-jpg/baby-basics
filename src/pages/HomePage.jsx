@@ -1,12 +1,16 @@
 import { ChatIcon, MoonIcon, SearchIcon, SunIcon, UnlockIcon } from '@chakra-ui/icons';
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Avatar, AvatarBadge, AvatarGroup, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, HStack, IconButton, Image, SkeletonCircle, SkeletonText, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
+import { Avatar, AvatarBadge, AvatarGroup, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, HStack, IconButton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
-import { motion } from 'framer-motion';
 
 import { useNavigate } from 'react-router-dom';
 import { auth, firestore } from '../firebaseConfig';
 import Context from '../context/Context';
+import SearchBarAlertDialog from '../SearchBarAlertDialog';
+import ClothingDataTabPanel from '../tabPanels/ClothingDataTabPanel';
+import FoodDataTabPanel from '../tabPanels/FoodDataTabPanel';
+import DiaperDataTabPanel from '../tabPanels/DiaperDataTabPanel';
+import UtilityDataTabPanel from '../tabPanels/UtilityDataTabPanel';
 
 export default function HomePage() {
     const [isDataLoaded, setIsDataLoaded] = useState(false);
@@ -20,7 +24,6 @@ export default function HomePage() {
     const [utilityData, isUtilitiesLoading] = useCollectionData(firestore.collection('utilities'), { idField: 'id' });
     const { setData: setUser } = useContext(Context);
     const [groupUsers, setGroupUsers] = useState(null);
-    const MotionVStack = motion(VStack);
 
     //-------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------
@@ -92,55 +95,7 @@ export default function HomePage() {
 
     return (
         <>
-            <AlertDialog
-                isOpen={searchBarIsOpen}
-                placement='right'
-                onClose={() => setSearchBarIsOpen(false)}
-                size="md"
-            >
-                <AlertDialogOverlay />
-                <AlertDialogContent>
-                    <AlertDialogHeader>Filter Items</AlertDialogHeader>
-                    <AlertDialogBody>
-                        <Tabs align='start' variant='enclosed' w="100%" h="100%" isFitted>
-                            <TabList>
-                                <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                                    Clothes
-                                </Tab>
-                                <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                                    Food
-                                </Tab>
-                                <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                                    Diapers
-                                </Tab>
-                                <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                                    Utilities
-                                </Tab>
-                            </TabList>
-                            <TabPanels>
-                                <TabPanel>
-                                    Clothing
-                                </TabPanel>
-                                <TabPanel>
-                                    Food
-                                </TabPanel>
-                                <TabPanel>
-                                    Diapers
-                                </TabPanel>
-                                <TabPanel>
-                                    Utilities
-                                </TabPanel>
-                            </TabPanels>
-                        </Tabs>
-                    </AlertDialogBody>
-                    <AlertDialogFooter>
-                        <Button variant='outline' mr={3} onClick={() => setSearchBarIsOpen(false)}>
-                            Close
-                        </Button>
-                        <Button>Search</Button>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
+            <SearchBarAlertDialog searchBarIsOpen={searchBarIsOpen} setSearchBarIsOpen={setSearchBarIsOpen} />
             <Drawer
                 isOpen={isOpen}
                 placement='left'
@@ -251,177 +206,16 @@ export default function HomePage() {
                 </TabList>
                 <TabPanels>
                     <TabPanel>
-                        <HStack flexWrap={"wrap"} top="20" position="absolute" spacing="8">
-                            {clothingData && clothingData.map(clothing => {
-                                return (
-                                    <MotionVStack
-                                        spacing="3"
-                                        padding="10"
-                                        as="a"
-                                        href={clothing.affiliateLink}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        variant="unstyled"
-                                        whileTap={{
-                                            scale: 0.8,
-                                            borderRadius: "100%",
-                                        }}
-                                        // When the user uses their mouse
-                                        whileHover={{ scale: 1.2, backgroundColor: "black" }}
-                                        // When the user tabs
-                                        whileFocus={{ scale: 1.2 }}
-                                    >
-                                        <SkeletonCircle size='10' isLoaded={!isDataLoaded} />
-                                        <SkeletonText isLoaded={!isDataLoaded}>
-                                            <Box>
-                                                <VStack>
-                                                    <Image
-                                                        src={clothing.image}
-                                                        size="sm"
-                                                        alt="Alternate Text"
-                                                        style={{ width: 150, height: 200, resizeMode: 'cover' }}
-                                                        cursor="pointer"
-                                                        onClick={() => console.log("Clicked! " + clothing.image)}
-                                                    />
-                                                    <VStack spacing="-0.5">
-                                                        <Text>{clothing.brand + " " + clothing.type}</Text>
-                                                        <Text>{"Gender: " + clothing.gender}</Text>
-                                                        <Text>{"$" + clothing.price}</Text>
-                                                        <Text>{"size: " + clothing.size}</Text>
-                                                    </VStack>
-                                                </VStack>
-                                            </Box>
-                                        </SkeletonText>
-                                    </MotionVStack>
-                                );
-                            })}
-                        </HStack>
+                        <ClothingDataTabPanel clothingData={clothingData} clothingDataLoaded={isDataLoaded} />
                     </TabPanel>
                     <TabPanel>
-                        <HStack flexWrap={"wrap"} top="20" position="absolute" spacing="20">
-                            {foodData && foodData.map(food => {
-                                return (
-                                    <MotionVStack
-                                        spacing="3"
-                                        paddingBottom="10"
-                                        as="a"
-                                        href={food.affiliateLink}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        variant="unstyled"
-                                        whileTap={{
-                                            scale: 0.8,
-                                            borderRadius: "100%",
-                                        }}
-                                        // When the user uses their mouse
-                                        whileHover={{ scale: 1.2 }}
-                                        // When the user tabs
-                                        whileFocus={{ scale: 1.2 }}
-                                    >
-                                        <SkeletonCircle size='10' isLoaded={!isFoodDataLoading} />
-                                        <SkeletonText isLoaded={!isFoodDataLoading}>
-                                            <HStack spacing="3">
-                                                <Image
-                                                    src={food.image}
-                                                    size="sm"
-                                                    alt="Alternate Text"
-                                                    style={{ width: 150, height: 200, resizeMode: 'cover' }}
-                                                />
-                                                <VStack spacing="-0.5">
-                                                    <Text>{food.brand + " " + food.title}</Text>
-                                                    <Text>{food.description}</Text>
-                                                    <Text>{food.type}</Text>
-                                                    <Text>{"$" + food.price}</Text>
-                                                    <Text>{"Stage " + food.stage + " food product"}</Text>
-                                                </VStack>
-                                            </HStack>
-                                        </SkeletonText>
-                                    </MotionVStack>
-                                );
-                            })}
-                        </HStack>
+                        <FoodDataTabPanel foodData={foodData} isFoodDataLoading={isFoodDataLoading} />
                     </TabPanel>
                     <TabPanel>
-                        <HStack flexWrap={"wrap"} top="20" position="absolute" spacing="8">
-                            {diaperData && diaperData.map(diaper => {
-                                return (
-                                    <MotionVStack
-                                        spacing="3"
-                                        paddingBottom="10"
-                                        as="a"
-                                        href={diaper.affiliateLink}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        variant="unstyled"
-                                        whileTap={{
-                                            scale: 0.8,
-                                            borderRadius: "100%",
-                                        }}
-                                        // When the user uses their mouse
-                                        whileHover={{ scale: 1.2 }}
-                                        // When the user tabs
-                                        whileFocus={{ scale: 1.2 }}
-                                    >
-                                        <SkeletonCircle size='10' isLoaded={!isDiapersLoading} />
-                                        <SkeletonText isLoaded={!isDiapersLoading}>
-                                            <Image
-                                                src={diaper.image}
-                                                size="sm"
-                                                alt="Alternate Text"
-                                                style={{ width: 150, height: 200, resizeMode: 'cover' }}
-                                            />
-                                            <VStack spacing="-0.5">
-                                                <Text>Amazon Affiliate</Text>
-                                                <Text>{diaper.brand}</Text>
-                                                <Text>{diaper.description}</Text>
-                                                <Text>{"$" + diaper.price}</Text>
-                                                <Text>{"Size: " + diaper.size}</Text>
-                                            </VStack>
-                                        </SkeletonText>
-                                    </MotionVStack>
-                                );
-                            })}
-                        </HStack>
+                        <DiaperDataTabPanel diaperData={diaperData} isDiapersLoading={isDiapersLoading} />
                     </TabPanel>
                     <TabPanel>
-                        <HStack flexWrap={"wrap"} top="20" position="absolute" spacing="8">
-                            {utilityData && utilityData.map(utility => {
-                                return (
-                                    <MotionVStack
-                                        spacing="3"
-                                        paddingBottom="10"
-                                        as="a"
-                                        href={utility.affiliateLink}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        variant="unstyled"
-                                        whileTap={{
-                                            scale: 0.8,
-                                            borderRadius: "100%",
-                                        }}
-                                        // When the user uses their mouse
-                                        whileHover={{ scale: 1.2 }}
-                                        // When the user tabs
-                                        whileFocus={{ scale: 1.2 }}
-                                    >
-                                        <SkeletonCircle size='10' isLoaded={!isUtilitiesLoading} />
-                                        <SkeletonText isLoaded={!isUtilitiesLoading}>
-                                            <Image
-                                                src={utility.image}
-                                                size="sm"
-                                                alt="Alternate Text"
-                                                style={{ width: 150, height: 200, resizeMode: 'cover' }}
-                                            />
-                                            <VStack spacing="-0.5">
-                                                <Text>{utility.type}</Text>
-                                                <Text>{utility.price}</Text>
-                                                <Text>{utility.age}</Text>
-                                            </VStack>
-                                        </SkeletonText>
-                                    </MotionVStack>
-                                );
-                            })}
-                        </HStack>
+                        <UtilityDataTabPanel utilityData={utilityData} isUtilitiesLoading={isUtilitiesLoading} />
                     </TabPanel>
                 </TabPanels>
             </Tabs>
