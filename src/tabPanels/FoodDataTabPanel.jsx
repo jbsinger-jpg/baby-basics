@@ -1,4 +1,4 @@
-import { HStack, Image, SkeletonCircle, SkeletonText, Text, VStack } from '@chakra-ui/react';
+import { Divider, HStack, Image, SkeletonCircle, SkeletonText, Text, VStack } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React from 'react';
 
@@ -35,11 +35,15 @@ export default function FoodDataTabPanel({ foodData, isFoodDataLoading }) {
                                     alt="Alternate Text"
                                     style={{ width: 150, height: 200, resizeMode: 'cover' }}
                                 />
-                                <VStack spacing="-0.5">
+                                <VStack spacing="1" width={150} justifyContent="center" alignItems="start">
                                     <Text>{food.brand + " " + food.title}</Text>
+                                    <Divider />
                                     <Text>{food.description}</Text>
+                                    <Divider />
                                     <Text>{food.type}</Text>
+                                    <Divider />
                                     <Text>{"$" + food.price}</Text>
+                                    <Divider />
                                     <Text>{"Stage " + food.stage + " food product"}</Text>
                                 </VStack>
                             </HStack>

@@ -1,4 +1,4 @@
-import { HStack, Image, SkeletonCircle, SkeletonText, Text, VStack } from '@chakra-ui/react';
+import { Divider, HStack, Image, SkeletonCircle, SkeletonText, Text, VStack } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React from 'react';
 
@@ -34,11 +34,15 @@ export default function DiaperDataTabPanel({ diaperData, isDiapersLoading }) {
                                 alt="Alternate Text"
                                 style={{ width: 150, height: 200, resizeMode: 'cover' }}
                             />
-                            <VStack spacing="-0.5">
+                            <VStack spacing="1" width={150} justifyContent="center" alignItems="start">
                                 <Text>Amazon Affiliate</Text>
+                                <Divider />
                                 <Text>{diaper.brand}</Text>
+                                <Divider />
                                 <Text>{diaper.description}</Text>
+                                <Divider />
                                 <Text>{"$" + diaper.price}</Text>
+                                <Divider />
                                 <Text>{"Size: " + diaper.size}</Text>
                             </VStack>
                         </SkeletonText>

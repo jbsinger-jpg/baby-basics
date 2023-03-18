@@ -1,4 +1,4 @@
-import { Box, HStack, Image, SkeletonCircle, SkeletonText, Text, VStack } from '@chakra-ui/react';
+import { Box, Divider, HStack, Image, SkeletonCircle, SkeletonText, Text, VStack } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React from 'react';
 
@@ -11,7 +11,6 @@ export default function ClothingDataTabPanel({ clothingData, clothingDataLoaded 
                 return (
                     <MotionVStack
                         spacing="3"
-                        padding="10"
                         as="a"
                         href={clothing.affiliateLink}
                         target="_blank"
@@ -22,7 +21,7 @@ export default function ClothingDataTabPanel({ clothingData, clothingDataLoaded 
                             borderRadius: "100%",
                         }}
                         // When the user uses their mouse
-                        whileHover={{ scale: 1.2, backgroundColor: "black" }}
+                        whileHover={{ scale: 1.2 }}
                         // When the user tabs
                         whileFocus={{ scale: 1.2 }}
                     >
@@ -38,10 +37,13 @@ export default function ClothingDataTabPanel({ clothingData, clothingDataLoaded 
                                         cursor="pointer"
                                         onClick={() => console.log("Clicked! " + clothing.image)}
                                     />
-                                    <VStack spacing="-0.5">
+                                    <VStack spacing="1" width={150} justifyContent="center" alignItems="start">
                                         <Text>{clothing.brand + " " + clothing.type}</Text>
+                                        <Divider />
                                         <Text>{"Gender: " + clothing.gender}</Text>
+                                        <Divider />
                                         <Text>{"$" + clothing.price}</Text>
+                                        <Divider />
                                         <Text>{"size: " + clothing.size}</Text>
                                     </VStack>
                                 </VStack>
