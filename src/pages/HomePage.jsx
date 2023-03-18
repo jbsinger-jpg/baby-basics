@@ -1,4 +1,4 @@
-import { ChatIcon, MoonIcon, SunIcon, UnlockIcon } from '@chakra-ui/icons';
+import { ChatIcon, MoonIcon, SearchIcon, SunIcon, UnlockIcon } from '@chakra-ui/icons';
 import { Avatar, AvatarBadge, AvatarGroup, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, HStack, IconButton, Image, SkeletonCircle, SkeletonText, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
@@ -14,7 +14,6 @@ export default function HomePage() {
     const currentUser = auth.currentUser;
     const navigate = useNavigate();
     const [userData] = useCollectionData(firestore.collection('users'), { idField: 'id' });
-    // TODO: Add in clothing data is loading state when ready to present to production and out of development.
     const [clothingData] = useCollectionData(firestore.collection('clothing'), { idField: 'id' });
     const [foodData, isFoodDataLoading] = useCollectionData(firestore.collection('food'), { idField: 'id' });
     const [diaperData, isDiapersLoading] = useCollectionData(firestore.collection('diapers'), { idField: 'id' });
@@ -35,6 +34,8 @@ export default function HomePage() {
     const [starterGroup] = useCollectionData(starterGroupRef, { idField: 'id' });
     //-------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------
+
+    const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
 
     const handleLogin = () => {
         navigate("/login");
@@ -91,6 +92,56 @@ export default function HomePage() {
 
     return (
         <>
+            <Drawer
+                isOpen={searchBarIsOpen}
+                placement='right'
+                onClose={() => setSearchBarIsOpen(false)}
+                size="md"
+            >
+                <DrawerOverlay />
+                <DrawerContent>
+                    <DrawerCloseButton />
+                    <DrawerHeader>Create your account</DrawerHeader>
+                    <DrawerBody>
+                        <Tabs align='start' variant='enclosed' w="100%" h="100%" isFitted>
+                            <TabList>
+                                <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                                    Clothes
+                                </Tab>
+                                <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                                    Food
+                                </Tab>
+                                <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                                    Diapers
+                                </Tab>
+                                <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                                    Utilities
+                                </Tab>
+                            </TabList>
+                            <TabPanels>
+                                <TabPanel>
+                                    Clothing
+                                </TabPanel>
+                                <TabPanel>
+                                    Food
+                                </TabPanel>
+                                <TabPanel>
+                                    Diapers
+                                </TabPanel>
+                                <TabPanel>
+                                    Utilities
+                                </TabPanel>
+                            </TabPanels>
+                        </Tabs>
+                    </DrawerBody>
+                    <DrawerFooter>
+                        <Button variant='outline' mr={3} onClick={() => setSearchBarIsOpen(false)}>
+                            Cancel
+                        </Button>
+                        <Button colorScheme='blue'>Save</Button>
+                    </DrawerFooter>
+                </DrawerContent>
+            </Drawer>
             <Drawer
                 isOpen={isOpen}
                 placement='left'
@@ -194,6 +245,9 @@ export default function HomePage() {
                             null
                         }
                         <ColorModeToggleButton />
+                        <Tooltip label="Search">
+                            <IconButton icon={<SearchIcon />} onClick={() => setSearchBarIsOpen(true)} />
+                        </Tooltip>
                     </HStack>
                 </TabList>
                 <TabPanels>
@@ -203,7 +257,7 @@ export default function HomePage() {
                                 return (
                                     <MotionVStack
                                         spacing="3"
-                                        paddingBottom="10"
+                                        padding="10"
                                         as="a"
                                         href={clothing.affiliateLink}
                                         target="_blank"
@@ -214,7 +268,7 @@ export default function HomePage() {
                                             borderRadius: "100%",
                                         }}
                                         // When the user uses their mouse
-                                        whileHover={{ scale: 1.2 }}
+                                        whileHover={{ scale: 1.2, backgroundColor: "black" }}
                                         // When the user tabs
                                         whileFocus={{ scale: 1.2 }}
                                     >
