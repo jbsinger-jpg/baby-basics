@@ -21,6 +21,7 @@ export default function HomePage() {
     const [utilityData, isUtilitiesLoading] = useCollectionData(firestore.collection('utilities'), { idField: 'id' });
     const { setData: setUser } = useContext(Context);
     const [groupUsers, setGroupUsers] = useState(null);
+    const MotionButton = motion(Button);
 
     //-------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------
@@ -254,8 +255,12 @@ export default function HomePage() {
                         <HStack flexWrap={"wrap"} top="20" position="absolute">
                             {diaperData && diaperData.map(diaper => {
                                 return (
-                                    <motion.button
-                                        onClick={() => navigate("/purchase")}
+                                    <MotionButton
+                                        as="a"
+                                        href={diaper.affiliateLink}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        variant="unstyled"
                                         whileTap={{
                                             scale: 0.8,
                                             borderRadius: "100%",
@@ -270,25 +275,25 @@ export default function HomePage() {
                                             tabIndex={-1} prevents the user from having to hit tab button twice to move to the
                                             next component 
                                         */}
-                                        <Button variant="unstyled" tabIndex={-1} >
-                                            <VStack spacing="3" paddingBottom="10">
-                                                <SkeletonCircle size='10' isLoaded={!isDiapersLoading} />
-                                                <SkeletonText isLoaded={!isDiapersLoading}>
-                                                    <Image
-                                                        src={diaper.image}
-                                                        size="sm"
-                                                        alt="Alternate Text"
-                                                        style={{ width: 150, height: 200, resizeMode: 'cover' }}
-                                                    />
-                                                    <VStack spacing="-0.5">
-                                                        <Text>{diaper.brand}</Text>
-                                                        <Text>{diaper.price}</Text>
-                                                        <Text>{diaper.size}</Text>
-                                                    </VStack>
-                                                </SkeletonText>
-                                            </VStack>
-                                        </Button>
-                                    </motion.button>
+                                        <VStack spacing="3" paddingBottom="10">
+                                            <SkeletonCircle size='10' isLoaded={!isDiapersLoading} />
+                                            <SkeletonText isLoaded={!isDiapersLoading}>
+                                                <Image
+                                                    src={diaper.image}
+                                                    size="sm"
+                                                    alt="Alternate Text"
+                                                    style={{ width: 150, height: 200, resizeMode: 'cover' }}
+                                                />
+                                                <VStack spacing="-0.5">
+                                                    <Text>Amazon Affiliate</Text>
+                                                    <Text>{diaper.brand}</Text>
+                                                    <Text>{diaper.description}</Text>
+                                                    <Text>{"$" + diaper.price}</Text>
+                                                    <Text>{"Size: " + diaper.size}</Text>
+                                                </VStack>
+                                            </SkeletonText>
+                                        </VStack>
+                                    </MotionButton>
                                 );
                             })}
                         </HStack>
