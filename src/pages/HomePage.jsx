@@ -1,5 +1,5 @@
 import { ChatIcon, MoonIcon, SearchIcon, SunIcon, UnlockIcon } from '@chakra-ui/icons';
-import { Avatar, AvatarBadge, AvatarGroup, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, HStack, IconButton, Image, SkeletonCircle, SkeletonText, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Avatar, AvatarBadge, AvatarGroup, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, HStack, IconButton, Image, SkeletonCircle, SkeletonText, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { motion } from 'framer-motion';
@@ -92,17 +92,16 @@ export default function HomePage() {
 
     return (
         <>
-            <Drawer
+            <AlertDialog
                 isOpen={searchBarIsOpen}
                 placement='right'
                 onClose={() => setSearchBarIsOpen(false)}
                 size="md"
             >
-                <DrawerOverlay />
-                <DrawerContent>
-                    <DrawerCloseButton />
-                    <DrawerHeader>Create your account</DrawerHeader>
-                    <DrawerBody>
+                <AlertDialogOverlay />
+                <AlertDialogContent>
+                    <AlertDialogHeader>Filter Items</AlertDialogHeader>
+                    <AlertDialogBody>
                         <Tabs align='start' variant='enclosed' w="100%" h="100%" isFitted>
                             <TabList>
                                 <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
@@ -133,15 +132,15 @@ export default function HomePage() {
                                 </TabPanel>
                             </TabPanels>
                         </Tabs>
-                    </DrawerBody>
-                    <DrawerFooter>
+                    </AlertDialogBody>
+                    <AlertDialogFooter>
                         <Button variant='outline' mr={3} onClick={() => setSearchBarIsOpen(false)}>
-                            Cancel
+                            Close
                         </Button>
-                        <Button colorScheme='blue'>Save</Button>
-                    </DrawerFooter>
-                </DrawerContent>
-            </Drawer>
+                        <Button>Search</Button>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
             <Drawer
                 isOpen={isOpen}
                 placement='left'
