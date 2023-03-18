@@ -21,7 +21,7 @@ export default function HomePage() {
     const [utilityData, isUtilitiesLoading] = useCollectionData(firestore.collection('utilities'), { idField: 'id' });
     const { setData: setUser } = useContext(Context);
     const [groupUsers, setGroupUsers] = useState(null);
-    const MotionButton = motion(Button);
+    const MotionVStack = motion(VStack);
 
     //-------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------
@@ -198,10 +198,26 @@ export default function HomePage() {
                 </TabList>
                 <TabPanels>
                     <TabPanel>
-                        <HStack flexWrap={"wrap"} top="20" position="absolute">
+                        <HStack flexWrap={"wrap"} top="20" position="absolute" spacing="8">
                             {clothingData && clothingData.map(clothing => {
                                 return (
-                                    <VStack spacing="3" padding="6">
+                                    <MotionVStack
+                                        spacing="3"
+                                        paddingBottom="10"
+                                        as="a"
+                                        href={clothing.affiliateLink}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        variant="unstyled"
+                                        whileTap={{
+                                            scale: 0.8,
+                                            borderRadius: "100%",
+                                        }}
+                                        // When the user uses their mouse
+                                        whileHover={{ scale: 1.2 }}
+                                        // When the user tabs
+                                        whileFocus={{ scale: 1.2 }}
+                                    >
                                         <SkeletonCircle size='10' isLoaded={!isDataLoaded} />
                                         <SkeletonText isLoaded={!isDataLoaded}>
                                             <Box>
@@ -222,16 +238,32 @@ export default function HomePage() {
                                                 </VStack>
                                             </Box>
                                         </SkeletonText>
-                                    </VStack>
+                                    </MotionVStack>
                                 );
                             })}
                         </HStack>
                     </TabPanel>
                     <TabPanel>
-                        <HStack flexWrap={"wrap"} top="20" position="absolute">
+                        <HStack flexWrap={"wrap"} top="20" position="absolute" spacing="8">
                             {foodData && foodData.map(food => {
                                 return (
-                                    <VStack spacing="3" paddingBottom="10">
+                                    <MotionVStack
+                                        spacing="3"
+                                        paddingBottom="10"
+                                        as="a"
+                                        href={food.affiliateLink}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        variant="unstyled"
+                                        whileTap={{
+                                            scale: 0.8,
+                                            borderRadius: "100%",
+                                        }}
+                                        // When the user uses their mouse
+                                        whileHover={{ scale: 1.2 }}
+                                        // When the user tabs
+                                        whileFocus={{ scale: 1.2 }}
+                                    >
                                         <SkeletonCircle size='10' isLoaded={!isFoodDataLoading} />
                                         <SkeletonText isLoaded={!isFoodDataLoading}>
                                             <Image
@@ -246,16 +278,18 @@ export default function HomePage() {
                                                 <Text>{food.age}</Text>
                                             </VStack>
                                         </SkeletonText>
-                                    </VStack>
+                                    </MotionVStack>
                                 );
                             })}
                         </HStack>
                     </TabPanel>
                     <TabPanel>
-                        <HStack flexWrap={"wrap"} top="20" position="absolute" spacing="5">
+                        <HStack flexWrap={"wrap"} top="20" position="absolute" spacing="8">
                             {diaperData && diaperData.map(diaper => {
                                 return (
-                                    <MotionButton
+                                    <MotionVStack
+                                        spacing="3"
+                                        paddingBottom="10"
                                         as="a"
                                         href={diaper.affiliateLink}
                                         target="_blank"
@@ -270,34 +304,48 @@ export default function HomePage() {
                                         // When the user tabs
                                         whileFocus={{ scale: 1.2 }}
                                     >
-                                        <VStack spacing="3" paddingBottom="10">
-                                            <SkeletonCircle size='10' isLoaded={!isDiapersLoading} />
-                                            <SkeletonText isLoaded={!isDiapersLoading}>
-                                                <Image
-                                                    src={diaper.image}
-                                                    size="sm"
-                                                    alt="Alternate Text"
-                                                    style={{ width: 150, height: 200, resizeMode: 'cover' }}
-                                                />
-                                                <VStack spacing="-0.5">
-                                                    <Text>Amazon Affiliate</Text>
-                                                    <Text>{diaper.brand}</Text>
-                                                    <Text>{diaper.description}</Text>
-                                                    <Text>{"$" + diaper.price}</Text>
-                                                    <Text>{"Size: " + diaper.size}</Text>
-                                                </VStack>
-                                            </SkeletonText>
-                                        </VStack>
-                                    </MotionButton>
+                                        <SkeletonCircle size='10' isLoaded={!isDiapersLoading} />
+                                        <SkeletonText isLoaded={!isDiapersLoading}>
+                                            <Image
+                                                src={diaper.image}
+                                                size="sm"
+                                                alt="Alternate Text"
+                                                style={{ width: 150, height: 200, resizeMode: 'cover' }}
+                                            />
+                                            <VStack spacing="-0.5">
+                                                <Text>Amazon Affiliate</Text>
+                                                <Text>{diaper.brand}</Text>
+                                                <Text>{diaper.description}</Text>
+                                                <Text>{"$" + diaper.price}</Text>
+                                                <Text>{"Size: " + diaper.size}</Text>
+                                            </VStack>
+                                        </SkeletonText>
+                                    </MotionVStack>
                                 );
                             })}
                         </HStack>
                     </TabPanel>
                     <TabPanel>
-                        <HStack flexWrap={"wrap"} top="20" position="absolute">
+                        <HStack flexWrap={"wrap"} top="20" position="absolute" spacing="8">
                             {utilityData && utilityData.map(utility => {
                                 return (
-                                    <VStack spacing="3" paddingBottom="10">
+                                    <MotionVStack
+                                        spacing="3"
+                                        paddingBottom="10"
+                                        as="a"
+                                        href={utility.affiliateLink}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        variant="unstyled"
+                                        whileTap={{
+                                            scale: 0.8,
+                                            borderRadius: "100%",
+                                        }}
+                                        // When the user uses their mouse
+                                        whileHover={{ scale: 1.2 }}
+                                        // When the user tabs
+                                        whileFocus={{ scale: 1.2 }}
+                                    >
                                         <SkeletonCircle size='10' isLoaded={!isUtilitiesLoading} />
                                         <SkeletonText isLoaded={!isUtilitiesLoading}>
                                             <Image
@@ -312,7 +360,7 @@ export default function HomePage() {
                                                 <Text>{utility.age}</Text>
                                             </VStack>
                                         </SkeletonText>
-                                    </VStack>
+                                    </MotionVStack>
                                 );
                             })}
                         </HStack>
