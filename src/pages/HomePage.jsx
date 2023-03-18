@@ -232,6 +232,7 @@ export default function HomePage() {
                                                     />
                                                     <VStack spacing="-0.5">
                                                         <Text>{clothing.brand + " " + clothing.type}</Text>
+                                                        <Text>{"Gender: " + clothing.gender}</Text>
                                                         <Text>{"$" + clothing.price}</Text>
                                                         <Text>{"size: " + clothing.size}</Text>
                                                     </VStack>
@@ -244,7 +245,7 @@ export default function HomePage() {
                         </HStack>
                     </TabPanel>
                     <TabPanel>
-                        <HStack flexWrap={"wrap"} top="20" position="absolute" spacing="8">
+                        <HStack flexWrap={"wrap"} top="20" position="absolute" spacing="20">
                             {foodData && foodData.map(food => {
                                 return (
                                     <MotionVStack
@@ -266,17 +267,21 @@ export default function HomePage() {
                                     >
                                         <SkeletonCircle size='10' isLoaded={!isFoodDataLoading} />
                                         <SkeletonText isLoaded={!isFoodDataLoading}>
-                                            <Image
-                                                src={food.image}
-                                                size="sm"
-                                                alt="Alternate Text"
-                                                style={{ width: 150, height: 200, resizeMode: 'cover' }}
-                                            />
-                                            <VStack spacing="-0.5">
-                                                <Text>{food.type}</Text>
-                                                <Text>{food.price}</Text>
-                                                <Text>{food.age}</Text>
-                                            </VStack>
+                                            <HStack spacing="3">
+                                                <Image
+                                                    src={food.image}
+                                                    size="sm"
+                                                    alt="Alternate Text"
+                                                    style={{ width: 150, height: 200, resizeMode: 'cover' }}
+                                                />
+                                                <VStack spacing="-0.5">
+                                                    <Text>{food.brand + " " + food.title}</Text>
+                                                    <Text>{food.description}</Text>
+                                                    <Text>{food.type}</Text>
+                                                    <Text>{"$" + food.price}</Text>
+                                                    <Text>{"Stage " + food.stage + " food product"}</Text>
+                                                </VStack>
+                                            </HStack>
                                         </SkeletonText>
                                     </MotionVStack>
                                 );
