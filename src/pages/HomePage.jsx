@@ -252,7 +252,7 @@ export default function HomePage() {
                         </HStack>
                     </TabPanel>
                     <TabPanel>
-                        <HStack flexWrap={"wrap"} top="20" position="absolute">
+                        <HStack flexWrap={"wrap"} top="20" position="absolute" spacing="5">
                             {diaperData && diaperData.map(diaper => {
                                 return (
                                     <MotionButton
@@ -270,11 +270,6 @@ export default function HomePage() {
                                         // When the user tabs
                                         whileFocus={{ scale: 1.2 }}
                                     >
-                                        {/* 
-                                            When user is tabbing through the page prevent the button from being focused on
-                                            tabIndex={-1} prevents the user from having to hit tab button twice to move to the
-                                            next component 
-                                        */}
                                         <VStack spacing="3" paddingBottom="10">
                                             <SkeletonCircle size='10' isLoaded={!isDiapersLoading} />
                                             <SkeletonText isLoaded={!isDiapersLoading}>
