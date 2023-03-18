@@ -6,6 +6,7 @@ import ForumMessagePage from "./pages/ForumMessagePage";
 import DirectMessagePage from "./pages/DirectMessagePage";
 import Context from './context/Context';
 import PurchasePage from "./pages/PurchasePage";
+import StarterForumTopicPage from "./pages/StarterForumTopicPage";
 
 
 function App() {
@@ -18,7 +19,8 @@ function App() {
         <Route path="purchase" element={<PurchasePage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="message" element={<DirectMessagePage />} />
-        <Route path="forum" element={<ForumMessagePage />} />
+        <Route path="forum" element={<StarterForumTopicPage />} />
+        <Route path="message-page" element={<ForumMessagePage />} />
       </Routes>
     </Context.Provider>
 

@@ -1,13 +1,16 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { auth, firestore, serverTimestamp } from '../firebaseConfig';
-import { Avatar, AvatarBadge, Box, Button, HStack, Textarea } from '@chakra-ui/react';
+import { Avatar, Box, Button, HStack, Textarea } from '@chakra-ui/react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
+import Context from '../context/Context';
 
 function ForumMessagePage() {
     const [text, setText] = useState();
+    const { data: pageData } = useContext(Context);
+
     const [messages] = useCollectionData(
         firestore
-            .collection('starter_forum_messages')
+            .collection(pageData)
             .orderBy("createdAt"),
         { idField: 'id' }
     );
@@ -25,7 +28,7 @@ function ForumMessagePage() {
         e.preventDefault();
         const { uid, photoURL } = auth.currentUser;
 
-        await firestore.collection('starter_forum_messages').add({
+        await firestore.collection(pageData).add({
             text: text,
             createdAt: serverTimestamp(),
             uid: uid,
