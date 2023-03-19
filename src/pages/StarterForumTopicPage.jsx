@@ -14,7 +14,7 @@ export default function StarterForumTopicPage() {
                     <h2>
                         <AccordionButton>
                             <Box as="span" flex='1' textAlign='left'>
-                                What to feed a newborn?
+                                What to feed a a baby?
                             </Box>
                             <AccordionIcon />
                         </AccordionButton>
@@ -23,14 +23,12 @@ export default function StarterForumTopicPage() {
                         <HStack justifyContent="space-between">
                             <Text>
                                 This forum is designed around discussing dietary restrictions that come with
-                                taking care of a baby.
+                                taking care of a baby at certain stages of growth.
                             </Text>
-                            <Button onClick={
-                                () => {
-                                    setPageData("feed_new_born_messages");
-                                    navigate("/message-page");
-                                }
-                            }>
+                            <Button onClick={() => {
+                                setPageData("feed_new_born_messages");
+                                navigate("/message-page");
+                            }}>
                                 Chat
                             </Button>
                         </HStack>
@@ -55,8 +53,7 @@ export default function StarterForumTopicPage() {
                                 () => {
                                     setPageData("baby_sleep_messages");
                                     navigate("/message-page");
-                                }
-                            }>
+                                }}>
                                 Chat
                             </Button>
                         </HStack>
@@ -118,7 +115,7 @@ export default function StarterForumTopicPage() {
                     <h2>
                         <AccordionButton>
                             <Box as="span" flex='1' textAlign='left'>
-                                What to do for first pediatrician visit?
+                                What is an OBGYN good for?
                             </Box>
                             <AccordionIcon />
                         </AccordionButton>
@@ -126,8 +123,8 @@ export default function StarterForumTopicPage() {
                     <AccordionPanel pb={4}>
                         <HStack justifyContent="space-between">
                             <Text>
-                                This forum is designed around knowing what to expect
-                                when getting ahold of your pediatrician
+                                This forum is designed around helping
+                                the mothers during pregnancy.
                             </Text>
                             <Button onClick={
                                 () => {

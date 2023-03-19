@@ -28,7 +28,6 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
         let options = [];
         const formattedFoodPrice = Number(foodPrice).toFixed(2);
 
-
         if (stageOption) {
             firestore.collection('food').where("stage", "==", stageOption)
                 .get()
@@ -134,7 +133,7 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
         }
 
         if (clothingSize) {
-            firestore.collection('clothing').where("size", "==", clothingSize)
+            firestore.collection('clothing').where("querySizes", "array-contains", clothingSize)
                 .get()
                 .then(snapshot => {
                     snapshot.docs.forEach(doc => {
@@ -201,9 +200,6 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                 });
         }
 
-        // on the case that we do not have query filters then
-        // we would want to reset teh food data options... later we are going to have to 
-        // add in !var2 && !var3 and so on...
         if (!diaperPrice && !diaperSize && !diaperBrand) {
             firestore.collection('diapers')
                 .get()
