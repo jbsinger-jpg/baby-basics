@@ -14,6 +14,10 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
     const [clothingSize, setClothingSize] = useState(null);
     const [clothingType, setClothingType] = useState(null);
 
+    const [diaperBrand, setDiaperBrand] = useState(null);
+    const [diaperPrice, setDiaperPrice] = useState(null);
+    const [diaperSize, setDiaperSize] = useState(null);
+
     const [searchTabIndex, setSearchTabIndex] = useState(tabIndex);
 
     const handleTabsChange = (index) => {
@@ -22,8 +26,8 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
 
     const handleFoodSearch = () => {
         let options = [];
-        // make an option to be inclusive or exclusive with the querying system
-        // might want to filter by price OR stage, alternatively filter by price AND stage
+        const formattedFoodPrice = Number(foodPrice).toFixed(2);
+
 
         if (stageOption) {
             firestore.collection('food').where("stage", "==", stageOption)
@@ -38,8 +42,8 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                 });
         }
 
-        if (foodPrice && foodPrice > 0) {
-            firestore.collection('food').where("foodPrice", "<=", foodPrice)
+        if (formattedFoodPrice && formattedFoodPrice > 0) {
+            firestore.collection('food').where("price", "<=", Number(formattedFoodPrice))
                 .get()
                 .then(snapshot => {
                     snapshot.docs.forEach(doc => {
@@ -51,7 +55,7 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
         }
 
         if (foodBrand) {
-            firestore.collection('food').where("foodBrand", "==", foodBrand)
+            firestore.collection('food').where("brand", "==", foodBrand)
                 .get()
                 .then(snapshot => {
                     snapshot.docs.forEach(doc => {
@@ -62,9 +66,6 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                 });
         }
 
-        // on the case that we do not have query filters then
-        // we would want to reset teh food data options... later we are going to have to 
-        // add in !var2 && !var3 and so on...
         if (!stageOption && !foodPrice && !foodBrand) {
             firestore.collection('food')
                 .get()
@@ -81,8 +82,7 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
 
     const handleClothingSearch = () => {
         let options = [];
-        // make an option to be inclusive or exclusive with the querying system
-        // might want to filter by price OR stage, alternatively filter by price AND stage
+        const formattedClothingPrice = Number(clothingPrice).toFixed(2);
 
         if (clothingBrand) {
             firestore.collection('clothing').where("brand", "==", clothingBrand)
@@ -109,8 +109,8 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                 });
         }
 
-        if (clothingPrice && clothingPrice > 0) {
-            firestore.collection('clothing').where("price", "<=", clothingPrice)
+        if (formattedClothingPrice && formattedClothingPrice > 0) {
+            firestore.collection('clothing').where("price", "<=", Number(formattedClothingPrice))
                 .get()
                 .then(snapshot => {
                     snapshot.docs.forEach(doc => {
@@ -145,9 +145,6 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                 });
         }
 
-        // on the case that we do not have query filters then
-        // we would want to reset teh food data options... later we are going to have to 
-        // add in !var2 && !var3 and so on...
         if (!clothingSize && !clothingType && !clothingPrice && !clothingGender && !clothingBrand) {
             firestore.collection('clothing')
                 .get()
@@ -158,6 +155,65 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
 
                     const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
                     setClothingData(uniqueArray);
+                });
+        }
+    };
+
+    const handleDiaperSearch = () => {
+        let options = [];
+        const formattedDiaperPrice = Number(diaperPrice).toFixed(2);
+
+        if (diaperBrand) {
+            firestore.collection('diapers').where("brand", "==", diaperBrand)
+                .get()
+                .then(snapshot => {
+                    snapshot.docs.forEach(doc => {
+                        options.push({ ...doc.data() });
+                    });
+
+                    const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+                    setDiaperData(uniqueArray);
+                });
+        }
+
+        if (formattedDiaperPrice && formattedDiaperPrice > 0) {
+            firestore.collection('diapers').where("price", "<=", Number(formattedDiaperPrice))
+                .get()
+                .then(snapshot => {
+                    snapshot.docs.forEach(doc => {
+                        options.push({ ...doc.data() });
+                    });
+                    const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+                    setDiaperData(uniqueArray);
+                    console.log(snapshot.docs);
+                });
+        }
+
+        if (diaperSize && diaperSize > 0) {
+            firestore.collection('diapers').where("size", "==", diaperSize)
+                .get()
+                .then(snapshot => {
+                    snapshot.docs.forEach(doc => {
+                        options.push({ ...doc.data() });
+                    });
+                    const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+                    setDiaperData(uniqueArray);
+                });
+        }
+
+        // on the case that we do not have query filters then
+        // we would want to reset teh food data options... later we are going to have to 
+        // add in !var2 && !var3 and so on...
+        if (!diaperPrice && !diaperSize && !diaperBrand) {
+            firestore.collection('diapers')
+                .get()
+                .then(snapshot => {
+                    snapshot.docs.forEach(doc => {
+                        options.push({ ...doc.data() });
+                    });
+
+                    const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+                    setDiaperData(uniqueArray);
                 });
         }
     };
@@ -257,7 +313,7 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                                     </HStack>
                                     <HStack>
                                         <Text>Price</Text>
-                                        <Input placeholder="price no more than..." value={foodPrice} onChange={(event) => setFoodPrice(event.target.value)} />
+                                        <Input placeholder="price no more than..." value={foodPrice} onChange={(event) => setFoodPrice(event.target.value.replace(/[^0-9.-]/g, ""))} />
                                     </HStack>
                                     <HStack>
                                         <Text>Brand</Text>
@@ -284,7 +340,35 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                                 </VStack>
                             </TabPanel>
                             <TabPanel>
-                                Diapers
+                                <VStack display="flex" alignItems={"start"}>
+                                    <HStack>
+                                        <Text>Brand</Text>
+                                        <Select placeholder='Select option' value={diaperBrand} onChange={(event) => { setDiaperBrand(event.target.value); }}>
+                                            <option value='Pampers'>Pampers</option>
+                                            <option value='Huggies'>Huggies</option>
+                                            <option value='Luvs'>Luvs</option>
+                                        </Select>
+                                    </HStack>
+                                    <HStack>
+                                        <Text>Price {diaperPrice}</Text>
+                                        <Input placeholder="price no more than..." value={diaperPrice} onChange={(event) => setDiaperPrice(event.target.value.replace(/[^0-9.-]/g, ""))} />
+                                    </HStack>
+                                    <HStack>
+                                        <Text>Size</Text>
+                                        <Input placeholder="size equal to..." value={diaperSize} onChange={(event) => setDiaperSize(event.target.value)} />
+                                    </HStack>
+                                    <HStack>
+                                        <Button onClick={handleDiaperSearch}>Search</Button>
+                                        <Tooltip label="Clear filters">
+                                            <IconButton icon={<DeleteIcon />} onClick={() => {
+                                                setDiaperBrand("");
+                                                setDiaperSize("");
+                                                setDiaperPrice("");
+                                            }}
+                                            />
+                                        </Tooltip>
+                                    </HStack>
+                                </VStack>
                             </TabPanel>
                             <TabPanel>
                                 Utilities
