@@ -13,8 +13,8 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
         // make an option to be inclusive or exclusive with the querying system
         // might want to filter by price OR stage, alternatively filter by price AND stage
 
-        if (stageOption !== "") {
-            firestore.collection('food').where("stage", "==", stageOption.toString())
+        if (stageOption) {
+            firestore.collection('food').where("stage", "==", stageOption)
                 .get()
                 .then(snapshot => {
                     snapshot.docs.forEach(doc => {
@@ -26,7 +26,7 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                 });
         }
 
-        if (price !== "" && price > 0) {
+        if (price && price > 0) {
             firestore.collection('food').where("price", "<=", price)
                 .get()
                 .then(snapshot => {
@@ -38,7 +38,7 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                 });
         }
 
-        if (brand !== "") {
+        if (brand) {
             firestore.collection('food').where("brand", "==", brand)
                 .get()
                 .then(snapshot => {
@@ -53,7 +53,7 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
         // on the case that we do not have query filters then
         // we would want to reset teh food data options... later we are going to have to 
         // add in !var2 && !var3 and so on...
-        if (stageOption === "" && price === "" && brand === "") {
+        if (!stageOption && !price && !brand) {
             firestore.collection('food')
                 .get()
                 .then(snapshot => {
