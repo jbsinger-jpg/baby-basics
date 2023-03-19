@@ -8,7 +8,7 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
     const [price, setPrice] = useState(null);
     const [brand, setBrand] = useState(null);
 
-    const handleSearch = () => {
+    const handleFoodSearch = () => {
         let options = [];
         // make an option to be inclusive or exclusive with the querying system
         // might want to filter by price OR stage, alternatively filter by price AND stage
@@ -122,14 +122,17 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                                             <option value='Mama Bear'>Sprouts</option>
                                         </Select>
                                     </HStack>
-                                    <Tooltip label="Clear filters">
-                                        <IconButton icon={<DeleteIcon />} onClick={() => {
-                                            setBrand("");
-                                            setPrice("");
-                                            setStageOption("");
-                                        }}
-                                        />
-                                    </Tooltip>
+                                    <HStack>
+                                        <Button onClick={handleFoodSearch}>Search</Button>
+                                        <Tooltip label="Clear filters">
+                                            <IconButton icon={<DeleteIcon />} onClick={() => {
+                                                setBrand("");
+                                                setPrice("");
+                                                setStageOption("");
+                                            }}
+                                            />
+                                        </Tooltip>
+                                    </HStack>
                                 </VStack>
                             </TabPanel>
                             <TabPanel>
@@ -145,7 +148,6 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                     <Button variant='outline' mr={3} onClick={() => setSearchBarIsOpen(false)}>
                         Close
                     </Button>
-                    <Button onClick={handleSearch}>Search</Button>
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
