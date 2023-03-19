@@ -5,8 +5,15 @@ import { firestore } from './firebaseConfig';
 
 export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOpen, setFoodData, setClothingData, setDiaperData, tabIndex }) {
     const [stageOption, setStageOption] = useState(null);
-    const [price, setPrice] = useState(null);
-    const [brand, setBrand] = useState(null);
+    const [foodPrice, setFoodPrice] = useState(null);
+    const [foodBrand, setFoodBrand] = useState(null);
+
+    const [clothingBrand, setClothingBrand] = useState(null);
+    const [clothingGender, setClothingGender] = useState(null);
+    const [clothingPrice, setClothingPrice] = useState(null);
+    const [clothingSize, setClothingSize] = useState(null);
+    const [clothingType, setClothingType] = useState(null);
+
     const [searchTabIndex, setSearchTabIndex] = useState(tabIndex);
 
     const handleTabsChange = (index) => {
@@ -31,8 +38,8 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                 });
         }
 
-        if (price && price > 0) {
-            firestore.collection('food').where("price", "<=", price)
+        if (foodPrice && foodPrice > 0) {
+            firestore.collection('food').where("foodPrice", "<=", foodPrice)
                 .get()
                 .then(snapshot => {
                     snapshot.docs.forEach(doc => {
@@ -43,8 +50,8 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                 });
         }
 
-        if (brand) {
-            firestore.collection('food').where("brand", "==", brand)
+        if (foodBrand) {
+            firestore.collection('food').where("foodBrand", "==", foodBrand)
                 .get()
                 .then(snapshot => {
                     snapshot.docs.forEach(doc => {
@@ -58,7 +65,7 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
         // on the case that we do not have query filters then
         // we would want to reset teh food data options... later we are going to have to 
         // add in !var2 && !var3 and so on...
-        if (!stageOption && !price && !brand) {
+        if (!stageOption && !foodPrice && !foodBrand) {
             firestore.collection('food')
                 .get()
                 .then(snapshot => {
@@ -68,6 +75,89 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
 
                     const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
                     setFoodData(uniqueArray);
+                });
+        }
+    };
+
+    const handleClothingSearch = () => {
+        let options = [];
+        // make an option to be inclusive or exclusive with the querying system
+        // might want to filter by price OR stage, alternatively filter by price AND stage
+
+        if (clothingBrand) {
+            firestore.collection('clothing').where("brand", "==", clothingBrand)
+                .get()
+                .then(snapshot => {
+                    snapshot.docs.forEach(doc => {
+                        options.push({ ...doc.data() });
+                    });
+
+                    const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+                    setClothingData(uniqueArray);
+                });
+        }
+
+        if (clothingGender) {
+            firestore.collection('clothing').where("gender", "==", clothingGender)
+                .get()
+                .then(snapshot => {
+                    snapshot.docs.forEach(doc => {
+                        options.push({ ...doc.data() });
+                    });
+                    const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+                    setClothingData(uniqueArray);
+                });
+        }
+
+        if (clothingPrice && clothingPrice > 0) {
+            firestore.collection('clothing').where("price", "<=", clothingPrice)
+                .get()
+                .then(snapshot => {
+                    snapshot.docs.forEach(doc => {
+                        options.push({ ...doc.data() });
+                    });
+                    const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+                    setClothingData(uniqueArray);
+                });
+        }
+
+        if (clothingType) {
+            firestore.collection('clothing').where("type", "==", clothingType)
+                .get()
+                .then(snapshot => {
+                    snapshot.docs.forEach(doc => {
+                        options.push({ ...doc.data() });
+                    });
+                    const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+                    setClothingData(uniqueArray);
+                });
+        }
+
+        if (clothingSize) {
+            firestore.collection('clothing').where("size", "==", clothingSize)
+                .get()
+                .then(snapshot => {
+                    snapshot.docs.forEach(doc => {
+                        options.push({ ...doc.data() });
+                    });
+                    const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+                    setClothingData(uniqueArray);
+                });
+        }
+
+        // on the case that we do not have query filters then
+        // we would want to reset teh food data options... later we are going to have to 
+        // add in !var2 && !var3 and so on...
+        if (!clothingSize && !clothingType && !clothingPrice && !clothingGender && !clothingBrand) {
+            firestore.collection('clothing')
+                .get()
+                .then(snapshot => {
+                    snapshot.docs.forEach(doc => {
+                        options.push({ ...doc.data() });
+                    });
+
+                    const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+                    setClothingData(uniqueArray);
                 });
         }
     };
@@ -107,7 +197,53 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                         </TabList>
                         <TabPanels>
                             <TabPanel>
-                                Clothing
+                                <VStack display="flex" alignItems={"start"}>
+                                    <HStack>
+                                        <Text>Gender</Text>
+                                        <Select placeholder='Select option' value={clothingGender} onChange={(event) => { setClothingGender(event.target.value); }}>
+                                            <option value='boy'>boy</option>
+                                            <option value='girl'>girl</option>
+                                        </Select>
+                                    </HStack>
+                                    <HStack>
+                                        <Text>Brand</Text>
+                                        <Select placeholder='Select option' value={clothingBrand} onChange={(event) => { setClothingBrand(event.target.value); }}>
+                                            <option value='Carters'> Carters </option>
+                                            <option value='Gerber'>Gerber</option>
+                                            <option value='Renotemy'>Renotemy</option>
+                                            <option value="Burt's Bees Baby">Burt's Bees Baby</option>
+                                        </Select>
+                                    </HStack>
+                                    <HStack>
+                                        <Text>Size</Text>
+                                        <Input placeholder="size equal to..." value={clothingSize} onChange={(event) => setClothingSize(event.target.value)} />
+                                    </HStack>
+                                    <HStack>
+                                        <Text>Type</Text>
+                                        <Select placeholder='Select option' value={clothingType} onChange={(event) => { setClothingType(event.target.value); }}>
+                                            <option value='footie'>footie</option>
+                                            <option value='shirt'>shirt</option>
+                                            <option value='pants'>pants</option>
+                                            <option value='bodysuits'>bodysuits</option>
+                                            <option value='romper'>romper</option>
+                                            <option value='sunsuit'>sunsuit</option>
+                                            <option value='dress'>dress</option>
+                                        </Select>
+                                    </HStack>
+                                    <HStack>
+                                        <Button onClick={handleClothingSearch}>Search</Button>
+                                        <Tooltip label="Clear filters">
+                                            <IconButton icon={<DeleteIcon />} onClick={() => {
+                                                setClothingBrand("");
+                                                setClothingGender("");
+                                                setClothingPrice("");
+                                                setClothingSize("");
+                                                setClothingType("");
+                                            }}
+                                            />
+                                        </Tooltip>
+                                    </HStack>
+                                </VStack>
                             </TabPanel>
                             <TabPanel>
                                 <VStack display="flex" alignItems={"start"}>
@@ -121,25 +257,25 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                                     </HStack>
                                     <HStack>
                                         <Text>Price</Text>
-                                        <Input placeholder="price no more than..." value={price} onChange={(event) => setPrice(event.target.value)} />
+                                        <Input placeholder="price no more than..." value={foodPrice} onChange={(event) => setFoodPrice(event.target.value)} />
                                     </HStack>
                                     <HStack>
                                         <Text>Brand</Text>
-                                        <Select placeholder='Select option' value={brand} onChange={(event) => { setBrand(event.target.value); }}>
+                                        <Select placeholder='Select option' value={foodBrand} onChange={(event) => { setFoodBrand(event.target.value); }}>
                                             <option value='Plum Organics'> Plum Organics </option>
                                             <option value='Happy Baby'>Happy Baby</option>
                                             <option value='Beech-Nut'>Beech-Nut</option>
                                             <option value='Mama Bear'>Mama Bear</option>
-                                            <option value='Mama Bear'>Gerber</option>
-                                            <option value='Mama Bear'>Sprouts</option>
+                                            <option value='Gerber'>Gerber</option>
+                                            <option value='Sprouts'>Sprouts</option>
                                         </Select>
                                     </HStack>
                                     <HStack>
                                         <Button onClick={handleFoodSearch}>Search</Button>
                                         <Tooltip label="Clear filters">
                                             <IconButton icon={<DeleteIcon />} onClick={() => {
-                                                setBrand("");
-                                                setPrice("");
+                                                setFoodBrand("");
+                                                setFoodPrice("");
                                                 setStageOption("");
                                             }}
                                             />
