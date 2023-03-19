@@ -51,5 +51,6 @@ export default function FoodDataTabPanel({ foodData, isFoodDataLoading }) {
                     </MotionVStack>
                 );
             })}
-        </HStack>);
+        </HStack>
+    );
 }

@@ -49,5 +49,6 @@ export default function DiaperDataTabPanel({ diaperData, isDiapersLoading }) {
                     </MotionVStack>
                 );
             })}
-        </HStack>);
+        </HStack>
+    );
 }

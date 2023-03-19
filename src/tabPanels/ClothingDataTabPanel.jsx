@@ -52,5 +52,6 @@ export default function ClothingDataTabPanel({ clothingData, clothingDataLoaded 
                     </MotionVStack>
                 );
             })}
-        </HStack>);
+        </HStack>
+    );
 }
