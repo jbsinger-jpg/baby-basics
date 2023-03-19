@@ -1,12 +1,17 @@
 import { DeleteIcon } from '@chakra-ui/icons';
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, HStack, IconButton, Input, Select, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, VStack } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { firestore } from './firebaseConfig';
 
-export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOpen, setFoodData, setClothingData, setDiaperData }) {
+export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOpen, setFoodData, setClothingData, setDiaperData, tabIndex }) {
     const [stageOption, setStageOption] = useState(null);
     const [price, setPrice] = useState(null);
     const [brand, setBrand] = useState(null);
+    const [searchTabIndex, setSearchTabIndex] = useState(tabIndex);
+
+    const handleTabsChange = (index) => {
+        setSearchTabIndex(index);
+    };
 
     const handleFoodSearch = () => {
         let options = [];
@@ -67,6 +72,13 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
         }
     };
 
+    useEffect(() => {
+        if (searchBarIsOpen) {
+            setSearchTabIndex(tabIndex);
+        }
+        //eslint-disable-next-line
+    }, [searchBarIsOpen]);
+
     return (
         <AlertDialog
             isOpen={searchBarIsOpen}
@@ -78,7 +90,7 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
             <AlertDialogContent>
                 <AlertDialogHeader>Filter Items</AlertDialogHeader>
                 <AlertDialogBody>
-                    <Tabs align='start' variant='enclosed' w="100%" h="100%" isFitted>
+                    <Tabs align='start' variant='enclosed' w="100%" h="100%" isFitted index={searchTabIndex} onChange={handleTabsChange}>
                         <TabList>
                             <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
                                 Clothes

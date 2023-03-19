@@ -14,9 +14,15 @@ import UtilityDataTabPanel from '../tabPanels/UtilityDataTabPanel';
 
 export default function HomePage() {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const currentUser = auth.currentUser;
+    const { setData: setUser } = useContext(Context);
     const navigate = useNavigate();
     const [userData] = useCollectionData(firestore.collection('users'), { idField: 'id' });
+    // utility data for search bar
+    const [utilityData, isUtilitiesLoading] = useCollectionData(firestore.collection('utilities'), { idField: 'id' });
+
+    const currentUser = auth.currentUser;
+    const [groupUsers, setGroupUsers] = useState(null);
+    const [tabIndex, setTabIndex] = useState(0);
     // clothing data for search bar
     const [clothingData, setClothingData] = useState(null);
     const [isClothingDataLoading, setIsClothingDataLoading] = useState(true);
@@ -27,10 +33,9 @@ export default function HomePage() {
     const [diaperData, setDiaperData] = useState(null);
     const [isDiapersLoading, setIsDiapersLoading] = useState(true);
 
-    const [utilityData, isUtilitiesLoading] = useCollectionData(firestore.collection('utilities'), { idField: 'id' });
-
-    const { setData: setUser } = useContext(Context);
-    const [groupUsers, setGroupUsers] = useState(null);
+    const handleTabsChange = (index) => {
+        setTabIndex(index);
+    };
 
     //-------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------
@@ -147,6 +152,7 @@ export default function HomePage() {
                 setFoodData={setFoodData}
                 setClothingData={setClothingData}
                 setDiaperData={setDiaperData}
+                tabIndex={tabIndex}
             />
             <Drawer
                 isOpen={isOpen}
@@ -220,7 +226,7 @@ export default function HomePage() {
                     </DrawerFooter>
                 </DrawerContent>
             </Drawer>
-            <Tabs align='start' variant='enclosed' w="90vw" h="100vh">
+            <Tabs align='start' variant='enclosed' w="90vw" h="100vh" index={tabIndex} onChange={handleTabsChange}>
                 <TabList display="flex" justifyContent="space-between" w="99vw">
                     <HStack spacing="-1">
                         <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
