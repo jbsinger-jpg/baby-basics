@@ -6,8 +6,8 @@ import Context from '../context/Context';
 
 function ForumMessagePage() {
     const [text, setText] = useState();
+    // Data passed from StarterForumPage to here to get the messages to not have to remake a bunch of pages
     const { data: pageData } = useContext(Context);
-
     const [messages] = useCollectionData(
         firestore
             .collection(pageData)

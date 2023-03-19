@@ -13,15 +13,22 @@ import DiaperDataTabPanel from '../tabPanels/DiaperDataTabPanel';
 import UtilityDataTabPanel from '../tabPanels/UtilityDataTabPanel';
 
 export default function HomePage() {
-    const [isDataLoaded, setIsDataLoaded] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const currentUser = auth.currentUser;
     const navigate = useNavigate();
     const [userData] = useCollectionData(firestore.collection('users'), { idField: 'id' });
-    const [clothingData] = useCollectionData(firestore.collection('clothing').orderBy('type'), { idField: 'id' });
-    const [foodData, isFoodDataLoading] = useCollectionData(firestore.collection('food').orderBy('stage'), { idField: 'id' });
-    const [diaperData, isDiapersLoading] = useCollectionData(firestore.collection('diapers').orderBy('size'), { idField: 'id' });
+    // clothing data for search bar
+    const [clothingData, setClothingData] = useState(null);
+    const [isClothingDataLoading, setIsClothingDataLoading] = useState(true);
+    // food data for search bar
+    const [foodData, setFoodData] = useState(null);
+    const [isFoodDataLoading, setIsFoodDataLoading] = useState(true);
+    // diaper data for search bar
+    const [diaperData, setDiaperData] = useState(null);
+    const [isDiapersLoading, setIsDiapersLoading] = useState(true);
+
     const [utilityData, isUtilitiesLoading] = useCollectionData(firestore.collection('utilities'), { idField: 'id' });
+
     const { setData: setUser } = useContext(Context);
     const [groupUsers, setGroupUsers] = useState(null);
 
@@ -93,9 +100,54 @@ export default function HomePage() {
         }
     }, [starterGroup]);
 
+    // initialize the page with the data from the data base
+    useEffect(() => {
+        let options = [];
+
+        // set the data on the inital page load
+        firestore.collection('food').get()
+            .then(snapshot => {
+                snapshot.docs.forEach(doc => {
+                    options.push({ ...doc.data() });
+                });
+
+                setFoodData(options);
+                setIsFoodDataLoading(false);
+                options = [];
+            });
+
+        firestore.collection('diapers').get()
+            .then(snapshot => {
+                snapshot.docs.forEach(doc => {
+                    options.push({ ...doc.data() });
+                });
+
+                setDiaperData(options);
+                setIsDiapersLoading(false);
+                options = [];
+            });
+
+        firestore.collection('clothing').get()
+            .then(snapshot => {
+                snapshot.docs.forEach(doc => {
+                    options.push({ ...doc.data() });
+                });
+
+                setClothingData(options);
+                setIsClothingDataLoading(false);
+                options = [];
+            });
+    }, []);
+
     return (
         <>
-            <SearchBarAlertDialog searchBarIsOpen={searchBarIsOpen} setSearchBarIsOpen={setSearchBarIsOpen} />
+            <SearchBarAlertDialog
+                searchBarIsOpen={searchBarIsOpen}
+                setSearchBarIsOpen={setSearchBarIsOpen}
+                setFoodData={setFoodData}
+                setClothingData={setClothingData}
+                setDiaperData={setDiaperData}
+            />
             <Drawer
                 isOpen={isOpen}
                 placement='left'
@@ -120,7 +172,7 @@ export default function HomePage() {
                                     <VStack w="100%" alignItems="start" spacing="5">
                                         {userData && userData.map(user => {
                                             return (
-                                                <Button variant="unstyled" onClick={() => handleDMPress(user)}>
+                                                <Button variant="unstyled" onClick={() => handleDMPress(user)} key={user.id}>
                                                     <HStack>
                                                         <Avatar name={user.first_name + " " + user.last_name} bg="orange">
                                                             <AvatarBadge boxSize='1.25em' bg='green.500' />
@@ -144,7 +196,7 @@ export default function HomePage() {
                                                     <HStack>
                                                         <AvatarGroup size='md' max={3}>
                                                             {groupUsers && groupUsers.map(user => {
-                                                                return (<Avatar name={user.first_name + " " + user.last_name} />);
+                                                                return (<Avatar key={user.id} name={user.first_name + " " + user.last_name} />);
                                                             })}
                                                         </AvatarGroup>
                                                     </HStack>
@@ -185,7 +237,6 @@ export default function HomePage() {
                         </Tab>
                     </HStack>
                     <HStack>
-                        <Button onClick={() => { setIsDataLoaded(!isDataLoaded); }}>trigger skelly</Button>
                         <Tooltip label="Log in">
                             <IconButton icon={<UnlockIcon />} onClick={handleLogin} />
                         </Tooltip>
@@ -206,7 +257,7 @@ export default function HomePage() {
                 </TabList>
                 <TabPanels>
                     <TabPanel>
-                        <ClothingDataTabPanel clothingData={clothingData} clothingDataLoaded={isDataLoaded} />
+                        <ClothingDataTabPanel clothingData={clothingData} clothingDataLoaded={isClothingDataLoading} />
                     </TabPanel>
                     <TabPanel>
                         <FoodDataTabPanel foodData={foodData} isFoodDataLoading={isFoodDataLoading} />
