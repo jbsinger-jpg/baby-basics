@@ -1,17 +1,19 @@
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, HStack, Input, Select, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack } from '@chakra-ui/react';
+import { DeleteIcon } from '@chakra-ui/icons';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, HStack, IconButton, Input, Select, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { firestore } from './firebaseConfig';
 
 export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOpen, setFoodData, setClothingData, setDiaperData }) {
     const [stageOption, setStageOption] = useState(null);
     const [price, setPrice] = useState(null);
+    const [brand, setBrand] = useState(null);
 
     const handleSearch = () => {
         let options = [];
         // make an option to be inclusive or exclusive with the querying system
         // might want to filter by price OR stage, alternatively filter by price AND stage
 
-        if (stageOption) {
+        if (stageOption !== "") {
             firestore.collection('food').where("stage", "==", stageOption.toString())
                 .get()
                 .then(snapshot => {
@@ -24,8 +26,20 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                 });
         }
 
-        if (price && price > 0) {
+        if (price !== "" && price > 0) {
             firestore.collection('food').where("price", "<=", price)
+                .get()
+                .then(snapshot => {
+                    snapshot.docs.forEach(doc => {
+                        options.push({ ...doc.data() });
+                    });
+                    const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+                    setFoodData(uniqueArray);
+                });
+        }
+
+        if (brand !== "") {
+            firestore.collection('food').where("brand", "==", brand)
                 .get()
                 .then(snapshot => {
                     snapshot.docs.forEach(doc => {
@@ -39,7 +53,7 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
         // on the case that we do not have query filters then
         // we would want to reset teh food data options... later we are going to have to 
         // add in !var2 && !var3 and so on...
-        if (!stageOption && !price) {
+        if (stageOption === "" && price === "" && brand === "") {
             firestore.collection('food')
                 .get()
                 .then(snapshot => {
@@ -47,7 +61,8 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                         options.push({ ...doc.data() });
                     });
 
-                    setFoodData(new Set(options));
+                    const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+                    setFoodData(uniqueArray);
                 });
         }
     };
@@ -96,6 +111,25 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                                         <Text>Price</Text>
                                         <Input placeholder="price no more than..." value={price} onChange={(event) => setPrice(event.target.value)} />
                                     </HStack>
+                                    <HStack>
+                                        <Text>Brand</Text>
+                                        <Select placeholder='Select option' value={brand} onChange={(event) => { setBrand(event.target.value); }}>
+                                            <option value='Plum Organics'> Plum Organics </option>
+                                            <option value='Happy Baby'>Happy Baby</option>
+                                            <option value='Beech-Nut'>Beech-Nut</option>
+                                            <option value='Mama Bear'>Mama Bear</option>
+                                            <option value='Mama Bear'>Gerber</option>
+                                            <option value='Mama Bear'>Sprouts</option>
+                                        </Select>
+                                    </HStack>
+                                    <Tooltip label="Clear filters">
+                                        <IconButton icon={<DeleteIcon />} onClick={() => {
+                                            setBrand("");
+                                            setPrice("");
+                                            setStageOption("");
+                                        }}
+                                        />
+                                    </Tooltip>
                                 </VStack>
                             </TabPanel>
                             <TabPanel>
@@ -114,5 +148,6 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                     <Button onClick={handleSearch}>Search</Button>
                 </AlertDialogFooter>
             </AlertDialogContent>
-        </AlertDialog>);
+        </AlertDialog>
+    );
 }

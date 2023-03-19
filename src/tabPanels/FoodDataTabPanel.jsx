@@ -7,7 +7,7 @@ export default function FoodDataTabPanel({ foodData, isFoodDataLoading }) {
 
     return (
         <HStack flexWrap={"wrap"} top="20" position="absolute" spacing="20">
-            {foodData && foodData.map(food => {
+            {foodData && foodData.length > 0 && foodData.map(food => {
                 return (
                     <MotionVStack
                         spacing="3"
