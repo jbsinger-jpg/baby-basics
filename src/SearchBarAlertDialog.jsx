@@ -1,40 +1,53 @@
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, HStack, Select, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, HStack, Input, Select, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { firestore } from './firebaseConfig';
 
-export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOpen, setFoodData }) {
+export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOpen, setFoodData, setClothingData, setDiaperData }) {
     const [stageOption, setStageOption] = useState(null);
+    const [price, setPrice] = useState(null);
 
     const handleSearch = () => {
         let options = [];
+        // make an option to be inclusive or exclusive with the querying system
+        // might want to filter by price OR stage, alternatively filter by price AND stage
+
         if (stageOption) {
-            console.log("Add a stage option!", stageOption);
             firestore.collection('food').where("stage", "==", stageOption.toString())
                 .get()
                 .then(snapshot => {
                     snapshot.docs.forEach(doc => {
                         options.push({ ...doc.data() });
-                        console.log(doc.data());
                     });
 
-                    setFoodData(options);
-                    console.log(options);
+                    const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+                    setFoodData(uniqueArray);
                 });
         }
+
+        if (price && price > 0) {
+            firestore.collection('food').where("price", "<=", price)
+                .get()
+                .then(snapshot => {
+                    snapshot.docs.forEach(doc => {
+                        options.push({ ...doc.data() });
+                    });
+                    const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+                    setFoodData(uniqueArray);
+                });
+        }
+
         // on the case that we do not have query filters then
-        // we would want to reset teh food data options
-        if (!stageOption) {
+        // we would want to reset teh food data options... later we are going to have to 
+        // add in !var2 && !var3 and so on...
+        if (!stageOption && !price) {
             firestore.collection('food')
                 .get()
                 .then(snapshot => {
                     snapshot.docs.forEach(doc => {
                         options.push({ ...doc.data() });
-                        console.log(doc.data());
                     });
 
-                    setFoodData(options);
-                    console.log(options);
+                    setFoodData(new Set(options));
                 });
         }
     };
@@ -70,17 +83,20 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                                 Clothing
                             </TabPanel>
                             <TabPanel>
-                                <HStack>
-                                    <Text>Stage</Text>
-                                    <Select placeholder='Select option' value={stageOption} onChange={(event) => {
-                                        setStageOption(event.target.value);
-                                        console.log(event.target.value);
-                                    }}>
-                                        <option value='1'>1</option>
-                                        <option value='2'>2</option>
-                                        <option value='3'>3</option>
-                                    </Select>
-                                </HStack>
+                                <VStack display="flex" alignItems={"start"}>
+                                    <HStack>
+                                        <Text>Stage</Text>
+                                        <Select placeholder='Select option' value={stageOption} onChange={(event) => { setStageOption(event.target.value); }}>
+                                            <option value='1'>1</option>
+                                            <option value='2'>2</option>
+                                            <option value='3'>3</option>
+                                        </Select>
+                                    </HStack>
+                                    <HStack>
+                                        <Text>Price</Text>
+                                        <Input placeholder="price no more than..." value={price} onChange={(event) => setPrice(event.target.value)} />
+                                    </HStack>
+                                </VStack>
                             </TabPanel>
                             <TabPanel>
                                 Diapers
