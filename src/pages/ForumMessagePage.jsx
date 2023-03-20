@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { auth, firestore, serverTimestamp } from '../firebaseConfig';
-import { Avatar, Box, Button, HStack, Textarea } from '@chakra-ui/react';
+import { Avatar, Box, Button, HStack, IconButton, Text, Textarea, VStack } from '@chakra-ui/react';
+import { ArrowDownIcon, ArrowUpIcon } from "@chakra-ui/icons";
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Context from '../context/Context';
 
@@ -28,12 +29,17 @@ function ForumMessagePage() {
         e.preventDefault();
         const { uid, photoURL } = auth.currentUser;
 
-        await firestore.collection(pageData).add({
+        const docRef = await firestore.collection(pageData).add({
             text: text,
             createdAt: serverTimestamp(),
             uid: uid,
             photoURL: photoURL,
             sender: auth?.currentUser?.email,
+            voteCount: 0,
+        });
+
+        await docRef.update({
+            id: docRef.id
         });
 
         setText('');
@@ -68,17 +74,45 @@ function ForumMessagePage() {
 }
 
 function ChatMessage({ message }) {
-    const { text, uid, photoURL } = message;
-    const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
+    // TODO: Create an upvote system for the chat messages
+    // Going to need to keep track of the following:
+    // -- who previously upvoted
+    // -- the entire message list
+    // -- the currently selected message?? 
 
+    const { text, uid, photoURL, voteCount, id } = message;
+    // const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
+    // const { data: pageData } = useContext(Context);
+    // const messageRef = await firestore.collection(pageData).doc(id);
+    const [messageVoteCount, setMessageVoteCount] = useState(voteCount);
     return (
-        <div style={{ display: "flex", justifyContent: messageClass === 'sent' ? "flex-start" : 'flex-end', padding: "10px" }}>
-            <div style={{ display: 'flex', flexDirection: "row", alignItems: "center", gap: "10px" }}>
+        // <div style={{ display: "flex", justifyContent: messageClass === 'sent' ? "flex-start" : 'flex-end', padding: "10px" }}>
+        <div style={{ display: "flex", justifyContent: 'flex-start', padding: "10px" }}>
+            <HStack alignItems="center" gap="10px">
+                <VStack>
+                    <IconButton
+                        size="xs"
+                        icon={<ArrowUpIcon />}
+                        variant='outline'
+                        colorScheme='teal'
+                        onClick={() => setMessageVoteCount(messageVoteCount + 1)}
+                    // onClick={async () => { await messageRef.update({ voteCount: voteCount + 1 }); }}
+                    />
+                    <Text>{messageVoteCount}</Text>
+                    <IconButton
+                        size="xs"
+                        icon={<ArrowDownIcon />}
+                        variant='outline'
+                        colorScheme='teal'
+                        onClick={() => setMessageVoteCount(messageVoteCount - 1)}
+                    // onClick={async () => { await messageRef.update({ voteCount: voteCount - 1 }); }}
+                    />
+                </VStack>
                 <Avatar src={photoURL || 'https://i.imgur.com/rFbS5ms.png'} alt="Avatar" />
                 <Box whiteSpace="pre-wrap">
                     {text}
                 </Box>
-            </div>
+            </HStack>
         </div>
     );
 }
