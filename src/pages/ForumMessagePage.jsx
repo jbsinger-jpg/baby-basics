@@ -83,13 +83,12 @@ function ChatMessage({ message }) {
     // -- the entire message list
     // -- the currently selected message?? 
 
-    const { text, uid, photoURL, voteCount, id, upVotedUsers, downVotedUsers } = message;
-    // const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
+    const { text, photoURL, voteCount, id } = message;
     const { data: pageData } = useContext(Context);
-    // const messageRef = await firestore.collection(pageData).doc(id);
     const [messageVoteCount, setMessageVoteCount] = useState(voteCount);
     const [upVoteButtonIsLoading, setUpVoteButtonIsLoading] = useState(false);
     const [downVoteButtonIsLoading, setDownVoteButtonIsLoading] = useState(false);
+    const [originalVoteAmount] = useState(voteCount);
 
     const handleUpVote = async () => {
         const messageRef = await firestore.collection(pageData).doc(id);
@@ -121,9 +120,8 @@ function ChatMessage({ message }) {
         if (messageDoc?.upVotedUsers && messageDoc?.upVotedUsers?.length > 0) {
             // check and see if the current user is in the votedUsers array
             for (let i = 0; i < messageDoc.upVotedUsers.length; i++) {
-                if (auth.currentUser.email.toString() === messageDoc.upVotedUsers[i].toString()) {
+                if (auth.currentUser.email.toString() === messageDoc.upVotedUsers[i].toString() && voteCount > originalVoteAmount) {
                     setUpVoteButtonIsLoading(false);
-                    console.log("mathc", auth.currentUser.email);
                     return;
                 }
             }
@@ -175,9 +173,8 @@ function ChatMessage({ message }) {
         if (messageDoc?.downVotedUsers && messageDoc?.downVotedUsers?.length > 0) {
             // check and see if the current user is in the votedUsers array
             for (let i = 0; i < messageDoc.downVotedUsers.length; i++) {
-                if (auth.currentUser.email.toString() === messageDoc.downVotedUsers[i].toString()) {
+                if (auth.currentUser.email.toString() === messageDoc.downVotedUsers[i].toString() && messageDoc.voteCount < originalVoteAmount) {
                     setDownVoteButtonIsLoading(false);
-                    console.log("match", auth.currentUser.email);
                     return;
                 }
             }
