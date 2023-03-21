@@ -118,26 +118,36 @@ function ChatMessage({ message }) {
                             downVotedUsers: [],
                         });
                     setUpVoteButtonIsLoading(false);
+                    console.log("match", auth.currentUser.email);
                     return;
                 }
             }
         }
         else {
             let downVotedUsersIndex = downVotedUsers?.indexOf(auth.currentUser.email);
+            let downVoteArray = [];
+
             if (downVotedUsersIndex && downVotedUsersIndex > -1) {
-                downVotedUsers.splice(downVotedUsersIndex, 1);
+                downVoteArray = downVotedUsers.splice(downVotedUsersIndex, 1);
             }
+
+            if (downVoteArray && downVoteArray > 0)
+                await messageRef.update({
+                    downVotedUsers: [...downVoteArray],
+                });
+            else
+                await messageRef.update({
+                    downVotedUsers: [],
+                });
 
             if (upVotedUsers)
                 await messageRef.update({
                     upVotedUsers: [...upVotedUsers, auth.currentUser.email],
-                    downVotedUsers: [...downVotedUsers],
                     voteCount: voteCount + 1,
                 });
             else
                 await messageRef.update({
                     upVotedUsers: [auth.currentUser.email],
-                    downVotedUsers: downVotedUsers ? [...downVotedUsers] : [],
                     voteCount: voteCount + 1,
                 });
             setMessageVoteCount(messageVoteCount + 1);
@@ -179,20 +189,29 @@ function ChatMessage({ message }) {
         }
         else {
             let upVotedUsersIndex = upVotedUsers?.indexOf(auth.currentUser.email);
+            let upVoteArray = [];
+
             if (upVotedUsersIndex && upVotedUsersIndex > -1) {
-                upVotedUsers.splice(upVotedUsersIndex, 1);
+                upVoteArray = upVotedUsers.splice(upVotedUsersIndex, 1);
             }
+
+            if (upVoteArray && upVoteArray.length > 0)
+                await messageRef.update({
+                    upVotedUsers: [...upVoteArray],
+                });
+            else
+                await messageRef.update({
+                    upVotedUsers: [],
+                });
 
             if (downVotedUsers)
                 await messageRef.update({
                     downVotedUsers: [...downVotedUsers, auth.currentUser.email],
-                    upVotedUsers: [...upVotedUsers],
                     voteCount: voteCount - 1,
                 });
             else
                 await messageRef.update({
                     downVotedUsers: [auth.currentUser.email],
-                    upVotedUsers: upVotedUsers ? [...upVotedUsers] : [],
                     voteCount: voteCount - 1,
                 });
             setMessageVoteCount(messageVoteCount - 1);
