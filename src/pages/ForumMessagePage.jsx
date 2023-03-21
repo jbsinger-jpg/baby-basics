@@ -4,6 +4,9 @@ import { Avatar, Box, Button, HStack, IconButton, Text, Textarea, VStack } from 
 import { ArrowDownIcon, ArrowUpIcon } from "@chakra-ui/icons";
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Context from '../context/Context';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
 
 function ForumMessagePage() {
     const [text, setText] = useState();
@@ -80,13 +83,13 @@ function ChatMessage({ message }) {
     // -- the entire message list
     // -- the currently selected message?? 
 
-    const { text, uid, photoURL, voteCount, id, votedUsers } = message;
+    const { text, uid, photoURL, voteCount, id, upVotedUsers, downVotedUsers } = message;
     // const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
     const { data: pageData } = useContext(Context);
     // const messageRef = await firestore.collection(pageData).doc(id);
     const [messageVoteCount, setMessageVoteCount] = useState(voteCount);
     const [upVoteButtonIsLoading, setUpVoteButtonIsLoading] = useState(false);
-
+    const [downVoteButtonIsLoading, setDownVoteButtonIsLoading] = useState(false);
 
     const handleUpVote = async () => {
         setUpVoteButtonIsLoading(true);
@@ -94,32 +97,108 @@ function ChatMessage({ message }) {
         const messageDoc = await messageRef.get().then(doc => {
             return doc.data();
         });
-        console.log(messageDoc);
-        if (messageDoc?.votedUsers && messageDoc?.votedUsers?.length > 0) {
+
+        if (messageDoc?.upVotedUsers && messageDoc?.upVotedUsers?.length > 0) {
             // check and see if the current user is in the votedUsers array
-            for (let i = 0; i < messageDoc.votedUsers.length; i++) {
-                if (auth.currentUser.email.toString() === messageDoc.votedUsers[i].toString()) {
-                    console.log("match");
+            for (let i = 0; i < messageDoc.upVotedUsers.length; i++) {
+                if (auth.currentUser.email.toString() === messageDoc.upVotedUsers[i].toString()) {
+                    let downVotedUsersIndex = downVotedUsers?.indexOf(auth.currentUser.email);
+                    let downVoteArray = [];
+
+                    if (downVotedUsersIndex && downVotedUsersIndex > -1) {
+                        downVoteArray = downVotedUsers.splice(downVotedUsersIndex, 1);
+                    }
+
+                    if (downVoteArray && downVoteArray > 0)
+                        await messageRef.update({
+                            downVotedUsers: [...downVoteArray],
+                        });
+                    else
+                        await messageRef.update({
+                            downVotedUsers: [],
+                        });
                     setUpVoteButtonIsLoading(false);
                     return;
                 }
             }
         }
         else {
-            if (votedUsers)
+            let downVotedUsersIndex = downVotedUsers?.indexOf(auth.currentUser.email);
+            if (downVotedUsersIndex && downVotedUsersIndex > -1) {
+                downVotedUsers.splice(downVotedUsersIndex, 1);
+            }
+
+            if (upVotedUsers)
                 await messageRef.update({
-                    votedUsers: [...votedUsers, auth.currentUser.email],
-                    voteCount: voteCount + 1
+                    upVotedUsers: [...upVotedUsers, auth.currentUser.email],
+                    downVotedUsers: [...downVotedUsers],
+                    voteCount: voteCount + 1,
                 });
             else
                 await messageRef.update({
-                    votedUsers: [auth.currentUser.email],
-                    voteCount: voteCount + 1
+                    upVotedUsers: [auth.currentUser.email],
+                    downVotedUsers: downVotedUsers ? [...downVotedUsers] : [],
+                    voteCount: voteCount + 1,
                 });
             setMessageVoteCount(messageVoteCount + 1);
         }
 
         setUpVoteButtonIsLoading(false);
+    };
+
+    const handleDownVote = async () => {
+        setDownVoteButtonIsLoading(true);
+        const messageRef = await firestore.collection(pageData).doc(id);
+        const messageDoc = await messageRef.get().then(doc => {
+            return doc.data();
+        });
+
+        if (messageDoc?.downVotedUsers && messageDoc?.downVotedUsers?.length > 0) {
+            // check and see if the current user is in the votedUsers array
+            for (let i = 0; i < messageDoc.downVotedUsers.length; i++) {
+                if (auth.currentUser.email.toString() === messageDoc.downVotedUsers[i].toString()) {
+                    let upVotedUsersIndex = upVotedUsers?.indexOf(auth.currentUser.email);
+                    let upVoteArray = [];
+
+                    if (upVotedUsersIndex && upVotedUsersIndex > -1) {
+                        upVoteArray = upVotedUsers.splice(upVotedUsersIndex, 1);
+                    }
+
+                    if (upVoteArray && upVoteArray.length > 0)
+                        await messageRef.update({
+                            upVotedUsers: [...upVoteArray],
+                        });
+                    else
+                        await messageRef.update({
+                            upVotedUsers: [],
+                        });
+                    setDownVoteButtonIsLoading(false);
+                    return;
+                }
+            }
+        }
+        else {
+            let upVotedUsersIndex = upVotedUsers?.indexOf(auth.currentUser.email);
+            if (upVotedUsersIndex && upVotedUsersIndex > -1) {
+                upVotedUsers.splice(upVotedUsersIndex, 1);
+            }
+
+            if (downVotedUsers)
+                await messageRef.update({
+                    downVotedUsers: [...downVotedUsers, auth.currentUser.email],
+                    upVotedUsers: [...upVotedUsers],
+                    voteCount: voteCount - 1,
+                });
+            else
+                await messageRef.update({
+                    downVotedUsers: [auth.currentUser.email],
+                    upVotedUsers: upVotedUsers ? [...upVotedUsers] : [],
+                    voteCount: voteCount - 1,
+                });
+            setMessageVoteCount(messageVoteCount - 1);
+        }
+
+        setDownVoteButtonIsLoading(false);
     };
 
     return (
@@ -134,7 +213,6 @@ function ChatMessage({ message }) {
                         colorScheme='teal'
                         onClick={handleUpVote}
                         isLoading={upVoteButtonIsLoading}
-                    // onClick={async () => { await messageRef.update({ voteCount: voteCount + 1 }); }}
                     />
                     <Text>{messageVoteCount}</Text>
                     <IconButton
@@ -142,8 +220,8 @@ function ChatMessage({ message }) {
                         icon={<ArrowDownIcon />}
                         variant='outline'
                         colorScheme='teal'
-                        onClick={() => setMessageVoteCount(messageVoteCount - 1)}
-                    // onClick={async () => { await messageRef.update({ voteCount: voteCount - 1 }); }}
+                        onClick={handleDownVote}
+                        isLoading={downVoteButtonIsLoading}
                     />
                 </VStack>
                 <Avatar src={photoURL || 'https://i.imgur.com/rFbS5ms.png'} alt="Avatar" />
