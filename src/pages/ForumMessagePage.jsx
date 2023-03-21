@@ -92,38 +92,7 @@ function ChatMessage({ message }) {
     const [downVoteButtonIsLoading, setDownVoteButtonIsLoading] = useState(false);
 
     const handleUpVote = async () => {
-        setUpVoteButtonIsLoading(true);
-        const messageRef = await firestore.collection(pageData).doc(id);
-        const messageDoc = await messageRef.get().then(doc => {
-            return doc.data();
-        });
-
-        if (messageDoc?.upVotedUsers && messageDoc?.upVotedUsers?.length > 0) {
-            // check and see if the current user is in the votedUsers array
-            for (let i = 0; i < messageDoc.upVotedUsers.length; i++) {
-                if (auth.currentUser.email.toString() === messageDoc.upVotedUsers[i].toString()) {
-                    let downVotedUsersIndex = downVotedUsers?.indexOf(auth.currentUser.email);
-                    let downVoteArray = [];
-
-                    if (downVotedUsersIndex && downVotedUsersIndex > -1) {
-                        downVoteArray = downVotedUsers.splice(downVotedUsersIndex, 1);
-                    }
-
-                    if (downVoteArray && downVoteArray > 0)
-                        await messageRef.update({
-                            downVotedUsers: [...downVoteArray],
-                        });
-                    else
-                        await messageRef.update({
-                            downVotedUsers: [],
-                        });
-                    setUpVoteButtonIsLoading(false);
-                    console.log("match", auth.currentUser.email);
-                    return;
-                }
-            }
-        }
-        else {
+        const removeOpposingVote = async () => {
             let downVotedUsersIndex = downVotedUsers?.indexOf(auth.currentUser.email);
             let downVoteArray = [];
 
@@ -139,6 +108,26 @@ function ChatMessage({ message }) {
                 await messageRef.update({
                     downVotedUsers: [],
                 });
+        };
+
+        setUpVoteButtonIsLoading(true);
+        const messageRef = await firestore.collection(pageData).doc(id);
+        const messageDoc = await messageRef.get().then(doc => {
+            return doc.data();
+        });
+
+        if (messageDoc?.upVotedUsers && messageDoc?.upVotedUsers?.length > 0) {
+            // check and see if the current user is in the votedUsers array
+            for (let i = 0; i < messageDoc.upVotedUsers.length; i++) {
+                if (auth.currentUser.email.toString() === messageDoc.upVotedUsers[i].toString()) {
+                    await removeOpposingVote();
+                    setUpVoteButtonIsLoading(false);
+                    return;
+                }
+            }
+        }
+        else {
+            await removeOpposingVote();
 
             if (upVotedUsers)
                 await messageRef.update({
@@ -157,37 +146,7 @@ function ChatMessage({ message }) {
     };
 
     const handleDownVote = async () => {
-        setDownVoteButtonIsLoading(true);
-        const messageRef = await firestore.collection(pageData).doc(id);
-        const messageDoc = await messageRef.get().then(doc => {
-            return doc.data();
-        });
-
-        if (messageDoc?.downVotedUsers && messageDoc?.downVotedUsers?.length > 0) {
-            // check and see if the current user is in the votedUsers array
-            for (let i = 0; i < messageDoc.downVotedUsers.length; i++) {
-                if (auth.currentUser.email.toString() === messageDoc.downVotedUsers[i].toString()) {
-                    let upVotedUsersIndex = upVotedUsers?.indexOf(auth.currentUser.email);
-                    let upVoteArray = [];
-
-                    if (upVotedUsersIndex && upVotedUsersIndex > -1) {
-                        upVoteArray = upVotedUsers.splice(upVotedUsersIndex, 1);
-                    }
-
-                    if (upVoteArray && upVoteArray.length > 0)
-                        await messageRef.update({
-                            upVotedUsers: [...upVoteArray],
-                        });
-                    else
-                        await messageRef.update({
-                            upVotedUsers: [],
-                        });
-                    setDownVoteButtonIsLoading(false);
-                    return;
-                }
-            }
-        }
-        else {
+        const removeOpposingVote = async () => {
             let upVotedUsersIndex = upVotedUsers?.indexOf(auth.currentUser.email);
             let upVoteArray = [];
 
@@ -203,6 +162,26 @@ function ChatMessage({ message }) {
                 await messageRef.update({
                     upVotedUsers: [],
                 });
+        };
+
+        setDownVoteButtonIsLoading(true);
+        const messageRef = await firestore.collection(pageData).doc(id);
+        const messageDoc = await messageRef.get().then(doc => {
+            return doc.data();
+        });
+
+        if (messageDoc?.downVotedUsers && messageDoc?.downVotedUsers?.length > 0) {
+            // check and see if the current user is in the votedUsers array
+            for (let i = 0; i < messageDoc.downVotedUsers.length; i++) {
+                if (auth.currentUser.email.toString() === messageDoc.downVotedUsers[i].toString()) {
+                    await removeOpposingVote();
+                    setDownVoteButtonIsLoading(false);
+                    return;
+                }
+            }
+        }
+        else {
+            await removeOpposingVote();
 
             if (downVotedUsers)
                 await messageRef.update({
