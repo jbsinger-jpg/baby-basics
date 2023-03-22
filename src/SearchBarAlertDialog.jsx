@@ -241,7 +241,7 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
             diaperOptions.push({ dbField: "price", operator: "<=", operand: Number(formattedDiaperPrice) });
         }
 
-        if (foodBrand) {
+        if (diaperSize) {
             diaperOptions.push({ dbField: "size", operator: "==", operand: diaperSize });
         }
 
@@ -444,7 +444,7 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                                             <option value='Luvs'>Luvs</option>
                                         </Select>
                                     </HStack>
-                                    <Text>Price {diaperPrice}</Text>
+                                    <Text>Price</Text>
                                     <HStack width="100%">
                                         <Input placeholder="price no more than..." value={diaperPrice} onChange={(event) => setDiaperPrice(event.target.value.replace(/[^0-9.-]/g, ""))} />
                                     </HStack>
