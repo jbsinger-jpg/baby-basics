@@ -4,7 +4,6 @@ import { Avatar, Box, Button, HStack, IconButton, Text, Textarea, VStack } from 
 import { ArrowDownIcon, ArrowUpIcon } from "@chakra-ui/icons";
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Context from '../context/Context';
-import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 
@@ -289,50 +288,6 @@ function ChatMessage({ message }) {
         setMessageVoteCount(messageDoc.voteCount - 1);
         setDownVoteButtonIsLoading(false);
 
-
-        // const removeOpposingVote = async () => {
-        //     let upVotedUsersIndex = messageDoc.upVotedUsers?.indexOf(auth.currentUser.email);
-        //     let upVoteArray = [];
-
-        //     if (upVotedUsersIndex && upVotedUsersIndex > -1) {
-        //         upVoteArray = messageDoc.upVotedUsers.splice(upVotedUsersIndex, 1);
-        //         allowVote = true;
-        //     }
-
-        //     if (upVoteArray && upVoteArray.length > 0)
-        //         await messageRef.update({
-        //             upVotedUsers: [...upVoteArray],
-        //         });
-        //     else
-        //         await messageRef.update({
-        //             upVotedUsers: [],
-        //         });
-        // };
-
-        // setDownVoteButtonIsLoading(true);
-        // await removeOpposingVote();
-
-        // if (messageDoc?.downVotedUsers && messageDoc?.downVotedUsers?.length > 0) {
-        //     // check and see if the current user is in the votedUsers array
-        //     for (let i = 0; i < messageDoc.downVotedUsers.length; i++) {
-        //         if (auth.currentUser.email.toString() === messageDoc.downVotedUsers[i].toString() && !allowVote) {
-        //             setDownVoteButtonIsLoading(false);
-        //             return;
-        //         }
-        //     }
-
-        //     if (messageDoc.downVotedUsers && messageDoc.downVotedUsers.length > 0)
-        //         await messageRef.update({
-        //             downVotedUsers: [...messageDoc.downVotedUsers, auth.currentUser.email],
-        //             voteCount: voteCount - 1,
-        //         });
-        // }
-        // else {
-        //     await messageRef.update({
-        //         downVotedUsers: [auth.currentUser.email],
-        //         voteCount: voteCount - 1,
-        //     });
-        // }
     };
 
     return (
