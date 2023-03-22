@@ -24,46 +24,74 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
         setSearchTabIndex(index);
     };
 
-    const handleFoodSearch = () => {
+    const handleFoodSearch = async () => {
         let options = [];
+        let foodOptions = [];
+        let foodData = [];
+        let foodRef = await firestore.collection('food');
         const formattedFoodPrice = Number(foodPrice).toFixed(2);
 
         if (stageOption) {
-            firestore.collection('food').where("stage", "==", stageOption)
-                .get()
-                .then(snapshot => {
-                    snapshot.docs.forEach(doc => {
-                        options.push({ ...doc.data() });
-                    });
-
-                    const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
-                    setFoodData(uniqueArray);
-                });
+            foodOptions.push({ dbField: "stage", operator: "==", operand: stageOption });
         }
 
         if (formattedFoodPrice && formattedFoodPrice > 0) {
-            firestore.collection('food').where("price", "<=", Number(formattedFoodPrice))
-                .get()
-                .then(snapshot => {
-                    snapshot.docs.forEach(doc => {
-                        options.push({ ...doc.data() });
-                    });
-                    const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
-                    setFoodData(uniqueArray);
-                });
+            foodOptions.push({ dbField: "price", operator: "<=", operand: Number(formattedFoodPrice) });
         }
 
         if (foodBrand) {
-            firestore.collection('food').where("brand", "==", foodBrand)
-                .get()
-                .then(snapshot => {
-                    snapshot.docs.forEach(doc => {
-                        options.push({ ...doc.data() });
-                    });
-                    const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
-                    setFoodData(uniqueArray);
-                });
+            foodOptions.push({ dbField: "brand", operator: "==", operand: foodBrand });
         }
+
+        for (let i = 0; i < foodOptions.length; i++) {
+            foodRef = await foodRef.where(foodOptions[i].dbField, foodOptions[i].operator, foodOptions[i].operand);
+        }
+
+        foodRef.get().then((querySnapshot => {
+            querySnapshot.docs.forEach(doc => {
+                foodData.push({ ...doc.data() });
+            });
+
+            setFoodData(foodData);
+        }));
+
+        ////Inclusive Search
+        // if (stageOption) {
+        //     firestore.collection('food').where("stage", "==", stageOption)
+        //         .get()
+        //         .then(snapshot => {
+        //             snapshot.docs.forEach(doc => {
+        //                 options.push({ ...doc.data() });
+        //             });
+
+        //             const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+        //             setFoodData(uniqueArray);
+        //         });
+        // }
+
+        // if (formattedFoodPrice && formattedFoodPrice > 0) {
+        //     firestore.collection('food').where("price", "<=", Number(formattedFoodPrice))
+        //         .get()
+        //         .then(snapshot => {
+        //             snapshot.docs.forEach(doc => {
+        //                 options.push({ ...doc.data() });
+        //             });
+        //             const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+        //             setFoodData(uniqueArray);
+        //         });
+        // }
+
+        // if (foodBrand) {
+        //     firestore.collection('food').where("brand", "==", foodBrand)
+        //         .get()
+        //         .then(snapshot => {
+        //             snapshot.docs.forEach(doc => {
+        //                 options.push({ ...doc.data() });
+        //             });
+        //             const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+        //             setFoodData(uniqueArray);
+        //         });
+        // }
 
         if (!stageOption && !foodPrice && !foodBrand) {
             firestore.collection('food')
@@ -79,70 +107,108 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
         }
     };
 
-    const handleClothingSearch = () => {
+    const handleClothingSearch = async () => {
         let options = [];
         const formattedClothingPrice = Number(clothingPrice).toFixed(2);
 
-        if (clothingBrand) {
-            firestore.collection('clothing').where("brand", "==", clothingBrand)
-                .get()
-                .then(snapshot => {
-                    snapshot.docs.forEach(doc => {
-                        options.push({ ...doc.data() });
-                    });
+        let clothingOptions = [];
+        let clothingData = [];
+        let clothingRef = await firestore.collection('clothing');
 
-                    const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
-                    setClothingData(uniqueArray);
-                });
+        if (clothingBrand) {
+            clothingOptions.push({ dbField: "brand", operator: "==", operand: clothingBrand });
         }
 
         if (clothingGender) {
-            firestore.collection('clothing').where("gender", "==", clothingGender)
-                .get()
-                .then(snapshot => {
-                    snapshot.docs.forEach(doc => {
-                        options.push({ ...doc.data() });
-                    });
-                    const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
-                    setClothingData(uniqueArray);
-                });
+            clothingOptions.push({ dbField: "gender", operator: "==", operand: clothingGender });
         }
 
         if (formattedClothingPrice && formattedClothingPrice > 0) {
-            firestore.collection('clothing').where("price", "<=", Number(formattedClothingPrice))
-                .get()
-                .then(snapshot => {
-                    snapshot.docs.forEach(doc => {
-                        options.push({ ...doc.data() });
-                    });
-                    const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
-                    setClothingData(uniqueArray);
-                });
+            clothingOptions.push({ dbField: "price", operator: "<=", operand: Number(formattedClothingPrice) });
         }
 
         if (clothingType) {
-            firestore.collection('clothing').where("type", "==", clothingType)
-                .get()
-                .then(snapshot => {
-                    snapshot.docs.forEach(doc => {
-                        options.push({ ...doc.data() });
-                    });
-                    const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
-                    setClothingData(uniqueArray);
-                });
+            clothingOptions.push({ dbField: "type", operator: "==", operand: clothingType });
         }
 
         if (clothingSize) {
-            firestore.collection('clothing').where("querySizes", "array-contains", clothingSize)
-                .get()
-                .then(snapshot => {
-                    snapshot.docs.forEach(doc => {
-                        options.push({ ...doc.data() });
-                    });
-                    const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
-                    setClothingData(uniqueArray);
-                });
+            clothingOptions.push({ dbField: "querySizes", operator: "array-contains", operand: clothingSize });
         }
+
+        for (let i = 0; i < clothingOptions.length; i++) {
+            clothingRef = await clothingRef.where(clothingOptions[i].dbField, clothingOptions[i].operator, clothingOptions[i].operand);
+        }
+
+
+        clothingRef.get().then((querySnapshot => {
+            querySnapshot.docs.forEach(doc => {
+                clothingData.push({ ...doc.data() });
+            });
+
+            setClothingData(clothingData);
+        }));
+
+        ////Inclusive Search
+        // if (clothingBrand) {
+        //     firestore.collection('clothing').where("brand", "==", clothingBrand)
+        //         .get()
+        //         .then(snapshot => {
+        //             snapshot.docs.forEach(doc => {
+        //                 options.push({ ...doc.data() });
+        //             });
+
+        //             const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+        //             setClothingData(uniqueArray);
+        //         });
+        // }
+
+        // if (clothingGender) {
+        //     firestore.collection('clothing').where("gender", "==", clothingGender)
+        //         .get()
+        //         .then(snapshot => {
+        //             snapshot.docs.forEach(doc => {
+        //                 options.push({ ...doc.data() });
+        //             });
+        //             const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+        //             setClothingData(uniqueArray);
+        //         });
+        // }
+
+        // if (formattedClothingPrice && formattedClothingPrice > 0) {
+        //     firestore.collection('clothing').where("price", "<=", Number(formattedClothingPrice))
+        //         .get()
+        //         .then(snapshot => {
+        //             snapshot.docs.forEach(doc => {
+        //                 options.push({ ...doc.data() });
+        //             });
+        //             const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+        //             setClothingData(uniqueArray);
+        //         });
+        // }
+
+        // if (clothingType) {
+        //     firestore.collection('clothing').where("type", "==", clothingType)
+        //         .get()
+        //         .then(snapshot => {
+        //             snapshot.docs.forEach(doc => {
+        //                 options.push({ ...doc.data() });
+        //             });
+        //             const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+        //             setClothingData(uniqueArray);
+        //         });
+        // }
+
+        // if (clothingSize) {
+        //     firestore.collection('clothing').where("querySizes", "array-contains", clothingSize)
+        //         .get()
+        //         .then(snapshot => {
+        //             snapshot.docs.forEach(doc => {
+        //                 options.push({ ...doc.data() });
+        //             });
+        //             const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+        //             setClothingData(uniqueArray);
+        //         });
+        // }
 
         if (!clothingSize && !clothingType && !clothingPrice && !clothingGender && !clothingBrand) {
             firestore.collection('clothing')
@@ -249,16 +315,16 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                         </TabList>
                         <TabPanels>
                             <TabPanel>
-                                <VStack display="flex" alignItems={"start"}>
-                                    <HStack>
-                                        <Text>Gender</Text>
+                                <VStack display="flex" alignItems={"start"} width="100%">
+                                    <Text>Gender</Text>
+                                    <HStack width="100%">
                                         <Select placeholder='Select option' value={clothingGender} onChange={(event) => { setClothingGender(event.target.value); }}>
                                             <option value='boy'>boy</option>
                                             <option value='girl'>girl</option>
                                         </Select>
                                     </HStack>
-                                    <HStack>
-                                        <Text>Brand</Text>
+                                    <Text>Brand</Text>
+                                    <HStack width="100%">
                                         <Select placeholder='Select option' value={clothingBrand} onChange={(event) => { setClothingBrand(event.target.value); }}>
                                             <option value='Carters'> Carters </option>
                                             <option value='Gerber'>Gerber</option>
@@ -266,12 +332,16 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                                             <option value="Burt's Bees Baby">Burt's Bees Baby</option>
                                         </Select>
                                     </HStack>
-                                    <HStack>
-                                        <Text>Size</Text>
+                                    <Text>Size</Text>
+                                    <HStack width="100%">
                                         <Input placeholder="size equal to..." value={clothingSize} onChange={(event) => setClothingSize(event.target.value)} />
                                     </HStack>
-                                    <HStack>
-                                        <Text>Type</Text>
+                                    <Text>Price</Text>
+                                    <HStack width="100%">
+                                        <Input placeholder="price less than or equal to..." value={clothingPrice} onChange={(event) => setClothingPrice(event.target.value)} />
+                                    </HStack>
+                                    <Text>Type</Text>
+                                    <HStack width="100%">
                                         <Select placeholder='Select option' value={clothingType} onChange={(event) => { setClothingType(event.target.value); }}>
                                             <option value='footie'>footie</option>
                                             <option value='shirt'>shirt</option>
@@ -299,20 +369,20 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                             </TabPanel>
                             <TabPanel>
                                 <VStack display="flex" alignItems={"start"}>
-                                    <HStack>
-                                        <Text>Stage</Text>
+                                    <Text>Stage</Text>
+                                    <HStack width="100%">
                                         <Select placeholder='Select option' value={stageOption} onChange={(event) => { setStageOption(event.target.value); }}>
                                             <option value='1'>1</option>
                                             <option value='2'>2</option>
                                             <option value='3'>3</option>
                                         </Select>
                                     </HStack>
-                                    <HStack>
-                                        <Text>Price</Text>
+                                    <Text>Price</Text>
+                                    <HStack width="100%">
                                         <Input placeholder="price no more than..." value={foodPrice} onChange={(event) => setFoodPrice(event.target.value.replace(/[^0-9.-]/g, ""))} />
                                     </HStack>
-                                    <HStack>
-                                        <Text>Brand</Text>
+                                    <Text>Brand</Text>
+                                    <HStack width="100%">
                                         <Select placeholder='Select option' value={foodBrand} onChange={(event) => { setFoodBrand(event.target.value); }}>
                                             <option value='Plum Organics'> Plum Organics </option>
                                             <option value='Happy Baby'>Happy Baby</option>
@@ -337,20 +407,20 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                             </TabPanel>
                             <TabPanel>
                                 <VStack display="flex" alignItems={"start"}>
-                                    <HStack>
-                                        <Text>Brand</Text>
+                                    <Text>Brand</Text>
+                                    <HStack width="100%">
                                         <Select placeholder='Select option' value={diaperBrand} onChange={(event) => { setDiaperBrand(event.target.value); }}>
                                             <option value='Pampers'>Pampers</option>
                                             <option value='Huggies'>Huggies</option>
                                             <option value='Luvs'>Luvs</option>
                                         </Select>
                                     </HStack>
-                                    <HStack>
-                                        <Text>Price {diaperPrice}</Text>
+                                    <Text>Price {diaperPrice}</Text>
+                                    <HStack width="100%">
                                         <Input placeholder="price no more than..." value={diaperPrice} onChange={(event) => setDiaperPrice(event.target.value.replace(/[^0-9.-]/g, ""))} />
                                     </HStack>
-                                    <HStack>
-                                        <Text>Size</Text>
+                                    <Text>Size</Text>
+                                    <HStack width="100%">
                                         <Input placeholder="size equal to..." value={diaperSize} onChange={(event) => setDiaperSize(event.target.value)} />
                                     </HStack>
                                     <HStack>
