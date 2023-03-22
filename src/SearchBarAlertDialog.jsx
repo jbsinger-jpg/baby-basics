@@ -28,8 +28,9 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
         let options = [];
         let foodOptions = [];
         let foodData = [];
-        let foodRef = await firestore.collection('food');
+
         const formattedFoodPrice = Number(foodPrice).toFixed(2);
+        let foodRef = await firestore.collection('food');
 
         if (stageOption) {
             foodOptions.push({ dbField: "stage", operator: "==", operand: stageOption });
@@ -109,10 +110,10 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
 
     const handleClothingSearch = async () => {
         let options = [];
-        const formattedClothingPrice = Number(clothingPrice).toFixed(2);
-
         let clothingOptions = [];
         let clothingData = [];
+
+        const formattedClothingPrice = Number(clothingPrice).toFixed(2);
         let clothingRef = await firestore.collection('clothing');
 
         if (clothingBrand) {
@@ -224,47 +225,75 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
         }
     };
 
-    const handleDiaperSearch = () => {
+    const handleDiaperSearch = async () => {
         let options = [];
+        let diaperOptions = [];
+        let diaperData = [];
+
+        let diaperRef = await firestore.collection('diapers');
         const formattedDiaperPrice = Number(diaperPrice).toFixed(2);
 
         if (diaperBrand) {
-            firestore.collection('diapers').where("brand", "==", diaperBrand)
-                .get()
-                .then(snapshot => {
-                    snapshot.docs.forEach(doc => {
-                        options.push({ ...doc.data() });
-                    });
-
-                    const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
-                    setDiaperData(uniqueArray);
-                });
+            diaperOptions.push({ dbField: "brand", operator: "==", operand: diaperBrand });
         }
 
         if (formattedDiaperPrice && formattedDiaperPrice > 0) {
-            firestore.collection('diapers').where("price", "<=", Number(formattedDiaperPrice))
-                .get()
-                .then(snapshot => {
-                    snapshot.docs.forEach(doc => {
-                        options.push({ ...doc.data() });
-                    });
-                    const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
-                    setDiaperData(uniqueArray);
-                    console.log(snapshot.docs);
-                });
+            diaperOptions.push({ dbField: "price", operator: "<=", operand: Number(formattedDiaperPrice) });
         }
 
-        if (diaperSize && diaperSize > 0) {
-            firestore.collection('diapers').where("size", "==", diaperSize)
-                .get()
-                .then(snapshot => {
-                    snapshot.docs.forEach(doc => {
-                        options.push({ ...doc.data() });
-                    });
-                    const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
-                    setDiaperData(uniqueArray);
-                });
+        if (foodBrand) {
+            diaperOptions.push({ dbField: "size", operator: "==", operand: diaperSize });
         }
+
+        for (let i = 0; i < diaperOptions.length; i++) {
+            diaperRef = await diaperRef.where(diaperOptions[i].dbField, diaperOptions[i].operator, diaperOptions[i].operand);
+        }
+
+        diaperRef.get().then((querySnapshot => {
+            querySnapshot.docs.forEach(doc => {
+                diaperData.push({ ...doc.data() });
+            });
+
+            setDiaperData(diaperData);
+        }));
+
+        // if (diaperBrand) {
+        //     firestore.collection('diapers').where("brand", "==", diaperBrand)
+        //         .get()
+        //         .then(snapshot => {
+        //             snapshot.docs.forEach(doc => {
+        //                 options.push({ ...doc.data() });
+        //             });
+
+        //             const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+        //             setDiaperData(uniqueArray);
+        //         });
+        // }
+
+        // if (formattedDiaperPrice && formattedDiaperPrice > 0) {
+        //     firestore.collection('diapers').where("price", "<=", Number(formattedDiaperPrice))
+        //         .get()
+        //         .then(snapshot => {
+        //             snapshot.docs.forEach(doc => {
+        //                 options.push({ ...doc.data() });
+        //             });
+        //             const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+        //             setDiaperData(uniqueArray);
+        //             console.log(snapshot.docs);
+        //         });
+        // }
+
+        // if (diaperSize && diaperSize > 0) {
+        //     firestore.collection('diapers').where("size", "==", diaperSize)
+        //         .get()
+        //         .then(snapshot => {
+        //             snapshot.docs.forEach(doc => {
+        //                 options.push({ ...doc.data() });
+        //             });
+        //             const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+        //             setDiaperData(uniqueArray);
+        //         });
+        // }
 
         if (!diaperPrice && !diaperSize && !diaperBrand) {
             firestore.collection('diapers')
