@@ -32,6 +32,7 @@ export default function HomePage() {
     // diaper data for search bar
     const [diaperData, setDiaperData] = useState(null);
     const [isDiapersLoading, setIsDiapersLoading] = useState(true);
+    console.log("Current user: ", auth.currentUser);
 
     const handleTabsChange = (index) => {
         setTabIndex(index);

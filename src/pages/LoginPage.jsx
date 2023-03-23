@@ -1,11 +1,11 @@
-import { Box, Button, Card, HStack, Input, Tab, TabList, TabPanel, TabPanels, Tabs, VStack, useToast, IconButton, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Card, HStack, Input, Tab, TabList, TabPanel, TabPanels, Tabs, VStack, useToast, IconButton, useColorModeValue, FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import React, { useState } from 'react';
 import validator from 'validator';
 import { useNavigate } from 'react-router-dom';
 
 // firebase
-import { auth } from '../firebaseConfig';
+import { auth, firestore } from '../firebaseConfig';
 import { GoogleAuthProvider } from "firebase/auth";
 
 export default function LoginPage() {
@@ -14,6 +14,9 @@ export default function LoginPage() {
     const [passwordVisible, setPasswordVisible] = useState(false);
     const [confirmPassword, setConfirmPassword] = useState("");
     const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+
     const toast = useToast();
     const navigate = useNavigate();
 
@@ -68,15 +71,35 @@ export default function LoginPage() {
             })
             .catch((error) => {
                 // Handle sign-in error
-                console.error(error);
+                toast({
+                    title: 'Error: ' + error,
+                    status: 'error',
+                    duration: 9000,
+                    isClosable: true,
+                });
             });
     };
 
     const handleSignInGoogle = () => {
         const provider = new GoogleAuthProvider();
 
-        auth.signInWithPopup(provider).then((result) => {
-            console.log(result);
+        auth.signInWithPopup(provider).then(async (result) => {
+            // add a template user to the database
+            const usersRef = await firestore.collection("users");
+            usersRef.where("email", "==", result.user.email).get().then(snapshot => {
+                console.log(snapshot.docs.length);
+                if (!snapshot.docs.length) {
+                    const newUserId = usersRef.doc().id;
+                    usersRef.doc(newUserId).set({
+                        auth_uid: result.user.uid,
+                        babies: [],
+                        email: result.user.email,
+                        full_name: result.user.displayName,
+                        id: newUserId
+                    });
+                }
+            });
+
             navigate("/");
             const token = result.credential.accessToken;
 
@@ -99,18 +122,37 @@ export default function LoginPage() {
         });
     };
 
-    const handleSignUp = (event) => {
+    const handleSignUp = async (event) => {
         event.preventDefault();
         if (password === confirmPassword) {
             auth.createUserWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    // Handle successful sign-up
-                    console.log("User Credentials: ", userCredential);
+                .then(async (userCredential) => {
+                    // add a template user to the database
+                    const usersRef = await firestore.collection("users");
+                    usersRef.where("email", "==", userCredential.user.email).get().then(snapshot => {
+                        console.log(snapshot.docs.length);
+                        if (!snapshot.docs.length) {
+                            const newUserId = usersRef.doc().id;
+                            usersRef.doc(newUserId).set({
+                                auth_uid: userCredential.user.uid,
+                                babies: [],
+                                email: userCredential.user.email,
+                                full_name: `${firstName} ${lastName}`,
+                                id: newUserId
+                            });
+                        }
+                    });
                     navigate("/");
+
                 })
                 .catch((error) => {
                     // Handle sign-up error
-                    console.error(error);
+                    toast({
+                        title: 'Error: ' + error,
+                        status: 'error',
+                        duration: 9000,
+                        isClosable: true,
+                    });
                 });
         }
         else {
@@ -205,46 +247,68 @@ export default function LoginPage() {
                             </Box>
                         </TabPanel>
                         <TabPanel>
-                            <VStack justifyContent={"flex-start"} position="absolute" top="20" width="100%" paddingRight="8">
-                                <Input
-                                    placeholder='first name'
-                                />
-                                <Input
-                                    placeholder='last name'
-                                />
-                                <Input
-                                    placeholder='email'
-                                    value={email}
-                                    onChange={(event) => { setEmail(event.target.value); }}
-                                />
-                                <HStack w="100%">
+                            <form onSubmit={handleSignUp}>
+                                <FormControl isRequired>
+                                    <FormErrorMessage>First name is required.</FormErrorMessage>
+                                    <FormLabel>First Name</FormLabel>
                                     <Input
-                                        type={passwordVisible ? "text" : "password"}
+                                        placeholder='First Name'
+                                        value={firstName}
+                                        onChange={event => setFirstName(event.target.value)}
+                                    />
+                                </FormControl>
+                                <FormControl isRequired>
+                                    <FormLabel>Last Name</FormLabel>
+                                    <Input
+                                        placeholder='last name'
+                                        value={lastName}
+                                        onChange={event => setLastName(event.target.value)}
+                                        isRequired={true}
+                                    />
+                                </FormControl>
+                                <FormControl isRequired>
+                                    <FormLabel>Email</FormLabel>
+                                    <Input
+                                        placeholder='email'
+                                        value={email}
+                                        onChange={(event) => { setEmail(event.target.value); }}
+                                        isRequired
+                                    />
+                                </FormControl>
+                                <FormControl isRequired>
+                                    <FormLabel>Password</FormLabel>
+                                    <Input
+                                        type={confirmPasswordVisible ? "text" : "password"}
                                         placeholder='password'
                                         value={password}
+                                        isRequired
                                         onChange={(event) => { setPassword(event.target.value); }}
+                                        id="password"
                                     />
-                                    <IconButton
-                                        icon={passwordVisible ? <ViewIcon /> : <ViewOffIcon />}
-                                        onClick={() => { setPasswordVisible(!passwordVisible); }}
-                                        variant="unstyled"
-                                    />
+                                </FormControl>
+                                <FormControl isRequired>
+                                    <FormLabel>Confirm Password</FormLabel>
                                     <Input
                                         type={confirmPasswordVisible ? "text" : "password"}
                                         placeholder='confirm password'
                                         value={confirmPassword}
+                                        isRequired={true}
                                         onChange={(event) => { setConfirmPassword(event.target.value); }}
+                                        id='confirm-password'
                                     />
-                                    <IconButton
-                                        icon={confirmPasswordVisible ? <ViewIcon /> : <ViewOffIcon />}
-                                        onClick={() => { setConfirmPasswordVisible(!confirmPasswordVisible); }}
-                                        variant="unstyled"
-                                    />
-                                </HStack>
-                            </VStack>
-                            <Box display="flex" flexDir="column" justifyContent={"space-evenly"} alignContent="center" gap="2" position="absolute" bottom="20" width="100%" paddingRight="8">
-                                <Button onClick={handleSignUp}>Sign-up</Button>
-                            </Box>
+                                </FormControl>
+                                <Box display="flex" flexDir="column" justifyContent={"space-evenly"} alignContent="center" gap="2" position="absolute" bottom="20" width="100%" paddingRight="8">
+                                    <HStack>
+                                        <Button type="submit" width="100%">Sign-up</Button>
+                                        <IconButton
+                                            icon={confirmPasswordVisible ? <ViewIcon /> : <ViewOffIcon />}
+                                            onClick={() => { setConfirmPasswordVisible(!confirmPasswordVisible); }}
+                                            variant="unstyled"
+                                            id="confirm-password-icon"
+                                        />
+                                    </HStack>
+                                </Box>
+                            </form>
                         </TabPanel>
                     </TabPanels>
                 </Tabs>
