@@ -79,9 +79,10 @@ export default function ScreeningPage() {
     const handleSelect = (choice) => {
         const newAnswers = [...answers];
         const newQuestions = [...questions];
+
         newAnswers[currentQuestion] = choice;
         newQuestions[currentQuestion].answer = choice;
-        console.log(newQuestions[currentQuestion].answer);
+
         setAnswers(newAnswers);
         setQuestions(newQuestions);
     };
@@ -107,9 +108,8 @@ export default function ScreeningPage() {
             if (questions[i].answer) {
                 options[questions[i].queryField] = questions[i].answer;
             }
-            console.log(questions[i].answer);
         }
-        console.log(options);
+
         userRef.update({
             ...options
         });
