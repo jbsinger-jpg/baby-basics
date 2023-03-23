@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from "framer-motion";
-import { Box, Button, HStack, IconButton, useColorMode, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Divider, Heading, HStack, IconButton, Radio, RadioGroup, Text, useColorMode, useColorModeValue, VStack } from '@chakra-ui/react';
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
+import { auth, firestore } from '../firebaseConfig';
 
 function ProgressBar({ progress }) {
     const progressBarVariants = {
@@ -27,20 +28,19 @@ function ProgressBar({ progress }) {
 
 function FormQuestion({ question, choices, onSelect }) {
     return (
-        <div>
-            <h3>{question}</h3>
-            {choices.map((choice) => (
-                <label key={choice}>
-                    <input
-                        type="radio"
-                        name={question}
+        <RadioGroup>
+            <VStack alignItems="start">
+                <Heading size="md">{question}</Heading>
+                {choices.map((choice) => (
+                    <Radio
                         value={choice}
                         onChange={() => onSelect(choice)}
-                    />
-                    {choice}
-                </label>
-            ))}
-        </div>
+                    >
+                        {choice}
+                    </Radio>
+                ))}
+            </VStack>
+        </RadioGroup>
     );
 }
 
@@ -49,26 +49,41 @@ export default function ScreeningPage() {
 
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [answers, setAnswers] = useState([]);
-    const questions = [
+    const [questions, setQuestions] = useState([
         {
-            question: "What is your favorite color?",
-            choices: ["Red", "Green", "Blue"],
+            question: "What is your marital status?",
+            choices: ["Married", "Seperated", "Widowed", "Never Married"],
+            queryField: "marital",
+            answer: null
         },
         {
-            question: "What is your favorite animal?",
-            choices: ["Dog", "Cat", "Bird"],
+            question: "How many children do you have in total?",
+            choices: ["1", "2", "3", "4", "5+"],
+            queryField: "children_total",
+            answer: null
         },
         {
-            question: "What is your favorite food?",
-            choices: ["Pizza", "Sushi", "Burgers"],
+            question: "How many children born at the same time?",
+            choices: ["N/A", "Twins", "Triplets", "Quadruplets", "Quintuplets", "Sextuplets", "a lot..."],
+            queryField: "children_simultaneous",
+            answer: null
         },
-    ];
+        {
+            question: "What is your nationality?",
+            choices: ["Asian", "White", "Hispanic or Latingo", "American Indian or Alaska Native", "Black or African American", "Native Hawaiian or Other Pacific Islander", "Multiple"],
+            queryField: "ethnicity",
+            answer: null
+        }
+    ]);
 
     const handleSelect = (choice) => {
         const newAnswers = [...answers];
+        const newQuestions = [...questions];
         newAnswers[currentQuestion] = choice;
+        newQuestions[currentQuestion].answer = choice;
+        console.log(newQuestions[currentQuestion].answer);
         setAnswers(newAnswers);
-        setCurrentQuestion(currentQuestion + 1);
+        setQuestions(newQuestions);
     };
 
 
@@ -82,6 +97,22 @@ export default function ScreeningPage() {
         if (currentQuestion !== questions.length) {
             setCurrentQuestion(currentQuestion + 1);
         }
+    };
+
+    const handleAnswerSubmit = async () => {
+        const userRef = await firestore.collection("users").doc(auth?.currentUser?.uid);
+        let options = {};
+
+        for (let i = 0; i < questions.length; i++) {
+            if (questions[i].answer) {
+                options[questions[i].queryField] = questions[i].answer;
+            }
+            console.log(questions[i].answer);
+        }
+        console.log(options);
+        userRef.update({
+            ...options
+        });
     };
 
     const progress = (currentQuestion / questions.length) * 100;
@@ -98,28 +129,38 @@ export default function ScreeningPage() {
                     />
                 }
                 {!questions[currentQuestion] && (
-                    <div>
-                        <h3>Thanks for completing the form!</h3>
-                        <p>Your answers:</p>
-                        <ul>
+                    <VStack>
+                        <Heading size="md">Thanks for completing the form!</Heading>
+                        <Heading size="sm">Your answers</Heading>
+                        <Divider />
+                        <VStack spacing="3" textAlign="start">
                             {answers.map((answer, index) => (
-                                <li key={index}>{answer}</li>
+                                <Box width="100vw" paddingLeft="10">
+                                    <Text key={questions[index].question}> {questions[index].question}</Text>
+                                    <Text key={index}> Answer: {answer}</Text>
+                                </Box>
                             ))}
-                        </ul>
-                    </div>
+                        </VStack>
+                    </VStack>
                 )}
             </Box>
             <HStack position="absolute" bottom="10" justifyContent="space-between" width="100vw" paddingRight="5" paddingLeft="5">
                 <Button onClick={handleBackButtonPress}>
                     Back
                 </Button>
-                <Button onClick={handleNextButtonPress}>
-                    Next
-                </Button>
+                {!questions[currentQuestion] ?
+                    <Button onClick={handleAnswerSubmit}>
+                        Submit Answers
+                    </Button>
+                    :
+                    <Button onClick={handleNextButtonPress}>
+                        Next
+                    </Button>
+                }
             </HStack>
             <IconButton icon={useColorModeValue("Dark", "Light") === "Dark" ? <MoonIcon /> : <SunIcon />} onClick={toggleColorMode}>
                 {useColorModeValue("Dark", "Light")}
             </IconButton>
-        </Box>
+        </Box >
     );
 }

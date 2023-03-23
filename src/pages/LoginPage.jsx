@@ -89,13 +89,10 @@ export default function LoginPage() {
             usersRef.where("email", "==", result.user.email).get().then(snapshot => {
                 console.log(snapshot.docs.length);
                 if (!snapshot.docs.length) {
-                    const newUserId = usersRef.doc().id;
-                    usersRef.doc(newUserId).set({
-                        auth_uid: result.user.uid,
-                        babies: [],
+                    usersRef.doc(result.user.uid).set({
                         email: result.user.email,
                         full_name: result.user.displayName,
-                        id: newUserId
+                        id: result.user.uid
                     });
                 }
             });
@@ -132,13 +129,10 @@ export default function LoginPage() {
                     usersRef.where("email", "==", userCredential.user.email).get().then(snapshot => {
                         console.log(snapshot.docs.length);
                         if (!snapshot.docs.length) {
-                            const newUserId = usersRef.doc().id;
-                            usersRef.doc(newUserId).set({
-                                auth_uid: userCredential.user.uid,
-                                babies: [],
+                            usersRef.doc(userCredential.user.uid).set({
                                 email: userCredential.user.email,
                                 full_name: `${firstName} ${lastName}`,
-                                id: newUserId
+                                id: userCredential.user.uid
                             });
                         }
                     });
