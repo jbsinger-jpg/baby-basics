@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from "framer-motion";
-import { Box, Button, Divider, Heading, HStack, IconButton, Radio, RadioGroup, Text, useColorMode, useColorModeValue, VStack } from '@chakra-ui/react';
-import { MoonIcon, SunIcon } from '@chakra-ui/icons';
+import { Box, Button, Divider, Heading, HStack, Radio, RadioGroup, Text, useColorModeValue, VStack } from '@chakra-ui/react';
 import { auth, firestore } from '../firebaseConfig';
 
 function ProgressBar({ progress }) {
@@ -45,8 +44,6 @@ function FormQuestion({ question, choices, onSelect }) {
 }
 
 export default function ScreeningPage() {
-    const { toggleColorMode } = useColorMode();
-
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [answers, setAnswers] = useState([]);
     const [questions, setQuestions] = useState([
@@ -158,9 +155,6 @@ export default function ScreeningPage() {
                     </Button>
                 }
             </HStack>
-            <IconButton icon={useColorModeValue("Dark", "Light") === "Dark" ? <MoonIcon /> : <SunIcon />} onClick={toggleColorMode}>
-                {useColorModeValue("Dark", "Light")}
-            </IconButton>
-        </Box >
+        </Box>
     );
 }

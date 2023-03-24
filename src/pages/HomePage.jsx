@@ -1,4 +1,4 @@
-import { ChatIcon, MoonIcon, SearchIcon, SunIcon, UnlockIcon } from '@chakra-ui/icons';
+import { CalendarIcon, ChatIcon, MoonIcon, SearchIcon, SunIcon, UnlockIcon } from '@chakra-ui/icons';
 import { Avatar, AvatarBadge, AvatarGroup, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, HStack, IconButton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
@@ -181,11 +181,11 @@ export default function HomePage() {
                                             return (
                                                 <Button variant="unstyled" onClick={() => handleDMPress(user)} key={user.id}>
                                                     <HStack>
-                                                        <Avatar name={user.first_name + " " + user.last_name} bg="orange">
+                                                        <Avatar name={user.full_name} bg="orange">
                                                             <AvatarBadge boxSize='1.25em' bg='green.500' />
                                                         </Avatar>
                                                         <VStack spacing="-0.5" alignItems="start">
-                                                            <Text>{user.first_name + " " + user.last_name}</Text>
+                                                            <Text>{user.full_name}</Text>
                                                             <Text>Online</Text>
                                                         </VStack>
                                                     </HStack>
@@ -203,7 +203,7 @@ export default function HomePage() {
                                                     <HStack>
                                                         <AvatarGroup size='md' max={3}>
                                                             {groupUsers && groupUsers.map(user => {
-                                                                return (<Avatar key={user.id} name={user.first_name + " " + user.last_name} />);
+                                                                return (<Avatar key={user.id} name={user.full_name} />);
                                                             })}
                                                         </AvatarGroup>
                                                     </HStack>

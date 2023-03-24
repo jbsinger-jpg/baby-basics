@@ -1,14 +1,16 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { auth, firestore, serverTimestamp } from '../firebaseConfig';
-import { Avatar, Box, Button, HStack, IconButton, Text, Textarea, VStack } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Avatar, Box, Button, HStack, IconButton, Text, Textarea, VStack } from '@chakra-ui/react';
 import { ArrowDownIcon, ArrowUpIcon } from "@chakra-ui/icons";
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Context from '../context/Context';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+import { motion } from "framer-motion";
 
 function ForumMessagePage() {
     const [text, setText] = useState();
+
     // Data passed from StarterForumPage to here to get the messages to not have to remake a bunch of pages
     const { data: pageData } = useContext(Context);
     const [messages] = useCollectionData(
@@ -82,11 +84,13 @@ function ChatMessage({ message }) {
     // -- the entire message list
     // -- the currently selected message?? 
 
-    const { text, photoURL, voteCount, id, } = message;
+    const { text, photoURL, voteCount, id, sender } = message;
     const { data: pageData } = useContext(Context);
     const [messageVoteCount, setMessageVoteCount] = useState(voteCount);
     const [upVoteButtonIsLoading, setUpVoteButtonIsLoading] = useState(false);
     const [downVoteButtonIsLoading, setDownVoteButtonIsLoading] = useState(false);
+    const [alertDialogVisible, setAlertDialogVisible] = useState(false);
+    const [alertDialogData, setAlertDialogData] = useState({});
 
     const handleUpVote = async () => {
         setUpVoteButtonIsLoading(true);
@@ -290,6 +294,55 @@ function ChatMessage({ message }) {
 
     };
 
+    const handleShowUserInfo = async () => {
+        if (sender !== auth.currentUser.email) {
+            const userRef = await firestore.collection("users");
+            const userQuery = userRef.where("email", "==", sender);
+            userQuery.get()
+                .then(snapshot => {
+                    snapshot.docs.forEach(doc => {
+                        console.log("doc data: ", doc.data());
+                        setAlertDialogData({ ...doc.data() });
+                    });
+
+                    setAlertDialogVisible(true);
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+        }
+    };
+
+    const handleFriendRequest = async () => {
+        let recieverDoc = {};
+        const usersRef = await firestore.collection("users");
+        const senderDoc = usersRef.doc(auth.currentUser.uid);
+        const senderUser = await (await senderDoc.get()).data();
+        console.log("Sender information: ", senderUser);
+
+        // search for the user that is the sender of the message.
+        const recieverQuery = await usersRef.where("email", "==", sender);
+        await recieverQuery.get()
+            .then(snapshot => {
+                snapshot.docs.forEach(doc => {
+                    recieverDoc = { ...doc.data() };
+                });
+            })
+            .catch(error => { console.log(error); });
+        console.log("reciever doc: ", recieverDoc);
+
+        // update the pending friend requests with the sender of the friend request.
+        const recievingFriendDoc = usersRef.doc(recieverDoc.id);
+        if (!recievingFriendDoc.pendingFriends)
+            recievingFriendDoc.update({
+                pendingFriends: [senderUser.email]
+            });
+        else
+            recievingFriendDoc.update({
+                pendingFriends: [recievingFriendDoc?.pendingFriends, senderUser.email]
+            });
+    };
+
     return (
         // <div style={{ display: "flex", justifyContent: messageClass === 'sent' ? "flex-start" : 'flex-end', padding: "10px" }}>
         <div style={{ display: "flex", justifyContent: 'flex-start', padding: "10px" }}>
@@ -313,11 +366,48 @@ function ChatMessage({ message }) {
                         isLoading={downVoteButtonIsLoading}
                     />
                 </VStack>
-                <Avatar src={photoURL || 'https://i.imgur.com/rFbS5ms.png'} alt="Avatar" />
+                <motion.button
+                    onClick={handleShowUserInfo}
+                    whileTap={{
+                        scale: 0.8,
+                        borderRadius: "100%",
+                    }}
+                    // When the user uses their mouse
+                    whileHover={{ scale: 1.2 }}
+                    // When the user tabs
+                    whileFocus={{ scale: 1.2 }}
+                >
+                    <Avatar src={photoURL || 'https://i.imgur.com/rFbS5ms.png'} alt="Avatar" />
+                </motion.button>
                 <Box whiteSpace="pre-wrap">
                     {text}
                 </Box>
             </HStack>
+            <AlertDialog
+                isOpen={alertDialogVisible}
+                onClose={() => setAlertDialogVisible(false)}
+            >
+                <AlertDialogOverlay>
+                    <AlertDialogContent>
+                        <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                            User Preview
+                        </AlertDialogHeader>
+
+                        <AlertDialogBody>
+                            {JSON.stringify(alertDialogData)}
+                        </AlertDialogBody>
+
+                        <AlertDialogFooter>
+                            <Button onClick={() => setAlertDialogVisible(false)}>
+                                Cancel
+                            </Button>
+                            <Button onClick={handleFriendRequest} ml={3}>
+                                Friend
+                            </Button>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialogOverlay>
+            </AlertDialog>
         </div>
     );
 }
