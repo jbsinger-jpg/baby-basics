@@ -42,7 +42,8 @@ export default function ClothingDataTabPanel({ clothingData, clothingDataLoaded 
                                         <Divider />
                                         <Text>{"Gender: " + clothing.gender}</Text>
                                         <Divider />
-                                        <Text>{"$" + clothing.price_range ? clothing.price_range : clothing.price}</Text>
+                                        {clothing.price_range && <Text>{"$" + clothing.price_range}</Text>}
+                                        {(clothing.price && !clothing.price_range) && <Text> {"$" + clothing.price}</Text>}
                                         <Divider />
                                         <Text>{"size: " + clothing.size}</Text>
                                     </VStack>

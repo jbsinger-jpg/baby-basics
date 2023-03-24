@@ -1,5 +1,5 @@
 import { CalendarIcon, ChatIcon, MoonIcon, SearchIcon, SunIcon, UnlockIcon } from '@chakra-ui/icons';
-import { Avatar, AvatarBadge, AvatarGroup, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, HStack, IconButton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Avatar, AvatarBadge, AvatarGroup, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, IconButton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +16,9 @@ export default function HomePage() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { setData: setUser } = useContext(Context);
     const navigate = useNavigate();
-    const [userData] = useCollectionData(firestore.collection('users'), { idField: 'id' });
+    const [userData, setUserData] = useState(null);
+    const [alertDialogUser, setAlertDialogUser] = useState(null);
+    const [alertDialogVisible, setAlertDialogVisible] = useState(false);
     // utility data for search bar
     const [utilityData, isUtilitiesLoading] = useCollectionData(firestore.collection('utilities'), { idField: 'id' });
 
@@ -32,7 +34,6 @@ export default function HomePage() {
     // diaper data for search bar
     const [diaperData, setDiaperData] = useState(null);
     const [isDiapersLoading, setIsDiapersLoading] = useState(true);
-    console.log("Current user: ", auth.currentUser);
 
     const handleTabsChange = (index) => {
         setTabIndex(index);
@@ -73,6 +74,53 @@ export default function HomePage() {
         // TODO: Pass the user to the message page
         setUser(user.email);
         navigate("/message");
+    };
+
+    const handleFriendConfirmation = (user) => {
+        setAlertDialogUser(user);
+        setAlertDialogVisible(true);
+    };
+
+    const handleFriendSubmission = async () => {
+        const userDoc = await firestore.collection("users").doc(currentUser.uid);
+
+        if (currentUser && userData.confirmedFriends)
+            userDoc.update({
+                confirmedFriends: [...userData.confirmedFriends, alertDialogUser],
+            });
+        else
+            userDoc.update({
+                confirmedFriends: [alertDialogUser],
+            });
+        await userDoc.get()
+            .then(doc => {
+                let pendingFriends = doc.data().pendingFriends;
+                let confirmedFriends = doc.data().confirmedFriends;
+                let pendingArray = [];
+
+                for (let i = 0; i < pendingFriends.length; i++) {
+                    for (let j = 0; j < confirmedFriends.length; j++) {
+                        if (JSON.stringify(pendingFriends[i]) === JSON.stringify(confirmedFriends[j])) {
+                            let pendingIndex = i;
+
+                            if (pendingIndex && pendingIndex > -1) {
+                                pendingArray = pendingFriends.slice(0, pendingIndex);
+                                pendingArray = pendingArray.concat(pendingFriends.slice(pendingIndex + 1));
+                            }
+                        }
+                    }
+                }
+
+                userDoc.update({
+                    pendingFriends: pendingArray
+                });
+            })
+            .catch(error => {
+
+            });
+
+        setUserData((await userDoc.get()).data());
+        setAlertDialogVisible(false);
     };
 
     const handleForumButtonPress = () => {
@@ -145,6 +193,15 @@ export default function HomePage() {
             });
     }, []);
 
+    useEffect(() => {
+        if (currentUser)
+            firestore.collection("users").doc(currentUser.uid).get()
+                .then(doc => {
+                    setUserData(doc.data());
+                })
+                .catch(error => { console.log(error); });
+    }, [currentUser]);
+
     return (
         <>
             <SearchBarAlertDialog
@@ -177,7 +234,25 @@ export default function HomePage() {
                             <TabPanels>
                                 <TabPanel>
                                     <VStack w="100%" alignItems="start" spacing="5">
-                                        {userData && userData.map(user => {
+                                        <Heading size="small">Pending Friends</Heading>
+                                        {userData && userData.pendingFriends && userData.pendingFriends.map(user => {
+                                            return (
+                                                <Button variant="unstyled" onClick={() => handleFriendConfirmation(user)} key={user.id}>
+                                                    <HStack>
+                                                        <Avatar name={user.full_name} bg="orange">
+                                                            <AvatarBadge boxSize='1.25em' bg='green.500' />
+                                                        </Avatar>
+                                                        <VStack spacing="-0.5" alignItems="start">
+                                                            <Text>{user.full_name}</Text>
+                                                            <Text>Online</Text>
+                                                        </VStack>
+                                                    </HStack>
+                                                </Button>
+
+                                            );
+                                        })}
+                                        <Heading size="small">Confirmed Friends</Heading>
+                                        {userData && userData.confirmedFriends && userData.confirmedFriends.map(user => {
                                             return (
                                                 <Button variant="unstyled" onClick={() => handleDMPress(user)} key={user.id}>
                                                     <HStack>
@@ -277,6 +352,29 @@ export default function HomePage() {
                     </TabPanel>
                 </TabPanels>
             </Tabs>
+            <AlertDialog
+                isOpen={alertDialogVisible}
+                onClose={() => setAlertDialogVisible(false)}
+            >
+                <AlertDialogOverlay>
+                    <AlertDialogContent>
+                        <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                            Friend Confirmation
+                        </AlertDialogHeader>
+                        <AlertDialogBody>
+                            Are you sure you wanna friend this person, dawg?
+                        </AlertDialogBody>
+                        <AlertDialogFooter>
+                            <Button onClick={() => setAlertDialogVisible(false)}>
+                                Cancel
+                            </Button>
+                            <Button onClick={handleFriendSubmission} ml={3}>
+                                Friend
+                            </Button>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialogOverlay>
+            </AlertDialog>
         </>
 
     );

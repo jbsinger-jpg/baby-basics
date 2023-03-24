@@ -335,11 +335,11 @@ function ChatMessage({ message }) {
         const recievingFriendDoc = usersRef.doc(recieverDoc.id);
         if (!recievingFriendDoc.pendingFriends)
             recievingFriendDoc.update({
-                pendingFriends: [senderUser.email]
+                pendingFriends: [{ ...senderUser }]
             });
         else
             recievingFriendDoc.update({
-                pendingFriends: [recievingFriendDoc?.pendingFriends, senderUser.email]
+                pendingFriends: [recievingFriendDoc?.pendingFriends, { ...senderUser }]
             });
     };
 
