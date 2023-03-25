@@ -361,6 +361,7 @@ function ChatMessage({ message }) {
         console.log("Sender information: ", senderUser);
 
         // search for the user that is the sender of the message.
+        // email should always be a unique entry no need to get more than one entry from this array
         const recieverQuery = await usersRef.where("email", "==", sender);
         await recieverQuery.get()
             .then(snapshot => {
@@ -372,57 +373,31 @@ function ChatMessage({ message }) {
         console.log("reciever doc: ", recieverDoc);
 
         // update the pending friend requests with the sender of the friend request.
-        const recievingFriendDoc = usersRef.doc(recieverDoc.id);
-        if (!recievingFriendDoc.pendingFriends)
-            recievingFriendDoc.update({
-                pendingFriends: [{ ...senderUser }]
-            })
-                .then(() => {
-                    toast({
-                        title: 'Friend Request Sent!',
-                        description: "Just gotta wait for them to friend you back!",
-                        status: 'success',
-                        duration: 9000,
-                        isClosable: true,
-                    });
-                })
-                .catch(error => {
-                    toast({
-                        title: 'Friend Request Failed!',
-                        description: error,
-                        status: 'error',
-                        duration: 9000,
-                        isClosable: true,
-                    });
-                })
-                .finally(() => {
-                    setFriendButtonIsLoading(false);
+        const pendingFriendRef = usersRef.doc(recieverDoc.id).collection("pendingFriends");
+        await pendingFriendRef.doc(senderUser.id).set({
+            ...senderUser
+        })
+            .then(() => {
+                toast({
+                    title: 'Friend Request Sent!',
+                    description: "Just gotta wait for them to friend you back!",
+                    status: 'success',
+                    duration: 9000,
+                    isClosable: true,
                 });
-        else
-            recievingFriendDoc.update({
-                pendingFriends: [recievingFriendDoc?.pendingFriends, { ...senderUser }]
             })
-                .then(() => {
-                    toast({
-                        title: 'Friend Request Sent!',
-                        description: "Just gotta wait for them to friend you back!",
-                        status: 'success',
-                        duration: 9000,
-                        isClosable: true,
-                    });
-                })
-                .catch(error => {
-                    toast({
-                        title: 'Friend Request Failed!',
-                        description: error,
-                        status: 'error',
-                        duration: 9000,
-                        isClosable: true,
-                    });
-                })
-                .finally(() => {
-                    setFriendButtonIsLoading(false);
+            .catch(error => {
+                toast({
+                    title: 'Friend Request Failed!',
+                    description: JSON.stringify(error),
+                    status: 'error',
+                    duration: 9000,
+                    isClosable: true,
                 });
+            })
+            .finally(() => {
+                setFriendButtonIsLoading(false);
+            });
     };
 
     return (

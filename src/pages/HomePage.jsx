@@ -1,5 +1,5 @@
 import { CalendarIcon, ChatIcon, MoonIcon, SearchIcon, SunIcon, UnlockIcon } from '@chakra-ui/icons';
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Avatar, AvatarBadge, AvatarGroup, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, IconButton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, useToast, VStack } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Avatar, AvatarBadge, AvatarGroup, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, IconButton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { useNavigate } from 'react-router-dom';
@@ -16,13 +16,14 @@ export default function HomePage() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { setData: setUser } = useContext(Context);
     const navigate = useNavigate();
-    const [userData, setUserData] = useState(null);
+    const currentUser = auth.currentUser;
+    const [userDataPendingFriends] = useCollectionData(firestore.collection('users').doc(currentUser?.uid).collection("pendingFriends"), { idField: 'id' });
+    const [userDataConfirmedFriends] = useCollectionData(firestore.collection('users').doc(currentUser?.uid).collection("confirmedFriends"), { idField: 'id' });
     const [alertDialogUser, setAlertDialogUser] = useState(null);
     const [alertDialogVisible, setAlertDialogVisible] = useState(false);
     // utility data for search bar
     const [utilityData, isUtilitiesLoading] = useCollectionData(firestore.collection('utilities'), { idField: 'id' });
 
-    const currentUser = auth.currentUser;
     const [groupUsers, setGroupUsers] = useState(null);
     const [tabIndex, setTabIndex] = useState(0);
     // clothing data for search bar
@@ -35,9 +36,7 @@ export default function HomePage() {
     const [diaperData, setDiaperData] = useState(null);
     const [isDiapersLoading, setIsDiapersLoading] = useState(true);
 
-    const toast = useToast();
     const [friendButtonIsLoading, setFriendButtonIsLoading] = useState(false);
-
     const [screeningAlertDialogVisibile, setScreeningAlertDialogVisibile] = useState(false);
 
     const handleTabsChange = (index) => {
@@ -88,83 +87,31 @@ export default function HomePage() {
 
     const handleFriendSubmission = async () => {
         setFriendButtonIsLoading(true);
-        const userDoc = await firestore.collection("users").doc(currentUser.uid);
+        const usersRef = await firestore.collection("users");
+        const userDoc = await usersRef.doc(currentUser.uid);
+        const userDocConfirmedFriends = await userDoc.collection("confirmedFriends");
+        const userDocPendingFriends = await userDoc.collection("pendingFriends");
 
-        if (currentUser && userData.confirmedFriends)
-            userDoc.update({
-                confirmedFriends: [...userData.confirmedFriends, alertDialogUser],
+        if (alertDialogUser.id) {
+            await userDocConfirmedFriends.doc(alertDialogUser.id).set({
+                ...alertDialogUser
             });
-        else
-            userDoc.update({
-                confirmedFriends: [alertDialogUser],
-            });
 
-        await userDoc.get()
-            .then(doc => {
-                let pendingFriends = doc.data().pendingFriends;
-                let confirmedFriends = doc.data().confirmedFriends;
-                let pendingArray = [];
+            await userDocPendingFriends.doc(alertDialogUser.id).delete();
 
-                for (let i = 0; i < pendingFriends.length; i++) {
-                    for (let j = 0; j < confirmedFriends.length; j++) {
-                        if (JSON.stringify(pendingFriends[i]) === JSON.stringify(confirmedFriends[j])) {
-                            let pendingIndex = i;
+            // update sending user friends list as well
+            const sendingUserDoc = await firestore.collection("users").doc(alertDialogUser.id);
+            const sendingUserDocConfirmedFriends = await sendingUserDoc.collection("confirmedFriends");
+            const sendingUserDocPendingFriends = await sendingUserDoc.collection("pendingFriends");
 
-                            if (pendingIndex && pendingIndex > -1) {
-                                pendingArray = pendingFriends.slice(0, pendingIndex);
-                                pendingArray = pendingArray.concat(pendingFriends.slice(pendingIndex + 1));
-                            }
-                        }
-                    }
-                }
-
-                userDoc.update({
-                    pendingFriends: pendingArray
-                })
-                    .then(async () => {
-                        toast({
-                            title: 'Friend Request Updated!',
-                            description: "Just gotta wait for them to friend you back!",
-                            status: 'success',
-                            duration: 9000,
-                            isClosable: true,
-                        });
-
-                        // update sending user friends list as well
-                        if (alertDialogUser.id) {
-                            const sendingUserDoc = await firestore.collection("users").doc(alertDialogUser.id);
-
-                            if (sendingUserDoc.confirmedFriends && userData)
-                                sendingUserDoc.update({
-                                    confirmedFriends: [...sendingUserDoc.confirmedFriends, userData],
-                                });
-                            else
-                                sendingUserDoc.update({
-                                    confirmedFriends: [userData],
-                                });
-                        }
-                    })
-                    .catch(error => {
-                        toast({
-                            title: 'Friend Request Failed!',
-                            description: error,
-                            status: 'error',
-                            duration: 9000,
-                            isClosable: true,
-                        });
-                    });
-            })
-            .catch(error => {
-                toast({
-                    title: 'Friend Request Failed!',
-                    description: error,
-                    status: 'error',
-                    duration: 9000,
-                    isClosable: true,
+            await sendingUserDocConfirmedFriends.doc(currentUser?.uid)
+                .set({
+                    ...(await userDoc.get()).data()
                 });
-            });
 
-        setUserData((await userDoc.get()).data());
+            await sendingUserDocPendingFriends.doc(currentUser.uid).delete();
+        }
+
         setAlertDialogVisible(false);
         setFriendButtonIsLoading(false);
     };
@@ -239,15 +186,6 @@ export default function HomePage() {
             });
     }, []);
 
-    useEffect(() => {
-        if (currentUser)
-            firestore.collection("users").doc(currentUser.uid).get()
-                .then(doc => {
-                    setUserData(doc.data());
-                })
-                .catch(error => { console.log(error); });
-    }, [currentUser]);
-
     return (
         <>
             <SearchBarAlertDialog
@@ -281,7 +219,7 @@ export default function HomePage() {
                                 <TabPanel>
                                     <VStack w="100%" alignItems="start" spacing="5">
                                         <Heading size="small">Pending Friends</Heading>
-                                        {userData && userData.pendingFriends && userData.pendingFriends.map(user => {
+                                        {userDataPendingFriends && userDataPendingFriends.map(user => {
                                             return (
                                                 <Button variant="unstyled" onClick={() => handleFriendConfirmation(user)} key={user.id}>
                                                     <HStack>
@@ -298,7 +236,7 @@ export default function HomePage() {
                                             );
                                         })}
                                         <Heading size="small">Confirmed Friends</Heading>
-                                        {userData && userData.confirmedFriends && userData.confirmedFriends.map(user => {
+                                        {userDataConfirmedFriends && userDataConfirmedFriends.map(user => {
                                             return (
                                                 <Button variant="unstyled" onClick={() => handleDMPress(user)} key={user.id}>
                                                     <HStack>
