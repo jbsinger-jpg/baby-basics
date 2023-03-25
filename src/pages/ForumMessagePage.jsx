@@ -438,28 +438,46 @@ function ChatMessage({ message }) {
                             User Demographic
                         </AlertDialogHeader>
                         <AlertDialogBody>
-                            {alertDialogData.full_name || alertDialogData.children_total || alertDialogData.children_simultaneous || alertDialogData.marital || alertDialogData.ethnicity ?
+                            {alertDialogData.children_total || alertDialogData.children_simultaneous || alertDialogData.marital || alertDialogData.ethnicity ?
                                 <>
-                                    <Text>
-                                        {"Name " + alertDialogData?.full_name}
-                                    </Text>
-                                    <Text>
-                                        {"Children total " + alertDialogData?.children_total}
-                                    </Text>
-                                    <Text>
-                                        {"Children simultaneous " + alertDialogData?.children_simultaneous}
-                                    </Text>
-                                    <Text>
-                                        {"Marital Status " + alertDialogData?.marital}
-                                    </Text>
-                                    <Text>
-                                        {"Ethinicity " + alertDialogData?.ethnicity}
-                                    </Text>
+                                    {alertDialogData?.full_name &&
+                                        <Text>
+                                            {"Name " + alertDialogData?.full_name}
+                                        </Text>
+                                    }
+                                    {alertDialogData?.children_total &&
+                                        <Text>
+                                            {"Children total " + alertDialogData?.children_total}
+                                        </Text>
+                                    }
+                                    {alertDialogData?.children_simultaneous &&
+                                        <Text>
+                                            {"Children simultaneous " + alertDialogData?.children_simultaneous}
+                                        </Text>
+                                    }
+                                    {alertDialogData?.marital &&
+                                        <Text>
+                                            {"Marital Status " + alertDialogData?.marital}
+                                        </Text>
+                                    }
+                                    {alertDialogData?.ethnicity &&
+                                        <Text>
+                                            {"Ethinicity " + alertDialogData?.ethnicity}
+                                        </Text>
+                                    }
                                 </>
                                 :
-                                <Text>
-                                    None
-                                </Text>
+                                <>
+                                    {alertDialogData?.full_name &&
+                                        <Text>
+                                            {"Name " + alertDialogData?.full_name}
+                                        </Text>
+                                    }
+                                    <Text>
+                                        None
+                                    </Text>
+                                </>
+
                             }
                         </AlertDialogBody>
 
@@ -474,7 +492,7 @@ function ChatMessage({ message }) {
                     </AlertDialogContent>
                 </AlertDialogOverlay>
             </AlertDialog>
-        </div>
+        </div >
     );
 }
 
