@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from "framer-motion";
-import { Box, Button, Divider, Heading, HStack, Radio, RadioGroup, Text, useColorModeValue, VStack } from '@chakra-ui/react';
+import { Box, Button, Divider, Heading, HStack, Radio, RadioGroup, Text, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
 import { auth, firestore } from '../firebaseConfig';
 
 function ProgressBar({ progress }) {
@@ -46,6 +46,8 @@ function FormQuestion({ question, choices, onSelect }) {
 export default function ScreeningPage() {
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [answers, setAnswers] = useState([]);
+    const [answerButtonIsLoading, setAnswerButtonIsLoading] = useState(false);
+    const toast = useToast();
     const [questions, setQuestions] = useState([
         {
             question: "What is your marital status?",
@@ -98,6 +100,7 @@ export default function ScreeningPage() {
     };
 
     const handleAnswerSubmit = async () => {
+        setAnswerButtonIsLoading(true);
         const userRef = await firestore.collection("users").doc(auth?.currentUser?.uid);
         let options = {};
 
@@ -109,7 +112,28 @@ export default function ScreeningPage() {
 
         userRef.update({
             ...options
-        });
+        })
+            .then(() => {
+                toast({
+                    title: 'Answers submitted!',
+                    description: "Other peeps will be able to see your responses when sending friend requests",
+                    status: 'success',
+                    duration: 9000,
+                    isClosable: true,
+                });
+            })
+            .catch(error => {
+                toast({
+                    title: 'Answers not submitted!',
+                    description: error,
+                    status: 'error',
+                    duration: 9000,
+                    isClosable: true,
+                });
+            })
+            .finally(() => {
+                setAnswerButtonIsLoading(false);
+            });
     };
 
     const progress = (currentQuestion / questions.length) * 100;
@@ -146,7 +170,7 @@ export default function ScreeningPage() {
                     Back
                 </Button>
                 {!questions[currentQuestion] ?
-                    <Button onClick={handleAnswerSubmit}>
+                    <Button onClick={handleAnswerSubmit} isLoading={answerButtonIsLoading}>
                         Submit Answers
                     </Button>
                     :

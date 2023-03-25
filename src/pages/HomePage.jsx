@@ -38,6 +38,8 @@ export default function HomePage() {
     const toast = useToast();
     const [friendButtonIsLoading, setFriendButtonIsLoading] = useState(false);
 
+    const [screeningAlertDialogVisibile, setScreeningAlertDialogVisibile] = useState(false);
+
     const handleTabsChange = (index) => {
         setTabIndex(index);
     };
@@ -371,6 +373,9 @@ export default function HomePage() {
                                 <Tooltip label="Chat with peeps">
                                     <IconButton icon={<ChatIcon />} onClick={onOpen} />
                                 </Tooltip>
+                                <Tooltip label="About you">
+                                    <IconButton icon={<CalendarIcon />} onClick={() => setScreeningAlertDialogVisibile(true)} />
+                                </Tooltip>
                             </>
                             :
                             null
@@ -414,6 +419,31 @@ export default function HomePage() {
                             </Button>
                             <Button isLoading={friendButtonIsLoading} onClick={handleFriendSubmission} ml={3}>
                                 Friend
+                            </Button>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialogOverlay>
+            </AlertDialog>
+            <AlertDialog
+                isOpen={screeningAlertDialogVisibile}
+                onClose={() => setScreeningAlertDialogVisibile(false)}
+            >
+                <AlertDialogOverlay>
+                    <AlertDialogContent>
+                        <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                            Demographic Disclaimer
+                        </AlertDialogHeader>
+                        <AlertDialogBody>
+                            This page asks personal questions that are in no need mandatory to answer
+                            this is just to make it easier for others to reach out to you when friending, or
+                            seeking opinions by people with certain characteristics.
+                        </AlertDialogBody>
+                        <AlertDialogFooter>
+                            <Button onClick={() => setScreeningAlertDialogVisibile(false)}>
+                                Cancel
+                            </Button>
+                            <Button onClick={() => navigate("/screening")} ml={3}>
+                                Continue
                             </Button>
                         </AlertDialogFooter>
                     </AlertDialogContent>
