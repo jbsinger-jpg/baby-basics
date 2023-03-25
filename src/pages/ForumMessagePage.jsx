@@ -13,13 +13,39 @@ function ForumMessagePage() {
 
     // Data passed from StarterForumPage to here to get the messages to not have to remake a bunch of pages
     const { data: pageData } = useContext(Context);
-    const [messages] = useCollectionData(
+    const [createdOrderMessages] = useCollectionData(
         firestore
             .collection(pageData)
             .orderBy("createdAt"),
         { idField: 'id' }
     );
+    const [voteOrderMessages] = useCollectionData(
+        firestore
+            .collection(pageData)
+            .orderBy("voteCount", "desc"),
+        { idField: 'id' }
+    );
+    const [messages, setMessages] = useState(createdOrderMessages);
+    const [orderByVoteCount, setOrderByVoteCount] = useState(false);
     const messageBoxRef = useRef();
+
+    // when the order button pressed change the order of the messages and make sure that the messages useState acutally has text
+    // rendered from it.
+    // =========================================================================================================================
+    // =========================================================================================================================
+    useEffect(() => {
+        if (createdOrderMessages && !orderByVoteCount) {
+            setMessages(createdOrderMessages);
+        }
+    }, [createdOrderMessages, orderByVoteCount]);
+
+    useEffect(() => {
+        if (voteOrderMessages && orderByVoteCount) {
+            setMessages(voteOrderMessages);
+        }
+    }, [voteOrderMessages, orderByVoteCount]);
+    // =========================================================================================================================
+    // =========================================================================================================================
 
     useEffect(() => {
         messageBoxRef.current.scrollTop = messageBoxRef.current.scrollHeight;
@@ -51,6 +77,17 @@ function ForumMessagePage() {
 
     return (
         <Box w="100vw" h="100vh">
+            <Box w="100vw" justifyContent="flex-end" display="flex" padding="5">
+                {orderByVoteCount ?
+                    <Button onClick={() => setOrderByVoteCount(!orderByVoteCount)}>
+                        Order By Created
+                    </Button>
+                    :
+                    <Button onClick={() => setOrderByVoteCount(!orderByVoteCount)}>
+                        Order By Vote
+                    </Button>
+                }
+            </Box>
             <div style={{ height: 'calc(100vh - 100px)', overflowY: 'auto' }} ref={messageBoxRef}>
                 {(messages) &&
                     messages
