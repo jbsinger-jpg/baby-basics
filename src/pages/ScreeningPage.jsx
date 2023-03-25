@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from "framer-motion";
-import { Box, Button, Divider, Heading, HStack, Radio, RadioGroup, Text, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
+import { Box, Button, Divider, Heading, HStack, IconButton, Radio, RadioGroup, Text, Tooltip, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
 import { auth, firestore } from '../firebaseConfig';
+import { DeleteIcon } from '@chakra-ui/icons';
 
 function ProgressBar({ progress }) {
     const progressBarVariants = {
@@ -44,10 +45,9 @@ function FormQuestion({ question, choices, onSelect }) {
 }
 
 export default function ScreeningPage() {
-    const [currentQuestion, setCurrentQuestion] = useState(0);
-    const [answers, setAnswers] = useState([]);
-    const [answerButtonIsLoading, setAnswerButtonIsLoading] = useState(false);
     const toast = useToast();
+    const [currentQuestion, setCurrentQuestion] = useState(0);
+    const [answerButtonIsLoading, setAnswerButtonIsLoading] = useState(false);
     const [questions, setQuestions] = useState([
         {
             question: "What is your marital status?",
@@ -76,13 +76,8 @@ export default function ScreeningPage() {
     ]);
 
     const handleSelect = (choice) => {
-        const newAnswers = [...answers];
         const newQuestions = [...questions];
-
-        newAnswers[currentQuestion] = choice;
         newQuestions[currentQuestion].answer = choice;
-
-        setAnswers(newAnswers);
         setQuestions(newQuestions);
     };
 
@@ -105,9 +100,7 @@ export default function ScreeningPage() {
         let options = {};
 
         for (let i = 0; i < questions.length; i++) {
-            if (questions[i].answer) {
-                options[questions[i].queryField] = questions[i].answer;
-            }
+            options[questions[i].queryField] = questions[i].answer;
         }
 
         userRef.update({
@@ -138,6 +131,16 @@ export default function ScreeningPage() {
 
     const progress = (currentQuestion / questions.length) * 100;
 
+    const handleReset = () => {
+        let options = [];
+
+        for (let i = 0; i < questions.length; i++) {
+            options.push({ ...questions[i], answer: null });
+        }
+
+        setQuestions(options);
+    };
+
     return (
         <Box w="100vw" h="100vh">
             <ProgressBar progress={progress} />
@@ -155,10 +158,10 @@ export default function ScreeningPage() {
                         <Heading size="sm">Your answers</Heading>
                         <Divider />
                         <VStack spacing="3" textAlign="start">
-                            {answers.map((answer, index) => (
+                            {questions.map((question, index) => (
                                 <Box width="100vw" paddingLeft="10">
-                                    <Text key={questions[index].question}> {questions[index].question}</Text>
-                                    <Text key={index}> Answer: {answer}</Text>
+                                    <Text key={question.question}> {question.question}</Text>
+                                    <Text key={index}> Answer: {question.answer}</Text>
                                 </Box>
                             ))}
                         </VStack>
@@ -170,9 +173,14 @@ export default function ScreeningPage() {
                     Back
                 </Button>
                 {!questions[currentQuestion] ?
-                    <Button onClick={handleAnswerSubmit} isLoading={answerButtonIsLoading}>
-                        Submit Answers
-                    </Button>
+                    <HStack>
+                        <Button onClick={handleAnswerSubmit} isLoading={answerButtonIsLoading}>
+                            Submit Answers
+                        </Button>
+                        <Tooltip label="Clear Answers">
+                            <IconButton icon={<DeleteIcon />} onClick={handleReset} />
+                        </Tooltip>
+                    </HStack>
                     :
                     <Button onClick={handleNextButtonPress}>
                         Next
