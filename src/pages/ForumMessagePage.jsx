@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { auth, firestore, serverTimestamp } from '../firebaseConfig';
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Avatar, Box, Button, HStack, IconButton, Text, Textarea, VStack } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Avatar, Box, Button, HStack, IconButton, Text, Textarea, useToast, VStack } from '@chakra-ui/react';
 import { ArrowDownIcon, ArrowUpIcon } from "@chakra-ui/icons";
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Context from '../context/Context';
@@ -85,12 +85,14 @@ function ChatMessage({ message }) {
     // -- the currently selected message?? 
 
     const { text, photoURL, voteCount, id, sender } = message;
+    const toast = useToast();
     const { data: pageData } = useContext(Context);
     const [messageVoteCount, setMessageVoteCount] = useState(voteCount);
     const [upVoteButtonIsLoading, setUpVoteButtonIsLoading] = useState(false);
     const [downVoteButtonIsLoading, setDownVoteButtonIsLoading] = useState(false);
     const [alertDialogVisible, setAlertDialogVisible] = useState(false);
     const [alertDialogData, setAlertDialogData] = useState({});
+    const [friendButtonIsLoading, setFriendButtonIsLoading] = useState(false);
 
     const handleUpVote = async () => {
         setUpVoteButtonIsLoading(true);
@@ -314,6 +316,7 @@ function ChatMessage({ message }) {
     };
 
     const handleFriendRequest = async () => {
+        setFriendButtonIsLoading(true);
         let recieverDoc = {};
         const usersRef = await firestore.collection("users");
         const senderDoc = usersRef.doc(auth.currentUser.uid);
@@ -336,11 +339,53 @@ function ChatMessage({ message }) {
         if (!recievingFriendDoc.pendingFriends)
             recievingFriendDoc.update({
                 pendingFriends: [{ ...senderUser }]
-            });
+            })
+                .then(() => {
+                    toast({
+                        title: 'Friend Request Sent!',
+                        description: "Just gotta wait for them to friend you back!",
+                        status: 'success',
+                        duration: 9000,
+                        isClosable: true,
+                    });
+                })
+                .catch(error => {
+                    toast({
+                        title: 'Friend Request Failed!',
+                        description: error,
+                        status: 'error',
+                        duration: 9000,
+                        isClosable: true,
+                    });
+                })
+                .finally(() => {
+                    setFriendButtonIsLoading(false);
+                });
         else
             recievingFriendDoc.update({
                 pendingFriends: [recievingFriendDoc?.pendingFriends, { ...senderUser }]
-            });
+            })
+                .then(() => {
+                    toast({
+                        title: 'Friend Request Sent!',
+                        description: "Just gotta wait for them to friend you back!",
+                        status: 'success',
+                        duration: 9000,
+                        isClosable: true,
+                    });
+                })
+                .catch(error => {
+                    toast({
+                        title: 'Friend Request Failed!',
+                        description: error,
+                        status: 'error',
+                        duration: 9000,
+                        isClosable: true,
+                    });
+                })
+                .finally(() => {
+                    setFriendButtonIsLoading(false);
+                });
     };
 
     return (
@@ -390,18 +435,39 @@ function ChatMessage({ message }) {
                 <AlertDialogOverlay>
                     <AlertDialogContent>
                         <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                            User Preview
+                            User Demographic
                         </AlertDialogHeader>
-
                         <AlertDialogBody>
-                            {JSON.stringify(alertDialogData)}
+                            {alertDialogData.full_name || alertDialogData.children_total || alertDialogData.children_simultaneous || alertDialogData.marital || alertDialogData.ethnicity ?
+                                <>
+                                    <Text>
+                                        {"Name " + alertDialogData?.full_name}
+                                    </Text>
+                                    <Text>
+                                        {"Children total " + alertDialogData?.children_total}
+                                    </Text>
+                                    <Text>
+                                        {"Children simultaneous " + alertDialogData?.children_simultaneous}
+                                    </Text>
+                                    <Text>
+                                        {"Marital Status " + alertDialogData?.marital}
+                                    </Text>
+                                    <Text>
+                                        {"Ethinicity " + alertDialogData?.ethnicity}
+                                    </Text>
+                                </>
+                                :
+                                <Text>
+                                    None
+                                </Text>
+                            }
                         </AlertDialogBody>
 
                         <AlertDialogFooter>
                             <Button onClick={() => setAlertDialogVisible(false)}>
                                 Cancel
                             </Button>
-                            <Button onClick={handleFriendRequest} ml={3}>
+                            <Button isLoading={friendButtonIsLoading} onClick={handleFriendRequest} ml={3}>
                                 Friend
                             </Button>
                         </AlertDialogFooter>

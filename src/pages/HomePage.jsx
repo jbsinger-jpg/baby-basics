@@ -1,5 +1,5 @@
 import { CalendarIcon, ChatIcon, MoonIcon, SearchIcon, SunIcon, UnlockIcon } from '@chakra-ui/icons';
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Avatar, AvatarBadge, AvatarGroup, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, IconButton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Avatar, AvatarBadge, AvatarGroup, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, IconButton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, useToast, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { useNavigate } from 'react-router-dom';
@@ -34,6 +34,9 @@ export default function HomePage() {
     // diaper data for search bar
     const [diaperData, setDiaperData] = useState(null);
     const [isDiapersLoading, setIsDiapersLoading] = useState(true);
+
+    const toast = useToast();
+    const [friendButtonIsLoading, setFriendButtonIsLoading] = useState(false);
 
     const handleTabsChange = (index) => {
         setTabIndex(index);
@@ -82,6 +85,7 @@ export default function HomePage() {
     };
 
     const handleFriendSubmission = async () => {
+        setFriendButtonIsLoading(true);
         const userDoc = await firestore.collection("users").doc(currentUser.uid);
 
         if (currentUser && userData.confirmedFriends)
@@ -92,6 +96,7 @@ export default function HomePage() {
             userDoc.update({
                 confirmedFriends: [alertDialogUser],
             });
+
         await userDoc.get()
             .then(doc => {
                 let pendingFriends = doc.data().pendingFriends;
@@ -113,14 +118,53 @@ export default function HomePage() {
 
                 userDoc.update({
                     pendingFriends: pendingArray
-                });
+                })
+                    .then(async () => {
+                        toast({
+                            title: 'Friend Request Updated!',
+                            description: "Just gotta wait for them to friend you back!",
+                            status: 'success',
+                            duration: 9000,
+                            isClosable: true,
+                        });
+
+                        // update sending user friends list as well
+                        if (alertDialogUser.id) {
+                            const sendingUserDoc = await firestore.collection("users").doc(alertDialogUser.id);
+
+                            if (sendingUserDoc.confirmedFriends && userData)
+                                sendingUserDoc.update({
+                                    confirmedFriends: [...sendingUserDoc.confirmedFriends, userData],
+                                });
+                            else
+                                sendingUserDoc.update({
+                                    confirmedFriends: [userData],
+                                });
+                        }
+                    })
+                    .catch(error => {
+                        toast({
+                            title: 'Friend Request Failed!',
+                            description: error,
+                            status: 'error',
+                            duration: 9000,
+                            isClosable: true,
+                        });
+                    });
             })
             .catch(error => {
-
+                toast({
+                    title: 'Friend Request Failed!',
+                    description: error,
+                    status: 'error',
+                    duration: 9000,
+                    isClosable: true,
+                });
             });
 
         setUserData((await userDoc.get()).data());
         setAlertDialogVisible(false);
+        setFriendButtonIsLoading(false);
     };
 
     const handleForumButtonPress = () => {
@@ -368,7 +412,7 @@ export default function HomePage() {
                             <Button onClick={() => setAlertDialogVisible(false)}>
                                 Cancel
                             </Button>
-                            <Button onClick={handleFriendSubmission} ml={3}>
+                            <Button isLoading={friendButtonIsLoading} onClick={handleFriendSubmission} ml={3}>
                                 Friend
                             </Button>
                         </AlertDialogFooter>
