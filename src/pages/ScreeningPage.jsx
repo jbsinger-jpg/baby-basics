@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { motion } from "framer-motion";
-import { Box, Button, Divider, Heading, HStack, IconButton, Radio, RadioGroup, Text, Tooltip, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Divider, Heading, HStack, IconButton, Radio, RadioGroup, Text, Tooltip, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
 import { auth, firestore } from '../firebaseConfig';
 import { DeleteIcon } from '@chakra-ui/icons';
+import { useNavigate } from 'react-router-dom';
 
 function ProgressBar({ progress }) {
     const progressBarVariants = {
@@ -48,6 +49,8 @@ export default function ScreeningPage() {
     const toast = useToast();
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [answerButtonIsLoading, setAnswerButtonIsLoading] = useState(false);
+    const [screeningAlertDialogVisibile, setScreeningAlertDialogVisibile] = useState(false);
+    const navigate = useNavigate();
     const [questions, setQuestions] = useState([
         {
             question: "What is your marital status?",
@@ -114,6 +117,8 @@ export default function ScreeningPage() {
                     duration: 9000,
                     isClosable: true,
                 });
+
+                navigate("/");
             })
             .catch(error => {
                 toast({
@@ -174,8 +179,8 @@ export default function ScreeningPage() {
                 </Button>
                 {!questions[currentQuestion] ?
                     <HStack>
-                        <Button onClick={handleAnswerSubmit} isLoading={answerButtonIsLoading}>
-                            Submit Answers
+                        <Button onClick={() => setScreeningAlertDialogVisibile(true)}>
+                            Confirm Answers
                         </Button>
                         <Tooltip label="Clear Answers">
                             <IconButton icon={<DeleteIcon />} onClick={handleReset} />
@@ -187,6 +192,30 @@ export default function ScreeningPage() {
                     </Button>
                 }
             </HStack>
+            <AlertDialog
+                isOpen={screeningAlertDialogVisibile}
+                onClose={() => setScreeningAlertDialogVisibile(false)}
+            >
+                <AlertDialogOverlay>
+                    <AlertDialogContent>
+                        <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                            Submit Answers
+                        </AlertDialogHeader>
+                        <AlertDialogBody>
+                            These answers will be submitted for everyone to see,
+                            double check that your answers are correct.
+                        </AlertDialogBody>
+                        <AlertDialogFooter>
+                            <Button onClick={() => setScreeningAlertDialogVisibile(false)}>
+                                Cancel
+                            </Button>
+                            <Button onClick={handleAnswerSubmit} isLoading={answerButtonIsLoading} ml={3}>
+                                Go Home
+                            </Button>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialogOverlay>
+            </AlertDialog>
         </Box>
     );
 }
