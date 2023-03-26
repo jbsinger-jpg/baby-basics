@@ -1,8 +1,9 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import { auth, firestore, serverTimestamp } from '../firebaseConfig';
-import { Avatar, Box, Button, HStack, Textarea } from '@chakra-ui/react';
+import { Box, Button, HStack, Textarea } from '@chakra-ui/react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Context from "../context/Context";
+import DMChatMessage from '../components/DMChatMessage';
 
 function DirectMessagePage() {
     const { data: selectedUser } = useContext(Context);
@@ -84,7 +85,7 @@ function DirectMessagePage() {
                 {(chatRoomMessagesRecieved && chatRoomMessagesSent) &&
                     generateMessages()
                         .map((msg) => {
-                            return (<ChatMessage key={msg.id} message={msg} />);
+                            return (<DMChatMessage key={msg.id} message={msg} />);
                         })
                 }
             </div>
@@ -103,22 +104,6 @@ function DirectMessagePage() {
                 </Box>
             </form>
         </Box>
-    );
-}
-
-function ChatMessage({ message }) {
-    const { text, uid, photoURL } = message;
-    const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
-
-    return (
-        <div style={{ display: "flex", justifyContent: messageClass === 'sent' ? "flex-start" : 'flex-end', padding: "10px" }}>
-            <div style={{ display: 'flex', flexDirection: "row", alignItems: "center", gap: "10px" }}>
-                <Avatar src={photoURL || 'https://i.imgur.com/rFbS5ms.png'} alt="Avatar" />
-                <Box whiteSpace="pre-wrap">
-                    {text}
-                </Box>
-            </div>
-        </div>
     );
 }
 

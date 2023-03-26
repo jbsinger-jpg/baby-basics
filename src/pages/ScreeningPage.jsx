@@ -1,49 +1,10 @@
 import React, { useState } from 'react';
-import { motion } from "framer-motion";
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Divider, Heading, HStack, IconButton, Radio, RadioGroup, Text, Tooltip, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Divider, Heading, HStack, IconButton, Text, Tooltip, useToast, VStack } from '@chakra-ui/react';
 import { auth, firestore } from '../firebaseConfig';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
-
-function ProgressBar({ progress }) {
-    const progressBarVariants = {
-        initial: { width: "0%" },
-        animate: { width: `${progress}%` },
-    };
-
-    return (
-        <div className="progress-bar-container">
-            <motion.div
-                style={{
-                    height: "10px",
-                    background: useColorModeValue("Dark", "Light") === "Dark" ? "black" : "white",
-                    borderRadius: "5px"
-                }}
-                variants={progressBarVariants}
-                initial="initial"
-                animate="animate"
-            />
-        </div>
-    );
-}
-
-function FormQuestion({ question, choices, onSelect }) {
-    return (
-        <RadioGroup>
-            <VStack alignItems="start">
-                <Heading size="md">{question}</Heading>
-                {choices.map((choice) => (
-                    <Radio
-                        value={choice}
-                        onChange={() => onSelect(choice)}
-                    >
-                        {choice}
-                    </Radio>
-                ))}
-            </VStack>
-        </RadioGroup>
-    );
-}
+import ProgressBar from '../components/ProgressBar';
+import FormQuestion from '../components/FormQuestion';
 
 export default function ScreeningPage() {
     const toast = useToast();
