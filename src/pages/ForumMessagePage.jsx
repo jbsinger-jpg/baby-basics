@@ -95,7 +95,7 @@ function ForumMessagePage() {
 
     return (
         <Box w="100vw" h="100vh">
-            <Box w="100vw" justifyContent="flex-end" display="flex" padding="5">
+            <Box w="100vw" justifyContent="flex-start" display="flex" padding="3">
                 {orderByVoteCount ?
                     <Button onClick={() => setOrderByVoteCount(!orderByVoteCount)}>
                         Order By Created

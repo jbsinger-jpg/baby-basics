@@ -153,7 +153,6 @@ export default function ChatMessage({ message }) {
             userQuery.get()
                 .then(snapshot => {
                     snapshot.docs.forEach(doc => {
-                        console.log("doc data: ", doc.data());
                         setAlertDialogData({ ...doc.data() });
                     });
 
@@ -163,6 +162,15 @@ export default function ChatMessage({ message }) {
                     console.log(error);
                 });
         }
+        else {
+            toast({
+                title: "Can't friend yourself loser, get roasted!",
+                position: "top-right",
+                status: 'error',
+                duration: 9000,
+                isClosable: true,
+            });
+        }
     };
 
     const handleFriendRequest = async () => {
@@ -171,7 +179,6 @@ export default function ChatMessage({ message }) {
         const usersRef = await firestore.collection("users");
         const senderDoc = usersRef.doc(auth.currentUser.uid);
         const senderUser = await (await senderDoc.get()).data();
-        console.log("Sender information: ", senderUser);
 
         // search for the user that is the sender of the message.
         // email should always be a unique entry no need to get more than one entry from this array
@@ -183,7 +190,6 @@ export default function ChatMessage({ message }) {
                 });
             })
             .catch(error => { console.log(error); });
-        console.log("reciever doc: ", recieverDoc);
 
         // update the pending friend requests with the sender of the friend request.
         const pendingFriendRef = usersRef.doc(recieverDoc.id).collection("pendingFriends");

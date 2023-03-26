@@ -34,10 +34,9 @@ export default function LoginPage() {
                     });
                 })
                 .catch((error) => {
-                    console.error(error);
                     toast({
                         title: 'Reset Email not sent!',
-                        description: "We were unable to send an email to the one you have provided: error code " + error,
+                        description: "We were unable to send an email to the one you have provided: error code " + JSON.stringify(error),
                         status: 'error',
                         duration: 9000,
                         isClosable: true,
@@ -60,7 +59,6 @@ export default function LoginPage() {
         auth.signInWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 // Handle successful sign-in
-                console.log("User Credentials: ", userCredential);
                 toast({
                     title: 'Successful Sign In!',
                     status: 'success',
@@ -111,7 +109,7 @@ export default function LoginPage() {
         }).catch((error) => {
             toast({
                 title: 'Unable to sign in',
-                description: "We were unable sign in to the account " + email + " provided error code " + error,
+                description: "We were unable sign in to the account " + email + " provided error code " + JSON.stringify(error),
                 status: 'error',
                 duration: 9000,
                 isClosable: true,
@@ -142,7 +140,7 @@ export default function LoginPage() {
                 .catch((error) => {
                     // Handle sign-up error
                     toast({
-                        title: 'Error: ' + error,
+                        title: 'Error: ' + JSON.stringify(error),
                         status: 'error',
                         duration: 9000,
                         isClosable: true,
