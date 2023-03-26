@@ -72,6 +72,12 @@ function ForumMessagePage() {
             id: docRef.id,
         });
 
+        await docRef.collection("pendingVoteUsers")
+            .doc(auth?.currentUser?.uid)
+            .set({
+                user: auth?.currentUser?.email
+            });
+
         setText('');
     };
 
@@ -134,203 +140,125 @@ function ChatMessage({ message }) {
     const handleUpVote = async () => {
         setUpVoteButtonIsLoading(true);
         const messageRef = await firestore.collection(pageData).doc(id);
+        const upVotedUsersRef = await messageRef.collection("upVotedUsers");
+        const downVotedUsersRef = await messageRef.collection("downVotedUsers");
+        const pendingVoteUsersRef = await messageRef.collection("pendingVoteUsers");
+
+        const upVotedUsersExists = (await upVotedUsersRef.doc(auth.currentUser.uid).get()).exists;
+        const downVotedUsersExists = (await downVotedUsersRef.doc(auth.currentUser.uid).get()).exists;
+        const pendingVoteUsersExists = (await pendingVoteUsersRef.doc(auth.currentUser.uid).get()).exists;
+
         const messageDoc = await messageRef.get().then(doc => {
             return doc.data();
         });
 
-        // check and see if the current user is in the downvoted users array if so do nothing, return
-        if (messageDoc?.upVotedUsers && messageDoc?.upVotedUsers?.length > 0) {
-            for (let i = 0; i < messageDoc.upVotedUsers.length; i++) {
-                if (auth.currentUser.email.toString() === messageDoc.upVotedUsers[i].toString()) {
-                    setUpVoteButtonIsLoading(false);
-                    return;
-                }
-            }
+        // check and see if the current user is in the upvoted users array if so do nothing, return
+        if (upVotedUsersExists) {
+            setUpVoteButtonIsLoading(false);
+            return;
         }
 
         // check if the user is in the opposing array put in pending
-        for (let i = 0; i < messageDoc?.downVotedUsers?.length; i++) {
-            if (auth.currentUser.email.toString() === messageDoc.downVotedUsers[i].toString()) {
-                let downVotedUsersIndex = messageDoc.downVotedUsers?.indexOf(auth.currentUser.email);
-                let downVoteArray = [];
-
-                if (downVotedUsersIndex && downVotedUsersIndex > -1) {
-                    downVoteArray = messageDoc.downVotedUsers.slice(0, downVotedUsersIndex);
-                    downVoteArray = downVoteArray.concat(messageDoc.downVotedUsers.slice(downVotedUsersIndex + 1));
-                }
-
-                if (messageDoc.pendingVoteUsers?.length > 0) {
-                    await messageRef.update({
-                        pendingVoteUsers: [...messageDoc.pendingVoteUsers, auth.currentUser.email],
-                        downVotedUsers: downVoteArray,
-                        voteCount: messageDoc.voteCount + 1
-                    });
-                }
-                else {
-                    await messageRef.update({
-                        pendingVoteUsers: [auth.currentUser.email],
-                        downVotedUsers: downVoteArray,
-                        voteCount: messageDoc.voteCount + 1
-                    });
-                }
-
-                // update frontend, if a match is found then we want to decrement the vote still
-                setMessageVoteCount(messageDoc.voteCount + 1);
-                setUpVoteButtonIsLoading(false);
-                return;
-            }
-        }
-
-        // check if the user is in the pending array if not then place in downvote array
-        for (let i = 0; i < messageDoc?.pendingVoteUsers?.length; i++) {
-            if (auth.currentUser.email.toString() === messageDoc.pendingVoteUsers[i].toString()) {
-                let pendingVoteUsersIndex = messageDoc.pendingVoteUsers?.indexOf(auth.currentUser.email);
-                let pendingVoteArray = [];
-
-                if (pendingVoteUsersIndex && pendingVoteUsersIndex > -1) {
-                    pendingVoteArray = messageDoc.pendingVoteUsers.splice(pendingVoteUsersIndex, 1);
-                }
-
-                if (pendingVoteArray && pendingVoteArray.length > 0)
-                    continue;
-                else
-                    pendingVoteArray = [];
-
-                if (messageDoc.upVotedUsers?.length > 0)
-                    await messageRef.update({
-                        upVotedUsers: [...messageDoc.upVotedUsers, auth.currentUser.email],
-                        pendingVoteUsers: pendingVoteArray,
-                        voteCount: messageDoc.voteCount + 1
-                    });
-                else
-                    await messageRef.update({
-                        upVotedUsers: [auth.currentUser.email],
-                        pendingVoteUsers: pendingVoteArray,
-                        voteCount: messageDoc.voteCount + 1
-                    });
-                // if a match is found then we want to decrement the vote still
-                setMessageVoteCount(messageDoc.voteCount + 1);
-                setUpVoteButtonIsLoading(false);
-                return;
-            }
-        }
-
-        // if the user is not in any of these statements then they are not in the appropriate array and we want to add them
-        if (messageDoc?.upVotedUsers?.length > 0)
+        if (downVotedUsersExists) {
+            await pendingVoteUsersRef.doc(auth.currentUser.uid).set({ user: auth.currentUser.email });
+            await downVotedUsersRef.doc(auth.currentUser.uid).delete();
             await messageRef.update({
-                upVotedUsers: [...messageDoc.upVotedUsers, auth.currentUser.email],
                 voteCount: messageDoc.voteCount + 1
             });
-        else
+
+            // update frontend, if a match is found then we want to decrement the vote still
+            setMessageVoteCount(messageDoc.voteCount + 1);
+            setUpVoteButtonIsLoading(false);
+            return;
+        }
+
+        if (pendingVoteUsersExists) {
+            await pendingVoteUsersRef.doc(auth.currentUser.uid).delete();
+            await upVotedUsersRef.doc(auth.currentUser.uid).set({ user: auth.currentUser.email });
             await messageRef.update({
-                upVotedUsers: [auth.currentUser.email],
                 voteCount: messageDoc.voteCount + 1
             });
-        // if a match is found then we want to decrement the vote still
-        setMessageVoteCount(messageDoc.voteCount + 1);
-        setUpVoteButtonIsLoading(false);
 
+            // update frontend, if a match is found then we want to decrement the vote still
+            setMessageVoteCount(messageDoc.voteCount + 1);
+            setUpVoteButtonIsLoading(false);
+            return;
+        }
+
+        // if the user just pressed on the downvote button then place them in the subcollection
+        if (!upVotedUsersExists) {
+            await upVotedUsersRef.doc(auth.currentUser.uid).set({ user: auth.currentUser.email });
+            await messageRef.update({
+                voteCount: messageDoc.voteCount + 1
+            });
+
+            // update frontend, if a match is found then we want to decrement the vote still
+            setMessageVoteCount(messageDoc.voteCount + 1);
+            setUpVoteButtonIsLoading(false);
+            return;
+        }
     };
 
     const handleDownVote = async () => {
         setDownVoteButtonIsLoading(true);
         const messageRef = await firestore.collection(pageData).doc(id);
+        const upVotedUsersRef = await messageRef.collection("upVotedUsers");
+        const downVotedUsersRef = await messageRef.collection("downVotedUsers");
+        const pendingVoteUsersRef = await messageRef.collection("pendingVoteUsers");
+
+        const upVotedUsersExists = (await upVotedUsersRef.doc(auth.currentUser.uid).get()).exists;
+        const downVotedUsersExists = (await downVotedUsersRef.doc(auth.currentUser.uid).get()).exists;
+        const pendingVoteUsersExists = (await pendingVoteUsersRef.doc(auth.currentUser.uid).get()).exists;
+
         const messageDoc = await messageRef.get().then(doc => {
             return doc.data();
         });
-
         // check and see if the current user is in the downvoted users array if so do nothing, return
-        if (messageDoc?.downVotedUsers && messageDoc?.downVotedUsers?.length > 0) {
-            for (let i = 0; i < messageDoc.downVotedUsers.length; i++) {
-                if (auth.currentUser.email.toString() === messageDoc.downVotedUsers[i].toString()) {
-                    setDownVoteButtonIsLoading(false);
-                    return;
-                }
-            }
+        if (downVotedUsersExists) {
+            setDownVoteButtonIsLoading(false);
+            return;
         }
 
         // check if the user is in the opposing array put in pending
-        for (let i = 0; i < messageDoc?.upVotedUsers?.length; i++) {
-            if (auth.currentUser.email.toString() === messageDoc.upVotedUsers[i].toString()) {
-                let upVotedUsersIndex = messageDoc.upVotedUsers?.indexOf(auth.currentUser.email);
-                let upVoteArray = [];
+        if (upVotedUsersExists) {
+            await pendingVoteUsersRef.doc(auth.currentUser.uid).set({ user: auth.currentUser.email });
+            await upVotedUsersRef.doc(auth.currentUser.uid).delete();
+            await messageRef.update({
+                voteCount: messageDoc.voteCount - 1
+            });
 
-                if (upVotedUsersIndex && upVotedUsersIndex > -1) {
-                    upVoteArray = messageDoc.upVotedUsers.slice(0, upVotedUsersIndex);
-                    upVoteArray = upVoteArray.concat(messageDoc.upVotedUsers.slice(upVotedUsersIndex + 1));
-                }
-
-                if (messageDoc.pendingVoteUsers?.length > 0) {
-                    await messageRef.update({
-                        pendingVoteUsers: [...messageDoc.pendingVoteUsers, auth.currentUser.email],
-                        upVotedUsers: upVoteArray,
-                        voteCount: messageDoc.voteCount - 1
-                    });
-                }
-                else {
-                    await messageRef.update({
-                        pendingVoteUsers: [auth.currentUser.email],
-                        upVotedUsers: upVoteArray,
-                        voteCount: messageDoc.voteCount - 1
-                    });
-                }
-
-                // update frontend, if a match is found then we want to decrement the vote still
-                setMessageVoteCount(messageDoc.voteCount - 1);
-                setDownVoteButtonIsLoading(false);
-                return;
-            }
+            // update frontend, if a match is found then we want to decrement the vote still
+            setMessageVoteCount(messageDoc.voteCount - 1);
+            setDownVoteButtonIsLoading(false);
+            return;
         }
 
         // check if the user is in the pending array if not then place in downvote array
-        for (let i = 0; i < messageDoc?.pendingVoteUsers?.length; i++) {
-            if (auth.currentUser.email.toString() === messageDoc.pendingVoteUsers[i].toString()) {
-                let pendingVoteUsersIndex = messageDoc.pendingVoteUsers?.indexOf(auth.currentUser.email);
-                let pendingVoteArray = [];
+        if (pendingVoteUsersExists) {
+            await pendingVoteUsersRef.doc(auth.currentUser.uid).delete();
+            await downVotedUsersRef.doc(auth.currentUser.uid).set({ user: auth.currentUser.email });
+            await messageRef.update({
+                voteCount: messageDoc.voteCount - 1
+            });
 
-                if (pendingVoteUsersIndex && pendingVoteUsersIndex > -1) {
-                    pendingVoteArray = messageDoc.pendingVoteUsers.splice(pendingVoteUsersIndex, 1);
-                }
-
-                if (pendingVoteArray && pendingVoteArray.length > 0)
-                    continue;
-                else
-                    pendingVoteArray = [];
-
-                if (messageDoc?.downVotedUsers?.length > 0)
-                    await messageRef.update({
-                        downVotedUsers: [...messageDoc.downVotedUsers, auth.currentUser.email],
-                        pendingVoteUsers: pendingVoteArray,
-                        voteCount: messageDoc.voteCount - 1
-                    });
-                else
-                    await messageRef.update({
-                        downVotedUsers: [auth.currentUser.email],
-                        pendingVoteUsers: pendingVoteArray,
-                        voteCount: messageDoc.voteCount - 1
-                    });
-                // if a match is found then we want to decrement the vote still
-                setMessageVoteCount(messageDoc.voteCount - 1);
-                setDownVoteButtonIsLoading(false);
-                return;
-            }
+            // update frontend, if a match is found then we want to decrement the vote still
+            setMessageVoteCount(messageDoc.voteCount - 1);
+            setDownVoteButtonIsLoading(false);
+            return;
         }
 
-        // if the user is not in any of these statements then they are not in the appropriate array and we want to add them
-        if (messageDoc?.downVotedUsers?.length > 0)
+        // if the user just pressed on the downvote button then place them in the subcollection
+        if (!downVotedUsersExists) {
+            await downVotedUsersRef.doc(auth.currentUser.uid).set({ user: auth.currentUser.email });
             await messageRef.update({
-                downVotedUsers: [...messageDoc.downVotedUsers, auth.currentUser.email],
                 voteCount: messageDoc.voteCount - 1
             });
-        else
-            await messageRef.update({
-                downVotedUsers: [auth.currentUser.email],
-                voteCount: messageDoc.voteCount - 1
-            });
-        // if a match is found then we want to decrement the vote still
-        setMessageVoteCount(messageDoc.voteCount - 1);
-        setDownVoteButtonIsLoading(false);
 
+            // update frontend, if a match is found then we want to decrement the vote still
+            setMessageVoteCount(messageDoc.voteCount - 1);
+            setDownVoteButtonIsLoading(false);
+            return;
+        }
     };
 
     const handleShowUserInfo = async () => {
