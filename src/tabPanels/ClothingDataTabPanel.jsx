@@ -6,10 +6,11 @@ export default function ClothingDataTabPanel({ clothingData, clothingDataLoaded 
     const MotionVStack = motion(VStack);
 
     return (
-        <HStack flexWrap={"wrap"} top="20" position="absolute" spacing="8">
+        <HStack flexWrap={"wrap"} top="20" position="absolute" spacing="12">
             {clothingData && clothingData.map(clothing => {
                 return (
                     <MotionVStack
+                        h="300px"
                         spacing="3"
                         as="a"
                         href={clothing.affiliateLink}
@@ -28,7 +29,7 @@ export default function ClothingDataTabPanel({ clothingData, clothingDataLoaded 
                         <SkeletonCircle size='10' isLoaded={!clothingDataLoaded} />
                         <SkeletonText isLoaded={!clothingDataLoaded}>
                             <Box>
-                                <VStack>
+                                <HStack spacing="4">
                                     <Image
                                         src={clothing.image}
                                         size="sm"
@@ -47,7 +48,7 @@ export default function ClothingDataTabPanel({ clothingData, clothingDataLoaded 
                                         <Divider />
                                         <Text>{"size: " + clothing.size}</Text>
                                     </VStack>
-                                </VStack>
+                                </HStack>
                             </Box>
                         </SkeletonText>
                     </MotionVStack>

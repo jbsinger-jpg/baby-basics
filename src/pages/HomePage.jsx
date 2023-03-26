@@ -195,6 +195,7 @@ export default function HomePage() {
                 setClothingData={setClothingData}
                 setDiaperData={setDiaperData}
                 tabIndex={tabIndex}
+                setTabIndex={setTabIndex}
             />
             <Drawer
                 isOpen={isOpen}

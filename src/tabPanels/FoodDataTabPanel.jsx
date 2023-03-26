@@ -10,6 +10,7 @@ export default function FoodDataTabPanel({ foodData, isFoodDataLoading }) {
             {foodData && foodData.length > 0 && foodData.map(food => {
                 return (
                     <MotionVStack
+                        h="250px"
                         spacing="3"
                         paddingBottom="10"
                         as="a"

@@ -3,7 +3,7 @@ import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, Al
 import React, { useEffect, useState } from 'react';
 import { firestore } from '../firebaseConfig';
 
-export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOpen, setFoodData, setClothingData, setDiaperData, tabIndex }) {
+export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOpen, setFoodData, setClothingData, setDiaperData, tabIndex, setTabIndex }) {
     const [stageOption, setStageOption] = useState(null);
     const [foodPrice, setFoodPrice] = useState(null);
     const [foodBrand, setFoodBrand] = useState(null);
@@ -22,6 +22,7 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
 
     const handleTabsChange = (index) => {
         setSearchTabIndex(index);
+        setTabIndex(index);
     };
 
     const handleFoodSearch = async () => {
