@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { auth, firestore } from '../firebaseConfig';
 import Context from '../context/Context';
-import SearchBarAlertDialog from '../SearchBarAlertDialog';
+import SearchBarAlertDialog from '../components/SearchBarAlertDialog';
 import ClothingDataTabPanel from '../tabPanels/ClothingDataTabPanel';
 import FoodDataTabPanel from '../tabPanels/FoodDataTabPanel';
 import DiaperDataTabPanel from '../tabPanels/DiaperDataTabPanel';
