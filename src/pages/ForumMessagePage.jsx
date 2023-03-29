@@ -70,7 +70,7 @@ function ForumMessagePage() {
     const sendMessage = async (e) => {
         e.preventDefault();
         const { uid, photoURL } = auth.currentUser;
-
+        
         const docRef = await firestore.collection(pageData).add({
             text: text,
             createdAt: serverTimestamp(),

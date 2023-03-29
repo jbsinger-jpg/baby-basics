@@ -1,4 +1,4 @@
-import { CalendarIcon, ChatIcon, MoonIcon, SearchIcon, SunIcon, UnlockIcon } from '@chakra-ui/icons';
+import { CalendarIcon, ChatIcon, MoonIcon, SearchIcon, SunIcon, UnlockIcon, WarningIcon } from '@chakra-ui/icons';
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Avatar, AvatarBadge, AvatarGroup, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, IconButton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
@@ -312,8 +312,20 @@ export default function HomePage() {
                                 <Tooltip label="Chat with peeps">
                                     <IconButton icon={<ChatIcon />} onClick={onOpen} />
                                 </Tooltip>
+                                <Tooltip label="Schedule Google Calendar Event">
+                                    <IconButton
+                                        as="a"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        href={`https://calendar.google.com/calendar/r?authuser=${auth.currentUser.email}&pli=1`}
+                                        icon={<CalendarIcon />}
+                                    />
+                                </Tooltip>
                                 <Tooltip label="About you">
-                                    <IconButton icon={<CalendarIcon />} onClick={() => setScreeningAlertDialogVisibile(true)} />
+                                    <IconButton
+                                        icon={<WarningIcon />}
+                                        onClick={() => setScreeningAlertDialogVisibile(true)}
+                                    />
                                 </Tooltip>
                             </>
                             :
@@ -333,7 +345,7 @@ export default function HomePage() {
                         <FoodDataTabPanel foodData={foodData} isFoodDataLoading={isFoodDataLoading} />
                     </TabPanel>
                     <TabPanel>
-                        <DiaperDataTabPanel diaperData={diaperData} isDiapersLoading={isDiapersLoading} />
+                        <DiaperDataTabPanel diaperData={diaperData} isDiapersLoading={isDiapersLoading} tabIndex={tabIndex} />
                     </TabPanel>
                     <TabPanel>
                         <UtilityDataTabPanel utilityData={utilityData} isUtilitiesLoading={isUtilitiesLoading} />

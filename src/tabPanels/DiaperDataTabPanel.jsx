@@ -24,9 +24,10 @@ function Rating() {
     return <Stack direction="row">{stars}</Stack>;
 }
 
-export default function DiaperDataTabPanel({ diaperData, isDiapersLoading }) {
+export default function DiaperDataTabPanel({ diaperData, isDiapersLoading, tabIndex }) {
     const MotionImage = motion(Image);
     const MotionButton = motion(Button);
+    const MotionBox = motion(Box);
 
     const [flippedCards, setFlippedCards] = useState(new Array(diaperData?.length).fill(false));
     const [buttonsPressed, setButtonsPressed] = useState(new Array(diaperData?.length).fill(false));
@@ -43,6 +44,13 @@ export default function DiaperDataTabPanel({ diaperData, isDiapersLoading }) {
         setButtonsPressed(updatedButtonsPressed);
 
     };
+
+    useEffect(() => {
+        const updatedButtonsPressed = new Array(diaperData?.length).fill(false);
+        setButtonsPressed(updatedButtonsPressed);
+        // eslint-disable-next-line
+    }, [tabIndex]);
+
 
     return (
         <HStack flexWrap={"wrap"} top="20" position="absolute" spacing="12">
@@ -73,7 +81,14 @@ export default function DiaperDataTabPanel({ diaperData, isDiapersLoading }) {
                                         style={{ width: 150, height: 200, resizeMode: 'cover' }}
                                     />
                                     :
-                                    <Box h="300px" alignItems="center" justifyContent="center" display="flex">
+                                    <MotionBox
+                                        h="300px"
+                                        alignItems="center"
+                                        justifyContent="center"
+                                        display="flex"
+                                        initial={{ scale: 0 }}
+                                        animate={{ scale: 1 }}
+                                    >
                                         <VStack spacing="4">
                                             <Text >TODO: Show Average Rating</Text>
                                             <Text >{diaper.title}</Text>
@@ -112,7 +127,7 @@ export default function DiaperDataTabPanel({ diaperData, isDiapersLoading }) {
                                                 </MotionButton>
                                             </HStack>
                                         </VStack>
-                                    </Box>
+                                    </MotionBox>
 
                                 }
                                 <VStack spacing="1" width={150} justifyContent="center" alignItems="start">
