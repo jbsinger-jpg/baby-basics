@@ -1,7 +1,7 @@
-import { Box, Divider, HStack, Image, SkeletonCircle, SkeletonText, Text, VStack, Stack, Icon, Button } from '@chakra-ui/react';
-import { AnimatePresence, motion, useAnimation, useCycle } from 'framer-motion';
+import { Box, Divider, HStack, Image, SkeletonCircle, SkeletonText, Text, VStack, Stack, Icon, Button, Heading, Tooltip } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
-import { StarIcon } from "@chakra-ui/icons";
+import { CheckIcon, CloseIcon, StarIcon } from "@chakra-ui/icons";
 
 function Rating() {
     const [rating, setRating] = useState(0);
@@ -89,11 +89,23 @@ export default function DiaperDataTabPanel({ diaperData, isDiapersLoading, tabIn
                                         initial={{ scale: 0 }}
                                         animate={{ scale: 1 }}
                                     >
-                                        <VStack spacing="4">
-                                            <Text >TODO: Show Average Rating</Text>
-                                            <Text >{diaper.title}</Text>
-                                            <Rating />
+                                        <VStack spacing="4" w="220px" justifyContent="start">
+                                            <HStack w="220px">
+                                                <Text>{diaper.title}</Text>
+                                                <Tooltip label="Average">
+                                                    <HStack>
+                                                        <Text>4.5 </Text>
+                                                        <Icon as={StarIcon}></Icon>
+                                                    </HStack>
+                                                </Tooltip>
+                                            </HStack>
                                             <HStack>
+                                                <Rating />
+                                                <Tooltip label="Total">
+                                                    <Heading size="xs">1234</Heading>
+                                                </Tooltip>
+                                            </HStack>
+                                            <HStack justifyContent="space-between" w="220px">
                                                 <MotionButton
                                                     whileTap={{
                                                         scale: 0.8,
@@ -107,7 +119,7 @@ export default function DiaperDataTabPanel({ diaperData, isDiapersLoading, tabIn
                                                         handleFlip(index);
                                                     }}
                                                 >
-                                                    Submit Rating
+                                                    <Icon as={CheckIcon} />
                                                 </MotionButton>
                                                 <MotionButton
                                                     whileTap={{
@@ -123,7 +135,7 @@ export default function DiaperDataTabPanel({ diaperData, isDiapersLoading, tabIn
                                                         handleButtonsTrigger(index);
                                                     }}
                                                 >
-                                                    Close
+                                                    <Icon as={CloseIcon} />
                                                 </MotionButton>
                                             </HStack>
                                         </VStack>
