@@ -19,7 +19,7 @@ function App() {
         <Route index element={<HomePage />} />
         <Route path="screening" element={<ScreeningPage />} />
         <Route path="store" element={<HomePage />} />
-        <Route path="purchase" element={<PurchasePage />} />
+        {/* <Route path="purchase" element={<PurchasePage />} /> */}
         <Route path="login" element={<LoginPage />} />
         <Route path="message" element={<DirectMessagePage />} />
         <Route path="forum" element={<StarterForumTopicPage />} />

@@ -49,6 +49,7 @@ export default function DiaperDataTabPanel({ diaperData, isDiapersLoading }) {
             {diaperData && diaperData.map((diaper, index) => {
                 return (
                     <VStack
+                        key={diaper.id}
                         h="300px"
                         spacing="3"
                         paddingBottom="10"

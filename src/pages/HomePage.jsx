@@ -259,7 +259,7 @@ export default function HomePage() {
                                     <VStack w="100%" alignItems="start" spacing="12">
                                         {starterGroup && starterGroup.map(group => {
                                             return (
-                                                <Button variant="unstyled" onClick={handleForumButtonPress}>
+                                                <Button variant="unstyled" onClick={handleForumButtonPress} key={group.name}>
                                                     <HStack>
                                                         <AvatarGroup size='md' max={3}>
                                                             {groupUsers && groupUsers.map(user => {

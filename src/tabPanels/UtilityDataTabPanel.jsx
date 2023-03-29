@@ -10,6 +10,7 @@ export default function UtilityDataTabPanel({ utilityData, isUtilitiesLoading })
             {utilityData && utilityData.map(utility => {
                 return (
                     <MotionVStack
+                        key={utility.id}
                         h="500px"
                         spacing="3"
                         paddingBottom="10"

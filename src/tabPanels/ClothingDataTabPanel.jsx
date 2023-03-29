@@ -10,6 +10,7 @@ export default function ClothingDataTabPanel({ clothingData, clothingDataLoaded 
             {clothingData && clothingData.map(clothing => {
                 return (
                     <MotionVStack
+                        key={clothing.id}
                         h="300px"
                         spacing="3"
                         as="a"
