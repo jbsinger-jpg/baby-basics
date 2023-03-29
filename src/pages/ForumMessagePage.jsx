@@ -1,14 +1,17 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { auth, firestore, serverTimestamp } from '../firebaseConfig';
-import { Box, Button, HStack, Textarea } from '@chakra-ui/react';
+import { Box, Button, HStack, IconButton, Input, Textarea, Tooltip } from '@chakra-ui/react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Context from '../context/Context';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import ChatMessage from '../components/ChatMessage';
+import { SearchIcon } from '@chakra-ui/icons';
 
 function ForumMessagePage() {
     const [text, setText] = useState();
+    const [searchTerm, setSearchTerm] = useState("");
+    const [searchButtonLoading, setSearchButtonLoading] = useState(false);
 
     // Data passed from StarterForumPage to here to get the messages to not have to remake a bunch of pages
     const { data: pageData, setData: setPageData } = useContext(Context);
@@ -67,6 +70,29 @@ function ForumMessagePage() {
         setText(e.target.value);
     };
 
+    const handleSearch = async () => {
+        setSearchButtonLoading(true);
+        await firestore.collection(pageData)
+            .where("text", ">=", searchTerm)
+            .where("text", "<=", searchTerm + "\uf8ff")
+            .get()
+            .then((querySnapshot) => {
+                let options = [];
+
+                querySnapshot.forEach((doc) => {
+                    options.push(doc.data());
+                });
+
+                setMessages(options);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+            .finally(() => {
+                setSearchButtonLoading(false);
+            });
+    };
+
     const sendMessage = async (e) => {
         e.preventDefault();
         const { uid, photoURL } = auth.currentUser;
@@ -99,7 +125,7 @@ function ForumMessagePage() {
 
     return (
         <Box w="100vw" h="100vh">
-            <Box w="100vw" justifyContent="flex-start" display="flex" padding="3">
+            <Box w="100vw" justifyContent="space-between" display="flex" padding="3">
                 {orderByVoteCount ?
                     <Button onClick={() => setOrderByVoteCount(!orderByVoteCount)}>
                         Order By Created
@@ -109,6 +135,13 @@ function ForumMessagePage() {
                         Order By Vote
                     </Button>
                 }
+                <HStack>
+                    <Input placeholder='Search...' value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} />
+                    <Tooltip label="Search">
+                        <IconButton icon={<SearchIcon />} onClick={handleSearch} isLoading={searchButtonLoading} />
+                    </Tooltip>
+                </HStack>
+
             </Box>
             <div style={{ height: 'calc(100vh - 175px)', overflowY: 'auto' }} ref={messageBoxRef}>
                 {(messages) &&

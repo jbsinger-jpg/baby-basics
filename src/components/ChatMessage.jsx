@@ -318,7 +318,6 @@ export default function ChatMessage({ message }) {
 
                             }
                         </AlertDialogBody>
-
                         <AlertDialogFooter>
                             <Button onClick={() => setAlertDialogVisible(false)}>
                                 Cancel
