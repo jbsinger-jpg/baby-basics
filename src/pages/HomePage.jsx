@@ -304,8 +304,8 @@ export default function HomePage() {
                         </Tab>
                     </HStack>
                     <HStack>
-                        <Tooltip label="Log in">
-                            <IconButton icon={<UnlockIcon />} onClick={handleLogin} />
+                        <Tooltip label="Search">
+                            <IconButton icon={<SearchIcon />} onClick={() => setSearchBarIsOpen(true)} />
                         </Tooltip>
                         {currentUser ?
                             <>
@@ -331,10 +331,10 @@ export default function HomePage() {
                             :
                             null
                         }
-                        <ColorModeToggleButton />
-                        <Tooltip label="Search">
-                            <IconButton icon={<SearchIcon />} onClick={() => setSearchBarIsOpen(true)} />
+                        <Tooltip label="Log in">
+                            <IconButton icon={<UnlockIcon />} onClick={handleLogin} />
                         </Tooltip>
+                        <ColorModeToggleButton />
                     </HStack>
                 </TabList>
                 <TabPanels>

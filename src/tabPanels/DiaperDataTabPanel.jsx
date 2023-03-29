@@ -64,7 +64,7 @@ export default function DiaperDataTabPanel({ diaperData, isDiapersLoading, tabIn
                     >
                         <SkeletonCircle size='10' isLoaded={!isDiapersLoading} />
                         <SkeletonText isLoaded={!isDiapersLoading}>
-                            <HStack spacing="4">
+                            <HStack spacing="4" w="400px">
                                 {!flippedCards[index] ?
                                     <MotionImage
                                         variant="unstyled"
@@ -157,11 +157,11 @@ export default function DiaperDataTabPanel({ diaperData, isDiapersLoading, tabIn
                         </SkeletonText>
                         <SkeletonText
                             isLoaded={!isDiapersLoading}
-                            w="320px"
+                            w="400px"
                         >
                             {!flippedCards[index] &&
                                 <HStack
-                                    w="320px"
+                                    w="220px"
                                     justifyContent="space-between"
                                 >
                                     <MotionButton
