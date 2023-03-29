@@ -1,5 +1,5 @@
 import { ArrowDownIcon, ArrowUpIcon } from "@chakra-ui/icons";
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Avatar, Box, Button, HStack, IconButton, Text, useToast, VStack } from "@chakra-ui/react";
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Avatar, Box, Button, Heading, HStack, IconButton, Text, Tooltip, useColorModeValue, useToast, VStack } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import Context from "../context/Context";
 import { auth, firestore } from "../firebaseConfig";
@@ -12,7 +12,7 @@ export default function ChatMessage({ message }) {
     // -- the entire message list
     // -- the currently selected message?? 
 
-    const { text, photoURL, voteCount, id, sender } = message;
+    const { text, photoURL, voteCount, id, sender, sender_full_name } = message;
     const toast = useToast();
     const { data: pageData } = useContext(Context);
     const [messageVoteCount, setMessageVoteCount] = useState(voteCount);
@@ -253,9 +253,16 @@ export default function ChatMessage({ message }) {
                     // When the user tabs
                     whileFocus={{ scale: 1.2 }}
                 >
-                    <Avatar src={photoURL || 'https://i.imgur.com/rFbS5ms.png'} alt="Avatar" />
+                    <Tooltip label={sender_full_name}>
+                        <Avatar src={photoURL || 'https://i.imgur.com/rFbS5ms.png'} alt="Avatar" />
+                    </Tooltip>
                 </motion.button>
-                <Box whiteSpace="pre-wrap">
+                <Box
+                    whiteSpace="pre-wrap"
+                    border={useColorModeValue("Dark", "Light") === "Dark" ? "1px solid black" : "1px solid white"}
+                    padding="5"
+                    borderRadius="10"
+                    bgColor={useColorModeValue("Dark", "Light") === "Dark" ? "gray.100" : "gray.600"}>
                     {text}
                 </Box>
             </HStack>

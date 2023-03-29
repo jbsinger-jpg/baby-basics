@@ -70,13 +70,17 @@ function ForumMessagePage() {
     const sendMessage = async (e) => {
         e.preventDefault();
         const { uid, photoURL } = auth.currentUser;
-        
+
+        const userDoc = await firestore.collection("users").doc(auth.currentUser.uid);
+        const userData = (await userDoc.get()).data();
+
         const docRef = await firestore.collection(pageData).add({
             text: text,
             createdAt: serverTimestamp(),
             uid: uid,
             photoURL: photoURL,
-            sender: auth?.currentUser?.email,
+            sender: userData.email,
+            sender_full_name: userData.full_name,
             voteCount: 0,
         });
 
@@ -106,7 +110,7 @@ function ForumMessagePage() {
                     </Button>
                 }
             </Box>
-            <div style={{ height: 'calc(100vh - 100px)', overflowY: 'auto' }} ref={messageBoxRef}>
+            <div style={{ height: 'calc(100vh - 175px)', overflowY: 'auto' }} ref={messageBoxRef}>
                 {(messages) &&
                     messages
                         .map((msg) => {

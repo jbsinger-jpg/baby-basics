@@ -81,7 +81,7 @@ function DirectMessagePage() {
 
     return (
         <Box>
-            <div style={{ height: 'calc(100vh - 100px)', overflowY: 'auto' }} ref={messageBoxRef}>
+            <div style={{ height: 'calc(100vh - 175px)', overflowY: 'auto' }} ref={messageBoxRef}>
                 {(chatRoomMessagesRecieved && chatRoomMessagesSent) &&
                     generateMessages()
                         .map((msg) => {
