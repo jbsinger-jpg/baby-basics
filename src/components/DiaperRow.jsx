@@ -1,5 +1,5 @@
 import { CheckIcon, CloseIcon, StarIcon } from '@chakra-ui/icons';
-import { Box, Button, Heading, HStack, Image, SkeletonCircle, SkeletonText, Text, Tooltip, VStack, Icon, Divider, Stack } from '@chakra-ui/react';
+import { Box, Button, Heading, HStack, Image, SkeletonCircle, SkeletonText, Text, Tooltip, VStack, Icon, Divider, Stack, Card, CardBody, Tag, TagLabel } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { firestore } from '../firebaseConfig';
@@ -92,7 +92,7 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
     return (
         <VStack
             key={diaper.id}
-            h="300px"
+            h="350px"
             spacing="3"
             paddingBottom="10"
         >
@@ -100,21 +100,25 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
             <SkeletonText isLoaded={!isDiapersLoading}>
                 <HStack spacing="4" w="400px">
                     {!flippedCards ?
-                        <MotionImage
-                            variant="unstyled"
-                            initial={buttonsPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
-                            animate={{ rotate: 0, scale: 1 }}
-                            onAnimationComplete={() => setButtonsPressed(false)}
-                            transition={{
-                                type: "spring",
-                                stiffness: 260,
-                                damping: 20
-                            }}
-                            src={diaper.image}
-                            size="sm"
-                            alt="Alternate Text"
-                            style={{ width: 150, height: 200, resizeMode: 'cover' }}
-                        />
+                        <Card w="220px">
+                            <CardBody display="flex" justifyContent="center">
+                                <MotionImage
+                                    variant="unstyled"
+                                    initial={buttonsPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
+                                    animate={{ rotate: 0, scale: 1 }}
+                                    onAnimationComplete={() => setButtonsPressed(false)}
+                                    transition={{
+                                        type: "spring",
+                                        stiffness: 260,
+                                        damping: 20
+                                    }}
+                                    src={diaper.image}
+                                    size="sm"
+                                    alt="Alternate Text"
+                                    style={{ width: 150, height: 200, resizeMode: 'cover' }}
+                                />
+                            </CardBody>
+                        </Card>
                         :
                         <MotionBox
                             h="300px"
@@ -180,15 +184,50 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
 
                     }
                     <VStack spacing="1" width={150} justifyContent="center" alignItems="start">
-                        <Text>Amazon Affiliate</Text>
+                        <Tag
+                            borderRadius='full'
+                            variant='solid'
+                            colorScheme='green'
+                        >
+                            <TagLabel>
+                                Amazon Affiliate
+                            </TagLabel>
+                        </Tag>
                         <Divider />
-                        <Text>{diaper.brand}</Text>
+                        <Tag
+                            borderRadius='full'
+                            variant='outline'
+                            colorScheme='blue'
+                        >
+                            <TagLabel>
+                                {diaper.brand}
+                            </TagLabel>
+                        </Tag>
                         <Divider />
-                        <Text>{diaper.description}</Text>
+                        <Tag
+                            borderRadius='full'
+                            variant='outline'
+                            colorScheme='orange'
+                        >
+                            <TagLabel>{diaper.description}</TagLabel>
+                        </Tag>
                         <Divider />
-                        <Text>{"$" + diaper.price}</Text>
+
+                        <Tag
+                            borderRadius='full'
+                            variant='outline'
+                            colorScheme='gray'
+                        >
+                            <TagLabel>{"$" + diaper.price}</TagLabel>
+                        </Tag>
                         <Divider />
-                        <Text>{"Size: " + diaper.size}</Text>
+                        <Tag
+                            borderRadius='full'
+                            variant='solid'
+                            colorScheme='telegram'
+                        >
+                            <TagLabel>{"Size: " + diaper.size}</TagLabel>
+                        </Tag>
                     </VStack>
                 </HStack>
             </SkeletonText>
