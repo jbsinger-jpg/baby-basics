@@ -101,6 +101,7 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                             variant="unstyled"
                             initial={buttonsPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
                             animate={{ rotate: 0, scale: 1 }}
+                            onAnimationComplete={() => setButtonsPressed(false)}
                             transition={{
                                 type: "spring",
                                 stiffness: 260,
@@ -119,6 +120,7 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                             display="flex"
                             initial={buttonsPressed ? { scale: 0 } : { scale: 1 }}
                             animate={{ scale: 1 }}
+                            onAnimationComplete={() => setButtonsPressed(false)}
                         >
                             <VStack spacing="4" w="220px" justifyContent="start">
                                 <HStack w="220px">
