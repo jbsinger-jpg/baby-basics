@@ -130,7 +130,7 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex }) 
                             onAnimationComplete={() => setButtonsPressed(false)}
                         >
                             <VStack spacing="4" w="220px" justifyContent="start">
-                                <HStack w="220px">
+                                <HStack w="220px" justifyContent="space-between">
                                     <Text>{clothing.title}</Text>
                                     <Tooltip label="Average">
                                         <HStack>

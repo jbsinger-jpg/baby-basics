@@ -130,7 +130,7 @@ export default function FoodRow({ food, isFoodDataLoading, tabIndex }) {
                             onAnimationComplete={() => setButtonsPressed(false)}
                         >
                             <VStack spacing="4" w="220px" justifyContent="start">
-                                <HStack w="220px">
+                                <HStack w="220px" justifyContent="space-between">
                                     <Text>{food.title}</Text>
                                     <Tooltip label="Average">
                                         <HStack>
@@ -265,7 +265,6 @@ export default function FoodRow({ food, isFoodDataLoading, tabIndex }) {
                             Rate
                         </MotionButton>
                     </HStack>
-
                 }
             </SkeletonText>
         </VStack>

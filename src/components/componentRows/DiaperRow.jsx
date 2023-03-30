@@ -130,7 +130,7 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                             onAnimationComplete={() => setButtonsPressed(false)}
                         >
                             <VStack spacing="4" w="220px" justifyContent="start">
-                                <HStack w="220px">
+                                <HStack w="220px" justifyContent="space-between">
                                     <Text>{diaper.title}</Text>
                                     <Tooltip label="Average">
                                         <HStack>
