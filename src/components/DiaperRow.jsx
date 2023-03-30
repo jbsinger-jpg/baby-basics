@@ -28,6 +28,7 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
             setButtonsPressed(false);
             setRating(newValue);
         };
+
         const stars = Array(5)
             .fill()
             .map((_, i) => {
@@ -41,26 +42,28 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                     />
                 );
             });
-        return <Stack direction="row">{stars}</Stack>;
+        return <Stack direction="row" cursor={"pointer"}>{stars}</Stack>;
     };
 
     const handleAddRating = async () => {
+        let ratingSum = 0;
         const diapersRef = await firestore.collection("diapers");
 
         diapersRef.doc(diaper.id).collection("ratings").add({
             rating: Number(rating),
         });
 
+        // update the data with the new rating
         const _total = (await diapersRef.doc(diaper.id).collection("ratings").get()).size;
-        setTotal(_total);
-
-        let ratingSum = 0;
         const sum = (await diapersRef.doc(diaper.id).collection("ratings").get()).docs.map(doc => doc.data().rating);
+
         for (let i = 0; i < sum.length; i++) {
             ratingSum += sum[i];
         }
 
         const avg = Number(ratingSum / _total).toFixed(1);
+
+        setTotal(_total);
         setAverage(avg);
     };
 

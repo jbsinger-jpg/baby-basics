@@ -8,6 +8,7 @@ export default function DiaperDataTabPanel({ diaperData, isDiapersLoading, tabIn
             {diaperData && diaperData.map((diaper, index) => {
                 return (
                     <DiaperRow
+                        key={index}
                         diaper={diaper}
                         isDiapersLoading={isDiapersLoading}
                         tabIndex={tabIndex}
