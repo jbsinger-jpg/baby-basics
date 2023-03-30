@@ -150,68 +150,6 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
             setClothingData(clothingData);
         }));
 
-        ////Inclusive Search
-        // if (clothingBrand) {
-        //     firestore.collection('clothing').where("brand", "==", clothingBrand)
-        //         .get()
-        //         .then(snapshot => {
-        //             snapshot.docs.forEach(doc => {
-        //                 options.push({ ...doc.data() });
-        //             });
-
-        //             const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
-        //             setClothingData(uniqueArray);
-        //         });
-        // }
-
-        // if (clothingGender) {
-        //     firestore.collection('clothing').where("gender", "==", clothingGender)
-        //         .get()
-        //         .then(snapshot => {
-        //             snapshot.docs.forEach(doc => {
-        //                 options.push({ ...doc.data() });
-        //             });
-        //             const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
-        //             setClothingData(uniqueArray);
-        //         });
-        // }
-
-        // if (formattedClothingPrice && formattedClothingPrice > 0) {
-        //     firestore.collection('clothing').where("price", "<=", Number(formattedClothingPrice))
-        //         .get()
-        //         .then(snapshot => {
-        //             snapshot.docs.forEach(doc => {
-        //                 options.push({ ...doc.data() });
-        //             });
-        //             const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
-        //             setClothingData(uniqueArray);
-        //         });
-        // }
-
-        // if (clothingType) {
-        //     firestore.collection('clothing').where("type", "==", clothingType)
-        //         .get()
-        //         .then(snapshot => {
-        //             snapshot.docs.forEach(doc => {
-        //                 options.push({ ...doc.data() });
-        //             });
-        //             const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
-        //             setClothingData(uniqueArray);
-        //         });
-        // }
-
-        // if (clothingSize) {
-        //     firestore.collection('clothing').where("querySizes", "array-contains", clothingSize)
-        //         .get()
-        //         .then(snapshot => {
-        //             snapshot.docs.forEach(doc => {
-        //                 options.push({ ...doc.data() });
-        //             });
-        //             const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
-        //             setClothingData(uniqueArray);
-        //         });
-        // }
-
         if (!clothingSize && !clothingType && !clothingPrice && !clothingGender && !clothingBrand) {
             firestore.collection('clothing')
                 .get()
@@ -257,44 +195,6 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
 
             setDiaperData(diaperData);
         }));
-
-        // if (diaperBrand) {
-        //     firestore.collection('diapers').where("brand", "==", diaperBrand)
-        //         .get()
-        //         .then(snapshot => {
-        //             snapshot.docs.forEach(doc => {
-        //                 options.push({ ...doc.data() });
-        //             });
-
-        //             const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
-        //             setDiaperData(uniqueArray);
-        //         });
-        // }
-
-        // if (formattedDiaperPrice && formattedDiaperPrice > 0) {
-        //     firestore.collection('diapers').where("price", "<=", Number(formattedDiaperPrice))
-        //         .get()
-        //         .then(snapshot => {
-        //             snapshot.docs.forEach(doc => {
-        //                 options.push({ ...doc.data() });
-        //             });
-        //             const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
-        //             setDiaperData(uniqueArray);
-        //             console.log(snapshot.docs);
-        //         });
-        // }
-
-        // if (diaperSize && diaperSize > 0) {
-        //     firestore.collection('diapers').where("size", "==", diaperSize)
-        //         .get()
-        //         .then(snapshot => {
-        //             snapshot.docs.forEach(doc => {
-        //                 options.push({ ...doc.data() });
-        //             });
-        //             const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
-        //             setDiaperData(uniqueArray);
-        //         });
-        // }
 
         if (!diaperPrice && !diaperSize && !diaperBrand) {
             firestore.collection('diapers')
