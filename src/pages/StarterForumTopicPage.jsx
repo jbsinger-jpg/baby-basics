@@ -14,7 +14,7 @@ export default function StarterForumTopicPage() {
                     <h2>
                         <AccordionButton>
                             <Box as="span" flex='1' textAlign='left'>
-                                What to feed a a baby?
+                                What to feed a baby?
                             </Box>
                             <AccordionIcon />
                         </AccordionButton>
@@ -129,6 +129,108 @@ export default function StarterForumTopicPage() {
                             <Button onClick={
                                 () => {
                                     setPageData("pediatrician_visit_messages");
+                                    navigate("/message-page");
+                                }
+                            }>
+                                Chat
+                            </Button>
+                        </HStack>
+                    </AccordionPanel>
+                </AccordionItem>
+                <AccordionItem>
+                    <h2>
+                        <AccordionButton>
+                            <Box as="span" flex='1' textAlign='left'>
+                                What should I do before leaving the house?
+                            </Box>
+                            <AccordionIcon />
+                        </AccordionButton>
+                    </h2>
+                    <AccordionPanel pb={4}>
+                        <HStack justifyContent="space-between">
+                            <Text>
+                                This forum is designed around prepping for the trip back from the hospital
+                            </Text>
+                            <Button onClick={
+                                () => {
+                                    setPageData("leaving_house_messages");
+                                    navigate("/message-page");
+                                }
+                            }>
+                                Chat
+                            </Button>
+                        </HStack>
+                    </AccordionPanel>
+                </AccordionItem>
+                <AccordionItem>
+                    <h2>
+                        <AccordionButton>
+                            <Box as="span" flex='1' textAlign='left'>
+                                How to tell if baby is crying for actual needs?
+                            </Box>
+                            <AccordionIcon />
+                        </AccordionButton>
+                    </h2>
+                    <AccordionPanel pb={4}>
+                        <HStack justifyContent="space-between">
+                            <Text>
+                                This forum is designed around helping parents telegraph their child's behavior
+                            </Text>
+                            <Button onClick={
+                                () => {
+                                    setPageData("baby_crying_messages");
+                                    navigate("/message-page");
+                                }
+                            }>
+                                Chat
+                            </Button>
+                        </HStack>
+                    </AccordionPanel>
+                </AccordionItem>
+                <AccordionItem>
+                    <h2>
+                        <AccordionButton>
+                            <Box as="span" flex='1' textAlign='left'>
+                                How much of baby care is due to prenatal health?
+                            </Box>
+                            <AccordionIcon />
+                        </AccordionButton>
+                    </h2>
+                    <AccordionPanel pb={4}>
+                        <HStack justifyContent="space-between">
+                            <Text>
+                                This forum is designed around helping mothers understand the importance
+                                of helping their baby in the womb
+                            </Text>
+                            <Button onClick={
+                                () => {
+                                    setPageData("prenatal_health_messages");
+                                    navigate("/message-page");
+                                }
+                            }>
+                                Chat
+                            </Button>
+                        </HStack>
+                    </AccordionPanel>
+                </AccordionItem>
+                <AccordionItem>
+                    <h2>
+                        <AccordionButton>
+                            <Box as="span" flex='1' textAlign='left'>
+                                What should I put in a go bag for my baby?
+                            </Box>
+                            <AccordionIcon />
+                        </AccordionButton>
+                    </h2>
+                    <AccordionPanel pb={4}>
+                        <HStack justifyContent="space-between">
+                            <Text>
+                                This forum is designed around helping parents when wanting to go
+                                out and about with their little ones.
+                            </Text>
+                            <Button onClick={
+                                () => {
+                                    setPageData("go_bag_messages");
                                     navigate("/message-page");
                                 }
                             }>
