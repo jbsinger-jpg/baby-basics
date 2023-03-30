@@ -40,7 +40,7 @@ export default function DiaperDataTabPanel({ diaperData, isDiapersLoading, tabIn
 
     const handleButtonsTrigger = (index) => {
         const updatedButtonsPressed = new Array(diaperData?.length).fill(false);
-        updatedButtonsPressed[index] = !updatedButtonsPressed[index];
+        updatedButtonsPressed[index] = true;
         setButtonsPressed(updatedButtonsPressed);
 
     };
@@ -86,7 +86,7 @@ export default function DiaperDataTabPanel({ diaperData, isDiapersLoading, tabIn
                                         alignItems="center"
                                         justifyContent="center"
                                         display="flex"
-                                        initial={{ scale: 0 }}
+                                        initial={buttonsPressed[index] ? { scale: 0 } : { scale: 1 }}
                                         animate={{ scale: 1 }}
                                     >
                                         <VStack spacing="4" w="220px" justifyContent="start">
