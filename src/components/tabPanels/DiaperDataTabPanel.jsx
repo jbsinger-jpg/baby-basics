@@ -1,6 +1,6 @@
 import { HStack } from '@chakra-ui/react';
 import React from 'react';
-import DiaperRow from '../components/DiaperRow';
+import DiaperRow from '../componentRows/DiaperRow';
 
 export default function DiaperDataTabPanel({ diaperData, isDiapersLoading, tabIndex }) {
     return (
@@ -15,6 +15,6 @@ export default function DiaperDataTabPanel({ diaperData, isDiapersLoading, tabIn
                     />
                 );
             })}
-        </HStack >
+        </HStack>
     );
 }

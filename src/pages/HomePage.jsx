@@ -7,10 +7,10 @@ import { useNavigate } from 'react-router-dom';
 import { auth, firestore } from '../firebaseConfig';
 import Context from '../context/Context';
 import SearchBarAlertDialog from '../components/SearchBarAlertDialog';
-import ClothingDataTabPanel from '../tabPanels/ClothingDataTabPanel';
-import FoodDataTabPanel from '../tabPanels/FoodDataTabPanel';
-import DiaperDataTabPanel from '../tabPanels/DiaperDataTabPanel';
-import UtilityDataTabPanel from '../tabPanels/UtilityDataTabPanel';
+import ClothingDataTabPanel from '../components/tabPanels/ClothingDataTabPanel';
+import FoodDataTabPanel from '../components/tabPanels/FoodDataTabPanel';
+import UtilityDataTabPanel from '../components/tabPanels/UtilityDataTabPanel';
+import DiaperDataTabPanel from '../components/tabPanels/DiaperDataTabPanel';
 
 export default function HomePage() {
     const { isOpen, onOpen, onClose } = useDisclosure();

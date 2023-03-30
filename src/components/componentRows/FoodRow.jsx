@@ -1,10 +1,10 @@
 import { CheckIcon, CloseIcon, StarIcon } from '@chakra-ui/icons';
-import { Box, Button, Heading, HStack, Image, SkeletonCircle, SkeletonText, Text, Tooltip, VStack, Icon, Divider, Stack, Card, CardBody, Tag, TagLabel } from '@chakra-ui/react';
+import { Divider, HStack, Image, SkeletonCircle, SkeletonText, Text, VStack, Icon, Stack, Box, Button, Card, CardBody, Tooltip, Heading, Tag, TagLabel } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
-import { firestore } from '../firebaseConfig';
+import { firestore } from '../../firebaseConfig';
 
-export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
+export default function FoodRow({ food, isFoodDataLoading, tabIndex }) {
     const MotionImage = motion(Image);
     const MotionBox = motion(Box);
     const MotionButton = motion(Button);
@@ -15,7 +15,7 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
     const [total, setTotal] = useState(0);
     const [average, setAverage] = useState(0);
 
-    const handleFlip = (index) => {
+    const handleFlip = () => {
         setFlippedCards(!flippedCards);
     };
 
@@ -49,13 +49,13 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
         let ratingSum = 0;
         const diapersRef = await firestore.collection("diapers");
 
-        diapersRef.doc(diaper.id).collection("ratings").add({
+        diapersRef.doc(food.id).collection("ratings").add({
             rating: Number(rating),
         });
 
         // update the data with the new rating
-        const _total = (await diapersRef.doc(diaper.id).collection("ratings").get()).size;
-        const sum = (await diapersRef.doc(diaper.id).collection("ratings").get()).docs.map(doc => doc.data().rating);
+        const _total = (await diapersRef.doc(food.id).collection("ratings").get()).size;
+        const sum = (await diapersRef.doc(food.id).collection("ratings").get()).docs.map(doc => doc.data().rating);
 
         for (let i = 0; i < sum.length; i++) {
             ratingSum += sum[i];
@@ -75,7 +75,7 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
     useEffect(() => {
         let ratingSum = 0;
 
-        (firestore.collection("diapers").doc(diaper.id).collection("ratings").get()).then(snapshot => {
+        (firestore.collection("diapers").doc(food.id).collection("ratings").get()).then(snapshot => {
             const _total = snapshot.size;
             setTotal(_total);
             const sum = snapshot.docs.map(doc => doc.data().rating);
@@ -91,13 +91,13 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
 
     return (
         <VStack
-            key={diaper.id}
+            key={food.id}
             h="350px"
             spacing="3"
             paddingBottom="10"
         >
-            <SkeletonCircle size='10' isLoaded={!isDiapersLoading} />
-            <SkeletonText isLoaded={!isDiapersLoading}>
+            <SkeletonCircle size='10' isLoaded={!isFoodDataLoading} />
+            <SkeletonText isLoaded={!isFoodDataLoading}>
                 <HStack spacing="4" w="400px">
                     {!flippedCards ?
                         <Card w="220px">
@@ -112,7 +112,7 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                                         stiffness: 260,
                                         damping: 20
                                     }}
-                                    src={diaper.image}
+                                    src={food.image}
                                     size="sm"
                                     alt="Alternate Text"
                                     style={{ width: 150, height: 200, resizeMode: 'cover' }}
@@ -131,7 +131,7 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                         >
                             <VStack spacing="4" w="220px" justifyContent="start">
                                 <HStack w="220px">
-                                    <Text>{diaper.title}</Text>
+                                    <Text>{food.title}</Text>
                                     <Tooltip label="Average">
                                         <HStack>
                                             <Text>{average}</Text>
@@ -200,7 +200,7 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                             colorScheme='blue'
                         >
                             <TagLabel>
-                                {diaper.brand}
+                                {food.brand}
                             </TagLabel>
                         </Tag>
                         <Divider />
@@ -209,7 +209,7 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                             variant='outline'
                             colorScheme='orange'
                         >
-                            <TagLabel>{diaper.description}</TagLabel>
+                            <TagLabel>{food.description}</TagLabel>
                         </Tag>
                         <Divider />
 
@@ -218,7 +218,7 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                             variant='outline'
                             colorScheme='gray'
                         >
-                            <TagLabel>{"$" + diaper.price}</TagLabel>
+                            <TagLabel>{"$" + food.price}</TagLabel>
                         </Tag>
                         <Divider />
                         <Tag
@@ -226,13 +226,13 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                             variant='solid'
                             colorScheme='telegram'
                         >
-                            <TagLabel>{"Size: " + diaper.size}</TagLabel>
+                            <TagLabel>{"Stage: " + food.stage}</TagLabel>
                         </Tag>
                     </VStack>
                 </HStack>
             </SkeletonText>
             <SkeletonText
-                isLoaded={!isDiapersLoading}
+                isLoaded={!isFoodDataLoading}
                 w="400px"
             >
                 {!flippedCards &&
@@ -246,7 +246,7 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                             // When the user tabs
                             whileFocus={{ scale: 1.2 }}
                             as="a"
-                            href={diaper.affiliateLink}
+                            href={food.affiliateLink}
                             target="_blank"
                             rel="noopener noreferrer"
                         >
