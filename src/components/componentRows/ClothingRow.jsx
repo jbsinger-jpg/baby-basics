@@ -265,7 +265,6 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex }) 
                             Rate
                         </MotionButton>
                     </HStack>
-
                 }
             </SkeletonText>
         </VStack>
