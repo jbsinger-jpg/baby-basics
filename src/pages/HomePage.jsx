@@ -1,4 +1,4 @@
-import { CalendarIcon, ChatIcon, MoonIcon, SearchIcon, SunIcon, UnlockIcon, WarningIcon } from '@chakra-ui/icons';
+import { CalendarIcon, ChatIcon, MoonIcon, SearchIcon, SunIcon, TimeIcon, UnlockIcon, WarningIcon } from '@chakra-ui/icons';
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Avatar, AvatarBadge, AvatarGroup, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, IconButton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
@@ -57,6 +57,10 @@ export default function HomePage() {
 
     const handleLogin = () => {
         navigate("/login");
+    };
+
+    const handleMilestones = () => {
+        navigate("/milestone");
     };
 
     const ColorModeToggleButton = () => {
@@ -338,6 +342,9 @@ export default function HomePage() {
                                         icon={<WarningIcon />}
                                         onClick={() => setScreeningAlertDialogVisibile(true)}
                                     />
+                                </Tooltip>
+                                <Tooltip label="Milestones for Baby">
+                                    <IconButton icon={<TimeIcon />} onClick={handleMilestones} />
                                 </Tooltip>
                             </>
                             :

@@ -5,9 +5,9 @@ import HomePage from './pages/HomePage';
 import ForumMessagePage from "./pages/ForumMessagePage";
 import DirectMessagePage from "./pages/DirectMessagePage";
 import Context from './context/Context';
-import PurchasePage from "./pages/PurchasePage";
 import StarterForumTopicPage from "./pages/StarterForumTopicPage";
 import ScreeningPage from "./pages/ScreeningPage";
+import MilestonePage from "./pages/MilestonePage";
 
 
 function App() {
@@ -18,12 +18,12 @@ function App() {
       <Routes>
         <Route index element={<HomePage />} />
         <Route path="screening" element={<ScreeningPage />} />
-        <Route path="store" element={<HomePage />} />
         {/* <Route path="purchase" element={<PurchasePage />} /> */}
         <Route path="login" element={<LoginPage />} />
         <Route path="message" element={<DirectMessagePage />} />
         <Route path="forum" element={<StarterForumTopicPage />} />
         <Route path="message-page" element={<ForumMessagePage />} />
+        <Route path="milestone" element={<MilestonePage />} />
       </Routes>
     </Context.Provider>
 
