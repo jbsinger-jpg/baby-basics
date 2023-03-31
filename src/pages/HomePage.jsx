@@ -9,7 +9,6 @@ import Context from '../context/Context';
 import SearchBarAlertDialog from '../components/SearchBarAlertDialog';
 import ClothingDataTabPanel from '../components/tabPanels/ClothingDataTabPanel';
 import FoodDataTabPanel from '../components/tabPanels/FoodDataTabPanel';
-import UtilityDataTabPanel from '../components/tabPanels/UtilityDataTabPanel';
 import DiaperDataTabPanel from '../components/tabPanels/DiaperDataTabPanel';
 
 export default function HomePage() {
@@ -21,8 +20,6 @@ export default function HomePage() {
     const [userDataConfirmedFriends] = useCollectionData(firestore.collection('users').doc(currentUser?.uid).collection("confirmedFriends"), { idField: 'id' });
     const [alertDialogUser, setAlertDialogUser] = useState(null);
     const [alertDialogVisible, setAlertDialogVisible] = useState(false);
-    // utility data for search bar
-    const [utilityData, isUtilitiesLoading] = useCollectionData(firestore.collection('utilities'), { idField: 'id' });
 
     const [groupUsers, setGroupUsers] = useState(null);
     const [tabIndex, setTabIndex] = useState(0);
@@ -300,7 +297,22 @@ export default function HomePage() {
                             Diapers
                         </Tab>
                         <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                            Utilities
+                            Toiletries
+                        </Tab>
+                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                            Formula
+                        </Tab>
+                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                            Toys
+                        </Tab>
+                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                            Monitors
+                        </Tab>
+                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                            Seats
+                        </Tab>
+                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                            Strollers
                         </Tab>
                     </HStack>
                     <HStack>
@@ -346,9 +358,6 @@ export default function HomePage() {
                     </TabPanel>
                     <TabPanel>
                         <DiaperDataTabPanel diaperData={diaperData} isDiapersLoading={isDiapersLoading} tabIndex={tabIndex} />
-                    </TabPanel>
-                    <TabPanel>
-                        <UtilityDataTabPanel utilityData={utilityData} isUtilitiesLoading={isUtilitiesLoading} />
                     </TabPanel>
                 </TabPanels>
             </Tabs>

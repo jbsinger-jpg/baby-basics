@@ -4,6 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import Context from '../context/Context';
 
 export default function StarterForumTopicPage() {
+
+    // TODO: Have the questions categorized in the following forum groups
+    // 1) Before pregnancy
+    // 2) During pregnancy
+    // 3) After pregnancy
+
     const navigate = useNavigate();
     const { setData: setPageData } = useContext(Context);
 
@@ -231,6 +237,188 @@ export default function StarterForumTopicPage() {
                             <Button onClick={
                                 () => {
                                     setPageData("go_bag_messages");
+                                    navigate("/message-page");
+                                }
+                            }>
+                                Chat
+                            </Button>
+                        </HStack>
+                    </AccordionPanel>
+                </AccordionItem>
+                <AccordionItem>
+                    <h2>
+                        <AccordionButton>
+                            <Box as="span" flex='1' textAlign='left'>
+                                What should I do if I can't breastfeed my baby?
+                            </Box>
+                            <AccordionIcon />
+                        </AccordionButton>
+                    </h2>
+                    <AccordionPanel pb={4}>
+                        <HStack justifyContent="space-between">
+                            <Text>
+                                This forum is designed around helping parents figure out alternative options
+                                for their children if they happen to experience health complications.
+                            </Text>
+                            <Button onClick={
+                                () => {
+                                    setPageData("breast_feed_alternative_messages");
+                                    navigate("/message-page");
+                                }
+                            }>
+                                Chat
+                            </Button>
+                        </HStack>
+                    </AccordionPanel>
+                </AccordionItem>
+                <AccordionItem>
+                    <h2>
+                        <AccordionButton>
+                            <Box as="span" flex='1' textAlign='left'>
+                                What can I financially expect for raising a baby?
+                            </Box>
+                            <AccordionIcon />
+                        </AccordionButton>
+                    </h2>
+                    <AccordionPanel pb={4}>
+                        <HStack justifyContent="space-between">
+                            <Text>
+                                This forum is designed around helping parents figure out how to handle taking care of
+                                their child with certain budgetary restrictions.
+                            </Text>
+                            <Button onClick={
+                                () => {
+                                    setPageData("financial_expectation_messages");
+                                    navigate("/message-page");
+                                }
+                            }>
+                                Chat
+                            </Button>
+                        </HStack>
+                    </AccordionPanel>
+                </AccordionItem>
+                <AccordionItem>
+                    <h2>
+                        <AccordionButton>
+                            <Box as="span" flex='1' textAlign='left'>
+                                What should I expect from an elementary school system?
+                            </Box>
+                            <AccordionIcon />
+                        </AccordionButton>
+                    </h2>
+                    <AccordionPanel pb={4}>
+                        <HStack justifyContent="space-between">
+                            <Text>
+                                This forum is designed around helping parents figure out how to handle knowing which
+                                places to take their children for educational purposes.
+                            </Text>
+                            <Button onClick={
+                                () => {
+                                    setPageData("school_messages");
+                                    navigate("/message-page");
+                                }
+                            }>
+                                Chat
+                            </Button>
+                        </HStack>
+                    </AccordionPanel>
+                </AccordionItem>
+                <AccordionItem>
+                    <h2>
+                        <AccordionButton>
+                            <Box as="span" flex='1' textAlign='left'>
+                                What are some fun activities I can do with my baby?
+                            </Box>
+                            <AccordionIcon />
+                        </AccordionButton>
+                    </h2>
+                    <AccordionPanel pb={4}>
+                        <HStack justifyContent="space-between">
+                            <Text>
+                                This forum is designed around helping parents figure out do more than just raise a kid,
+                                but to learn how to interact with them in their younger stages of development.
+                            </Text>
+                            <Button onClick={
+                                () => {
+                                    setPageData("hobbies_with_baby_messages");
+                                    navigate("/message-page");
+                                }
+                            }>
+                                Chat
+                            </Button>
+                        </HStack>
+                    </AccordionPanel>
+                </AccordionItem>
+                <AccordionItem>
+                    <h2>
+                        <AccordionButton>
+                            <Box as="span" flex='1' textAlign='left'>
+                                What kind of car seat is best for my kid?
+                            </Box>
+                            <AccordionIcon />
+                        </AccordionButton>
+                    </h2>
+                    <AccordionPanel pb={4}>
+                        <HStack justifyContent="space-between">
+                            <Text>
+                                This forum is designed around helping parents figure out how to keep
+                                their kid safe when needing to drive from one place to another.
+                            </Text>
+                            <Button onClick={
+                                () => {
+                                    setPageData("car_seat_messages");
+                                    navigate("/message-page");
+                                }
+                            }>
+                                Chat
+                            </Button>
+                        </HStack>
+                    </AccordionPanel>
+                </AccordionItem>
+                <AccordionItem>
+                    <h2>
+                        <AccordionButton>
+                            <Box as="span" flex='1' textAlign='left'>
+                                What kind of pets can I have around my child?
+                            </Box>
+                            <AccordionIcon />
+                        </AccordionButton>
+                    </h2>
+                    <AccordionPanel pb={4}>
+                        <HStack justifyContent="space-between">
+                            <Text>
+                                This forum is designed around helping parents figure out which
+                                animals tend to be the safest around children.
+                            </Text>
+                            <Button onClick={
+                                () => {
+                                    setPageData("animals_and_babies_messages");
+                                    navigate("/message-page");
+                                }
+                            }>
+                                Chat
+                            </Button>
+                        </HStack>
+                    </AccordionPanel>
+                </AccordionItem>
+                <AccordionItem>
+                    <h2>
+                        <AccordionButton>
+                            <Box as="span" flex='1' textAlign='left'>
+                                How will I know if my house is genuinely baby proofed?
+                            </Box>
+                            <AccordionIcon />
+                        </AccordionButton>
+                    </h2>
+                    <AccordionPanel pb={4}>
+                        <HStack justifyContent="space-between">
+                            <Text>
+                                This forum is designed around helping parents make themselves feel comfortable
+                                with having their baby traverse their home.
+                            </Text>
+                            <Button onClick={
+                                () => {
+                                    setPageData("baby_proof_messages");
                                     navigate("/message-page");
                                 }
                             }>
