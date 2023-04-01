@@ -9,7 +9,6 @@ import StarterForumTopicPage from "./pages/StarterForumTopicPage";
 import ScreeningPage from "./pages/ScreeningPage";
 import MilestonePage from "./pages/MilestonePage";
 
-
 function App() {
   const [state, setState] = useState(null);
 
