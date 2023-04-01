@@ -49,19 +49,27 @@ const promptOptions = [
 
         ],
         motorMilestones: [
-
+            "Uses hands to support self while sitting",
+            "Rolls from back to tummy and tummy to back",
+            "While standing with support, accepts entire weight with legs"
         ],
         sensoryMilestones: [
-
+            "Uses both hands to explore toys",
+            "Is not upset by everyday sounds",
+            "Enjoys a variety of movements"
         ],
         communicationMilestones: [
-
+            "Listens and responds when spoken to",
+            "Uses babbling to get attention",
+            "Notices toys that make sounds"
         ],
         feedingMilestones: [
-
+            "Shows interest in food",
+            "Moves pureed food from front of mouth to back",
+            "Begins to eat cereals and pureed foods – Smooth, pureed food (single ingredient only), like carrots, sweet potato, squash, apples, pears"
         ],
         hyperlinks: [
-
+            "https://pathways.org/growth-development/4-6-months/milestones/"
         ]
     },
     {
@@ -71,19 +79,27 @@ const promptOptions = [
 
         ],
         motorMilestones: [
-
+            "Sits and reaches for toys without falling",
+            "Moves from tummy or back into sitting",
+            "Turns head to visually track objects while sitting"
         ],
         sensoryMilestones: [
-
+            "Turns several pages of a chunky (board) book at once",
+            "Experiments with the amount of force needed to pick up different objects",
+            "Focuses on objects near and far"
         ],
         communicationMilestones: [
-
+            "Uses increased variety of sounds and syllable combinations in babbling",
+            "Recognizes sound of name",
+            "Participates in two-way communication"
         ],
         feedingMilestones: [
-
+            "In a high chair, holds and drinks from a bottle",
+            "Stays full longer after eating",
+            "Shows strong reaction to new smells and tastes"
         ],
         hyperlinks: [
-
+            "https://pathways.org/growth-development/7-9-months/milestones/"
         ]
     },
     {
@@ -93,19 +109,27 @@ const promptOptions = [
 
         ],
         motorMilestones: [
-
+            "Pulls to stand and cruises along furniture",
+            "Stands alone and takes several independent steps",
+            "Releases objects into a container with a large opening"
         ],
         sensoryMilestones: [
-
+            "Explores toys with hands, fingers, and mouth",
+            "Enjoys listening to songs",
+            "Crawls to or away from objects baby sees in the distance"
         ],
         communicationMilestones: [
-
+            "Says one or two words",
+            "Pays attention to where you are looking and pointing",
+            "Imitates speech sounds"
         ],
         feedingMilestones: [
-
+            "Finger feeds self",
+            "Eating an increasing variety of food",
+            "Might be ready to start self feeding with utensils"
         ],
         hyperlinks: [
-
+            "https://pathways.org/growth-development/10-12-months/milestones/"
         ]
     },
     {
@@ -115,19 +139,26 @@ const promptOptions = [
 
         ],
         motorMilestones: [
-
+            "Walks independently and seldom falls",
+            "Squats to pick up a toy",
+            "Stacks two objects or blocks"
         ],
         sensoryMilestones: [
-
+            "Helps with getting dressed/undressed",
+            "Has a regular sleep schedule",
+            "Eats an increasing variety of foods"
         ],
         communicationMilestones: [
-
+            "May use 5-10 words",
+            "Imitates simple words and actions",
+            "Shows interest in pictures"
         ],
         feedingMilestones: [
-
+            "Increases variety of coarsely chopped table foods",
+            "Holds and drinks from a cup"
         ],
         hyperlinks: [
-
+            "https://pathways.org/growth-development/13-18-months/milestones/"
         ]
     },
     {
@@ -137,19 +168,25 @@ const promptOptions = [
 
         ],
         motorMilestones: [
-
+            "Starts to jumps with both feet leaving the ground",
+            "Climbs on low furniture",
+            "When walking, able to pull toys behind them"
         ],
         sensoryMilestones: [
-
+            "Flips switches on and off",
+            "Takes toys apart and puts them back together",
+            "Uses crayons, pens, or markers to make marks on paper"
         ],
         communicationMilestones: [
-
+            "Identifies 3-5 body parts when named",
+            "Consistently imitates new words",
+            "Understands new words quickly"
         ],
         feedingMilestones: [
-
+            "None"
         ],
         hyperlinks: [
-
+            "https://pathways.org/growth-development/19-24-months/milestones/"
         ]
     },
 ];
@@ -220,13 +257,12 @@ export default function MilestonePage() {
                 setSelectedAge(event.target.value);
                 handleAnswerChange(event);
             }}>
-                <option value='0M'> 0M </option>
-                <option value='3M'> 3M </option>
-                <option value='6M'> 6M </option>
-                <option value="9M"> 9M </option>
-                <option value="12M"> 12M </option>
-                <option value="18M"> 18M </option>
-                <option value="24M"> 24M </option>
+                <option value="0-3M"> 0-3M </option>
+                <option value="4-6M"> 4-6M </option>
+                <option value="7-9M"> 7-9M </option>
+                <option value="10-12M"> 10-12M </option>
+                <option value="13-18M"> 13-18M </option>
+                <option value="19-24M"> 19-24M </option>
             </Select>
             <Input
                 value={selectedAnswer}
