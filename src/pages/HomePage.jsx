@@ -1,4 +1,4 @@
-import { CalendarIcon, ChatIcon, MoonIcon, SearchIcon, SunIcon, TimeIcon, UnlockIcon, WarningIcon } from '@chakra-ui/icons';
+import { AddIcon, CalendarIcon, ChatIcon, HamburgerIcon, LinkIcon, MoonIcon, SearchIcon, SunIcon, TimeIcon, UnlockIcon, WarningIcon } from '@chakra-ui/icons';
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Avatar, AvatarBadge, AvatarGroup, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, IconButton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
@@ -35,6 +35,7 @@ export default function HomePage() {
 
     const [friendButtonIsLoading, setFriendButtonIsLoading] = useState(false);
     const [screeningAlertDialogVisibile, setScreeningAlertDialogVisibile] = useState(false);
+    const [settingsIsOpen, setSettingsIsOpen] = useState(false);
 
     const handleTabsChange = (index) => {
         setTabIndex(index);
@@ -61,6 +62,10 @@ export default function HomePage() {
 
     const handleMilestones = () => {
         navigate("/milestone");
+    };
+
+    const handleSettingsPress = () => {
+        setSettingsIsOpen(true);
     };
 
     const ColorModeToggleButton = () => {
@@ -288,6 +293,40 @@ export default function HomePage() {
                     </DrawerFooter>
                 </DrawerContent>
             </Drawer>
+            <Drawer
+                isOpen={settingsIsOpen}
+                placement='right'
+                onClose={() => setSettingsIsOpen(false)}
+            >
+                <DrawerOverlay />
+                <DrawerContent>
+                    <DrawerCloseButton />
+                    <DrawerHeader>User Stuff</DrawerHeader>
+                    <DrawerBody>
+                        <Button leftIcon={<ChatIcon />} onClick={onOpen} >
+                            Chat with Peeps
+                        </Button>
+                        <Button
+                            as="a"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href={`https://calendar.google.com/calendar/r?authuser=${auth.currentUser.email}&pli=1`}
+                            leftIcon={<CalendarIcon />}
+                        >
+                            Set Google Calendar Event
+                        </Button>
+                        <Button
+                            leftIcon={<WarningIcon />}
+                            onClick={() => setScreeningAlertDialogVisibile(true)}
+                        >
+                            About you
+                        </Button>
+                        <Button leftIcon={<TimeIcon />} onClick={handleMilestones} >
+                            Milestones for Baby
+                        </Button>
+                    </DrawerBody>
+                </DrawerContent>
+            </Drawer>
             <Tabs align='start' variant='enclosed' w="90vw" h="100vh" index={tabIndex} onChange={handleTabsChange}>
                 <TabList display="flex" justifyContent="space-between" w="99vw">
                     <HStack spacing="-1">
@@ -323,37 +362,27 @@ export default function HomePage() {
                         <Tooltip label="Search">
                             <IconButton icon={<SearchIcon />} onClick={() => setSearchBarIsOpen(true)} />
                         </Tooltip>
-                        {currentUser ?
-                            <>
-                                <Tooltip label="Chat with peeps">
-                                    <IconButton icon={<ChatIcon />} onClick={onOpen} />
-                                </Tooltip>
-                                <Tooltip label="Schedule Google Calendar Event">
-                                    <IconButton
-                                        as="a"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        href={`https://calendar.google.com/calendar/r?authuser=${auth.currentUser.email}&pli=1`}
-                                        icon={<CalendarIcon />}
-                                    />
-                                </Tooltip>
-                                <Tooltip label="About you">
-                                    <IconButton
-                                        icon={<WarningIcon />}
-                                        onClick={() => setScreeningAlertDialogVisibile(true)}
-                                    />
-                                </Tooltip>
-                                <Tooltip label="Milestones for Baby">
-                                    <IconButton icon={<TimeIcon />} onClick={handleMilestones} />
-                                </Tooltip>
-                            </>
-                            :
-                            null
-                        }
+                        <Tooltip label="Go to Google Maps">
+                            <IconButton
+                                as="a"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                href={`https://www.google.com/maps/`}
+                                icon={<LinkIcon />}
+                            />
+                        </Tooltip>
                         <Tooltip label="Log in">
                             <IconButton icon={<UnlockIcon />} onClick={handleLogin} />
                         </Tooltip>
                         <ColorModeToggleButton />
+                        {currentUser ?
+                            <IconButton
+                                icon={<HamburgerIcon />}
+                                onClick={handleSettingsPress}
+                            />
+                            :
+                            null
+                        }
                     </HStack>
                 </TabList>
                 <TabPanels>
