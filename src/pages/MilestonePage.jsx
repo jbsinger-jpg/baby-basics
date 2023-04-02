@@ -187,20 +187,22 @@ const promptOptions = [
         ageSelected: "19-24M",
         answer: "Ability to communicate should greatly increase",
         activities: [
-
+            "Stick letters on a window",
+            "Sort Elastics by staw color",
+            "Matching foam numbers to their outlines"
         ],
         motorMilestones: [
             "Starts to jumps with both feet leaving the ground",
             "Climbs on low furniture",
-            "When walking, able to pull toys behind them"
+            "Drink with a straw."
         ],
         sensoryMilestones: [
             "Flips switches on and off",
-            "Takes toys apart and puts them back together",
-            "Uses crayons, pens, or markers to make marks on paper"
+            "Likes to imitate parents' actions",
+            "Refers to self by name"
         ],
         communicationMilestones: [
-            "Identifies 3-5 body parts when named",
+            "Knows the names of familiar body parts",
             "Consistently imitates new words",
             "Understands new words quickly"
         ],
@@ -208,7 +210,9 @@ const promptOptions = [
             "None"
         ],
         hyperlinks: [
-            "https://pathways.org/growth-development/19-24-months/milestones/"
+            "https://pathways.org/growth-development/19-24-months/milestones/",
+            "https://edn.ne.gov/cms/developmental-milestones-19-through-24-months",
+            "https://chicklink.com/activities-for-18-24-month-olds/"
         ]
     },
 ];
