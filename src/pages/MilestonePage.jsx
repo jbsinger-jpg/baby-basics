@@ -44,24 +44,26 @@ const promptOptions = [
     },
     {
         ageSelected: "4-6M",
-        answer: "Lots of crying but for a 3M old...",
+        answer: "Baby should be able to babble to get attention, and have limited movement",
         activities: [
-
+            "Play music",
+            "Read to your baby",
+            "Offer some simple toys, i.e a rattle, or mirror"
         ],
         motorMilestones: [
-            "Uses hands to support self while sitting",
+            "Baby's head control will get better after rolling over",
             "Rolls from back to tummy and tummy to back",
             "While standing with support, accepts entire weight with legs"
         ],
         sensoryMilestones: [
-            "Uses both hands to explore toys",
-            "Is not upset by everyday sounds",
-            "Enjoys a variety of movements"
+            "Your baby is starting to be able to tell the difference between shades of basic colors",
+            "Babbling over new sounds, showing increase in responsiveness",
+            "Knows familiar people"
         ],
         communicationMilestones: [
             "Listens and responds when spoken to",
             "Uses babbling to get attention",
-            "Notices toys that make sounds"
+            'Blows bubbles or “raspberries"'
         ],
         feedingMilestones: [
             "Shows interest in food",
@@ -69,29 +71,36 @@ const promptOptions = [
             "Begins to eat cereals and pureed foods – Smooth, pureed food (single ingredient only), like carrots, sweet potato, squash, apples, pears"
         ],
         hyperlinks: [
-            "https://pathways.org/growth-development/4-6-months/milestones/"
+            "https://pathways.org/growth-development/4-6-months/milestones/",
+            "https://www.mayoclinic.org/healthy-lifestyle/infant-and-toddler-health/in-depth/infant-development/art-20048178",
+            "https://www.choc.org/primary-care/ages-stages/4-to-6-months/",
+            "https://www.cdc.gov/ncbddd/actearly/milestones/milestones-6mo.html"
         ]
     },
     {
         ageSelected: "7-9M",
-        answer: "Lots of crying but for a 6M old...",
+        answer: "Might start crawling and being able to sit on their own",
         activities: [
-
+            "Nursery rhyme sing-along",
+            "Light and shadow play",
+            "Blowing bubbles",
+            "Go for a sensory walk with your 7-month-old",
+            "Read picture books"
         ],
         motorMilestones: [
             "Sits and reaches for toys without falling",
-            "Moves from tummy or back into sitting",
-            "Turns head to visually track objects while sitting"
+            "Can hold an object in each hand",
+            "May hold a bottle"
         ],
         sensoryMilestones: [
-            "Turns several pages of a chunky (board) book at once",
+            "Pays attention to conversation",
             "Experiments with the amount of force needed to pick up different objects",
             "Focuses on objects near and far"
         ],
         communicationMilestones: [
             "Uses increased variety of sounds and syllable combinations in babbling",
             "Recognizes sound of name",
-            "Participates in two-way communication"
+            "Lifts arms up to be picked up"
         ],
         feedingMilestones: [
             "In a high chair, holds and drinks from a bottle",
@@ -99,71 +108,84 @@ const promptOptions = [
             "Shows strong reaction to new smells and tastes"
         ],
         hyperlinks: [
-            "https://pathways.org/growth-development/7-9-months/milestones/"
+            "https://pathways.org/growth-development/7-9-months/milestones/",
+            "https://www.beaumont.org/services/childrens/health-safety/your-growing-child-7-9-months",
+            "https://www.cdc.gov/ncbddd/actearly/milestones/milestones-9mo.html",
+            "https://rainydaymum.co.uk/activity-ideas-to-do-with-your-7-month-old/"
         ]
     },
     {
         ageSelected: "10-12M",
-        answer: "Lots of crying but for a 9M old...",
+        answer: "Baby should be able to pull themselves to a standing position",
         activities: [
-
+            "Interactive play: rolling a ball, playing catch",
+            "Drawing with baby-safe crayon",
+            "Safe physical play"
         ],
         motorMilestones: [
-            "Pulls to stand and cruises along furniture",
-            "Stands alone and takes several independent steps",
+            "Pulls to stand along furniture, close to walking independently but not quite",
+            "Sit without help and pull themselves to a standing position.",
             "Releases objects into a container with a large opening"
         ],
         sensoryMilestones: [
-            "Explores toys with hands, fingers, and mouth",
-            "Enjoys listening to songs",
-            "Crawls to or away from objects baby sees in the distance"
+            "Recognizes familiar objects and pictures in books, and may point to some objects when asked",
+            "Will understand that objects are hidden or stored away, increase in object permanence",
+            "May begin to pretend simple activities, such as cleaning or drinking from cup",
+            "Can follow simple instructions"
         ],
         communicationMilestones: [
             "Says one or two words",
-            "Pays attention to where you are looking and pointing",
+            "Using simple gestures, like waving bye",
             "Imitates speech sounds"
         ],
         feedingMilestones: [
             "Finger feeds self",
-            "Eating an increasing variety of food",
+            "Drinking from a cup",
             "Might be ready to start self feeding with utensils"
         ],
         hyperlinks: [
-            "https://pathways.org/growth-development/10-12-months/milestones/"
+            "https://pathways.org/growth-development/10-12-months/milestones/",
+            "https://www.mayoclinic.org/healthy-lifestyle/infant-and-toddler-health/in-depth/infant-development/art-20047380#:~:text=From%20ages%2010%20to%2012,lead%20to%20walking%20without%20support.",
+            "https://www.choc.org/primary-care/ages-stages/10-to-12-months/",
+            "https://www.peanut-app.io/blog/activities-for-10-month-old"
         ]
     },
     {
         ageSelected: "13-18M",
-        answer: "Lots of crying but for a 12M old...",
+        answer: "Should be able to move freely",
         activities: [
-
+            "Hide toys under blankets",
+            "Draw with sand",
+            "Throw ping-pong balls in a box"
         ],
         motorMilestones: [
-            "Walks independently and seldom falls",
+            "Walks and stands independently",
             "Squats to pick up a toy",
-            "Stacks two objects or blocks"
+            "Holds crayon and scribble, not with fine accuracy"
         ],
         sensoryMilestones: [
-            "Helps with getting dressed/undressed",
-            "Has a regular sleep schedule",
-            "Eats an increasing variety of foods"
+            "Recognizes familiar people",
+            "Has a sleep schedule",
+            "Plays pretend"
         ],
         communicationMilestones: [
             "May use 5-10 words",
             "Imitates simple words and actions",
-            "Shows interest in pictures"
+            "Initiates games"
         ],
         feedingMilestones: [
             "Increases variety of coarsely chopped table foods",
             "Holds and drinks from a cup"
         ],
         hyperlinks: [
-            "https://pathways.org/growth-development/13-18-months/milestones/"
+            "https://pathways.org/growth-development/13-18-months/milestones/",
+            "https://edn.ne.gov/cms/developmental-milestones-13-through-18-months",
+            "https://chicklink.com/20-activities-for-a-toddler/"
         ]
     },
     {
         ageSelected: "19-24M",
-        answer: "Lots of crying but for a 18M old...",
+        answer: "Ability to communicate should greatly increase",
         activities: [
 
         ],
