@@ -1,10 +1,5 @@
 import { Box, Input, Select, Textarea, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
-// TODO: Break down prompt options with the 4 categories for milestones
-// 1) Motor milestones
-// 2) Sensory milestones
-// 3) Communication milestones
-// 4) Feeding milestones
 
 const promptOptions = [
     {

@@ -310,7 +310,7 @@ export default function HomePage() {
                             as="a"
                             target="_blank"
                             rel="noopener noreferrer"
-                            href={`https://calendar.google.com/calendar/r?authuser=${auth.currentUser.email}&pli=1`}
+                            href={`https://calendar.google.com/calendar/r?authuser=${auth?.currentUser?.email}&pli=1`}
                             leftIcon={<CalendarIcon />}
                         >
                             Set Google Calendar Event
