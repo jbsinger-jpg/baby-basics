@@ -10,6 +10,7 @@ import SearchBarAlertDialog from '../components/SearchBarAlertDialog';
 import ClothingDataTabPanel from '../components/tabPanels/ClothingDataTabPanel';
 import FoodDataTabPanel from '../components/tabPanels/FoodDataTabPanel';
 import DiaperDataTabPanel from '../components/tabPanels/DiaperDataTabPanel';
+import MaternalDataTabPanel from '../components/tabPanels/MaternalDataTabPanel';
 
 export default function HomePage() {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -32,6 +33,9 @@ export default function HomePage() {
     // diaper data for search bar
     const [diaperData, setDiaperData] = useState(null);
     const [isDiapersLoading, setIsDiapersLoading] = useState(true);
+
+    const [maternialData, setMaternialData] = useState(null);
+    const [maternialDataIsLoading, setMaternialDataIsLoading] = useState(true);
 
     const [friendButtonIsLoading, setFriendButtonIsLoading] = useState(false);
     const [screeningAlertDialogVisibile, setScreeningAlertDialogVisibile] = useState(false);
@@ -190,6 +194,17 @@ export default function HomePage() {
                 setIsClothingDataLoading(false);
                 options = [];
             });
+
+        firestore.collection('maternal_clothes').get()
+            .then(snapshot => {
+                snapshot.docs.forEach(doc => {
+                    options.push({ ...doc.data() });
+                });
+
+                setMaternialData(options);
+                setMaternialDataIsLoading(false);
+                options = [];
+            });
     }, []);
 
     return (
@@ -340,6 +355,9 @@ export default function HomePage() {
                             Toiletries
                         </Tab>
                         <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                            Maternial
+                        </Tab>
+                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
                             Formula
                         </Tab>
                         <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
@@ -394,6 +412,12 @@ export default function HomePage() {
                     </TabPanel>
                     <TabPanel>
                         <DiaperDataTabPanel diaperData={diaperData} isDiapersLoading={isDiapersLoading} tabIndex={tabIndex} />
+                    </TabPanel>
+                    <TabPanel>
+                        Toiletries
+                    </TabPanel>
+                    <TabPanel>
+                        <MaternalDataTabPanel maternialData={maternialData} maternialDataLoading={maternialDataIsLoading} tabIndex={tabIndex} />
                     </TabPanel>
                 </TabPanels>
             </Tabs>
