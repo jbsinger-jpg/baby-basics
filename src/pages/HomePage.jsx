@@ -419,6 +419,21 @@ export default function HomePage() {
                     <TabPanel>
                         <MaternalDataTabPanel maternialData={maternialData} maternialDataLoading={maternialDataIsLoading} tabIndex={tabIndex} />
                     </TabPanel>
+                    <TabPanel>
+                        Formula
+                    </TabPanel>
+                    <TabPanel>
+                        Toys
+                    </TabPanel>
+                    <TabPanel>
+                        Monitors
+                    </TabPanel>
+                    <TabPanel>
+                        Seats
+                    </TabPanel>
+                    <TabPanel>
+                        Strollers
+                    </TabPanel>
                 </TabPanels>
             </Tabs>
             <AlertDialog
