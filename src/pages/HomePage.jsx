@@ -68,6 +68,10 @@ export default function HomePage() {
         navigate("/milestone");
     };
 
+    const handleMaternalResources = () => {
+        navigate("/maternal");
+    };
+
     const handleSettingsPress = () => {
         setSettingsIsOpen(true);
     };
@@ -77,7 +81,16 @@ export default function HomePage() {
 
         return (
             <Tooltip label="Change color mode">
-                <IconButton icon={useColorModeValue("Dark", "Light") === "Dark" ? <MoonIcon /> : <SunIcon />} onClick={toggleColorMode}>
+                <IconButton
+                    icon={useColorModeValue("Dark", "Light") === "Dark" ? <MoonIcon height="30px" width="30px" /> : <SunIcon height="30px" width="30px" />}
+                    onClick={toggleColorMode}
+                    width="56px"
+                    height="56px"
+                    borderRadius="50%"
+                    boxShadow="md"
+                    _hover={{ boxShadow: "lg" }}
+                    zIndex={999}
+                >
                     {useColorModeValue("Dark", "Light")}
                 </IconButton>
             </Tooltip>
@@ -322,6 +335,17 @@ export default function HomePage() {
                             Chat with Peeps
                         </Button>
                         <Button
+                            leftIcon={<TimeIcon />}
+                            onClick={handleMilestones}
+                        >
+                            Baby Milestones
+                        </Button>
+                        <Button
+                            onClick={handleMaternalResources}
+                        >
+                            Maternal Resources
+                        </Button>
+                        <Button
                             as="a"
                             target="_blank"
                             rel="noopener noreferrer"
@@ -372,35 +396,6 @@ export default function HomePage() {
                         <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
                             Strollers
                         </Tab>
-                    </HStack>
-                    <HStack>
-                        <Tooltip label="Search">
-                            <IconButton icon={<SearchIcon />} onClick={() => setSearchBarIsOpen(true)} />
-                        </Tooltip>
-                        <Tooltip label="Go to Google Maps">
-                            <IconButton
-                                as="a"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                href={`https://www.google.com/maps/`}
-                                icon={<LinkIcon />}
-                            />
-                        </Tooltip>
-                        <Tooltip label="Log in">
-                            <IconButton icon={<UnlockIcon />} onClick={handleLogin} />
-                        </Tooltip>
-                        <Tooltip label="Milestones for Baby">
-                            <IconButton icon={<TimeIcon />} onClick={handleMilestones} />
-                        </Tooltip>
-                        <ColorModeToggleButton />
-                        {currentUser ?
-                            <IconButton
-                                icon={<HamburgerIcon />}
-                                onClick={handleSettingsPress}
-                            />
-                            :
-                            null
-                        }
                     </HStack>
                 </TabList>
                 <TabPanels>
@@ -484,6 +479,68 @@ export default function HomePage() {
                     </AlertDialogContent>
                 </AlertDialogOverlay>
             </AlertDialog>
+            <VStack
+                top="14"
+                right="4"
+                position="fixed"
+            >
+                <ColorModeToggleButton />
+                <Tooltip label="Go to Google Maps">
+                    <IconButton
+                        as="a"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href={`https://www.google.com/maps/`}
+                        icon={<LinkIcon height="30px" width="30px" />}
+                        width="56px"
+                        height="56px"
+                        borderRadius="50%"
+                        boxShadow="md"
+                        _hover={{ boxShadow: "lg" }}
+                        zIndex={999}
+                    />
+                </Tooltip>
+                <Tooltip label="Log in">
+                    <IconButton
+                        icon={<UnlockIcon height="30px" width="30px" />}
+                        onClick={handleLogin}
+                        width="56px"
+                        height="56px"
+                        borderRadius="50%"
+                        boxShadow="md"
+                        _hover={{ boxShadow: "lg" }}
+                        zIndex={999}
+                    />
+                </Tooltip>
+                {currentUser ?
+                    <Tooltip label="Other Pages">
+                        <IconButton
+                            icon={<HamburgerIcon height="30px" width="30px" />}
+                            onClick={handleSettingsPress}
+                            width="56px"
+                            height="56px"
+                            borderRadius="50%"
+                            boxShadow="md"
+                            _hover={{ boxShadow: "lg" }}
+                            zIndex={999}
+                        />
+                    </Tooltip>
+                    :
+                    null
+                }
+                <Tooltip label="Search">
+                    <IconButton
+                        icon={<SearchIcon height="30px" width="30px" />}
+                        onClick={() => setSearchBarIsOpen(true)}
+                        width="56px"
+                        height="56px"
+                        borderRadius="50%"
+                        boxShadow="md"
+                        _hover={{ boxShadow: "lg" }}
+                        zIndex={999}
+                    />
+                </Tooltip>
+            </VStack>
         </>
 
     );
