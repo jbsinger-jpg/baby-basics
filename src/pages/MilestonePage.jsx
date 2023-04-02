@@ -35,6 +35,12 @@ const promptOptions = [
             "https://pathways.org/baby-milestones-calendar/?gclid=Cj0KCQjwiZqhBhCJARIsACHHEH86vfPyH6tvUXwPDgWU8jpb7cU43bPforCV23MfAutajr02Jbf9nEoaAll_EALw_wcB",
             "https://dadsadventure.com/your-babys-playmate/?gclid=CjwKCAjwrJ-hBhB7EiwAuyBVXeIezd00HCI0y_zL4c0J1PWXy0LN8DGY8huixsRVWDEFhz8b37_eNBoC7VIQAvD_BwE",
             "https://www.healthychildren.org/English/ages-stages/baby/Pages/default.aspx"
+        ],
+        videos: [
+            { value: "https://www.youtube.com/embed/kc7nN-r5y2I", label: "How To Play With 0-3 Month Old Newborn", key: 0 },
+            { value: "https://www.youtube.com/embed/_RUGceDmfwE", label: "Avoid These 5 Things for Better BABY DEVELOPMENT", key: 1 },
+            { value: "https://www.youtube.com/embed/DTIz2D0K_EE", label: "What are Baby Monthly Milestones? How Should a Baby Grow?", key: 2 },
+            { value: "https://www.youtube.com/embed/NMLsn1BNBYk", label: "A Complete Guide to Your Newborn's First Month - What to Expect", key: 3 },
         ]
     },
     {
@@ -70,6 +76,10 @@ const promptOptions = [
             "https://www.mayoclinic.org/healthy-lifestyle/infant-and-toddler-health/in-depth/infant-development/art-20048178",
             "https://www.choc.org/primary-care/ages-stages/4-to-6-months/",
             "https://www.cdc.gov/ncbddd/actearly/milestones/milestones-6mo.html"
+        ],
+        videos: [
+            { value: "https://www.youtube.com/embed/Y_8nlwkioLw", label: "MONTESSORI AT HOME", key: 0 },
+            { value: "https://www.youtube.com/embed/AdIM7eAVPtU", label: "Four-Month-Old Baby - What to Expect", key: 1 },
         ]
     },
     {
@@ -107,6 +117,10 @@ const promptOptions = [
             "https://www.beaumont.org/services/childrens/health-safety/your-growing-child-7-9-months",
             "https://www.cdc.gov/ncbddd/actearly/milestones/milestones-9mo.html",
             "https://rainydaymum.co.uk/activity-ideas-to-do-with-your-7-month-old/"
+        ],
+        videos: [
+            { value: "https://www.youtube.com/embed/hxQr75hrZDE", label: "7-Month-Old Baby - What to Expect", key: 0 },
+            { value: "https://www.youtube.com/embed/avhyyLEY1J0", label: "7 Months Old: What to Expect - Channel Mum", key: 1 },
         ]
     },
     {
@@ -279,7 +293,7 @@ export default function MilestonePage() {
         <HStack>
             <VStack w="50vw" h="100vh">
                 <Select
-                    placeholder='Select option'
+                    placeholder='Select baby age'
                     value={selectedAge}
                     onChange={(event) => {
                         setSelectedAge(event.target.value);
@@ -373,7 +387,7 @@ export default function MilestonePage() {
                     />
                 </Box>
                 <Select
-                    placeholder='Select option'
+                    placeholder='Select activity video'
                     value={selectedVideo}
                     onChange={(event) => {
                         setSelectedVideo(event.target.value);

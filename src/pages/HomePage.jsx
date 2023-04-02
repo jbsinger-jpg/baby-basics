@@ -321,9 +321,6 @@ export default function HomePage() {
                         >
                             About you
                         </Button>
-                        <Button leftIcon={<TimeIcon />} onClick={handleMilestones} >
-                            Milestones for Baby
-                        </Button>
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>
@@ -374,6 +371,9 @@ export default function HomePage() {
                         <Tooltip label="Log in">
                             <IconButton icon={<UnlockIcon />} onClick={handleLogin} />
                         </Tooltip>
+                        <Button leftIcon={<TimeIcon />} onClick={handleMilestones} >
+                            Milestones for Baby
+                        </Button>
                         <ColorModeToggleButton />
                         {currentUser ?
                             <IconButton
