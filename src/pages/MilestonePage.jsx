@@ -1,4 +1,4 @@
-import { Box, Input, Select, Textarea, VStack } from '@chakra-ui/react';
+import { Box, HStack, Input, Select, Textarea, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
 const promptOptions = [
@@ -214,13 +214,15 @@ const promptOptions = [
 
 export default function MilestonePage() {
     const [selectedAge, setSelectedAge] = useState("0M");
-    const [selectedAnswer, setSelectedAnswer] = useState(promptOptions[0]?.answer);
-    const [selectedActivities, setSelectedActivities] = useState(promptOptions[0]?.activities);
-    const [selectedMotorMilestones, setSelectedMotorMilestones] = useState(promptOptions[0]?.motorMilestones);
-    const [selectedCommunicationMilestones, setSelectedCommunicationMilestones] = useState(promptOptions[0]?.communicationMilestones);
-    const [selectedFeedingMilestones, setSelectedFeedingMilestones] = useState(promptOptions[0]?.feedingMilestones);
-    const [selectedSensoryMilestones, setSelectedSensoryMilestones] = useState(promptOptions[0]?.sensoryMilestones);
-    const [selectedHyperLinks, setSelectedHyperLinks] = useState(promptOptions[0]?.hyperlinks);
+    const [selectedAnswer, setSelectedAnswer] = useState("");
+    const [selectedActivities, setSelectedActivities] = useState("");
+    const [selectedMotorMilestones, setSelectedMotorMilestones] = useState("");
+    const [selectedCommunicationMilestones, setSelectedCommunicationMilestones] = useState("");
+    const [selectedFeedingMilestones, setSelectedFeedingMilestones] = useState("");
+    const [selectedSensoryMilestones, setSelectedSensoryMilestones] = useState("");
+    const [selectedHyperLinks, setSelectedHyperLinks] = useState("");
+    const [videos, setVideos] = useState("");
+    const [selectedVideo, setSelectedVideo] = useState("");
 
     const getFormattedHyperlinks = () => {
         let option = "";
@@ -268,100 +270,128 @@ export default function MilestonePage() {
                 setSelectedSensoryMilestones(promptOptions[i].sensoryMilestones);
                 setSelectedCommunicationMilestones(promptOptions[i].communicationMilestones);
                 setSelectedHyperLinks(promptOptions[i].hyperlinks);
+                setVideos(promptOptions[i].videos);
             }
         }
     };
 
     return (
-        <VStack>
-            <Select placeholder='Select option' value={selectedAge} onChange={(event) => {
-                setSelectedAge(event.target.value);
-                handleAnswerChange(event);
-            }}>
-                <option value="0-3M"> 0-3M </option>
-                <option value="4-6M"> 4-6M </option>
-                <option value="7-9M"> 7-9M </option>
-                <option value="10-12M"> 10-12M </option>
-                <option value="13-18M"> 13-18M </option>
-                <option value="19-24M"> 19-24M </option>
-            </Select>
-            <Input
-                value={selectedAnswer}
-                isReadOnly
-                size='sm'
-            />
-            <Box
-                w="100vw"
-                h="15vh"
-                whiteSpace='pre-wrap'
-            >
-                <Textarea
+        <HStack>
+            <VStack w="50vw" h="100vh">
+                <Select
+                    placeholder='Select option'
+                    value={selectedAge}
+                    onChange={(event) => {
+                        setSelectedAge(event.target.value);
+                        handleAnswerChange(event);
+                    }}
+                >
+                    <option value="0-3M"> 0-3M </option>
+                    <option value="4-6M"> 4-6M </option>
+                    <option value="7-9M"> 7-9M </option>
+                    <option value="10-12M"> 10-12M </option>
+                    <option value="13-18M"> 13-18M </option>
+                    <option value="19-24M"> 19-24M </option>
+                </Select>
+                <Input
+                    value={selectedAnswer}
+                    isReadOnly
+                    size='sm'
+                />
+                <Box
+                    w="50vw"
                     h="15vh"
-                    value={getFormattedActivities()}
-                    isReadOnly
-                    size='sm'
-                />
-            </Box>
-            <Box
-                w="100vw"
-                h="15vh"
-                whiteSpace='pre-wrap'
-            >
-                <Textarea
+                    whiteSpace='pre-wrap'
+                >
+                    <Textarea
+                        h="15vh"
+                        value={getFormattedMotorMilestones()}
+                        isReadOnly
+                        size='sm'
+                    />
+                </Box>
+                <Box
+                    w="50vw"
                     h="15vh"
-                    value={getFormattedMotorMilestones()}
-                    isReadOnly
-                    size='sm'
-                />
-            </Box>
-            <Box
-                w="100vw"
-                h="15vh"
-                whiteSpace='pre-wrap'
-            >
-                <Textarea
+                    whiteSpace='pre-wrap'
+                >
+                    <Textarea
+                        h="15vh"
+                        value={getFormattedCommunicationMilestones()}
+                        isReadOnly
+                        size='sm'
+                    />
+                </Box>
+                <Box
+                    w="50vw"
                     h="15vh"
-                    value={getFormattedCommunicationMilestones()}
-                    isReadOnly
-                    size='sm'
-                />
-            </Box>
-            <Box
-                w="100vw"
-                h="15vh"
-                whiteSpace='pre-wrap'
-            >
-                <Textarea
+                    whiteSpace='pre-wrap'
+                >
+                    <Textarea
+                        h="15vh"
+                        value={getFormattedFeedingMilestones()}
+                        isReadOnly
+                        size='sm'
+                    />
+                </Box>
+                <Box
+                    w="50vw"
                     h="15vh"
-                    value={getFormattedFeedingMilestones()}
-                    isReadOnly
-                    size='sm'
-                />
-            </Box>
-            <Box
-                w="100vw"
-                h="15vh"
-                whiteSpace='pre-wrap'
-            >
-                <Textarea
+                    whiteSpace='pre-wrap'
+                >
+                    <Textarea
+                        h="15vh"
+                        value={getFormattedSensoryMilestones()}
+                        isReadOnly
+                        size='sm'
+                    />
+                </Box>
+                <Box
+                    w="50vw"
                     h="15vh"
-                    value={getFormattedSensoryMilestones()}
-                    isReadOnly
-                    size='sm'
+                    whiteSpace='pre-wrap'
+                >
+                    <Textarea
+                        h="15vh"
+                        value={getFormattedHyperlinks()}
+                        isReadOnly
+                        size='sm'
+                    />
+                </Box>
+            </VStack>
+            <VStack w="50vw" h="100vh">
+                <Box
+                    w="50vw"
+                    h="15vh"
+                    whiteSpace='pre-wrap'
+                >
+                    <Textarea
+                        h="15vh"
+                        value={getFormattedActivities()}
+                        isReadOnly
+                        size='sm'
+                    />
+                </Box>
+                <Select
+                    placeholder='Select option'
+                    value={selectedVideo}
+                    onChange={(event) => {
+                        setSelectedVideo(event.target.value);
+                    }}
+                >
+                    {videos && videos.length > 0 && videos.map(video => {
+                        return (<option value={video.value} key={video.key}>{video.label}</option>);
+                    })}
+                </Select>
+                <iframe
+                    height="315px"
+                    width="560px"
+                    src={selectedVideo || "https://www.youtube.com/embed/rv-fBnFbQAk"}
+                    title="YouTube video player"
+                    allowFullScreen
                 />
-            </Box>
-            <Box
-                w="100vw"
-                h="10vh"
-                whiteSpace='pre-wrap'
-            >
-                <Textarea
-                    h="10vh"
-                    value={getFormattedHyperlinks()}
-                    isReadOnly
-                    size='sm'
-                />
-            </Box>
-        </VStack>
+            </VStack>
+        </HStack>
+
     );
 }
