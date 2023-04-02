@@ -157,6 +157,11 @@ const promptOptions = [
             "https://www.mayoclinic.org/healthy-lifestyle/infant-and-toddler-health/in-depth/infant-development/art-20047380#:~:text=From%20ages%2010%20to%2012,lead%20to%20walking%20without%20support.",
             "https://www.choc.org/primary-care/ages-stages/10-to-12-months/",
             "https://www.peanut-app.io/blog/activities-for-10-month-old"
+        ],
+        videos: [
+            { value: "https://www.youtube.com/embed/LFmrmSfxqAw", label: "BRAIN DEVELOPMENT ACTIVITIES", key: 0 },
+            { value: "https://www.youtube.com/embed/ZI28AAC7gsk", label: "Activities for Babies 9-12 Months", key: 1 },
+            { value: "https://www.youtube.com/embed/wDnWwo-C55o", label: "12-Month-Old Baby", key: 2 },
         ]
     },
     {
@@ -190,6 +195,10 @@ const promptOptions = [
             "https://pathways.org/growth-development/13-18-months/milestones/",
             "https://edn.ne.gov/cms/developmental-milestones-13-through-18-months",
             "https://chicklink.com/20-activities-for-a-toddler/"
+        ],
+        videos: [
+            { value: "https://www.youtube.com/embed/DlwFzb145Ps", label: "Activities for 15-18 Month Olds", key: 0 },
+            { value: "https://www.youtube.com/embed/C7O0U9OGHew", label: "Your Baby at 18 Months", key: 1 },
         ]
     },
     {
@@ -297,8 +306,8 @@ export default function MilestonePage() {
                             <Heading size="lg">Motor Skills</Heading>
                             <Divider />
                             <UnorderedList spacing="2">
-                                {selectedMotorMilestones.length > 0 && selectedMotorMilestones.map(milestone => {
-                                    return (<ListItem>{milestone}</ListItem>);
+                                {selectedMotorMilestones.length > 0 && selectedMotorMilestones.map((milestone, index) => {
+                                    return (<ListItem key={index}>{milestone}</ListItem>);
                                 })}
                             </UnorderedList>
                             <Divider />
@@ -312,8 +321,8 @@ export default function MilestonePage() {
                             <Heading size="lg">Communication Skills</Heading>
                             <Divider />
                             <UnorderedList spacing="2">
-                                {selectedCommunicationMilestones.length > 0 && selectedCommunicationMilestones.map(milestone => {
-                                    return (<ListItem>{milestone}</ListItem>);
+                                {selectedCommunicationMilestones.length > 0 && selectedCommunicationMilestones.map((milestone, index) => {
+                                    return (<ListItem key={index}>{milestone}</ListItem>);
                                 })}
                             </UnorderedList>
                             <Divider />
@@ -327,8 +336,8 @@ export default function MilestonePage() {
                             <Heading size="lg">Feeding Skills</Heading>
                             <Divider />
                             <UnorderedList spacing="2">
-                                {selectedFeedingMilestones.length > 0 && selectedFeedingMilestones.map(milestone => {
-                                    return (<ListItem>{milestone}</ListItem>);
+                                {selectedFeedingMilestones.length > 0 && selectedFeedingMilestones.map((milestone, index) => {
+                                    return (<ListItem key={index}>{milestone}</ListItem>);
                                 })}
                             </UnorderedList>
                             <Divider />
@@ -342,8 +351,8 @@ export default function MilestonePage() {
                             <Heading size="lg">Sensory Skills</Heading>
                             <Divider />
                             <UnorderedList spacing="2">
-                                {selectedSensoryMilestones.length > 0 && selectedSensoryMilestones.map(milestone => {
-                                    return (<ListItem>{milestone}</ListItem>);
+                                {selectedSensoryMilestones.length > 0 && selectedSensoryMilestones.map((milestone, index) => {
+                                    return (<ListItem key={index}>{milestone}</ListItem>);
                                 })}
                             </UnorderedList>
                             <Divider />
@@ -357,8 +366,8 @@ export default function MilestonePage() {
                             <Heading size="lg">Resources Viewed</Heading>
                             <Divider />
                             <UnorderedList spacing="2">
-                                {selectedHyperLinks.length > 0 && selectedHyperLinks.map(milestone => {
-                                    return (<ListItem>{milestone}</ListItem>);
+                                {selectedHyperLinks.length > 0 && selectedHyperLinks.map((milestone, index) => {
+                                    return (<ListItem key={index}>{milestone}</ListItem>);
                                 })}
                             </UnorderedList>
                             <Divider />
@@ -392,8 +401,8 @@ export default function MilestonePage() {
                             <Heading size="lg">Potential Activities</Heading>
                             <Divider />
                             <UnorderedList spacing="2">
-                                {selectedActivities.length > 0 && selectedActivities.map(milestone => {
-                                    return (<ListItem>{milestone}</ListItem>);
+                                {selectedActivities.length > 0 && selectedActivities.map((milestone, index) => {
+                                    return (<ListItem key={index}>{milestone}</ListItem>);
                                 })}
                             </UnorderedList>
                             <Divider />
@@ -409,7 +418,7 @@ export default function MilestonePage() {
                                     setSelectedVideo(event.target.value);
                                 }}
                             >
-                                {videos && videos.length > 0 && videos.map(video => {
+                                {videos && videos.length > 0 && videos.map((video) => {
                                     return (<option value={video.value} key={video.key}>{video.label}</option>);
                                 })}
                             </Select>

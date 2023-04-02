@@ -371,9 +371,9 @@ export default function HomePage() {
                         <Tooltip label="Log in">
                             <IconButton icon={<UnlockIcon />} onClick={handleLogin} />
                         </Tooltip>
-                        <Button leftIcon={<TimeIcon />} onClick={handleMilestones} >
-                            Milestones for Baby
-                        </Button>
+                        <Tooltip label="Milestones for Baby">
+                            <IconButton icon={<TimeIcon />} onClick={handleMilestones} />
+                        </Tooltip>
                         <ColorModeToggleButton />
                         {currentUser ?
                             <IconButton
