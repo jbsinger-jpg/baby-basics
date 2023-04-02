@@ -1,4 +1,4 @@
-import { Box, HStack, Input, Select, Textarea, VStack } from '@chakra-ui/react';
+import { Box, Divider, HStack, Heading, Input, ListItem, Select, Tab, TabList, TabPanel, TabPanels, Tabs, Textarea, UnorderedList, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
 const promptOptions = [
@@ -238,42 +238,6 @@ export default function MilestonePage() {
     const [videos, setVideos] = useState("");
     const [selectedVideo, setSelectedVideo] = useState("");
 
-    const getFormattedHyperlinks = () => {
-        let option = "";
-        selectedHyperLinks.length > 0 ? option = selectedHyperLinks.join('\n\n') : option = "";
-        return option;
-    };
-
-    const getFormattedSensoryMilestones = () => {
-        let option = "";
-        selectedSensoryMilestones.length > 0 ? option = selectedSensoryMilestones.join('\n\n') : option = "";
-        return option;
-    };
-
-    const getFormattedFeedingMilestones = () => {
-        let option = "";
-        selectedFeedingMilestones.length > 0 ? option = selectedFeedingMilestones.join('\n\n') : option = "";
-        return option;
-    };
-
-    const getFormattedCommunicationMilestones = () => {
-        let option = "";
-        selectedCommunicationMilestones.length > 0 ? option = selectedCommunicationMilestones.join('\n\n') : option = "";
-        return option;
-    };
-
-    const getFormattedMotorMilestones = () => {
-        let option = "";
-        selectedMotorMilestones.length > 0 ? option = selectedMotorMilestones.join('\n\n') : option = "";
-        return option;
-    };
-
-    const getFormattedActivities = () => {
-        let option = "";
-        selectedActivities.length > 0 ? option = selectedActivities.join('\n\n') : option = "";
-        return option;
-    };
-
     const handleAnswerChange = (event) => {
         for (let i = 0; i < promptOptions.length; i++) {
             if (promptOptions[i].ageSelected === event.target.value) {
@@ -290,122 +254,176 @@ export default function MilestonePage() {
     };
 
     return (
-        <HStack>
-            <VStack w="50vw" h="100vh">
-                <Select
-                    placeholder='Select baby age'
-                    value={selectedAge}
-                    onChange={(event) => {
-                        setSelectedAge(event.target.value);
-                        handleAnswerChange(event);
-                    }}
-                >
-                    <option value="0-3M"> 0-3M </option>
-                    <option value="4-6M"> 4-6M </option>
-                    <option value="7-9M"> 7-9M </option>
-                    <option value="10-12M"> 10-12M </option>
-                    <option value="13-18M"> 13-18M </option>
-                    <option value="19-24M"> 19-24M </option>
-                </Select>
-                <Input
-                    value={selectedAnswer}
-                    isReadOnly
-                    size='sm'
-                />
-                <Box
-                    w="50vw"
-                    h="15vh"
-                    whiteSpace='pre-wrap'
-                >
-                    <Textarea
-                        h="15vh"
-                        value={getFormattedMotorMilestones()}
-                        isReadOnly
-                        size='sm'
-                    />
-                </Box>
-                <Box
-                    w="50vw"
-                    h="15vh"
-                    whiteSpace='pre-wrap'
-                >
-                    <Textarea
-                        h="15vh"
-                        value={getFormattedCommunicationMilestones()}
-                        isReadOnly
-                        size='sm'
-                    />
-                </Box>
-                <Box
-                    w="50vw"
-                    h="15vh"
-                    whiteSpace='pre-wrap'
-                >
-                    <Textarea
-                        h="15vh"
-                        value={getFormattedFeedingMilestones()}
-                        isReadOnly
-                        size='sm'
-                    />
-                </Box>
-                <Box
-                    w="50vw"
-                    h="15vh"
-                    whiteSpace='pre-wrap'
-                >
-                    <Textarea
-                        h="15vh"
-                        value={getFormattedSensoryMilestones()}
-                        isReadOnly
-                        size='sm'
-                    />
-                </Box>
-                <Box
-                    w="50vw"
-                    h="15vh"
-                    whiteSpace='pre-wrap'
-                >
-                    <Textarea
-                        h="15vh"
-                        value={getFormattedHyperlinks()}
-                        isReadOnly
-                        size='sm'
-                    />
-                </Box>
-            </VStack>
-            <VStack w="50vw" h="100vh">
-                <Box
-                    w="50vw"
-                    h="15vh"
-                    whiteSpace='pre-wrap'
-                >
-                    <Textarea
-                        h="15vh"
-                        value={getFormattedActivities()}
-                        isReadOnly
-                        size='sm'
-                    />
-                </Box>
-                <Select
-                    placeholder='Select activity video'
-                    value={selectedVideo}
-                    onChange={(event) => {
-                        setSelectedVideo(event.target.value);
-                    }}
-                >
-                    {videos && videos.length > 0 && videos.map(video => {
-                        return (<option value={video.value} key={video.key}>{video.label}</option>);
-                    })}
-                </Select>
-                <iframe
-                    height="315px"
-                    width="560px"
-                    src={selectedVideo || "https://www.youtube.com/embed/rv-fBnFbQAk"}
-                    title="YouTube video player"
-                    allowFullScreen
-                />
-            </VStack>
-        </HStack>
-
+        <Tabs variant='enclosed'>
+            <TabList>
+                <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                    Information
+                </Tab>
+                <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                    Videos
+                </Tab>
+            </TabList>
+            <TabPanels>
+                <TabPanel>
+                    <VStack w="100vw" h="100vh">
+                        <Select
+                            w="95vw"
+                            placeholder='Select baby age'
+                            value={selectedAge}
+                            onChange={(event) => {
+                                setSelectedAge(event.target.value);
+                                handleAnswerChange(event);
+                            }}
+                        >
+                            <option value="0-3M"> 0-3M </option>
+                            <option value="4-6M"> 4-6M </option>
+                            <option value="7-9M"> 7-9M </option>
+                            <option value="10-12M"> 10-12M </option>
+                            <option value="13-18M"> 13-18M </option>
+                            <option value="19-24M"> 19-24M </option>
+                        </Select>
+                        <Input
+                            w="95vw"
+                            value={selectedAnswer}
+                            isReadOnly
+                            size='sm'
+                        />
+                        <VStack
+                            w="95vw"
+                            h="20vh"
+                            whiteSpace='pre-wrap'
+                            alignItems="start"
+                        >
+                            <Heading size="lg">Motor Skills</Heading>
+                            <Divider />
+                            <UnorderedList spacing="2">
+                                {selectedMotorMilestones.length > 0 && selectedMotorMilestones.map(milestone => {
+                                    return (<ListItem>{milestone}</ListItem>);
+                                })}
+                            </UnorderedList>
+                            <Divider />
+                        </VStack>
+                        <VStack
+                            w="95vw"
+                            h="20vh"
+                            whiteSpace='pre-wrap'
+                            alignItems="start"
+                        >
+                            <Heading size="lg">Communication Skills</Heading>
+                            <Divider />
+                            <UnorderedList spacing="2">
+                                {selectedCommunicationMilestones.length > 0 && selectedCommunicationMilestones.map(milestone => {
+                                    return (<ListItem>{milestone}</ListItem>);
+                                })}
+                            </UnorderedList>
+                            <Divider />
+                        </VStack>
+                        <VStack
+                            w="95vw"
+                            h="20vh"
+                            whiteSpace='pre-wrap'
+                            alignItems="start"
+                        >
+                            <Heading size="lg">Feeding Skills</Heading>
+                            <Divider />
+                            <UnorderedList spacing="2">
+                                {selectedFeedingMilestones.length > 0 && selectedFeedingMilestones.map(milestone => {
+                                    return (<ListItem>{milestone}</ListItem>);
+                                })}
+                            </UnorderedList>
+                            <Divider />
+                        </VStack>
+                        <VStack
+                            w="95vw"
+                            h="20vh"
+                            whiteSpace='pre-wrap'
+                            alignItems="start"
+                        >
+                            <Heading size="lg">Sensory Skills</Heading>
+                            <Divider />
+                            <UnorderedList spacing="2">
+                                {selectedSensoryMilestones.length > 0 && selectedSensoryMilestones.map(milestone => {
+                                    return (<ListItem>{milestone}</ListItem>);
+                                })}
+                            </UnorderedList>
+                            <Divider />
+                        </VStack>
+                        <VStack
+                            w="95vw"
+                            h="40vh"
+                            whiteSpace='pre-wrap'
+                            alignItems="start"
+                        >
+                            <Heading size="lg">Resources Viewed</Heading>
+                            <Divider />
+                            <UnorderedList spacing="2">
+                                {selectedHyperLinks.length > 0 && selectedHyperLinks.map(milestone => {
+                                    return (<ListItem>{milestone}</ListItem>);
+                                })}
+                            </UnorderedList>
+                            <Divider />
+                        </VStack>
+                    </VStack>
+                </TabPanel>
+                <TabPanel>
+                    <VStack w="100vw" h="100vh">
+                        <Select
+                            w="95vw"
+                            placeholder='Select baby age'
+                            value={selectedAge}
+                            onChange={(event) => {
+                                setSelectedAge(event.target.value);
+                                handleAnswerChange(event);
+                            }}
+                        >
+                            <option value="0-3M"> 0-3M </option>
+                            <option value="4-6M"> 4-6M </option>
+                            <option value="7-9M"> 7-9M </option>
+                            <option value="10-12M"> 10-12M </option>
+                            <option value="13-18M"> 13-18M </option>
+                            <option value="19-24M"> 19-24M </option>
+                        </Select>
+                        <VStack
+                            w="95vw"
+                            h="25vh"
+                            whiteSpace='pre-wrap'
+                            alignItems="start"
+                        >
+                            <Heading size="lg">Potential Activities</Heading>
+                            <Divider />
+                            <UnorderedList spacing="2">
+                                {selectedActivities.length > 0 && selectedActivities.map(milestone => {
+                                    return (<ListItem>{milestone}</ListItem>);
+                                })}
+                            </UnorderedList>
+                            <Divider />
+                        </VStack>
+                        <VStack
+                            w="95vw"
+                            alignItems="start"
+                        >
+                            <Select
+                                placeholder='Select activity video'
+                                value={selectedVideo}
+                                onChange={(event) => {
+                                    setSelectedVideo(event.target.value);
+                                }}
+                            >
+                                {videos && videos.length > 0 && videos.map(video => {
+                                    return (<option value={video.value} key={video.key}>{video.label}</option>);
+                                })}
+                            </Select>
+                            <iframe
+                                height="315px"
+                                width="560px"
+                                src={selectedVideo || "https://www.youtube.com/embed/rv-fBnFbQAk"}
+                                title="YouTube video player"
+                                allowFullScreen
+                            />
+                        </VStack>
+                    </VStack>
+                </TabPanel>
+            </TabPanels>
+        </Tabs>
     );
 }
