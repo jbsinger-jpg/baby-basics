@@ -1,16 +1,20 @@
-import { AddIcon, CalendarIcon, ChatIcon, HamburgerIcon, LinkIcon, MoonIcon, SearchIcon, SunIcon, TimeIcon, UnlockIcon, WarningIcon } from '@chakra-ui/icons';
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Avatar, AvatarBadge, AvatarGroup, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, IconButton, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorMode, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
+import { CalendarIcon, ChatIcon, TimeIcon, WarningIcon } from '@chakra-ui/icons';
+import { Avatar, AvatarBadge, AvatarGroup, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { useNavigate } from 'react-router-dom';
 
 import { auth, firestore } from '../firebaseConfig';
 import Context from '../context/Context';
-import SearchBarAlertDialog from '../components/SearchBarAlertDialog';
+import SearchBarModal from '../components/modals/SearchBarModal';
 import ClothingDataTabPanel from '../components/tabPanels/ClothingDataTabPanel';
 import FoodDataTabPanel from '../components/tabPanels/FoodDataTabPanel';
 import DiaperDataTabPanel from '../components/tabPanels/DiaperDataTabPanel';
 import MaternalDataTabPanel from '../components/tabPanels/MaternalDataTabPanel';
+import GoogleSearchModal from '../components/modals/GoogleSearchModal';
+import FloatingActionButtons from '../components/FloatingActionButtons';
+import DisclaimerModal from '../components/modals/DisclaimerModal';
+import FriendRequestModal from '../components/modals/FriendRequestModal';
 
 export default function HomePage() {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -37,9 +41,14 @@ export default function HomePage() {
     const [maternialData, setMaternialData] = useState(null);
     const [maternialDataIsLoading, setMaternialDataIsLoading] = useState(true);
 
-    const [friendButtonIsLoading, setFriendButtonIsLoading] = useState(false);
     const [screeningAlertDialogVisibile, setScreeningAlertDialogVisibile] = useState(false);
     const [settingsIsOpen, setSettingsIsOpen] = useState(false);
+
+    const [searchPlaces, setSearchPlaces] = useState(false);
+
+    const handleSearchPlacesDialogOpen = () => {
+        setSearchPlaces(true);
+    };
 
     const handleTabsChange = (index) => {
         setTabIndex(index);
@@ -60,41 +69,12 @@ export default function HomePage() {
 
     const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
 
-    const handleLogin = () => {
-        navigate("/login");
-    };
-
     const handleMilestones = () => {
         navigate("/milestone");
     };
 
     const handleMaternalResources = () => {
         navigate("/maternal");
-    };
-
-    const handleSettingsPress = () => {
-        setSettingsIsOpen(true);
-    };
-
-    const ColorModeToggleButton = () => {
-        const { toggleColorMode } = useColorMode();
-
-        return (
-            <Tooltip label="Change color mode">
-                <IconButton
-                    icon={useColorModeValue("Dark", "Light") === "Dark" ? <MoonIcon height="30px" width="30px" /> : <SunIcon height="30px" width="30px" />}
-                    onClick={toggleColorMode}
-                    width="56px"
-                    height="56px"
-                    borderRadius="50%"
-                    boxShadow="md"
-                    _hover={{ boxShadow: "lg" }}
-                    zIndex={999}
-                >
-                    {useColorModeValue("Dark", "Light")}
-                </IconButton>
-            </Tooltip>
-        );
     };
 
     const handleDMPress = (user) => {
@@ -106,37 +86,6 @@ export default function HomePage() {
     const handleFriendConfirmation = (user) => {
         setAlertDialogUser(user);
         setAlertDialogVisible(true);
-    };
-
-    const handleFriendSubmission = async () => {
-        setFriendButtonIsLoading(true);
-        const usersRef = await firestore.collection("users");
-        const userDoc = await usersRef.doc(currentUser.uid);
-        const userDocConfirmedFriends = await userDoc.collection("confirmedFriends");
-        const userDocPendingFriends = await userDoc.collection("pendingFriends");
-
-        if (alertDialogUser.id) {
-            await userDocConfirmedFriends.doc(alertDialogUser.id).set({
-                ...alertDialogUser
-            });
-
-            await userDocPendingFriends.doc(alertDialogUser.id).delete();
-
-            // update sending user friends list as well
-            const sendingUserDoc = await firestore.collection("users").doc(alertDialogUser.id);
-            const sendingUserDocConfirmedFriends = await sendingUserDoc.collection("confirmedFriends");
-            const sendingUserDocPendingFriends = await sendingUserDoc.collection("pendingFriends");
-
-            await sendingUserDocConfirmedFriends.doc(currentUser?.uid)
-                .set({
-                    ...(await userDoc.get()).data()
-                });
-
-            await sendingUserDocPendingFriends.doc(currentUser.uid).delete();
-        }
-
-        setAlertDialogVisible(false);
-        setFriendButtonIsLoading(false);
     };
 
     const handleForumButtonPress = () => {
@@ -222,15 +171,6 @@ export default function HomePage() {
 
     return (
         <>
-            <SearchBarAlertDialog
-                searchBarIsOpen={searchBarIsOpen}
-                setSearchBarIsOpen={setSearchBarIsOpen}
-                setFoodData={setFoodData}
-                setClothingData={setClothingData}
-                setDiaperData={setDiaperData}
-                tabIndex={tabIndex}
-                setTabIndex={setTabIndex}
-            />
             <Drawer
                 isOpen={isOpen}
                 placement='left'
@@ -431,116 +371,35 @@ export default function HomePage() {
                     </TabPanel>
                 </TabPanels>
             </Tabs>
-            <AlertDialog
-                isOpen={alertDialogVisible}
-                onClose={() => setAlertDialogVisible(false)}
-            >
-                <AlertDialogOverlay>
-                    <AlertDialogContent>
-                        <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                            Friend Confirmation
-                        </AlertDialogHeader>
-                        <AlertDialogBody>
-                            Are you sure you wanna friend this person, dawg?
-                        </AlertDialogBody>
-                        <AlertDialogFooter>
-                            <Button onClick={() => setAlertDialogVisible(false)}>
-                                Cancel
-                            </Button>
-                            <Button isLoading={friendButtonIsLoading} onClick={handleFriendSubmission} ml={3}>
-                                Friend
-                            </Button>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialogOverlay>
-            </AlertDialog>
-            <AlertDialog
-                isOpen={screeningAlertDialogVisibile}
-                onClose={() => setScreeningAlertDialogVisibile(false)}
-            >
-                <AlertDialogOverlay>
-                    <AlertDialogContent>
-                        <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                            Demographic Disclaimer
-                        </AlertDialogHeader>
-                        <AlertDialogBody>
-                            This page asks personal questions that are in no need mandatory to answer
-                            this is just to make it easier for others to reach out to you when friending, or
-                            seeking opinions by people with certain characteristics.
-                        </AlertDialogBody>
-                        <AlertDialogFooter>
-                            <Button onClick={() => setScreeningAlertDialogVisibile(false)}>
-                                Cancel
-                            </Button>
-                            <Button onClick={() => navigate("/screening")} ml={3}>
-                                Continue
-                            </Button>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialogOverlay>
-            </AlertDialog>
-            <VStack
-                top="14"
-                right="4"
-                position="fixed"
-            >
-                <ColorModeToggleButton />
-                <Tooltip label="Go to Google Maps">
-                    <IconButton
-                        as="a"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href={`https://www.google.com/maps/`}
-                        icon={<LinkIcon height="30px" width="30px" />}
-                        width="56px"
-                        height="56px"
-                        borderRadius="50%"
-                        boxShadow="md"
-                        _hover={{ boxShadow: "lg" }}
-                        zIndex={999}
-                    />
-                </Tooltip>
-                <Tooltip label="Log in">
-                    <IconButton
-                        icon={<UnlockIcon height="30px" width="30px" />}
-                        onClick={handleLogin}
-                        width="56px"
-                        height="56px"
-                        borderRadius="50%"
-                        boxShadow="md"
-                        _hover={{ boxShadow: "lg" }}
-                        zIndex={999}
-                    />
-                </Tooltip>
-                {currentUser ?
-                    <Tooltip label="Other Pages">
-                        <IconButton
-                            icon={<HamburgerIcon height="30px" width="30px" />}
-                            onClick={handleSettingsPress}
-                            width="56px"
-                            height="56px"
-                            borderRadius="50%"
-                            boxShadow="md"
-                            _hover={{ boxShadow: "lg" }}
-                            zIndex={999}
-                        />
-                    </Tooltip>
-                    :
-                    null
-                }
-                <Tooltip label="Search">
-                    <IconButton
-                        icon={<SearchIcon height="30px" width="30px" />}
-                        onClick={() => setSearchBarIsOpen(true)}
-                        width="56px"
-                        height="56px"
-                        borderRadius="50%"
-                        boxShadow="md"
-                        _hover={{ boxShadow: "lg" }}
-                        zIndex={999}
-                    />
-                </Tooltip>
-            </VStack>
+            <FloatingActionButtons
+                handleSearchPlacesDialogOpen={handleSearchPlacesDialogOpen}
+                setSettingsIsOpen={setSettingsIsOpen}
+                currentUser={currentUser}
+                setSearchBarIsOpen={setSearchBarIsOpen}
+            />
+            <GoogleSearchModal
+                searchPlaces={searchPlaces}
+                setSearchPlaces={setSearchPlaces}
+            />
+            <DisclaimerModal
+                screeningAlertDialogVisibile={screeningAlertDialogVisibile}
+                setScreeningAlertDialogVisibile={setScreeningAlertDialogVisibile}
+            />
+            <FriendRequestModal
+                alertDialogVisible={alertDialogVisible}
+                setAlertDialogVisible={setAlertDialogVisible}
+                alertDialogUser={alertDialogUser}
+                currentUser={currentUser}
+            />
+            <SearchBarModal
+                searchBarIsOpen={searchBarIsOpen}
+                setSearchBarIsOpen={setSearchBarIsOpen}
+                setFoodData={setFoodData}
+                setClothingData={setClothingData}
+                setDiaperData={setDiaperData}
+                tabIndex={tabIndex}
+                setTabIndex={setTabIndex}
+            />
         </>
 
     );

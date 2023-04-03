@@ -8,6 +8,7 @@ import Context from './context/Context';
 import StarterForumTopicPage from "./pages/StarterForumTopicPage";
 import ScreeningPage from "./pages/ScreeningPage";
 import MilestonePage from "./pages/MilestonePage";
+import MaternalResourcesPage from "./pages/MaternalResourcesPage";
 
 function App() {
   const [state, setState] = useState(null);
@@ -23,6 +24,7 @@ function App() {
         <Route path="forum" element={<StarterForumTopicPage />} />
         <Route path="message-page" element={<ForumMessagePage />} />
         <Route path="milestone" element={<MilestonePage />} />
+        <Route path="maternal" element={<MaternalResourcesPage />} />
       </Routes>
     </Context.Provider>
 
