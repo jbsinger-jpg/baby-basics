@@ -8,11 +8,15 @@ const locations = [
     { key: 3, value: "playground", label: "Playgrounds" },
     { key: 4, value: "birthing+classes", label: "Birthing Classes" },
     { key: 5, value: "genetic+counseling", label: "Genetic Counseling" },
+    { key: 6, value: "children's+amusement+center", label: "Children's Amusement Centers" },
 ];
 
 export default function GoogleMapsModal({ searchPlaces, setSearchPlaces }) {
     // Searching Logic
     const [selectedLocation, setSelectedLocation] = useState(null);
+
+    // TODO: Make sure the city and state are in acceptable formats for search
+    // TODO: Make sure the fields you are searching get formatted via a form component instead of onChange event
     const [state, setState] = useState(null);
     const [city, setCity] = useState(null);
 
