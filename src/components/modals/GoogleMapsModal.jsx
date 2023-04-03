@@ -10,7 +10,7 @@ const locations = [
     { key: 5, value: "genetic+counseling", label: "Genetic Counseling" },
 ];
 
-export default function GoogleSearchModal({ searchPlaces, setSearchPlaces }) {
+export default function GoogleMapsModal({ searchPlaces, setSearchPlaces }) {
     // Searching Logic
     const [selectedLocation, setSelectedLocation] = useState(null);
     const [state, setState] = useState(null);

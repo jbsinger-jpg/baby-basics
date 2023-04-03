@@ -11,7 +11,7 @@ import ClothingDataTabPanel from '../components/tabPanels/ClothingDataTabPanel';
 import FoodDataTabPanel from '../components/tabPanels/FoodDataTabPanel';
 import DiaperDataTabPanel from '../components/tabPanels/DiaperDataTabPanel';
 import MaternalDataTabPanel from '../components/tabPanels/MaternalDataTabPanel';
-import GoogleSearchModal from '../components/modals/GoogleSearchModal';
+import GoogleMapsModal from '../components/modals/GoogleMapsModal';
 import FloatingActionButtons from '../components/FloatingActionButtons';
 import DisclaimerModal from '../components/modals/DisclaimerModal';
 import FriendRequestModal from '../components/modals/FriendRequestModal';
@@ -340,19 +340,35 @@ export default function HomePage() {
                 </TabList>
                 <TabPanels>
                     <TabPanel>
-                        <ClothingDataTabPanel clothingData={clothingData} clothingDataLoaded={isClothingDataLoading} />
+                        <ClothingDataTabPanel
+                            clothingData={clothingData}
+                            clothingDataLoaded={isClothingDataLoading}
+                            tabIndex={tabIndex}
+                        />
                     </TabPanel>
                     <TabPanel>
-                        <FoodDataTabPanel foodData={foodData} isFoodDataLoading={isFoodDataLoading} />
+                        <FoodDataTabPanel
+                            foodData={foodData}
+                            isFoodDataLoading={isFoodDataLoading}
+                            tabIndex={tabIndex}
+                        />
                     </TabPanel>
                     <TabPanel>
-                        <DiaperDataTabPanel diaperData={diaperData} isDiapersLoading={isDiapersLoading} tabIndex={tabIndex} />
+                        <DiaperDataTabPanel
+                            diaperData={diaperData}
+                            isDiapersLoading={isDiapersLoading}
+                            tabIndex={tabIndex}
+                        />
                     </TabPanel>
                     <TabPanel>
                         Toiletries
                     </TabPanel>
                     <TabPanel>
-                        <MaternalDataTabPanel maternialData={maternialData} maternialDataLoading={maternialDataIsLoading} tabIndex={tabIndex} />
+                        <MaternalDataTabPanel
+                            maternialData={maternialData}
+                            maternialDataLoading={maternialDataIsLoading}
+                            tabIndex={tabIndex}
+                        />
                     </TabPanel>
                     <TabPanel>
                         Formula
@@ -377,7 +393,7 @@ export default function HomePage() {
                 currentUser={currentUser}
                 setSearchBarIsOpen={setSearchBarIsOpen}
             />
-            <GoogleSearchModal
+            <GoogleMapsModal
                 searchPlaces={searchPlaces}
                 setSearchPlaces={setSearchPlaces}
             />
