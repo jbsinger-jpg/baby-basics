@@ -221,13 +221,15 @@ export default function MaternialRow({ maternial, maternialDataLoading, tabIndex
                             <TagLabel>{"$" + maternial.price}</TagLabel>
                         </Tag>
                         <Divider />
-                        <Tag
-                            borderRadius='full'
-                            variant='solid'
-                            colorScheme='telegram'
-                        >
-                            {maternial.sizes && <TagLabel>{"Size: " + maternial.sizes}</TagLabel>}
-                        </Tag>
+                        {maternial.sizes &&
+                            <Tag
+                                borderRadius='full'
+                                variant='solid'
+                                colorScheme='telegram'
+                            >
+                                <TagLabel>{"Size: " + maternial.sizes}</TagLabel>
+                            </Tag>
+                        }
                     </VStack>
                 </HStack>
             </SkeletonText>

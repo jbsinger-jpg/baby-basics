@@ -221,13 +221,6 @@ export default function FormulaRow({ formula, formulaDataIsLoading, tabIndex }) 
                             <TagLabel>{"$" + formula.price}</TagLabel>
                         </Tag>
                         <Divider />
-                        <Tag
-                            borderRadius='full'
-                            variant='solid'
-                            colorScheme='telegram'
-                        >
-                            {formula.sizes && <TagLabel>{"Size: " + formula.sizes}</TagLabel>}
-                        </Tag>
                     </VStack>
                 </HStack>
             </SkeletonText>

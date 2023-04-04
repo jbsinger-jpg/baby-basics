@@ -112,7 +112,7 @@ export default function StrollerRow({ stroller, strollerDataIsLoading, tabIndex 
                                         stiffness: 260,
                                         damping: 20
                                     }}
-                                    src={stroller.image}
+                                    src={stroller?.image}
                                     size="sm"
                                     alt="Alternate Text"
                                     style={{ width: 150, height: 200, resizeMode: 'cover' }}

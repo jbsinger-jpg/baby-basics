@@ -221,13 +221,6 @@ export default function ToyRow({ toy, toyDataIsLoading, tabIndex }) {
                             <TagLabel>{"$" + toy.price}</TagLabel>
                         </Tag>
                         <Divider />
-                        <Tag
-                            borderRadius='full'
-                            variant='solid'
-                            colorScheme='telegram'
-                        >
-                            {toy.sizes && <TagLabel>{"Size: " + toy.sizes}</TagLabel>}
-                        </Tag>
                     </VStack>
                 </HStack>
             </SkeletonText>

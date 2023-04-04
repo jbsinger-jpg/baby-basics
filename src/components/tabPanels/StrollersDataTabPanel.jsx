@@ -9,8 +9,8 @@ export default function StrollersDataTabPanel({ strollerData, strollerDataIsLoad
                 return (
                     <StrollerRow
                         key={stroller.id}
-                        maternial={stroller}
-                        maternialDataLoading={strollerDataIsLoading}
+                        stroller={stroller}
+                        strollerDataIsLoading={strollerDataIsLoading}
                         tabIndex={tabIndex}
                     />
                 );

@@ -221,7 +221,7 @@ export default function HomePage() {
                 options = [];
             });
 
-        firestore.collection('seats').get()
+        firestore.collection('car_seats').get()
             .then(snapshot => {
                 snapshot.docs.forEach(doc => {
                     options.push({ ...doc.data() });
