@@ -89,10 +89,6 @@ export default function HomePage() {
 
     const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
 
-    const handleMaternalResources = () => {
-        navigate("/maternal");
-    };
-
     const handleDMPress = (user) => {
         // TODO: Pass the user to the message page
         setUser(user.email);
@@ -344,11 +340,6 @@ export default function HomePage() {
                     <DrawerBody>
                         <Button leftIcon={<ChatIcon />} onClick={onOpen} >
                             Chat with Peeps
-                        </Button>
-                        <Button
-                            onClick={handleMaternalResources}
-                        >
-                            Maternal Resources
                         </Button>
                         <Button
                             as="a"

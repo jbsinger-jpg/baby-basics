@@ -1,5 +1,9 @@
-import { HamburgerIcon, LinkIcon, MoonIcon, SearchIcon, SunIcon, TimeIcon, UnlockIcon } from '@chakra-ui/icons';
+import { HamburgerIcon, MoonIcon, SearchIcon, SunIcon, TimeIcon, UnlockIcon } from '@chakra-ui/icons';
 import { IconButton, Tooltip, VStack, useColorMode, useColorModeValue } from '@chakra-ui/react';
+import PregnantWomanOutlinedIcon from '@mui/icons-material/PregnantWomanOutlined';
+import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
+import MapIcon from '@mui/icons-material/Map';
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -39,6 +43,10 @@ export default function FloatingActionButtons({ setSettingsIsOpen, handleSearchP
         navigate("/milestone");
     };
 
+    const handleMaternalResources = () => {
+        navigate("/maternal");
+    };
+
     return (
         <VStack
             top="14"
@@ -49,7 +57,7 @@ export default function FloatingActionButtons({ setSettingsIsOpen, handleSearchP
             <Tooltip label="Look up a Location">
                 <IconButton
                     onClick={handleSearchPlacesDialogOpen}
-                    icon={<LinkIcon height="30px" width="30px" />}
+                    icon={<MapIcon fontSize="large" />}
                     width="56px"
                     height="56px"
                     borderRadius="50%"
@@ -100,7 +108,7 @@ export default function FloatingActionButtons({ setSettingsIsOpen, handleSearchP
             </Tooltip>
             <Tooltip label="Baby Milestones">
                 <IconButton
-                    icon={<TimeIcon height="30px" width="30px" />}
+                    icon={<BabyChangingStationIcon fontSize="large" />}
                     width="56px"
                     height="56px"
                     borderRadius="50%"
@@ -108,6 +116,20 @@ export default function FloatingActionButtons({ setSettingsIsOpen, handleSearchP
                     _hover={{ boxShadow: "lg" }}
                     zIndex={999}
                     onClick={handleMilestones}
+                >
+                    Baby Milestones
+                </IconButton>
+            </Tooltip>
+            <Tooltip label="Maternity Information">
+                <IconButton
+                    icon={<PregnantWomanOutlinedIcon fontSize="large" />}
+                    width="56px"
+                    height="56px"
+                    borderRadius="50%"
+                    boxShadow="md"
+                    _hover={{ boxShadow: "lg" }}
+                    zIndex={999}
+                    onClick={handleMaternalResources}
                 >
                     Baby Milestones
                 </IconButton>
