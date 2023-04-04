@@ -89,10 +89,6 @@ export default function HomePage() {
 
     const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
 
-    const handleMilestones = () => {
-        navigate("/milestone");
-    };
-
     const handleMaternalResources = () => {
         navigate("/maternal");
     };
@@ -350,12 +346,6 @@ export default function HomePage() {
                             Chat with Peeps
                         </Button>
                         <Button
-                            leftIcon={<TimeIcon />}
-                            onClick={handleMilestones}
-                        >
-                            Baby Milestones
-                        </Button>
-                        <Button
                             onClick={handleMaternalResources}
                         >
                             Maternal Resources
@@ -391,10 +381,10 @@ export default function HomePage() {
                             Diapers
                         </Tab>
                         <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                            Toiletries
+                            Baby Hygiene
                         </Tab>
                         <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                            Maternial
+                            Maternal
                         </Tab>
                         <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
                             Formula
@@ -436,7 +426,7 @@ export default function HomePage() {
                         />
                     </TabPanel>
                     <TabPanel>
-                        Toiletries
+                        Baby Hygiene
                     </TabPanel>
                     <TabPanel>
                         <MaternalDataTabPanel
@@ -512,6 +502,5 @@ export default function HomePage() {
                 setTabIndex={setTabIndex}
             />
         </>
-
     );
 }

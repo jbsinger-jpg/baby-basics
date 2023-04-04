@@ -1,4 +1,4 @@
-import { HamburgerIcon, LinkIcon, MoonIcon, SearchIcon, SunIcon, UnlockIcon } from '@chakra-ui/icons';
+import { HamburgerIcon, LinkIcon, MoonIcon, SearchIcon, SunIcon, TimeIcon, UnlockIcon } from '@chakra-ui/icons';
 import { IconButton, Tooltip, VStack, useColorMode, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -35,6 +35,10 @@ export default function FloatingActionButtons({ setSettingsIsOpen, handleSearchP
         navigate("/login");
     };
 
+    const handleMilestones = () => {
+        navigate("/milestone");
+    };
+
     return (
         <VStack
             top="14"
@@ -67,7 +71,7 @@ export default function FloatingActionButtons({ setSettingsIsOpen, handleSearchP
                 />
             </Tooltip>
             {currentUser ?
-                <Tooltip label="Other Pages">
+                <Tooltip label="User Account">
                     <IconButton
                         icon={<HamburgerIcon height="30px" width="30px" />}
                         onClick={handleSettingsPress}
@@ -93,6 +97,20 @@ export default function FloatingActionButtons({ setSettingsIsOpen, handleSearchP
                     _hover={{ boxShadow: "lg" }}
                     zIndex={999}
                 />
+            </Tooltip>
+            <Tooltip label="Baby Milestones">
+                <IconButton
+                    icon={<TimeIcon height="30px" width="30px" />}
+                    width="56px"
+                    height="56px"
+                    borderRadius="50%"
+                    boxShadow="md"
+                    _hover={{ boxShadow: "lg" }}
+                    zIndex={999}
+                    onClick={handleMilestones}
+                >
+                    Baby Milestones
+                </IconButton>
             </Tooltip>
         </VStack>
     );
