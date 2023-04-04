@@ -1,7 +1,7 @@
 import { CalendarIcon, ChatIcon, TimeIcon, WarningIcon } from '@chakra-ui/icons';
 import { Avatar, AvatarBadge, AvatarGroup, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
-import { useCollectionData } from 'react-firebase-hooks/firestore';
+import { useCollectionDataOnce } from 'react-firebase-hooks/firestore';
 import { useNavigate } from 'react-router-dom';
 
 import { auth, firestore } from '../firebaseConfig';
@@ -15,14 +15,19 @@ import GoogleMapsModal from '../components/modals/GoogleMapsModal';
 import FloatingActionButtons from '../components/FloatingActionButtons';
 import DisclaimerModal from '../components/modals/DisclaimerModal';
 import FriendRequestModal from '../components/modals/FriendRequestModal';
+import FormulaDataTabPanel from '../components/tabPanels/FormulaDataTabPanel';
+import ToysDataTabPanel from '../components/tabPanels/ToysDataTabPanel';
+import MonitorsDataTabPanel from '../components/tabPanels/MonitorsDataTabPanel';
+import SeatsTabPanel from '../components/tabPanels/SeatsTabPanel';
+import StrollersDataTabPanel from '../components/tabPanels/StrollersDataTabPanel';
 
 export default function HomePage() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { setData: setUser } = useContext(Context);
     const navigate = useNavigate();
     const currentUser = auth.currentUser;
-    const [userDataPendingFriends] = useCollectionData(firestore.collection('users').doc(currentUser?.uid).collection("pendingFriends"), { idField: 'id' });
-    const [userDataConfirmedFriends] = useCollectionData(firestore.collection('users').doc(currentUser?.uid).collection("confirmedFriends"), { idField: 'id' });
+    const [userDataPendingFriends] = useCollectionDataOnce(firestore.collection('users').doc(currentUser?.uid).collection("pendingFriends"), { idField: 'id' });
+    const [userDataConfirmedFriends] = useCollectionDataOnce(firestore.collection('users').doc(currentUser?.uid).collection("confirmedFriends"), { idField: 'id' });
     const [alertDialogUser, setAlertDialogUser] = useState(null);
     const [alertDialogVisible, setAlertDialogVisible] = useState(false);
 
@@ -40,6 +45,21 @@ export default function HomePage() {
 
     const [maternialData, setMaternialData] = useState(null);
     const [maternialDataIsLoading, setMaternialDataIsLoading] = useState(true);
+
+    const [formulaData, setFormulaData] = useState(null);
+    const [formulaDataIsLoading, setFormulaDataIsLoading] = useState(true);
+
+    const [toyData, setToyData] = useState(null);
+    const [toyDataIsLoading, setToyDataIsLoading] = useState(true);
+
+    const [monitorData, setMonitorData] = useState(null);
+    const [monitorDataIsLoading, setMonitorDataIsLoading] = useState(true);
+
+    const [seatData, setSeatData] = useState(null);
+    const [seatDataIsLoading, setSeatDataIsLoading] = useState(true);
+
+    const [strollerData, setStrollerData] = useState(null);
+    const [strollerDataIsLoading, setStrollerDataIsLoading] = useState(true);
 
     const [screeningAlertDialogVisibile, setScreeningAlertDialogVisibile] = useState(false);
     const [settingsIsOpen, setSettingsIsOpen] = useState(false);
@@ -63,7 +83,7 @@ export default function HomePage() {
     if (currentUserEmail) {
         starterGroupRef = starterGroupRef.where("users", "array-contains", currentUserEmail);
     }
-    const [starterGroup] = useCollectionData(starterGroupRef, { idField: 'id' });
+    const [starterGroup] = useCollectionDataOnce(starterGroupRef, { idField: 'id' });
     //-------------------------------------------------------------------------------
     //-------------------------------------------------------------------------------
 
@@ -165,6 +185,61 @@ export default function HomePage() {
 
                 setMaternialData(options);
                 setMaternialDataIsLoading(false);
+                options = [];
+            });
+
+        firestore.collection('formula').get()
+            .then(snapshot => {
+                snapshot.docs.forEach(doc => {
+                    options.push({ ...doc.data() });
+                });
+
+                setFormulaData(options);
+                setFormulaDataIsLoading(false);
+                options = [];
+            });
+
+        firestore.collection('toys').get()
+            .then(snapshot => {
+                snapshot.docs.forEach(doc => {
+                    options.push({ ...doc.data() });
+                });
+
+                setToyData(options);
+                setToyDataIsLoading(false);
+                options = [];
+            });
+
+        firestore.collection('monitors').get()
+            .then(snapshot => {
+                snapshot.docs.forEach(doc => {
+                    options.push({ ...doc.data() });
+                });
+
+                setMonitorData(options);
+                setMonitorDataIsLoading(false);
+                options = [];
+            });
+
+        firestore.collection('seats').get()
+            .then(snapshot => {
+                snapshot.docs.forEach(doc => {
+                    options.push({ ...doc.data() });
+                });
+
+                setSeatData(options);
+                setSeatDataIsLoading(false);
+                options = [];
+            });
+
+        firestore.collection('strollers').get()
+            .then(snapshot => {
+                snapshot.docs.forEach(doc => {
+                    options.push({ ...doc.data() });
+                });
+
+                setStrollerData(options);
+                setStrollerDataIsLoading(false);
                 options = [];
             });
     }, []);
@@ -371,19 +446,39 @@ export default function HomePage() {
                         />
                     </TabPanel>
                     <TabPanel>
-                        Formula
+                        <FormulaDataTabPanel
+                            formulaData={formulaData}
+                            formulaDataIsLoading={formulaDataIsLoading}
+                            tabIndex={tabIndex}
+                        />
                     </TabPanel>
                     <TabPanel>
-                        Toys
+                        <ToysDataTabPanel
+                            toyData={toyData}
+                            toyDataIsLoading={toyDataIsLoading}
+                            tabIndex={tabIndex}
+                        />
                     </TabPanel>
                     <TabPanel>
-                        Monitors
+                        <MonitorsDataTabPanel
+                            monitorData={monitorData}
+                            monitorDataIsLoading={monitorDataIsLoading}
+                            tabIndex={tabIndex}
+                        />
                     </TabPanel>
                     <TabPanel>
-                        Seats
+                        <SeatsTabPanel
+                            seatData={seatData}
+                            seatDataIsLoading={seatDataIsLoading}
+                            tabIndex={tabIndex}
+                        />
                     </TabPanel>
                     <TabPanel>
-                        Strollers
+                        <StrollersDataTabPanel
+                            strollerData={strollerData}
+                            strollerDataIsLoading={strollerDataIsLoading}
+                            tabIndex={tabIndex}
+                        />
                     </TabPanel>
                 </TabPanels>
             </Tabs>
