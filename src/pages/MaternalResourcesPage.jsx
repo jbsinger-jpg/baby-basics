@@ -51,31 +51,27 @@ export default function MaternalResourcesPage() {
               <VStack h="60vh" justifyContent="space-between">
                 <VStack w="30vw">
                   <Heading textDecoration="underline">Health Advice</Heading>
-                  <UnorderedList>
-                    <ListItem>Prenatal Vitamins</ListItem>
-                    <ListItem>Screening Tests</ListItem>
-                    <ListItem>Questions For OBGYN</ListItem>
-                  </UnorderedList>
-                </VStack>
-                <VStack w="25vw">
-                  <Select
-                    placeholder='Select Health Advice Video'
-                    value={selectedVideo}
-                    onChange={(event) => {
-                      setSelectedVideo(event.target.value);
-                    }}
-                  >
-                    {videos && videos.length > 0 && videos.map((video) => {
-                      return (<option value={video.value} key={video.key}>{video.label}</option>);
-                    })}
-                  </Select>
-                  <iframe
-                    height="300px"
-                    width="100%"
-                    src={selectedVideo || "https://www.youtube.com/embed/rv-fBnFbQAk"}
-                    title="YouTube video player"
-                    allowFullScreen
-                  />
+                  <Card maxW='sm'>
+                    <CardBody>
+                      <Stack mt='6' spacing='3'>
+                        <Image
+                          src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHvho0UC6aSJ46yhNYi_-nd6jijcEqQe5DHA&usqp=CAU'
+                          alt='avacada'
+                          borderRadius='lg'
+                          h="300px"
+                          w="300px"
+                        />
+                        <Heading size='md'> Week 16! </Heading>
+                        <Text>
+                          Prenatal Checkin
+                          {/* **Prenatal Vitamins**
+                          **Screening Tests**
+                          **Questions For OBGYN** */}
+                        </Text>
+                        <Text> Prenatal Vitamins </Text>
+                      </Stack>
+                    </CardBody>
+                  </Card>
                 </VStack>
               </VStack>
               <VStack justifyContent="start" w="30vw" spacing="4" h="100vh">
@@ -102,11 +98,37 @@ export default function MaternalResourcesPage() {
               </VStack>
               <VStack justifyContent="start" w="30vw">
                 <Heading textDecoration="underline">Resource Links</Heading>
-                <UnorderedList>
-                  <ListItem>Prenatal Vitamins</ListItem>
-                  <ListItem>Screening Tests</ListItem>
-                  <ListItem>Questions For OBGYN</ListItem>
-                </UnorderedList>
+                <Card maxW='sm'>
+                  <CardBody>
+                    <Stack mt='6' spacing='3'>
+                      <Select
+                        placeholder='Select Video'
+                        value={selectedVideo}
+                        onChange={(event) => {
+                          setSelectedVideo(event.target.value);
+                        }}
+                      >
+                        {videos && videos.length > 0 && videos.map((video) => {
+                          return (<option value={video.value} key={video.key}>{video.label}</option>);
+                        })}
+                      </Select>
+                      <iframe
+                        height="300px"
+                        width="100%"
+                        src={selectedVideo || "https://www.youtube.com/embed/rv-fBnFbQAk"}
+                        title="YouTube video player"
+                        allowFullScreen
+                      />
+                      <Heading size='md'> Week 16! </Heading>
+                      <Text>
+                        Have fun baking that baby bun!
+                        {/* **Prenatal Vitamins**
+                          **Screening Tests**
+                          **Questions For OBGYN** */}
+                      </Text>
+                    </Stack>
+                  </CardBody>
+                </Card>
               </VStack>
             </HStack>
           </TabPanel>
@@ -115,31 +137,27 @@ export default function MaternalResourcesPage() {
               <VStack h="60vh" justifyContent="space-between">
                 <VStack w="30vw">
                   <Heading textDecoration="underline">Health Advice</Heading>
-                  <UnorderedList>
-                    <ListItem>Prenatal Vitamins</ListItem>
-                    <ListItem>Screening Tests</ListItem>
-                    <ListItem>Questions For OBGYN</ListItem>
-                  </UnorderedList>
-                </VStack>
-                <VStack w="25vw">
-                  <Select
-                    placeholder='Select Health Advice Video'
-                    value={selectedVideo}
-                    onChange={(event) => {
-                      setSelectedVideo(event.target.value);
-                    }}
-                  >
-                    {videos && videos.length > 0 && videos.map((video) => {
-                      return (<option value={video.value} key={video.key}>{video.label}</option>);
-                    })}
-                  </Select>
-                  <iframe
-                    height="300px"
-                    width="100%"
-                    src={selectedVideo || "https://www.youtube.com/embed/rv-fBnFbQAk"}
-                    title="YouTube video player"
-                    allowFullScreen
-                  />
+                  <Card maxW='sm'>
+                    <CardBody>
+                      <Stack mt='6' spacing='3'>
+                        <Image
+                          src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHvho0UC6aSJ46yhNYi_-nd6jijcEqQe5DHA&usqp=CAU'
+                          alt='avacada'
+                          borderRadius='lg'
+                          h="300px"
+                          w="300px"
+                        />
+                        <Heading size='md'> Week 16! </Heading>
+                        <Text>
+                          Prenatal Checkin
+                          {/* **Prenatal Vitamins**
+                          **Screening Tests**
+                          **Questions For OBGYN** */}
+                        </Text>
+                        <Text> Prenatal Vitamins </Text>
+                      </Stack>
+                    </CardBody>
+                  </Card>
                 </VStack>
               </VStack>
               <VStack justifyContent="start" w="30vw" spacing="4" h="100vh">
