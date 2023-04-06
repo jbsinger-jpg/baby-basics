@@ -1,6 +1,8 @@
 import { Card, CardBody, HStack, Heading, Image, ListItem, Select, Stack, UnorderedList, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { physicalChangesImage, trimesterImage } from '../images/maternalPageImages';
+import FloatingActionButtonsBabyInfo from '../components/FloatingActionButtonsBabyInfo';
+import GoogleMapsModal from '../components/modals/GoogleMapsModal';
 
 const promptOptions = [
     {
@@ -247,6 +249,7 @@ export default function MilestonePage() {
     const [selectedHyperLinks, setSelectedHyperLinks] = useState("");
     const [videos, setVideos] = useState("");
     const [selectedVideo, setSelectedVideo] = useState("");
+    const [places, setPlaces] = useState(false);
 
     const handleAnswerChange = (event) => {
         for (let i = 0; i < promptOptions.length; i++) {
@@ -263,168 +266,181 @@ export default function MilestonePage() {
         }
     };
 
+    const handleSearchPlacesDialogOpen = () => {
+        setPlaces(true);
+    };
+
     return (
-        <HStack flexWrap={"wrap"} top="20" position="absolute" spacing="12" justifyContent="center" alignItems="start">
-            <Select
-                w="95vw"
-                marginBottom="10"
-                placeholder='Select baby age'
-                value={selectedAge}
-                onChange={(event) => {
-                    setSelectedAge(event.target.value);
-                    handleAnswerChange(event);
-                }}
-            >
-                <option value="0-3M"> 0-3M </option>
-                <option value="4-6M"> 4-6M </option>
-                <option value="7-9M"> 7-9M </option>
-                <option value="10-12M"> 10-12M </option>
-                <option value="13-18M"> 13-18M </option>
-                <option value="19-24M"> 19-24M </option>
-            </Select>
-            <VStack justifyContent="start" w="30vw" spacing="4" h="80vh">
-                <Heading textDecoration="underline">Motor</Heading>
-                <Card maxW='sm'>
-                    <CardBody>
-                        <Stack mt='6' spacing='3'>
-                            <Image
-                                src={trimesterImage}
-                                alt='avacada'
-                                borderRadius='lg'
-                                h="300"
-                                w="300"
-                            />
-                            <Heading size='md'> Key Points </Heading>
-                            <UnorderedList spacing="2" paddingLeft="2">
-                                {selectedMotorMilestones.length > 0 && selectedMotorMilestones.map((milestone, index) => {
-                                    return (<ListItem key={index}>{milestone}</ListItem>);
-                                })}
-                            </UnorderedList>
-                        </Stack>
-                    </CardBody>
-                </Card>
-            </VStack>
-            <VStack justifyContent="start" w="30vw" spacing="4" h="80vh">
-                <Heading textDecoration="underline">Communication</Heading>
-                <Card maxW='sm'>
-                    <CardBody>
-                        <Stack mt='6' spacing='3'>
-                            <Image
-                                src={physicalChangesImage}
-                                alt='avacada'
-                                borderRadius='lg'
-                                h="300"
-                                w="300"
-                            />
-                            <Heading size='md'> Key Points </Heading>
-                            <UnorderedList spacing="2" paddingLeft="2">
-                                {selectedCommunicationMilestones.length > 0 && selectedCommunicationMilestones.map((milestone, index) => {
-                                    return (<ListItem key={index}>{milestone}</ListItem>);
-                                })}
-                            </UnorderedList>
-                        </Stack>
-                    </CardBody>
-                </Card>
-            </VStack>
-            <VStack justifyContent="start" w="30vw" spacing="4" h="80vh">
-                <Heading textDecoration="underline">Feeding</Heading>
-                <Card maxW='sm'>
-                    <CardBody>
-                        <Stack mt='6' spacing='3'>
-                            <Image
-                                src={physicalChangesImage}
-                                alt='avacada'
-                                borderRadius='lg'
-                                h="300"
-                                w="300"
-                            />
-                            <Heading size='md'> Key Points </Heading>
-                            <UnorderedList spacing="2" paddingLeft="2">
-                                {selectedFeedingMilestones.length > 0 && selectedFeedingMilestones.map((milestone, index) => {
-                                    return (<ListItem key={index}>{milestone}</ListItem>);
-                                })}
-                            </UnorderedList>
-                        </Stack>
-                    </CardBody>
-                </Card>
-            </VStack>
-            <VStack justifyContent="start" w="30vw" spacing="4" h="80vh">
-                <Heading textDecoration="underline">Sensory</Heading>
-                <Card maxW='sm'>
-                    <CardBody>
-                        <Stack mt='6' spacing='3'>
-                            <Image
-                                src={physicalChangesImage}
-                                alt='avacada'
-                                borderRadius='lg'
-                                h="300"
-                                w="300"
-                            />
-                            <Heading size='md'> Key Points </Heading>
-                            <UnorderedList spacing="2" paddingLeft="2">
-                                {selectedSensoryMilestones.length > 0 && selectedSensoryMilestones.map((milestone, index) => {
-                                    return (<ListItem key={index}>{milestone}</ListItem>);
-                                })}
-                            </UnorderedList>
-                        </Stack>
-                    </CardBody>
-                </Card>
-            </VStack>
-            <VStack justifyContent="start" w="30vw" spacing="4" h="80vh">
-                <Heading textDecoration="underline">Resources</Heading>
-                <Card maxW='sm'>
-                    <CardBody>
-                        <Stack mt='6' spacing='3'>
-                            <Select
-                                placeholder='Select Video'
-                                value={selectedVideo}
-                                onChange={(event) => {
-                                    setSelectedVideo(event.target.value);
-                                }}
-                            >
-                                {videos && videos.length > 0 && videos.map((video) => {
-                                    return (<option value={video.value} key={video.key}>{video.label}</option>);
-                                })}
-                            </Select>
-                            <iframe
-                                height="300px"
-                                width="100%"
-                                src={selectedVideo || "https://www.youtube.com/embed/rv-fBnFbQAk"}
-                                title="YouTube video player"
-                                allowFullScreen
-                            />
-                            <Heading size='md'> Key Points </Heading>
-                            <UnorderedList spacing="2" paddingLeft="2">
-                                {selectedHyperLinks.length > 0 && selectedHyperLinks.map((milestone, index) => {
-                                    return (<ListItem key={index}>{milestone}</ListItem>);
-                                })}
-                            </UnorderedList>
-                        </Stack>
-                    </CardBody>
-                </Card>
-            </VStack>
-            <VStack justifyContent="start" w="30vw" spacing="4" h="80vh">
-                <Heading textDecoration="underline">Potential Activities</Heading>
-                <Card maxW='sm'>
-                    <CardBody>
-                        <Stack mt='6' spacing='3'>
-                            <Image
-                                src={physicalChangesImage}
-                                alt='avacada'
-                                borderRadius='lg'
-                                h="300"
-                                w="300"
-                            />
-                            <Heading size='md'> Key Points </Heading>
-                            <UnorderedList spacing="2" paddingLeft="2">
-                                {selectedActivities.length > 0 && selectedActivities.map((milestone, index) => {
-                                    return (<ListItem key={index}>{milestone}</ListItem>);
-                                })}
-                            </UnorderedList>
-                        </Stack>
-                    </CardBody>
-                </Card>
-            </VStack>
-        </HStack>
+        <>
+            <FloatingActionButtonsBabyInfo
+                handleSearchPlacesDialogOpen={handleSearchPlacesDialogOpen}
+            />
+            <GoogleMapsModal
+                setPlaces={setPlaces}
+                places={places}
+            />
+            <HStack flexWrap={"wrap"} spacing="12" justifyContent="center" alignItems="start" marginTop="10">
+                <Select
+                    w="95vw"
+                    marginBottom="10"
+                    placeholder='Select baby age'
+                    value={selectedAge}
+                    onChange={(event) => {
+                        setSelectedAge(event.target.value);
+                        handleAnswerChange(event);
+                    }}
+                >
+                    <option value="0-3M"> 0-3M </option>
+                    <option value="4-6M"> 4-6M </option>
+                    <option value="7-9M"> 7-9M </option>
+                    <option value="10-12M"> 10-12M </option>
+                    <option value="13-18M"> 13-18M </option>
+                    <option value="19-24M"> 19-24M </option>
+                </Select>
+                <VStack justifyContent="start" w="30vw" spacing="4" h="80vh">
+                    <Heading textDecoration="underline">Motor</Heading>
+                    <Card maxW='sm'>
+                        <CardBody>
+                            <Stack mt='6' spacing='3'>
+                                <Image
+                                    src={trimesterImage}
+                                    alt='avacada'
+                                    borderRadius='lg'
+                                    h="300"
+                                    w="300"
+                                />
+                                <Heading size='md'> Key Points </Heading>
+                                <UnorderedList spacing="2" paddingLeft="2">
+                                    {selectedMotorMilestones.length > 0 && selectedMotorMilestones.map((milestone, index) => {
+                                        return (<ListItem key={index}>{milestone}</ListItem>);
+                                    })}
+                                </UnorderedList>
+                            </Stack>
+                        </CardBody>
+                    </Card>
+                </VStack>
+                <VStack justifyContent="start" w="30vw" spacing="4" h="80vh">
+                    <Heading textDecoration="underline">Communication</Heading>
+                    <Card maxW='sm'>
+                        <CardBody>
+                            <Stack mt='6' spacing='3'>
+                                <Image
+                                    src={physicalChangesImage}
+                                    alt='avacada'
+                                    borderRadius='lg'
+                                    h="300"
+                                    w="300"
+                                />
+                                <Heading size='md'> Key Points </Heading>
+                                <UnorderedList spacing="2" paddingLeft="2">
+                                    {selectedCommunicationMilestones.length > 0 && selectedCommunicationMilestones.map((milestone, index) => {
+                                        return (<ListItem key={index}>{milestone}</ListItem>);
+                                    })}
+                                </UnorderedList>
+                            </Stack>
+                        </CardBody>
+                    </Card>
+                </VStack>
+                <VStack justifyContent="start" w="30vw" spacing="4" h="80vh">
+                    <Heading textDecoration="underline">Feeding</Heading>
+                    <Card maxW='sm'>
+                        <CardBody>
+                            <Stack mt='6' spacing='3'>
+                                <Image
+                                    src={physicalChangesImage}
+                                    alt='avacada'
+                                    borderRadius='lg'
+                                    h="300"
+                                    w="300"
+                                />
+                                <Heading size='md'> Key Points </Heading>
+                                <UnorderedList spacing="2" paddingLeft="2">
+                                    {selectedFeedingMilestones.length > 0 && selectedFeedingMilestones.map((milestone, index) => {
+                                        return (<ListItem key={index}>{milestone}</ListItem>);
+                                    })}
+                                </UnorderedList>
+                            </Stack>
+                        </CardBody>
+                    </Card>
+                </VStack>
+                <VStack justifyContent="start" w="30vw" spacing="4" h="80vh">
+                    <Heading textDecoration="underline">Sensory</Heading>
+                    <Card maxW='sm'>
+                        <CardBody>
+                            <Stack mt='6' spacing='3'>
+                                <Image
+                                    src={physicalChangesImage}
+                                    alt='avacada'
+                                    borderRadius='lg'
+                                    h="300"
+                                    w="300"
+                                />
+                                <Heading size='md'> Key Points </Heading>
+                                <UnorderedList spacing="2" paddingLeft="2">
+                                    {selectedSensoryMilestones.length > 0 && selectedSensoryMilestones.map((milestone, index) => {
+                                        return (<ListItem key={index}>{milestone}</ListItem>);
+                                    })}
+                                </UnorderedList>
+                            </Stack>
+                        </CardBody>
+                    </Card>
+                </VStack>
+                <VStack justifyContent="start" w="30vw" spacing="4" h="80vh">
+                    <Heading textDecoration="underline">Resources</Heading>
+                    <Card maxW='sm'>
+                        <CardBody>
+                            <Stack mt='6' spacing='3'>
+                                <Select
+                                    placeholder='Select Video'
+                                    value={selectedVideo}
+                                    onChange={(event) => {
+                                        setSelectedVideo(event.target.value);
+                                    }}
+                                >
+                                    {videos && videos.length > 0 && videos.map((video) => {
+                                        return (<option value={video.value} key={video.key}>{video.label}</option>);
+                                    })}
+                                </Select>
+                                <iframe
+                                    height="300px"
+                                    width="100%"
+                                    src={selectedVideo || "https://www.youtube.com/embed/rv-fBnFbQAk"}
+                                    title="YouTube video player"
+                                    allowFullScreen
+                                />
+                                <Heading size='md'> Key Points </Heading>
+                                <UnorderedList spacing="2" paddingLeft="2">
+                                    {selectedHyperLinks.length > 0 && selectedHyperLinks.map((milestone, index) => {
+                                        return (<ListItem key={index}>{milestone}</ListItem>);
+                                    })}
+                                </UnorderedList>
+                            </Stack>
+                        </CardBody>
+                    </Card>
+                </VStack>
+                <VStack justifyContent="start" w="30vw" spacing="4" h="80vh">
+                    <Heading textDecoration="underline">Potential Activities</Heading>
+                    <Card maxW='sm'>
+                        <CardBody>
+                            <Stack mt='6' spacing='3'>
+                                <Image
+                                    src={physicalChangesImage}
+                                    alt='avacada'
+                                    borderRadius='lg'
+                                    h="300"
+                                    w="300"
+                                />
+                                <Heading size='md'> Key Points </Heading>
+                                <UnorderedList spacing="2" paddingLeft="2">
+                                    {selectedActivities.length > 0 && selectedActivities.map((milestone, index) => {
+                                        return (<ListItem key={index}>{milestone}</ListItem>);
+                                    })}
+                                </UnorderedList>
+                            </Stack>
+                        </CardBody>
+                    </Card>
+                </VStack>
+            </HStack>
+        </>
     );
 }
