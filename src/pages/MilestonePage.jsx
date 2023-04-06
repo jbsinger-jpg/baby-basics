@@ -1,15 +1,16 @@
-import { Card, CardBody, HStack, Heading, Image, ListItem, Select, Stack, UnorderedList, VStack } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, Card, CardBody, CardFooter, HStack, Heading, Image, ListItem, Select, Stack, UnorderedList, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { physicalChangesImage, trimesterImage } from '../images/maternalPageImages';
 import FloatingActionButtonsBabyInfo from '../components/FloatingActionButtonsBabyInfo';
 import GoogleMapsModal from '../components/modals/GoogleMapsModal';
+import { motion } from 'framer-motion';
 
 const promptOptions = [
     {
         ageSelected: "0-3M",
         answer: "Baby will spend most of its time sleeping, and feeding",
         activities: [
-            "Monkey See Monkey do: They might mimic you sticking your tongue out, even as a newborn. As the baby grows, they may mimic your other facial expressions and cooing sounds, too. Start early: hold her face-to-face, smile, open your mouth and slowly stick out your tongue. Repeat",
+            "Monkey See Monkey do: They might mimic you sticking your tongue out, even as a newborn. As the baby grows, they may mimic your other facial expressions and cooing sounds, too. Start early: hold her face-to-face, smile,open your mouth and slowly stick out  your tongue. Repeat",
             "Baby Calisthenics: With your baby on their back, gently pull their legs up to you and then side to side. Up, out, down, back, reverse. Do the same with their arms",
             "Airplane: Hold your baby firmly with both hands—one under their bottom and the other cupped on the back of her head. Lift them up in the air and let her “fly” around slowly and gently. Always firmly support their head"
         ],
@@ -239,16 +240,28 @@ const promptOptions = [
 ];
 
 export default function MilestonePage() {
-    const [selectedAge, setSelectedAge] = useState("0M");
-    const [selectedActivities, setSelectedActivities] = useState("");
-    const [selectedMotorMilestones, setSelectedMotorMilestones] = useState("");
-    const [selectedCommunicationMilestones, setSelectedCommunicationMilestones] = useState("");
-    const [selectedFeedingMilestones, setSelectedFeedingMilestones] = useState("");
-    const [selectedSensoryMilestones, setSelectedSensoryMilestones] = useState("");
-    const [selectedHyperLinks, setSelectedHyperLinks] = useState("");
-    const [videos, setVideos] = useState("");
-    const [selectedVideo, setSelectedVideo] = useState("");
+    const [selectedAge, setSelectedAge] = useState("0-3M");
+    const [selectedActivities, setSelectedActivities] = useState(promptOptions[0].activities);
+    const [selectedMotorMilestones, setSelectedMotorMilestones] = useState(promptOptions[0].motorMilestones);
+    const [selectedCommunicationMilestones, setSelectedCommunicationMilestones] = useState(promptOptions[0].communicationMilestones);
+    const [selectedFeedingMilestones, setSelectedFeedingMilestones] = useState(promptOptions[0].feedingMilestones);
+    const [selectedSensoryMilestones, setSelectedSensoryMilestones] = useState(promptOptions[0].sensoryMilestones);
+    const [selectedHyperLinks, setSelectedHyperLinks] = useState(promptOptions[0].hyperlinks);
+    const [videos, setVideos] = useState(promptOptions[0]?.videos);
+    const [selectedVideo, setSelectedVideo] = useState(null);
     const [places, setPlaces] = useState(false);
+    const [motorButtonPressed, setMotorButtonPressed] = useState(false);
+    const [flippedMotorCard, setFlippedMotorCard] = useState(false);
+    const [communicationButtonPressed, setCommunicationButtonPressed] = useState(false);
+    const [flippedCommunicationCard, setFlippedCommunicationCard] = useState(false);
+    const [feedingButtonPressed, setFeedingButtonPressed] = useState(false);
+    const [flippedFeedingCard, setFlippedFeedingCard] = useState(false);
+    const [sensoryButtonPressed, setSensoryButtonPressed] = useState(false);
+    const [flippedSensoryCard, setFlippedSensoryCard] = useState(false);
+    const [activitiesButtonPressed, setActivitiesButtonPressed] = useState(false);
+    const [flippedActivitiesCard, setFlippedActivitiesCard] = useState(false);
+    const [flippedResourcesCard, setFlippedResourcesCard] = useState(false);
+    const MotionImage = motion(Image);
 
     const handleAnswerChange = (event) => {
         for (let i = 0; i < promptOptions.length; i++) {
@@ -295,147 +308,285 @@ export default function MilestonePage() {
                     <option value="13-18M"> 13-18M </option>
                     <option value="19-24M"> 19-24M </option>
                 </Select>
-                <VStack justifyContent="start" w="30vw" spacing="4" h="80vh">
+                <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
                     <Heading textDecoration="underline">Motor</Heading>
-                    <Card maxW='sm'>
+                    <Card w="400px" h="450px">
                         <CardBody>
-                            <Stack mt='6' spacing='3'>
-                                <Image
-                                    src={trimesterImage}
-                                    alt='avacada'
-                                    borderRadius='lg'
-                                    h="300"
-                                    w="300"
-                                />
-                                <Heading size='md'> Key Points </Heading>
-                                <UnorderedList spacing="2" paddingLeft="2">
-                                    {selectedMotorMilestones.length > 0 && selectedMotorMilestones.map((milestone, index) => {
-                                        return (<ListItem key={index}>{milestone}</ListItem>);
-                                    })}
-                                </UnorderedList>
+                            <Stack mt='6' spacing='3' alignItems="center">
+                                {!flippedMotorCard ?
+                                    <MotionImage
+                                        // onClick={() => { setMotorButtonPressed(true); }}
+                                        borderRadius='lg'
+                                        initial={motorButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
+                                        animate={{ rotate: 0, scale: 1 }}
+                                        onAnimationComplete={() => setMotorButtonPressed(false)}
+                                        transition={{
+                                            type: "spring",
+                                            stiffness: 260,
+                                            damping: 20
+                                        }}
+                                        src={trimesterImage}
+                                        size="sm"
+                                        alt="Alternate Text"
+                                        style={{ width: 300, height: 300, resizeMode: 'cover' }}
+                                    />
+                                    :
+                                    <>
+                                        <Heading size='md'> Key Points </Heading>
+                                        <UnorderedList spacing="2" paddingLeft="2">
+                                            {selectedMotorMilestones.length > 0 && selectedMotorMilestones.map((milestone, index) => {
+                                                return (<ListItem key={index}>{milestone}</ListItem>);
+                                            })}
+                                        </UnorderedList>
+                                    </>
+                                }
                             </Stack>
                         </CardBody>
+                        <CardFooter>
+                            <ButtonGroup spacing='2' justifyContent={"space-between"}>
+                                <Button onClick={() => {
+                                    setFlippedMotorCard(!flippedMotorCard);
+                                    setMotorButtonPressed(true);
+                                }}>
+                                    flip
+                                </Button>
+                            </ButtonGroup>
+                        </CardFooter>
                     </Card>
                 </VStack>
-                <VStack justifyContent="start" w="30vw" spacing="4" h="80vh">
+                <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
                     <Heading textDecoration="underline">Communication</Heading>
-                    <Card maxW='sm'>
+                    <Card w="400px" h="450px">
                         <CardBody>
-                            <Stack mt='6' spacing='3'>
-                                <Image
-                                    src={physicalChangesImage}
-                                    alt='avacada'
-                                    borderRadius='lg'
-                                    h="300"
-                                    w="300"
-                                />
-                                <Heading size='md'> Key Points </Heading>
-                                <UnorderedList spacing="2" paddingLeft="2">
-                                    {selectedCommunicationMilestones.length > 0 && selectedCommunicationMilestones.map((milestone, index) => {
-                                        return (<ListItem key={index}>{milestone}</ListItem>);
-                                    })}
-                                </UnorderedList>
+                            <Stack mt='6' spacing='3' alignItems="center">
+                                {!flippedCommunicationCard ?
+                                    <MotionImage
+                                        // onClick={() => { setMotorButtonPressed(true); }}
+                                        borderRadius='lg'
+                                        initial={communicationButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
+                                        animate={{ rotate: 0, scale: 1 }}
+                                        onAnimationComplete={() => setCommunicationButtonPressed(false)}
+                                        transition={{
+                                            type: "spring",
+                                            stiffness: 260,
+                                            damping: 20
+                                        }}
+                                        src={trimesterImage}
+                                        size="sm"
+                                        alt="Alternate Text"
+                                        style={{ width: 300, height: 300, resizeMode: 'cover' }}
+                                    />
+                                    :
+                                    <>
+                                        <Heading size='md'> Key Points </Heading>
+                                        <UnorderedList spacing="2" paddingLeft="2">
+                                            {selectedCommunicationMilestones.length > 0 && selectedCommunicationMilestones.map((milestone, index) => {
+                                                return (<ListItem key={index}>{milestone}</ListItem>);
+                                            })}
+                                        </UnorderedList>
+                                    </>
+                                }
                             </Stack>
                         </CardBody>
+                        <CardFooter>
+                            <ButtonGroup spacing='2' justifyContent={"space-between"}>
+                                <Button onClick={() => {
+                                    setFlippedCommunicationCard(!communicationButtonPressed);
+                                    setCommunicationButtonPressed(true);
+                                }}>
+                                    flip
+                                </Button>
+                            </ButtonGroup>
+                        </CardFooter>
                     </Card>
                 </VStack>
-                <VStack justifyContent="start" w="30vw" spacing="4" h="80vh">
+                <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
                     <Heading textDecoration="underline">Feeding</Heading>
-                    <Card maxW='sm'>
+                    <Card w="400px" h="450px">
                         <CardBody>
-                            <Stack mt='6' spacing='3'>
-                                <Image
-                                    src={physicalChangesImage}
-                                    alt='avacada'
-                                    borderRadius='lg'
-                                    h="300"
-                                    w="300"
-                                />
-                                <Heading size='md'> Key Points </Heading>
-                                <UnorderedList spacing="2" paddingLeft="2">
-                                    {selectedFeedingMilestones.length > 0 && selectedFeedingMilestones.map((milestone, index) => {
-                                        return (<ListItem key={index}>{milestone}</ListItem>);
-                                    })}
-                                </UnorderedList>
+                            <Stack mt='6' spacing='3' alignItems="center">
+                                {!flippedFeedingCard ?
+                                    <MotionImage
+                                        // onClick={() => { setMotorButtonPressed(true); }}
+                                        borderRadius='lg'
+                                        initial={feedingButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
+                                        animate={{ rotate: 0, scale: 1 }}
+                                        onAnimationComplete={() => setFeedingButtonPressed(false)}
+                                        transition={{
+                                            type: "spring",
+                                            stiffness: 260,
+                                            damping: 20
+                                        }}
+                                        src={trimesterImage}
+                                        size="sm"
+                                        alt="Alternate Text"
+                                        style={{ width: 300, height: 300, resizeMode: 'cover' }}
+                                    />
+                                    :
+                                    <>
+                                        <Heading size='md'> Key Points </Heading>
+                                        <UnorderedList spacing="2" paddingLeft="2">
+                                            {selectedFeedingMilestones.length > 0 && selectedFeedingMilestones.map((milestone, index) => {
+                                                return (<ListItem key={index}>{milestone}</ListItem>);
+                                            })}
+                                        </UnorderedList>
+                                    </>
+                                }
                             </Stack>
                         </CardBody>
+                        <CardFooter>
+                            <ButtonGroup spacing='2' justifyContent={"space-between"}>
+                                <Button onClick={() => {
+                                    setFlippedFeedingCard(!flippedFeedingCard);
+                                    setFeedingButtonPressed(true);
+                                }}>
+                                    flip
+                                </Button>
+                            </ButtonGroup>
+                        </CardFooter>
                     </Card>
                 </VStack>
-                <VStack justifyContent="start" w="30vw" spacing="4" h="80vh">
+                <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
                     <Heading textDecoration="underline">Sensory</Heading>
-                    <Card maxW='sm'>
+                    <Card w="400px" h="450px">
                         <CardBody>
-                            <Stack mt='6' spacing='3'>
-                                <Image
-                                    src={physicalChangesImage}
-                                    alt='avacada'
-                                    borderRadius='lg'
-                                    h="300"
-                                    w="300"
-                                />
-                                <Heading size='md'> Key Points </Heading>
-                                <UnorderedList spacing="2" paddingLeft="2">
-                                    {selectedSensoryMilestones.length > 0 && selectedSensoryMilestones.map((milestone, index) => {
-                                        return (<ListItem key={index}>{milestone}</ListItem>);
-                                    })}
-                                </UnorderedList>
+                            <Stack mt='6' spacing='3' alignItems="center">
+                                {!flippedSensoryCard ?
+                                    <MotionImage
+                                        // onClick={() => { setMotorButtonPressed(true); }}
+                                        borderRadius='lg'
+                                        initial={sensoryButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
+                                        animate={{ rotate: 0, scale: 1 }}
+                                        onAnimationComplete={() => setSensoryButtonPressed(false)}
+                                        transition={{
+                                            type: "spring",
+                                            stiffness: 260,
+                                            damping: 20
+                                        }}
+                                        src={trimesterImage}
+                                        size="sm"
+                                        alt="Alternate Text"
+                                        style={{ width: 300, height: 300, resizeMode: 'cover' }}
+                                    />
+                                    :
+                                    <>
+                                        <Heading size='md'> Key Points </Heading>
+                                        <UnorderedList spacing="2" paddingLeft="2">
+                                            {selectedSensoryMilestones.length > 0 && selectedSensoryMilestones.map((milestone, index) => {
+                                                return (<ListItem key={index}>{milestone}</ListItem>);
+                                            })}
+                                        </UnorderedList>
+                                    </>
+                                }
                             </Stack>
                         </CardBody>
+                        <CardFooter>
+                            <ButtonGroup spacing='2' justifyContent={"space-between"}>
+                                <Button onClick={() => {
+                                    setFlippedSensoryCard(!flippedSensoryCard);
+                                    setSensoryButtonPressed(true);
+                                }}>
+                                    flip
+                                </Button>
+                            </ButtonGroup>
+                        </CardFooter>
                     </Card>
                 </VStack>
-                <VStack justifyContent="start" w="30vw" spacing="4" h="80vh">
+                <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
                     <Heading textDecoration="underline">Resources</Heading>
-                    <Card maxW='sm'>
+                    <Card w="400px" h="450px">
                         <CardBody>
                             <Stack mt='6' spacing='3'>
-                                <Select
-                                    placeholder='Select Video'
-                                    value={selectedVideo}
-                                    onChange={(event) => {
-                                        setSelectedVideo(event.target.value);
-                                    }}
-                                >
-                                    {videos && videos.length > 0 && videos.map((video) => {
-                                        return (<option value={video.value} key={video.key}>{video.label}</option>);
-                                    })}
-                                </Select>
-                                <iframe
-                                    height="300px"
-                                    width="100%"
-                                    src={selectedVideo || "https://www.youtube.com/embed/rv-fBnFbQAk"}
-                                    title="YouTube video player"
-                                    allowFullScreen
-                                />
-                                <Heading size='md'> Key Points </Heading>
-                                <UnorderedList spacing="2" paddingLeft="2">
-                                    {selectedHyperLinks.length > 0 && selectedHyperLinks.map((milestone, index) => {
-                                        return (<ListItem key={index}>{milestone}</ListItem>);
-                                    })}
-                                </UnorderedList>
+                                {!flippedResourcesCard ?
+                                    <>
+                                        <Select
+                                            placeholder='Select Video'
+                                            value={selectedVideo}
+                                            onChange={(event) => {
+                                                setSelectedVideo(event.target.value);
+                                            }}
+                                        >
+                                            {videos && videos.length > 0 && videos.map((video) => {
+                                                return (<option value={video.value} key={video.key}>{video.label}</option>);
+                                            })}
+                                        </Select>
+                                        <iframe
+                                            height="250px"
+                                            width="100%"
+                                            src={selectedVideo || "https://www.youtube.com/embed/rv-fBnFbQAk"}
+                                            title="YouTube video player"
+                                            allowFullScreen
+                                        />
+                                    </>
+                                    :
+                                    <>
+                                        <Heading size='md'> Key Points </Heading>
+                                        <UnorderedList spacing="2" paddingLeft="2">
+                                            {selectedHyperLinks.length > 0 && selectedHyperLinks.map((milestone, index) => {
+                                                return (<ListItem key={index}>{milestone}</ListItem>);
+                                            })}
+                                        </UnorderedList>
+                                    </>
+                                }
                             </Stack>
                         </CardBody>
+                        <CardFooter>
+                            <ButtonGroup spacing='2' justifyContent={"space-between"}>
+                                <Button onClick={() => {
+                                    setFlippedResourcesCard(!flippedResourcesCard);
+                                }}>
+                                    flip
+                                </Button>
+                            </ButtonGroup>
+                        </CardFooter>
                     </Card>
                 </VStack>
-                <VStack justifyContent="start" w="30vw" spacing="4" h="80vh">
+                <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
                     <Heading textDecoration="underline">Potential Activities</Heading>
-                    <Card maxW='sm'>
+                    <Card w="400px" h="450px">
                         <CardBody>
-                            <Stack mt='6' spacing='3'>
-                                <Image
-                                    src={physicalChangesImage}
-                                    alt='avacada'
-                                    borderRadius='lg'
-                                    h="300"
-                                    w="300"
-                                />
-                                <Heading size='md'> Key Points </Heading>
-                                <UnorderedList spacing="2" paddingLeft="2">
-                                    {selectedActivities.length > 0 && selectedActivities.map((milestone, index) => {
-                                        return (<ListItem key={index}>{milestone}</ListItem>);
-                                    })}
-                                </UnorderedList>
+                            <Stack mt='6' spacing='3' alignItems="center">
+                                {!flippedActivitiesCard ?
+                                    <MotionImage
+                                        // onClick={() => { setMotorButtonPressed(true); }}
+                                        borderRadius='lg'
+                                        initial={activitiesButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
+                                        animate={{ rotate: 0, scale: 1 }}
+                                        onAnimationComplete={() => setActivitiesButtonPressed(false)}
+                                        transition={{
+                                            type: "spring",
+                                            stiffness: 260,
+                                            damping: 20
+                                        }}
+                                        src={trimesterImage}
+                                        size="sm"
+                                        alt="Alternate Text"
+                                        style={{ width: 300, height: 300, resizeMode: 'cover' }}
+                                    />
+                                    :
+                                    <>
+                                        <Heading size='md'> Key Points </Heading>
+                                        <Box overflowY="auto" w="100%" h="260px" alignItems="center" flexDir="column" display="flex">
+                                            <UnorderedList spacing="2" paddingLeft="2">
+                                                {selectedActivities.length > 0 && selectedActivities.map((milestone, index) => {
+                                                    return (<ListItem key={index}>{milestone}</ListItem>);
+                                                })}
+                                            </UnorderedList>
+                                        </Box>
+                                    </>
+                                }
                             </Stack>
                         </CardBody>
+                        <CardFooter>
+                            <ButtonGroup spacing='2' justifyContent={"space-between"}>
+                                <Button onClick={() => {
+                                    setFlippedActivitiesCard(!flippedActivitiesCard);
+                                    setActivitiesButtonPressed(true);
+                                }}>
+                                    flip
+                                </Button>
+                            </ButtonGroup>
+                        </CardFooter>
                     </Card>
                 </VStack>
             </HStack>
