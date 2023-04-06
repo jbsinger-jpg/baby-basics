@@ -1,6 +1,6 @@
 import { Box, Button, ButtonGroup, Card, CardBody, CardFooter, HStack, Heading, Image, ListItem, Select, Stack, UnorderedList, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { physicalChangesImage, trimesterImage } from '../images/maternalPageImages';
+import { trimesterImage } from '../images/maternalPageImages';
 import FloatingActionButtonsBabyInfo from '../components/FloatingActionButtonsBabyInfo';
 import GoogleMapsModal from '../components/modals/GoogleMapsModal';
 import { motion } from 'framer-motion';

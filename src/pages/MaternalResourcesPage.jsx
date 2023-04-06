@@ -1,13 +1,290 @@
-import { Button, Card, CardBody, HStack, Heading, Image, ListItem, Select, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, UnorderedList, VStack } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, Card, CardBody, CardFooter, HStack, Heading, Image, ListItem, Select, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, UnorderedList, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import FloatingActionButtonsMaternalInfo from '../components/FloatingActionButtonsMaternalInfo';
 import { healthAdviceBabyImage, physicalChangesImage, pregnantSymptomsImage, trimesterImage } from '../images/maternalPageImages';
 import GoogleMapsModal from '../components/modals/GoogleMapsModal';
+import { motion } from 'framer-motion';
 
 // trimester weeks
 const trimester1Weeks = Array.from({ length: 12 }, (_, i) => i + 1);
 const trimester2Weeks = Array.from({ length: 13 }, (_, i) => i + 13);
 const trimester3Weeks = Array.from({ length: 14 }, (_, i) => i + 26);
+
+const trimesterWeekInformation = [
+  {
+    week: 1,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 2,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 3,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 4,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 5,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 6,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 7,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 8,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 9,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 10,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 11,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 12,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 13,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 14,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 15,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 16,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 17,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 18,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 19,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 20,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 21,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 22,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 23,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 24,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 25,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 26,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 27,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 28,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 29,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 30,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 31,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 32,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 33,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 34,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 35,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 36,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 37,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 38,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+  {
+    week: 39,
+    babyResourceLinks: [],
+    motherHealthAdvice: [],
+    motherPhysicalChanges: [],
+    motherPregnantSymptoms: []
+  },
+];
 
 // TODO: Order information based on the trimester
 export default function MaternalResourcesPage() {
@@ -15,6 +292,18 @@ export default function MaternalResourcesPage() {
   const [videos, setVideos] = useState(null);
   const [searchPlaces, setSearchPlaces] = useState(false);
   const [trimesterWeeks, setTrimesterWeeks] = useState([...trimester1Weeks]);
+
+  const [flippedTrimesterCard, setFlippedTrimesterCard] = useState(false);
+  const [trimesterButtonPressed, setTrimesterButtonPressed] = useState(false);
+  const [selectedTrimesterInformation, setSelectedTrimesterInformation] = useState([]);
+
+  const [flippedResourcesCard, setFlippedResourcesCard] = useState(false);
+  const [resourceButtonPressed, setResourceButtonPressed] = useState(false);
+
+  const [selectedHyperLinks, setSelectedHyperLinks] = useState([]);
+
+  const MotionImage = motion(Image);
+  const MotionBox = motion(Box);
 
   const handleSearchPlacesDialogOpen = () => {
     setSearchPlaces(true);
@@ -49,97 +338,122 @@ export default function MaternalResourcesPage() {
             <HStack w="100vw" justifyContent="space-evenly" alignItems="start">
               <VStack justifyContent="start" w="30vw" spacing="4" h="100vh">
                 <Heading textDecoration="underline">Trimester Information</Heading>
-                <Card maxW='sm'>
+                <Card w="400px" h="450px">
                   <CardBody>
-                    <Stack mt='6' spacing='3'>
-                      <Image
-                        src={trimesterImage}
-                        alt='avacada'
-                        borderRadius='lg'
-                        h="300"
-                        w="300"
-                      />
-                      <Heading size='md'> General </Heading>
-                      <UnorderedList>
-                        <ListItem>
-                          Embryo development: In the first few weeks of pregnancy, the embryo undergoes rapid development, with cells dividing and multiplying to form the different organs and systems of the body. By the end of the first trimester, the baby will have developed all of its major organs and systems.
-                        </ListItem>
-                        <ListItem>
-                          Fetal heartbeat: Around week 6 of pregnancy, the baby's heart will begin to beat, and this can often be seen on an ultrasound.
-                        </ListItem>
-                        <ListItem>
-                          Limb development: By week 8, the baby will have developed arms and legs, and fingers and toes will start to form.
-                        </ListItem>
-                        <ListItem>
-                          Brain development: The baby's brain will begin to develop in the first trimester, and by week 10, the brain will have grown to be quite complex.
-                        </ListItem>
-                        <ListItem>
-                          Movement: While the baby is still too small to feel any movements in the first trimester, it will start to make tiny movements of its own, such as kicking its legs and moving its arms.
-                        </ListItem>
-                        <ListItem>
-                          Gender determination: Although the baby's genitals will begin to develop in the first trimester, it is usually not possible to determine the gender until later in the pregnancy.
-                        </ListItem>
-                      </UnorderedList>
+                    <Stack mt='6' spacing='3' alignItems="center">
+                      {!flippedTrimesterCard ?
+                        <MotionImage
+                          // onClick={() => { setTrimesterButtonPressed(true); }}
+                          borderRadius='lg'
+                          initial={trimesterButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
+                          animate={{ rotate: 0, scale: 1 }}
+                          onAnimationComplete={() => setTrimesterButtonPressed(false)}
+                          transition={{
+                            type: "spring",
+                            stiffness: 260,
+                            damping: 20
+                          }}
+                          src={trimesterImage}
+                          size="sm"
+                          alt="Alternate Text"
+                          style={{ width: 300, height: 300, resizeMode: 'cover' }}
+                        />
+                        :
+                        <>
+                          <Heading size='md'> Key Points </Heading>
+                          <MotionBox
+                            initial={trimesterButtonPressed ? { scale: 0 } : { scale: 1 }}
+                            animate={{ scale: 1 }}
+                            onAnimationComplete={() => setTrimesterButtonPressed(false)}
+                            overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
+                            <UnorderedList spacing="2" paddingLeft="2">
+                              {selectedTrimesterInformation.length > 0 && selectedTrimesterInformation.map((milestone, index) => {
+                                return (<ListItem key={index}>{milestone}</ListItem>);
+                              })}
+                            </UnorderedList>
+                          </MotionBox>
+                        </>
+                      }
                     </Stack>
                   </CardBody>
-                </Card>
-              </VStack>
-              <VStack justifyContent="start" w="30vw" spacing="4" h="100vh">
-                <Heading textDecoration="underline">Physical Changes</Heading>
-                <Card maxW='sm'>
-                  <CardBody>
-                    <Stack mt='6' spacing='3'>
-                      <Image
-                        src={physicalChangesImage}
-                        alt='avacada'
-                        borderRadius='lg'
-                        h="300"
-                        w="300"
-                      />
-                      <Heading size='md'> Week 16! </Heading>
-                      <Text>
-                        Your baby is the size of an Avacada!
-                        The weight is around 100g, which is the same as a medium bag of salad.
-                        Your baby is starting to pull faces now, but any smiling or frowning will be completely random, as there's no muscle control yet.
-                      </Text>
-                    </Stack>
-                  </CardBody>
+                  <CardFooter>
+                    <ButtonGroup spacing='2' justifyContent={"space-between"}>
+                      <Button onClick={() => {
+                        setFlippedTrimesterCard(!flippedTrimesterCard);
+                        setTrimesterButtonPressed(true);
+                      }}>
+                        flip
+                      </Button>
+                    </ButtonGroup>
+                  </CardFooter>
                 </Card>
               </VStack>
               <VStack justifyContent="start" w="30vw">
                 <Heading textDecoration="underline">Resource Links</Heading>
-                <Card maxW='sm'>
+                <Card w="400px" h="450px">
                   <CardBody>
-                    <Stack mt='6' spacing='3'>
-                      <Select
-                        placeholder='Select Video'
-                        value={selectedVideo}
-                        onChange={(event) => {
-                          setSelectedVideo(event.target.value);
-                        }}
-                      >
-                        {videos && videos.length > 0 && videos.map((video) => {
-                          return (<option value={video.value} key={video.key}>{video.label}</option>);
-                        })}
-                      </Select>
-                      <iframe
-                        height="300px"
-                        width="100%"
-                        src={selectedVideo || "https://www.youtube.com/embed/rv-fBnFbQAk"}
-                        title="YouTube video player"
-                        allowFullScreen
-                      />
-                      <Heading size='md'> Week 16! </Heading>
-                      <Text>
-                        Have fun baking that baby bun!
-                      </Text>
+                    <Stack mt='6' spacing='3' alignItems="center">
+                      {!flippedResourcesCard ?
+                        <>
+                          <Select
+                            placeholder='Select Video'
+                            value={selectedVideo}
+                            onChange={(event) => {
+                              setSelectedVideo(event.target.value);
+                            }}
+                          >
+                            {videos && videos.length > 0 && videos.map((video) => {
+                              return (<option value={video.value} key={video.key}>{video.label}</option>);
+                            })}
+                          </Select>
+                          <iframe
+                            height="250px"
+                            width="100%"
+                            src={selectedVideo || "https://www.youtube.com/embed/rv-fBnFbQAk"}
+                            title="YouTube video player"
+                            allowFullScreen
+                          />
+                        </>
+                        :
+                        <>
+                          <Heading size='md'> Key Resources </Heading>
+                          <MotionBox
+                            initial={resourceButtonPressed ? { scale: 0 } : { scale: 1 }}
+                            animate={{ scale: 1 }}
+                            onAnimationComplete={() => setResourceButtonPressed(false)}
+                            overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
+                            <UnorderedList spacing="2" paddingLeft="2">
+                              {selectedHyperLinks.length > 0 && selectedHyperLinks.map((milestone, index) => {
+                                return (<ListItem key={index}>{milestone}</ListItem>);
+                              })}
+                            </UnorderedList>
+                          </MotionBox>
+                        </>
+
+                      }
                     </Stack>
                   </CardBody>
+                  <CardFooter>
+                    <ButtonGroup spacing='2' justifyContent={"space-between"}>
+                      <Button onClick={() => {
+                        setFlippedResourcesCard(!flippedResourcesCard);
+                        setResourceButtonPressed(true);
+                      }}>
+                        flip
+                      </Button>
+                    </ButtonGroup>
+                  </CardFooter>
                 </Card>
               </VStack>
             </HStack>
           </TabPanel>
           <TabPanel>
+            <Select placeholder='Select Week' w="20vw">
+              {trimesterWeeks && trimesterWeeks.map(week => {
+                return (<option value={week} key={week}>{week}</option>);
+
+              })}
+            </Select>
             <HStack w="100vw" justifyContent="space-evenly" alignItems="start">
               <VStack h="60vh" justifyContent="space-between">
                 <VStack w="30vw">
