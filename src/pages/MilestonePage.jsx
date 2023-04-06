@@ -240,7 +240,6 @@ const promptOptions = [
 
 export default function MilestonePage() {
     const [selectedAge, setSelectedAge] = useState("0M");
-    const [selectedAnswer, setSelectedAnswer] = useState("");
     const [selectedActivities, setSelectedActivities] = useState("");
     const [selectedMotorMilestones, setSelectedMotorMilestones] = useState("");
     const [selectedCommunicationMilestones, setSelectedCommunicationMilestones] = useState("");
@@ -254,7 +253,6 @@ export default function MilestonePage() {
     const handleAnswerChange = (event) => {
         for (let i = 0; i < promptOptions.length; i++) {
             if (promptOptions[i].ageSelected === event.target.value) {
-                setSelectedAnswer(promptOptions[i].answer);
                 setSelectedActivities(promptOptions[i].activities);
                 setSelectedMotorMilestones(promptOptions[i].motorMilestones);
                 setSelectedFeedingMilestones(promptOptions[i].feedingMilestones);
@@ -276,8 +274,8 @@ export default function MilestonePage() {
                 handleSearchPlacesDialogOpen={handleSearchPlacesDialogOpen}
             />
             <GoogleMapsModal
-                setPlaces={setPlaces}
-                places={places}
+                setSearchPlaces={setPlaces}
+                searchPlaces={places}
             />
             <HStack flexWrap={"wrap"} spacing="12" justifyContent="center" alignItems="start" marginTop="10">
                 <Select
