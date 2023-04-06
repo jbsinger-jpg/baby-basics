@@ -261,6 +261,9 @@ export default function MilestonePage() {
     const [activitiesButtonPressed, setActivitiesButtonPressed] = useState(false);
     const [flippedActivitiesCard, setFlippedActivitiesCard] = useState(false);
     const [flippedResourcesCard, setFlippedResourcesCard] = useState(false);
+    const [resourceButtonPressed, setResourceButtonPressed] = useState(false);
+
+    const MotionBox = motion(Box);
     const MotionImage = motion(Image);
 
     const handleAnswerChange = (event) => {
@@ -333,13 +336,17 @@ export default function MilestonePage() {
                                     :
                                     <>
                                         <Heading size='md'> Key Points </Heading>
-                                        <Box overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
+                                        <MotionBox
+                                            initial={motorButtonPressed ? { scale: 0 } : { scale: 1 }}
+                                            animate={{ scale: 1 }}
+                                            onAnimationComplete={() => setMotorButtonPressed(false)}
+                                            overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
                                             <UnorderedList>
                                                 {selectedMotorMilestones.length > 0 && selectedMotorMilestones.map((milestone, index) => {
                                                     return (<ListItem key={index}>{milestone}</ListItem>);
                                                 })}
                                             </UnorderedList>
-                                        </Box>
+                                        </MotionBox>
                                     </>
                                 }
                             </Stack>
@@ -381,13 +388,18 @@ export default function MilestonePage() {
                                     :
                                     <>
                                         <Heading size='md'> Key Points </Heading>
-                                        <Box overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
+                                        <MotionBox
+                                            initial={communicationButtonPressed ? { scale: 0 } : { scale: 1 }}
+                                            animate={{ scale: 1 }}
+                                            onAnimationComplete={() => setCommunicationButtonPressed(false)}
+                                            overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex"
+                                        >
                                             <UnorderedList spacing="2" paddingLeft="2">
                                                 {selectedCommunicationMilestones.length > 0 && selectedCommunicationMilestones.map((milestone, index) => {
                                                     return (<ListItem key={index}>{milestone}</ListItem>);
                                                 })}
                                             </UnorderedList>
-                                        </Box>
+                                        </MotionBox>
                                     </>
                                 }
                             </Stack>
@@ -395,7 +407,7 @@ export default function MilestonePage() {
                         <CardFooter>
                             <ButtonGroup spacing='2' justifyContent={"space-between"}>
                                 <Button onClick={() => {
-                                    setFlippedCommunicationCard(!communicationButtonPressed);
+                                    setFlippedCommunicationCard(!flippedCommunicationCard);
                                     setCommunicationButtonPressed(true);
                                 }}>
                                     flip
@@ -429,13 +441,17 @@ export default function MilestonePage() {
                                     :
                                     <>
                                         <Heading size='md'> Key Points </Heading>
-                                        <Box overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
+                                        <MotionBox
+                                            initial={feedingButtonPressed ? { scale: 0 } : { scale: 1 }}
+                                            animate={{ scale: 1 }}
+                                            onAnimationComplete={() => setFeedingButtonPressed(false)}
+                                            overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
                                             <UnorderedList spacing="2" paddingLeft="2">
                                                 {selectedFeedingMilestones.length > 0 && selectedFeedingMilestones.map((milestone, index) => {
                                                     return (<ListItem key={index}>{milestone}</ListItem>);
                                                 })}
                                             </UnorderedList>
-                                        </Box>
+                                        </MotionBox>
                                     </>
                                 }
                             </Stack>
@@ -477,13 +493,17 @@ export default function MilestonePage() {
                                     :
                                     <>
                                         <Heading size='md'> Key Points </Heading>
-                                        <Box overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
+                                        <MotionBox
+                                            initial={sensoryButtonPressed ? { scale: 0 } : { scale: 1 }}
+                                            animate={{ scale: 1 }}
+                                            onAnimationComplete={() => setSensoryButtonPressed(false)}
+                                            overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
                                             <UnorderedList spacing="2" paddingLeft="2">
                                                 {selectedSensoryMilestones.length > 0 && selectedSensoryMilestones.map((milestone, index) => {
                                                     return (<ListItem key={index}>{milestone}</ListItem>);
                                                 })}
                                             </UnorderedList>
-                                        </Box>
+                                        </MotionBox>
                                     </>
                                 }
                             </Stack>
@@ -529,13 +549,17 @@ export default function MilestonePage() {
                                     :
                                     <>
                                         <Heading size='md'> Key Resources </Heading>
-                                        <Box overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
+                                        <MotionBox
+                                            initial={resourceButtonPressed ? { scale: 0 } : { scale: 1 }}
+                                            animate={{ scale: 1 }}
+                                            onAnimationComplete={() => setResourceButtonPressed(false)}
+                                            overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
                                             <UnorderedList spacing="2" paddingLeft="2">
                                                 {selectedHyperLinks.length > 0 && selectedHyperLinks.map((milestone, index) => {
                                                     return (<ListItem key={index}>{milestone}</ListItem>);
                                                 })}
                                             </UnorderedList>
-                                        </Box>
+                                        </MotionBox>
                                     </>
 
                                 }
@@ -545,6 +569,7 @@ export default function MilestonePage() {
                             <ButtonGroup spacing='2' justifyContent={"space-between"}>
                                 <Button onClick={() => {
                                     setFlippedResourcesCard(!flippedResourcesCard);
+                                    setResourceButtonPressed(true);
                                 }}>
                                     flip
                                 </Button>
@@ -577,13 +602,17 @@ export default function MilestonePage() {
                                     :
                                     <>
                                         <Heading size='md'> Key Points </Heading>
-                                        <Box overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
+                                        <MotionBox
+                                            initial={activitiesButtonPressed ? { scale: 0 } : { scale: 1 }}
+                                            animate={{ scale: 1 }}
+                                            onAnimationComplete={() => setActivitiesButtonPressed(false)}
+                                            overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
                                             <UnorderedList spacing="2" paddingLeft="2">
                                                 {selectedActivities.length > 0 && selectedActivities.map((milestone, index) => {
                                                     return (<ListItem key={index}>{milestone}</ListItem>);
                                                 })}
                                             </UnorderedList>
-                                        </Box>
+                                        </MotionBox>
                                     </>
                                 }
                             </Stack>

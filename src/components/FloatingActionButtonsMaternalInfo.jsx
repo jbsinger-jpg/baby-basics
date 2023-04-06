@@ -19,7 +19,6 @@ const ColorModeToggleButton = () => {
                 borderRadius="50%"
                 boxShadow="md"
                 _hover={{ boxShadow: "lg" }}
-                zIndex={999}
             >
                 {useColorModeValue("Dark", "Light")}
             </IconButton>
@@ -39,6 +38,8 @@ export default function FloatingActionButtonsMaternalInfo({ handleSearchPlacesDi
             top="14"
             right="4"
             position="fixed"
+            zIndex={999}
+
         >
             <ColorModeToggleButton />
             <Tooltip label="Look up a Location">
@@ -50,7 +51,6 @@ export default function FloatingActionButtonsMaternalInfo({ handleSearchPlacesDi
                     borderRadius="50%"
                     boxShadow="md"
                     _hover={{ boxShadow: "lg" }}
-                    zIndex={999}
                 />
             </Tooltip>
             <Tooltip label="Baby Milestones">
@@ -61,10 +61,8 @@ export default function FloatingActionButtonsMaternalInfo({ handleSearchPlacesDi
                     borderRadius="50%"
                     boxShadow="md"
                     _hover={{ boxShadow: "lg" }}
-                    zIndex={999}
                     onClick={handleMilestoneResources}
                 >
-                    Baby Milestones
                 </IconButton>
             </Tooltip>
         </VStack>
