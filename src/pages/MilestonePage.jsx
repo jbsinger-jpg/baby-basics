@@ -333,11 +333,13 @@ export default function MilestonePage() {
                                     :
                                     <>
                                         <Heading size='md'> Key Points </Heading>
-                                        <UnorderedList spacing="2" paddingLeft="2">
-                                            {selectedMotorMilestones.length > 0 && selectedMotorMilestones.map((milestone, index) => {
-                                                return (<ListItem key={index}>{milestone}</ListItem>);
-                                            })}
-                                        </UnorderedList>
+                                        <Box overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
+                                            <UnorderedList>
+                                                {selectedMotorMilestones.length > 0 && selectedMotorMilestones.map((milestone, index) => {
+                                                    return (<ListItem key={index}>{milestone}</ListItem>);
+                                                })}
+                                            </UnorderedList>
+                                        </Box>
                                     </>
                                 }
                             </Stack>
@@ -379,11 +381,13 @@ export default function MilestonePage() {
                                     :
                                     <>
                                         <Heading size='md'> Key Points </Heading>
-                                        <UnorderedList spacing="2" paddingLeft="2">
-                                            {selectedCommunicationMilestones.length > 0 && selectedCommunicationMilestones.map((milestone, index) => {
-                                                return (<ListItem key={index}>{milestone}</ListItem>);
-                                            })}
-                                        </UnorderedList>
+                                        <Box overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
+                                            <UnorderedList spacing="2" paddingLeft="2">
+                                                {selectedCommunicationMilestones.length > 0 && selectedCommunicationMilestones.map((milestone, index) => {
+                                                    return (<ListItem key={index}>{milestone}</ListItem>);
+                                                })}
+                                            </UnorderedList>
+                                        </Box>
                                     </>
                                 }
                             </Stack>
@@ -425,11 +429,13 @@ export default function MilestonePage() {
                                     :
                                     <>
                                         <Heading size='md'> Key Points </Heading>
-                                        <UnorderedList spacing="2" paddingLeft="2">
-                                            {selectedFeedingMilestones.length > 0 && selectedFeedingMilestones.map((milestone, index) => {
-                                                return (<ListItem key={index}>{milestone}</ListItem>);
-                                            })}
-                                        </UnorderedList>
+                                        <Box overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
+                                            <UnorderedList spacing="2" paddingLeft="2">
+                                                {selectedFeedingMilestones.length > 0 && selectedFeedingMilestones.map((milestone, index) => {
+                                                    return (<ListItem key={index}>{milestone}</ListItem>);
+                                                })}
+                                            </UnorderedList>
+                                        </Box>
                                     </>
                                 }
                             </Stack>
@@ -471,11 +477,13 @@ export default function MilestonePage() {
                                     :
                                     <>
                                         <Heading size='md'> Key Points </Heading>
-                                        <UnorderedList spacing="2" paddingLeft="2">
-                                            {selectedSensoryMilestones.length > 0 && selectedSensoryMilestones.map((milestone, index) => {
-                                                return (<ListItem key={index}>{milestone}</ListItem>);
-                                            })}
-                                        </UnorderedList>
+                                        <Box overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
+                                            <UnorderedList spacing="2" paddingLeft="2">
+                                                {selectedSensoryMilestones.length > 0 && selectedSensoryMilestones.map((milestone, index) => {
+                                                    return (<ListItem key={index}>{milestone}</ListItem>);
+                                                })}
+                                            </UnorderedList>
+                                        </Box>
                                     </>
                                 }
                             </Stack>
@@ -496,7 +504,7 @@ export default function MilestonePage() {
                     <Heading textDecoration="underline">Resources</Heading>
                     <Card w="400px" h="450px">
                         <CardBody>
-                            <Stack mt='6' spacing='3'>
+                            <Stack mt='6' spacing='3' alignItems="center">
                                 {!flippedResourcesCard ?
                                     <>
                                         <Select
@@ -520,13 +528,16 @@ export default function MilestonePage() {
                                     </>
                                     :
                                     <>
-                                        <Heading size='md'> Key Points </Heading>
-                                        <UnorderedList spacing="2" paddingLeft="2">
-                                            {selectedHyperLinks.length > 0 && selectedHyperLinks.map((milestone, index) => {
-                                                return (<ListItem key={index}>{milestone}</ListItem>);
-                                            })}
-                                        </UnorderedList>
+                                        <Heading size='md'> Key Resources </Heading>
+                                        <Box overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
+                                            <UnorderedList spacing="2" paddingLeft="2">
+                                                {selectedHyperLinks.length > 0 && selectedHyperLinks.map((milestone, index) => {
+                                                    return (<ListItem key={index}>{milestone}</ListItem>);
+                                                })}
+                                            </UnorderedList>
+                                        </Box>
                                     </>
+
                                 }
                             </Stack>
                         </CardBody>
@@ -566,7 +577,7 @@ export default function MilestonePage() {
                                     :
                                     <>
                                         <Heading size='md'> Key Points </Heading>
-                                        <Box overflowY="auto" w="100%" h="260px" alignItems="center" flexDir="column" display="flex">
+                                        <Box overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
                                             <UnorderedList spacing="2" paddingLeft="2">
                                                 {selectedActivities.length > 0 && selectedActivities.map((milestone, index) => {
                                                     return (<ListItem key={index}>{milestone}</ListItem>);
