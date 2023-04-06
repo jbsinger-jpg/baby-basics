@@ -10,276 +10,258 @@ const trimester1Weeks = Array.from({ length: 12 }, (_, i) => i + 1);
 const trimester2Weeks = Array.from({ length: 13 }, (_, i) => i + 13);
 const trimester3Weeks = Array.from({ length: 14 }, (_, i) => i + 26);
 
+const trimesterPhaseInformation = [
+  {
+    stage: 1,
+    babyDevelopment: [
+
+    ],
+  },
+  {
+    stage: 2,
+    babyDevelopment: [
+
+    ],
+  },
+  {
+    stage: 3,
+    babyDevelopment: [
+
+    ],
+  }
+];
+
 const trimesterWeekInformation = [
   {
     week: 1,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 2,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 3,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 4,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 5,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 6,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 7,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 8,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 9,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 10,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 11,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 12,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 13,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 14,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 15,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 16,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 17,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 18,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 19,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 20,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 21,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 22,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 23,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 24,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 25,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 26,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 27,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 28,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 29,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 30,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 31,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 32,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 33,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 34,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 35,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 36,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 37,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 38,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
   },
   {
     week: 39,
-    babyResourceLinks: [],
     motherHealthAdvice: [],
     motherPhysicalChanges: [],
     motherPregnantSymptoms: []
@@ -329,12 +311,6 @@ export default function MaternalResourcesPage() {
         </TabList>
         <TabPanels>
           <TabPanel>
-            <Select placeholder='Select Week' w="20vw">
-              {trimesterWeeks && trimesterWeeks.map(week => {
-                return (<option value={week} key={week}>{week}</option>);
-
-              })}
-            </Select>
             <HStack w="100vw" justifyContent="space-evenly" alignItems="start">
               <VStack justifyContent="start" w="30vw" spacing="4" h="100vh">
                 <Heading textDecoration="underline">Trimester Information</Heading>
@@ -389,7 +365,7 @@ export default function MaternalResourcesPage() {
                 </Card>
               </VStack>
               <VStack justifyContent="start" w="30vw">
-                <Heading textDecoration="underline">Resource Links</Heading>
+                <Heading textDecoration="underline">Trimester Development</Heading>
                 <Card w="400px" h="450px">
                   <CardBody>
                     <Stack mt='6' spacing='3' alignItems="center">
@@ -448,7 +424,7 @@ export default function MaternalResourcesPage() {
             </HStack>
           </TabPanel>
           <TabPanel>
-            <Select placeholder='Select Week' w="20vw">
+            <Select placeholder='Select Week' w="20vw" marginBottom="15px">
               {trimesterWeeks && trimesterWeeks.map(week => {
                 return (<option value={week} key={week}>{week}</option>);
 
