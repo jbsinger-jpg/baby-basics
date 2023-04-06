@@ -341,7 +341,7 @@ export default function MilestonePage() {
                                             animate={{ scale: 1 }}
                                             onAnimationComplete={() => setMotorButtonPressed(false)}
                                             overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
-                                            <UnorderedList>
+                                            <UnorderedList spacing="2" paddingLeft="2">
                                                 {selectedMotorMilestones.length > 0 && selectedMotorMilestones.map((milestone, index) => {
                                                     return (<ListItem key={index}>{milestone}</ListItem>);
                                                 })}
