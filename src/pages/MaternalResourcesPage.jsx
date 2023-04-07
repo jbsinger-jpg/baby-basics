@@ -79,7 +79,7 @@ const trimesterPhaseInformation = [
       "Contractions leading to labor"
     ],
     recommendations: [
-      "Work out your pelvic floor by doing Kegel exercises. These exercises are important" + 
+      "Work out your pelvic floor by doing Kegel exercises. These exercises are important" +
       " because  Kegels can help heal perineal tissues, which are stretched during vaginal birth.",
       "Take prenatal vitamins",
       "Keep your teeth and gums healthy. Poor dental hygiene is linked to premature labor."
@@ -88,6 +88,7 @@ const trimesterPhaseInformation = [
 ];
 
 // TODO: Order information based on the trimester
+// TODO: Break down information into one page
 export default function MaternalResourcesPage() {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [videos, setVideos] = useState(null);
