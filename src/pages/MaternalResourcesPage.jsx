@@ -1,9 +1,10 @@
-import { Box, Button, ButtonGroup, Card, CardBody, CardFooter, HStack, Heading, Image, ListItem, Select, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, UnorderedList, VStack } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, Card, CardBody, CardFooter, HStack, Heading, Icon, Image, ListItem, Select, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, UnorderedList, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import FloatingActionButtonsMaternalInfo from '../components/FloatingActionButtonsMaternalInfo';
 import { healthAdviceBabyImage, physicalChangesImage, pregnantSymptomsImage, trimesterImage } from '../images/maternalPageImages';
 import GoogleMapsModal from '../components/modals/GoogleMapsModal';
 import { motion } from 'framer-motion';
+import Woman2Icon from '@mui/icons-material/Woman2';
 
 // trimester weeks
 const trimester1Weeks = Array.from({ length: 12 }, (_, i) => i + 1);
@@ -14,258 +15,76 @@ const trimesterPhaseInformation = [
   {
     stage: 1,
     babyDevelopment: [
-
+      "Week 1-2: Fertilization of the egg and formation of the zygote",
+      "Week 3-4: Implantation of the zygote in the uterus and formation of the embryonic disc, which will eventually develop into the baby and the placenta",
+      "Week 5-8: Formation of major organs and body systems, including the heart, brain, spinal cord, and limbs",
+      "Week 9-12: Formation of the fetus, which looks more like a human with distinct facial features, fingers, and toes. The fetus is also able to move, and the organs continue to develop."
     ],
+    motherPregnancySymptoms: [
+      "Breast tenderness and swelling",
+      "Fatigue",
+      "Nausea and vomiting",
+      "Increased Urination",
+      "Mood Swings",
+      "Light spotting, or bleeding",
+      "Heightened sense of smell"
+    ],
+    recommendations: [
+      "Urine tests: if left untreated can trigger pre-term labor",
+      "Blood tests: check Rh status, iron levels, blood sugar (gestional diabetes), rubella or HIV, Hep. B, and syphilis"
+    ]
   },
   {
     stage: 2,
     babyDevelopment: [
-
+      "Week 13 - 16: The fetus is able to make facial expressions and can suck its thumb.The eyes move to the front of the face, and the ears are in their final position.The fetal heartbeat can be heard using a Doppler device.",
+      "Week 17 - 20: The fetus grows rapidly and weighs around 10 ounces.Hair, eyebrows, and eyelashes begin to grow.The mother may feel the baby's movements for the first time.",
+      "Week 21 - 24: The fetus continues to grow and gain weight.The lungs are developing, and the baby may practice breathing movements.The skin is still thin and translucent.",
+      "Week 25-28: The fetus is now viable, meaning it has a chance of survival if born prematurely. The eyes can open and close, and the baby can hear sounds outside the womb."
     ],
+    motherPregnancySymptoms: [
+      "Growing belly",
+      "Increased appetite",
+      "Improved energy levels",
+      "Nasal congestion",
+      "Skin changes: Darkening of skin, stretch marks",
+      "Heartburn or indegestion",
+      "Braxton Hicks contractions",
+      "Swelling of feet or ankles",
+      "Backache"
+    ],
+    recommendations: [
+      "Swelling will cause changes to your circulation that make it hard for your blood to get from your legs to your heart." +
+      "To help prevent this drink water throughout the day and exercise lightly but regularly to increase blood flow.",
+
+    ]
   },
   {
     stage: 3,
     babyDevelopment: [
-
+      "Week 29-32: The fetus continues to gain weight and fill out. The bones are fully formed but still soft and pliable. The baby's movements may feel stronger and more frequent.",
+      "Week 33-36: The baby's growth slows down, and the lungs are nearly fully developed. The baby may settle into a head-down position in preparation for birth.",
+      "Week 37-40: The baby is considered full-term and ready for birth. The average weight is around 7.5 pounds, but it can vary widely. The baby's head may engage in the pelvis in preparation for delivery."
     ],
+    motherPregnancySymptoms: [
+      "Braxton Hicks contractions become more frequent and intense",
+      "Shortness of breath",
+      "Fatigue",
+      "Increased pressure on the bladder and rectum",
+      "Difficulty sleeping",
+      "Braxton Hicks contractions become more frequent and intense",
+      "Swelling in the hands, feet, and face",
+      "Hemorrhoids",
+      "Breast leakage",
+      "Contractions leading to labor"
+    ],
+    recommendations: [
+      "Work out your pelvic floor by doing Kegel exercises. These exercises are important" + 
+      " because  Kegels can help heal perineal tissues, which are stretched during vaginal birth.",
+      "Take prenatal vitamins",
+      "Keep your teeth and gums healthy. Poor dental hygiene is linked to premature labor."
+    ]
   }
-];
-
-const trimesterWeekInformation = [
-  {
-    week: 1,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 2,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 3,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 4,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 5,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 6,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 7,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 8,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 9,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 10,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 11,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 12,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 13,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 14,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 15,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 16,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 17,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 18,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 19,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 20,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 21,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 22,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 23,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 24,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 25,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 26,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 27,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 28,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 29,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 30,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 31,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 32,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 33,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 34,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 35,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 36,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 37,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 38,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
-  {
-    week: 39,
-    motherHealthAdvice: [],
-    motherPhysicalChanges: [],
-    motherPregnantSymptoms: []
-  },
 ];
 
 // TODO: Order information based on the trimester
@@ -284,7 +103,7 @@ export default function MaternalResourcesPage() {
 
   const [selectedHyperLinks, setSelectedHyperLinks] = useState([]);
 
-  const MotionImage = motion(Image);
+  const MotionIcon = motion(Icon);
   const MotionBox = motion(Box);
 
   const handleSearchPlacesDialogOpen = () => {
@@ -318,7 +137,8 @@ export default function MaternalResourcesPage() {
                   <CardBody>
                     <Stack mt='6' spacing='3' alignItems="center">
                       {!flippedTrimesterCard ?
-                        <MotionImage
+                        <MotionIcon
+                          as={Woman2Icon}
                           // onClick={() => { setTrimesterButtonPressed(true); }}
                           borderRadius='lg'
                           initial={trimesterButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
