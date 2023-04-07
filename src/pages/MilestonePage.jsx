@@ -1,9 +1,13 @@
-import { Box, Button, ButtonGroup, Card, CardBody, CardFooter, HStack, Heading, Image, ListItem, Select, Stack, UnorderedList, VStack } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, Card, CardBody, CardFooter, HStack, Heading, Icon, ListItem, Select, Stack, UnorderedList, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { trimesterImage } from '../images/maternalPageImages';
 import FloatingActionButtonsBabyInfo from '../components/FloatingActionButtonsBabyInfo';
 import GoogleMapsModal from '../components/modals/GoogleMapsModal';
 import { motion } from 'framer-motion';
+import ChatIcon from '@mui/icons-material/Chat';
+import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
+import LocalCafeIcon from '@mui/icons-material/LocalCafe';
+import HearingIcon from '@mui/icons-material/Hearing';
+import AbcIcon from '@mui/icons-material/Abc';
 
 const promptOptions = [
     {
@@ -264,9 +268,27 @@ export default function MilestonePage() {
     const [resourceButtonPressed, setResourceButtonPressed] = useState(false);
 
     const MotionBox = motion(Box);
-    const MotionImage = motion(Image);
+    const MotionIcon = motion(Icon);
 
     const handleAnswerChange = (event) => {
+        if (flippedMotorCard)
+            setMotorButtonPressed(true);
+
+        if (flippedCommunicationCard)
+            setCommunicationButtonPressed(true);
+
+        if (flippedFeedingCard)
+            setFeedingButtonPressed(true);
+
+        if (flippedSensoryCard)
+            setSensoryButtonPressed(true);
+
+        if (flippedResourcesCard)
+            setResourceButtonPressed(true);
+
+        if (flippedActivitiesCard)
+            setActivitiesButtonPressed(true);
+
         for (let i = 0; i < promptOptions.length; i++) {
             if (promptOptions[i].ageSelected === event.target.value) {
                 setSelectedActivities(promptOptions[i].activities);
@@ -317,8 +339,8 @@ export default function MilestonePage() {
                         <CardBody>
                             <Stack mt='6' spacing='3' alignItems="center">
                                 {!flippedMotorCard ?
-                                    <MotionImage
-                                        // onClick={() => { setMotorButtonPressed(true); }}
+                                    <MotionIcon
+                                        as={AccessibilityNewIcon}
                                         borderRadius='lg'
                                         initial={motorButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
                                         animate={{ rotate: 0, scale: 1 }}
@@ -328,9 +350,6 @@ export default function MilestonePage() {
                                             stiffness: 260,
                                             damping: 20
                                         }}
-                                        src={trimesterImage}
-                                        size="sm"
-                                        alt="Alternate Text"
                                         style={{ width: 300, height: 300, resizeMode: 'cover' }}
                                     />
                                     :
@@ -369,8 +388,8 @@ export default function MilestonePage() {
                         <CardBody>
                             <Stack mt='6' spacing='3' alignItems="center">
                                 {!flippedCommunicationCard ?
-                                    <MotionImage
-                                        // onClick={() => { setMotorButtonPressed(true); }}
+                                    <MotionIcon
+                                        as={ChatIcon}
                                         borderRadius='lg'
                                         initial={communicationButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
                                         animate={{ rotate: 0, scale: 1 }}
@@ -380,9 +399,6 @@ export default function MilestonePage() {
                                             stiffness: 260,
                                             damping: 20
                                         }}
-                                        src={trimesterImage}
-                                        size="sm"
-                                        alt="Alternate Text"
                                         style={{ width: 300, height: 300, resizeMode: 'cover' }}
                                     />
                                     :
@@ -422,8 +438,8 @@ export default function MilestonePage() {
                         <CardBody>
                             <Stack mt='6' spacing='3' alignItems="center">
                                 {!flippedFeedingCard ?
-                                    <MotionImage
-                                        // onClick={() => { setMotorButtonPressed(true); }}
+                                    <MotionIcon
+                                        as={LocalCafeIcon}
                                         borderRadius='lg'
                                         initial={feedingButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
                                         animate={{ rotate: 0, scale: 1 }}
@@ -433,9 +449,6 @@ export default function MilestonePage() {
                                             stiffness: 260,
                                             damping: 20
                                         }}
-                                        src={trimesterImage}
-                                        size="sm"
-                                        alt="Alternate Text"
                                         style={{ width: 300, height: 300, resizeMode: 'cover' }}
                                     />
                                     :
@@ -474,8 +487,8 @@ export default function MilestonePage() {
                         <CardBody>
                             <Stack mt='6' spacing='3' alignItems="center">
                                 {!flippedSensoryCard ?
-                                    <MotionImage
-                                        // onClick={() => { setMotorButtonPressed(true); }}
+                                    <MotionIcon
+                                        as={HearingIcon}
                                         borderRadius='lg'
                                         initial={sensoryButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
                                         animate={{ rotate: 0, scale: 1 }}
@@ -485,9 +498,6 @@ export default function MilestonePage() {
                                             stiffness: 260,
                                             damping: 20
                                         }}
-                                        src={trimesterImage}
-                                        size="sm"
-                                        alt="Alternate Text"
                                         style={{ width: 300, height: 300, resizeMode: 'cover' }}
                                     />
                                     :
@@ -561,7 +571,6 @@ export default function MilestonePage() {
                                             </UnorderedList>
                                         </MotionBox>
                                     </>
-
                                 }
                             </Stack>
                         </CardBody>
@@ -583,8 +592,8 @@ export default function MilestonePage() {
                         <CardBody>
                             <Stack mt='6' spacing='3' alignItems="center">
                                 {!flippedActivitiesCard ?
-                                    <MotionImage
-                                        // onClick={() => { setMotorButtonPressed(true); }}
+                                    <MotionIcon
+                                        as={AbcIcon}
                                         borderRadius='lg'
                                         initial={activitiesButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
                                         animate={{ rotate: 0, scale: 1 }}
@@ -594,9 +603,6 @@ export default function MilestonePage() {
                                             stiffness: 260,
                                             damping: 20
                                         }}
-                                        src={trimesterImage}
-                                        size="sm"
-                                        alt="Alternate Text"
                                         style={{ width: 300, height: 300, resizeMode: 'cover' }}
                                     />
                                     :
