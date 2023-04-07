@@ -315,7 +315,7 @@ export default function MilestonePage() {
                 setSearchPlaces={setPlaces}
                 searchPlaces={places}
             />
-            <HStack flexWrap={"wrap"} spacing="12" justifyContent="center" alignItems="start" marginTop="10">
+            <HStack flexWrap={"wrap"} spacing="12" justifyContent="center" alignItems="start" marginTop="5">
                 <Select
                     w="95vw"
                     marginBottom="10"
