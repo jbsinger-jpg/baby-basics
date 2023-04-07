@@ -5,6 +5,8 @@ import { healthAdviceBabyImage, physicalChangesImage, pregnantSymptomsImage, tri
 import GoogleMapsModal from '../components/modals/GoogleMapsModal';
 import { motion } from 'framer-motion';
 import Woman2Icon from '@mui/icons-material/Woman2';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon';
 
 // trimester weeks
 const trimester1Weeks = Array.from({ length: 12 }, (_, i) => i + 1);
@@ -56,7 +58,6 @@ const trimesterPhaseInformation = [
     recommendations: [
       "Swelling will cause changes to your circulation that make it hard for your blood to get from your legs to your heart." +
       "To help prevent this drink water throughout the day and exercise lightly but regularly to increase blood flow.",
-
     ]
   },
   {
@@ -89,6 +90,7 @@ const trimesterPhaseInformation = [
 
 // TODO: Order information based on the trimester
 // TODO: Break down information into one page
+
 export default function MaternalResourcesPage() {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [videos, setVideos] = useState(null);
@@ -98,9 +100,17 @@ export default function MaternalResourcesPage() {
   const [flippedTrimesterCard, setFlippedTrimesterCard] = useState(false);
   const [trimesterButtonPressed, setTrimesterButtonPressed] = useState(false);
   const [selectedTrimesterInformation, setSelectedTrimesterInformation] = useState([]);
+  const [selectedHealthAdvice, setSelectedHealthAdvice] = useState([]);
+  const [selectedPregnantSymptoms, setSelectedPregnantSymptoms] = useState([]);
 
   const [flippedResourcesCard, setFlippedResourcesCard] = useState(false);
   const [resourceButtonPressed, setResourceButtonPressed] = useState(false);
+
+  const [flippedHealthCard, setFlippedHealthCard] = useState(false);
+  const [healthButtonPressed, setHealthButtonPressed] = useState(false);
+
+  const [flippedSymptomsCard, setFlippedSymptomsCard] = useState(false);
+  const [symptomsButtonPressed, setSymptomsButtonPressed] = useState(false);
 
   const [selectedHyperLinks, setSelectedHyperLinks] = useState([]);
 
@@ -112,222 +122,220 @@ export default function MaternalResourcesPage() {
   };
 
   return (
-    <HStack justifyContent="space-between" w="100vw">
-      <Tabs align='start' variant='enclosed'>
-        <TabList display="flex" justifyContent="space-between" w="99vw">
-          <HStack spacing="-1">
-            <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-              Baby
-            </Tab>
-            <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-              Mother
-            </Tab>
-          </HStack>
-          <HStack>
-            <Button onClick={() => { setTrimesterWeeks(trimester1Weeks); }}> Trimester 1 </Button>
-            <Button onClick={() => { setTrimesterWeeks(trimester2Weeks); }}> Trimester 2 </Button>
-            <Button onClick={() => { setTrimesterWeeks(trimester3Weeks); }}> Trimester 3 </Button>
-          </HStack>
-        </TabList>
-        <TabPanels>
-          <TabPanel>
-            <HStack w="100vw" justifyContent="space-evenly" alignItems="start">
-              <VStack justifyContent="start" w="30vw" spacing="4" h="100vh">
-                <Heading textDecoration="underline">Trimester Information</Heading>
-                <Card w="400px" h="450px">
-                  <CardBody>
-                    <Stack mt='6' spacing='3' alignItems="center">
-                      {!flippedTrimesterCard ?
-                        <MotionIcon
-                          as={Woman2Icon}
-                          // onClick={() => { setTrimesterButtonPressed(true); }}
-                          borderRadius='lg'
-                          initial={trimesterButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
-                          animate={{ rotate: 0, scale: 1 }}
-                          onAnimationComplete={() => setTrimesterButtonPressed(false)}
-                          transition={{
-                            type: "spring",
-                            stiffness: 260,
-                            damping: 20
-                          }}
-                          src={trimesterImage}
-                          size="sm"
-                          alt="Alternate Text"
-                          style={{ width: 300, height: 300, resizeMode: 'cover' }}
-                        />
-                        :
-                        <>
-                          <Heading size='md'> Key Points </Heading>
-                          <MotionBox
-                            initial={trimesterButtonPressed ? { scale: 0 } : { scale: 1 }}
-                            animate={{ scale: 1 }}
-                            onAnimationComplete={() => setTrimesterButtonPressed(false)}
-                            overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
-                            <UnorderedList spacing="2" paddingLeft="2">
-                              {selectedTrimesterInformation.length > 0 && selectedTrimesterInformation.map((milestone, index) => {
-                                return (<ListItem key={index}>{milestone}</ListItem>);
-                              })}
-                            </UnorderedList>
-                          </MotionBox>
-                        </>
-                      }
-                    </Stack>
-                  </CardBody>
-                  <CardFooter>
-                    <ButtonGroup spacing='2' justifyContent={"space-between"}>
-                      <Button onClick={() => {
-                        setFlippedTrimesterCard(!flippedTrimesterCard);
-                        setTrimesterButtonPressed(true);
-                      }}>
-                        flip
-                      </Button>
-                    </ButtonGroup>
-                  </CardFooter>
-                </Card>
-              </VStack>
-              <VStack justifyContent="start" w="30vw">
-                <Heading textDecoration="underline">Trimester Development</Heading>
-                <Card w="400px" h="450px">
-                  <CardBody>
-                    <Stack mt='6' spacing='3' alignItems="center">
-                      {!flippedResourcesCard ?
-                        <>
-                          <Select
-                            placeholder='Select Video'
-                            value={selectedVideo}
-                            onChange={(event) => {
-                              setSelectedVideo(event.target.value);
-                            }}
-                          >
-                            {videos && videos.length > 0 && videos.map((video) => {
-                              return (<option value={video.value} key={video.key}>{video.label}</option>);
-                            })}
-                          </Select>
-                          <iframe
-                            height="250px"
-                            width="100%"
-                            src={selectedVideo || "https://www.youtube.com/embed/rv-fBnFbQAk"}
-                            title="YouTube video player"
-                            allowFullScreen
-                          />
-                        </>
-                        :
-                        <>
-                          <Heading size='md'> Key Resources </Heading>
-                          <MotionBox
-                            initial={resourceButtonPressed ? { scale: 0 } : { scale: 1 }}
-                            animate={{ scale: 1 }}
-                            onAnimationComplete={() => setResourceButtonPressed(false)}
-                            overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
-                            <UnorderedList spacing="2" paddingLeft="2">
-                              {selectedHyperLinks.length > 0 && selectedHyperLinks.map((milestone, index) => {
-                                return (<ListItem key={index}>{milestone}</ListItem>);
-                              })}
-                            </UnorderedList>
-                          </MotionBox>
-                        </>
+    <HStack flexWrap={"wrap"} spacing="12" justifyContent="center" alignItems="start" marginTop="5" w="100vw">
+      <HStack alignItems="start" w="100vw" paddingLeft="5">
+        <Button onClick={() => { setTrimesterWeeks(trimester1Weeks); }}> Trimester 1 </Button>
+        <Button onClick={() => { setTrimesterWeeks(trimester2Weeks); }}> Trimester 2 </Button>
+        <Button onClick={() => { setTrimesterWeeks(trimester3Weeks); }}> Trimester 3 </Button>
+      </HStack>
+      <HStack w="100vw" justifyContent="space-evenly" alignItems="start">
+        <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
+          <Heading textDecoration="underline">Trimester Information</Heading>
+          <Card w="400px" h="450px">
+            <CardBody>
+              <Stack mt='6' spacing='3' alignItems="center">
+                {!flippedTrimesterCard ?
+                  <MotionIcon
+                    as={Woman2Icon}
+                    borderRadius='lg'
+                    initial={trimesterButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
+                    animate={{ rotate: 0, scale: 1 }}
+                    onAnimationComplete={() => setTrimesterButtonPressed(false)}
+                    transition={{
+                      type: "spring",
+                      stiffness: 260,
+                      damping: 20
+                    }}
+                    style={{ width: 300, height: 300, resizeMode: 'cover' }}
+                  />
+                  :
+                  <>
+                    <Heading size='md'> Key Points </Heading>
+                    <MotionBox
+                      initial={trimesterButtonPressed ? { scale: 0 } : { scale: 1 }}
+                      animate={{ scale: 1 }}
+                      onAnimationComplete={() => setTrimesterButtonPressed(false)}
+                      overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
+                      <UnorderedList spacing="2" paddingLeft="2">
+                        {selectedTrimesterInformation.length > 0 && selectedTrimesterInformation.map((milestone, index) => {
+                          return (<ListItem key={index}>{milestone}</ListItem>);
+                        })}
+                      </UnorderedList>
+                    </MotionBox>
+                  </>
+                }
+              </Stack>
+            </CardBody>
+            <CardFooter>
+              <ButtonGroup spacing='2' justifyContent={"space-between"}>
+                <Button onClick={() => {
+                  setFlippedTrimesterCard(!flippedTrimesterCard);
+                  setTrimesterButtonPressed(true);
+                }}>
+                  flip
+                </Button>
+              </ButtonGroup>
+            </CardFooter>
+          </Card>
+        </VStack>
+        <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
+          <Heading textDecoration="underline">Trimester Development</Heading>
+          <Card w="400px" h="450px">
+            <CardBody>
+              <Stack mt='6' spacing='3' alignItems="center">
+                {!flippedResourcesCard ?
+                  <>
+                    <Select
+                      placeholder='Select Video'
+                      value={selectedVideo}
+                      onChange={(event) => {
+                        setSelectedVideo(event.target.value);
+                      }}
+                    >
+                      {videos && videos.length > 0 && videos.map((video) => {
+                        return (<option value={video.value} key={video.key}>{video.label}</option>);
+                      })}
+                    </Select>
+                    <iframe
+                      height="250px"
+                      width="100%"
+                      src={selectedVideo || "https://www.youtube.com/embed/rv-fBnFbQAk"}
+                      title="YouTube video player"
+                      allowFullScreen
+                    />
+                  </>
+                  :
+                  <>
+                    <Heading size='md'> Key Resources </Heading>
+                    <MotionBox
+                      initial={resourceButtonPressed ? { scale: 0 } : { scale: 1 }}
+                      animate={{ scale: 1 }}
+                      onAnimationComplete={() => setResourceButtonPressed(false)}
+                      overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
+                      <UnorderedList spacing="2" paddingLeft="2">
+                        {selectedHyperLinks.length > 0 && selectedHyperLinks.map((milestone, index) => {
+                          return (<ListItem key={index}>{milestone}</ListItem>);
+                        })}
+                      </UnorderedList>
+                    </MotionBox>
+                  </>
 
-                      }
-                    </Stack>
-                  </CardBody>
-                  <CardFooter>
-                    <ButtonGroup spacing='2' justifyContent={"space-between"}>
-                      <Button onClick={() => {
-                        setFlippedResourcesCard(!flippedResourcesCard);
-                        setResourceButtonPressed(true);
-                      }}>
-                        flip
-                      </Button>
-                    </ButtonGroup>
-                  </CardFooter>
-                </Card>
-              </VStack>
-            </HStack>
-          </TabPanel>
-          <TabPanel>
-            <Select placeholder='Select Week' w="20vw" marginBottom="15px">
-              {trimesterWeeks && trimesterWeeks.map(week => {
-                return (<option value={week} key={week}>{week}</option>);
-
-              })}
-            </Select>
-            <HStack w="100vw" justifyContent="space-evenly" alignItems="start">
-              <VStack h="60vh" justifyContent="space-between">
-                <VStack w="30vw">
-                  <Heading textDecoration="underline">Health Advice</Heading>
-                  <Card maxW='sm'>
-                    <CardBody>
-                      <Stack mt='6' spacing='3'>
-                        <Image
-                          src={healthAdviceBabyImage}
-                          alt='avacada'
-                          borderRadius='lg'
-                          h="300px"
-                          w="300px"
-                        />
-                        <Heading size='md'> Week 16! </Heading>
-                        <Text>
-                          Prenatal Checkin
-                        </Text>
-                        <Text>
-                          Prenatal Vitamins
-                        </Text>
-                      </Stack>
-                    </CardBody>
-                  </Card>
-                </VStack>
-              </VStack>
-              <VStack justifyContent="start" w="30vw" spacing="4" h="100vh">
-                <Heading textDecoration="underline">Physical Changes</Heading>
-                <Card maxW='sm'>
-                  <CardBody>
-                    <Stack mt='6' spacing='3'>
-                      <Image
-                        src={physicalChangesImage}
-                        alt='avacada'
-                        borderRadius='lg'
-                        h="300"
-                        w="300"
-                      />
-                      <Heading size='md'> Week 16! </Heading>
-                      <Text>
-                        Increases in your blood and hormone levels might be causing you some discomfort.
-                        You might develop acne as your skin produces more oil.
-                        You might also notice varicose veins or get cramps in your legs.
-                        Exercising and stretching should help to relieve this.
-                      </Text>
-                    </Stack>
-                  </CardBody>
-                </Card>
-              </VStack>
-              <VStack justifyContent="start" w="30vw">
-                <Heading textDecoration="underline">Preggers Symptoms</Heading>
-                <Card maxW='sm'>
-                  <CardBody>
-                    <Stack mt='6' spacing='3'>
-                      <Image
-                        src={pregnantSymptomsImage}
-                        alt='avacada'
-                        borderRadius='lg'
-                        h="300"
-                        w="300"
-                      />
-                      <Heading size='md'> Week 16! </Heading>
-                      <Text>
-                        Swollen and bleeding gums
-                        Pains on the side of your belly, caused by your expanding womb
-                        Headaches.
-                        Nosebleeds.
-                        Feeling bloated
-                      </Text>
-                    </Stack>
-                  </CardBody>
-                </Card>
-              </VStack>
-            </HStack>
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
+                }
+              </Stack>
+            </CardBody>
+            <CardFooter>
+              <ButtonGroup spacing='2' justifyContent={"space-between"}>
+                <Button onClick={() => {
+                  setFlippedResourcesCard(!flippedResourcesCard);
+                  setResourceButtonPressed(true);
+                }}>
+                  flip
+                </Button>
+              </ButtonGroup>
+            </CardFooter>
+          </Card>
+        </VStack>
+      </HStack>
+      <HStack w="100vw" justifyContent="space-evenly" alignItems="start">
+        <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
+          <Heading textDecoration="underline">Health Advice</Heading>
+          <Card w="400px" h="450px">
+            <CardBody>
+              <Stack mt='6' spacing='3' alignItems="center">
+                {!flippedHealthCard ?
+                  <MotionIcon
+                    as={FavoriteBorderIcon}
+                    borderRadius='lg'
+                    initial={healthButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
+                    animate={{ rotate: 0, scale: 1 }}
+                    onAnimationComplete={() => setHealthButtonPressed(false)}
+                    transition={{
+                      type: "spring",
+                      stiffness: 260,
+                      damping: 20
+                    }}
+                    style={{ width: 300, height: 300, resizeMode: 'cover' }}
+                  />
+                  :
+                  <>
+                    <Heading size='md'> Key Points </Heading>
+                    <MotionBox
+                      initial={healthButtonPressed ? { scale: 0 } : { scale: 1 }}
+                      animate={{ scale: 1 }}
+                      onAnimationComplete={() => setHealthButtonPressed(false)}
+                      overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
+                      <UnorderedList spacing="2" paddingLeft="2">
+                        {selectedHealthAdvice.length > 0 && selectedHealthAdvice.map((milestone, index) => {
+                          return (<ListItem key={index}>{milestone}</ListItem>);
+                        })}
+                      </UnorderedList>
+                    </MotionBox>
+                  </>
+                }
+              </Stack>
+            </CardBody>
+            <CardFooter>
+              <ButtonGroup spacing='2' justifyContent={"space-between"}>
+                <Button onClick={() => {
+                  setFlippedHealthCard(!flippedHealthCard);
+                  setHealthButtonPressed(true);
+                }}>
+                  flip
+                </Button>
+              </ButtonGroup>
+            </CardFooter>
+          </Card>
+        </VStack>
+        <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
+          <Heading textDecoration="underline">Preggers Symptoms</Heading>
+          <Card w="400px" h="450px">
+            <CardBody>
+              <Stack mt='6' spacing='3' alignItems="center">
+                {!flippedSymptomsCard ?
+                  <MotionIcon
+                    as={CatchingPokemonIcon}
+                    borderRadius='lg'
+                    initial={symptomsButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
+                    animate={{ rotate: 0, scale: 1 }}
+                    onAnimationComplete={() => setSymptomsButtonPressed(false)}
+                    transition={{
+                      type: "spring",
+                      stiffness: 260,
+                      damping: 20
+                    }}
+                    style={{ width: 300, height: 300, resizeMode: 'cover' }}
+                  />
+                  :
+                  <>
+                    <Heading size='md'> Key Points </Heading>
+                    <MotionBox
+                      initial={symptomsButtonPressed ? { scale: 0 } : { scale: 1 }}
+                      animate={{ scale: 1 }}
+                      onAnimationComplete={() => setSymptomsButtonPressed(false)}
+                      overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
+                      <UnorderedList spacing="2" paddingLeft="2">
+                        {selectedPregnantSymptoms.length > 0 && selectedPregnantSymptoms.map((milestone, index) => {
+                          return (<ListItem key={index}>{milestone}</ListItem>);
+                        })}
+                      </UnorderedList>
+                    </MotionBox>
+                  </>
+                }
+              </Stack>
+            </CardBody>
+            <CardFooter>
+              <ButtonGroup spacing='2' justifyContent={"space-between"}>
+                <Button onClick={() => {
+                  setFlippedSymptomsCard(!flippedSymptomsCard);
+                  setSymptomsButtonPressed(true);
+                }}>
+                  flip
+                </Button>
+              </ButtonGroup>
+            </CardFooter>
+          </Card>
+        </VStack>
+      </HStack>
       <FloatingActionButtonsMaternalInfo
         handleSearchPlacesDialogOpen={handleSearchPlacesDialogOpen}
       />
