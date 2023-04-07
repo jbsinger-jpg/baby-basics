@@ -1,7 +1,6 @@
 import { Box, Button, ButtonGroup, Card, CardBody, CardFooter, HStack, Heading, Icon, Image, ListItem, Select, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, UnorderedList, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import FloatingActionButtonsMaternalInfo from '../components/FloatingActionButtonsMaternalInfo';
-import { healthAdviceBabyImage, physicalChangesImage, pregnantSymptomsImage, trimesterImage } from '../images/maternalPageImages';
 import GoogleMapsModal from '../components/modals/GoogleMapsModal';
 import { motion } from 'framer-motion';
 import Woman2Icon from '@mui/icons-material/Woman2';
@@ -130,7 +129,7 @@ export default function MaternalResourcesPage() {
       </HStack>
       <HStack w="100vw" justifyContent="space-evenly" alignItems="start">
         <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
-          <Heading textDecoration="underline">Trimester Information</Heading>
+          <Heading textDecoration="underline">Recommendations</Heading>
           <Card w="400px" h="450px">
             <CardBody>
               <Stack mt='6' spacing='3' alignItems="center">
@@ -179,7 +178,7 @@ export default function MaternalResourcesPage() {
           </Card>
         </VStack>
         <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
-          <Heading textDecoration="underline">Trimester Development</Heading>
+          <Heading textDecoration="underline">Development</Heading>
           <Card w="400px" h="450px">
             <CardBody>
               <Stack mt='6' spacing='3' alignItems="center">
@@ -238,7 +237,7 @@ export default function MaternalResourcesPage() {
       </HStack>
       <HStack w="100vw" justifyContent="space-evenly" alignItems="start">
         <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
-          <Heading textDecoration="underline">Health Advice</Heading>
+          <Heading textDecoration="underline">Baby Development</Heading>
           <Card w="400px" h="450px">
             <CardBody>
               <Stack mt='6' spacing='3' alignItems="center">
