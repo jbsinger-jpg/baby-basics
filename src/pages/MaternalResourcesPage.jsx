@@ -112,8 +112,11 @@ export default function MaternalResourcesPage() {
   // FAB buttons
   const [searchPlaces, setSearchPlaces] = useState(false);
 
+  const [initialStage, setInitialStage] = useState(1);
+
   const MotionIcon = motion(Icon);
   const MotionBox = motion(Box);
+  const MotionButton = motion(Button);
 
   const handleSearchPlacesDialogOpen = () => {
     setSearchPlaces(true);
@@ -127,14 +130,50 @@ export default function MaternalResourcesPage() {
         setSelectedPregnantSymptoms(trimesterPhaseInformation[i].motherPregnancySymptoms);
       }
     }
+
+    if (initialStage === buttonStage) {
+      return;
+    }
+
+    setInitialStage(buttonStage);
+
+    if (flippedSymptomsCard)
+      setSymptomsButtonPressed(true);
+
+    if (flippedBabyDevelopmentCard)
+      setBabyDevelopmentButtonPressed(true);
+
+    if (flippedRecommendationCard)
+      setRecommendationsButtonPressed(true);
+
+    if (flippedResourcesCard)
+      setResourceButtonPressed(true);
   };
 
   return (
     <HStack flexWrap={"wrap"} spacing="12" justifyContent="center" alignItems="start" marginTop="5" w="100vw">
-      <HStack alignItems="start" w="100vw" paddingLeft="5">
-        <Button onClick={() => { handleSelectedTrimesterChange(1); }}> Trimester 1 </Button>
-        <Button onClick={() => { handleSelectedTrimesterChange(2); }}> Trimester 2 </Button>
-        <Button onClick={() => { handleSelectedTrimesterChange(3); }}> Trimester 3 </Button>
+      <HStack alignItems="start" w="100vw" paddingLeft="5" spacing="5">
+        <MotionButton
+          whileHover={{ scale: 1.2 }}
+          whileTap={{ scale: 0.8 }}
+          onClick={() => { handleSelectedTrimesterChange(1); }}
+        >
+          Trimester 1
+        </MotionButton>
+        <MotionButton
+          whileHover={{ scale: 1.2 }}
+          whileTap={{ scale: 0.8 }}
+          onClick={() => { handleSelectedTrimesterChange(2); }}
+        >
+          Trimester 2
+        </MotionButton>
+        <MotionButton
+          whileHover={{ scale: 1.2 }}
+          whileTap={{ scale: 0.8 }}
+          onClick={() => { handleSelectedTrimesterChange(3); }}
+        >
+          Trimester 3
+        </MotionButton>
       </HStack>
       <HStack w="100vw" justifyContent="space-evenly" alignItems="start">
         <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
