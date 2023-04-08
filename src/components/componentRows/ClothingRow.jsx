@@ -1,8 +1,9 @@
 import { CheckIcon, CloseIcon, StarIcon } from '@chakra-ui/icons';
-import { Box, Button, Divider, HStack, Image, SkeletonCircle, SkeletonText, Text, VStack, Icon, Stack, Card, CardBody, Tooltip, Heading, Tag, TagLabel } from '@chakra-ui/react';
+import { Box, Button, Divider, HStack, Image, SkeletonCircle, SkeletonText, Text, VStack, Icon, Stack, Card, CardBody, Tooltip, Heading, Tag, TagLabel, useColorModeValue } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { firestore } from '../../firebaseConfig';
+import { cardBackground, screenBackground } from '../../defaultStyle';
 
 export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex }) {
     const MotionImage = motion(Image);
@@ -89,6 +90,8 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex }) 
         });
     });
 
+    const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
+
     return (
         <VStack
             key={clothing.id}
@@ -100,7 +103,7 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex }) 
             <SkeletonText isLoaded={!clothingDataLoaded}>
                 <HStack spacing="4" w="400px">
                     {!flippedCards ?
-                        <Card w="220px">
+                        <Card w="220px" bg={_cardBackground}>
                             <CardBody display="flex" justifyContent="center">
                                 <MotionImage
                                     variant="unstyled"

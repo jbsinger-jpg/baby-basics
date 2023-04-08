@@ -1,9 +1,10 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import { auth, firestore, serverTimestamp } from '../firebaseConfig';
-import { Box, Button, HStack, Textarea } from '@chakra-ui/react';
+import { Box, Button, HStack, Textarea, useColorModeValue } from '@chakra-ui/react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Context from "../context/Context";
 import DMChatMessage from '../components/DMChatMessage';
+import { screenBackground } from '../defaultStyle';
 
 function DirectMessagePage() {
     const { data: selectedUser } = useContext(Context);
@@ -79,8 +80,10 @@ function DirectMessagePage() {
         messageBoxRef.current.scrollTop = messageBoxRef.current.scrollHeight;
     }, [chatRoomMessagesSent]);
 
+    const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
+
     return (
-        <Box>
+        <Box bg={_screenBackground} h="100vh">
             <div style={{ height: 'calc(100vh - 175px)', overflowY: 'auto' }} ref={messageBoxRef}>
                 {(chatRoomMessagesRecieved && chatRoomMessagesSent) &&
                     generateMessages()
@@ -90,7 +93,7 @@ function DirectMessagePage() {
                 }
             </div>
             <form onSubmit={sendMessage}>
-                <Box w="100vw" padding="5" bottom="0" position="fixed">
+                <Box w="100vw" padding="5" bottom="0" position="fixed" bg={_screenBackground}>
                     <HStack>
                         <Textarea
                             value={text}

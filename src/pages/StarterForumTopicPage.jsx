@@ -1,7 +1,8 @@
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, HStack, Text, VStack } from '@chakra-ui/react';
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, HStack, Text, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Context from '../context/Context';
+import { screenBackground } from '../defaultStyle';
 
 export default function StarterForumTopicPage() {
 
@@ -12,9 +13,10 @@ export default function StarterForumTopicPage() {
 
     const navigate = useNavigate();
     const { setData: setPageData } = useContext(Context);
+    const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
 
     return (
-        <VStack spacing="3">
+        <VStack spacing="3" bg={_screenBackground} h="100vh">
             <Accordion allowToggle width="100%">
                 <AccordionItem>
                     <h2>

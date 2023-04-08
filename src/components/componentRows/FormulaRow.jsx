@@ -1,8 +1,9 @@
 import { CheckIcon, CloseIcon, StarIcon } from '@chakra-ui/icons';
-import { Box, Button, Card, CardBody, Divider, HStack, Heading, Icon, Image, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack } from '@chakra-ui/react';
+import { Box, Button, Card, CardBody, Divider, HStack, Heading, Icon, Image, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { firestore } from '../../firebaseConfig';
+import { cardBackground } from '../../defaultStyle';
 
 export default function FormulaRow({ formula, formulaDataIsLoading, tabIndex }) {
     const MotionImage = motion(Image);
@@ -89,6 +90,8 @@ export default function FormulaRow({ formula, formulaDataIsLoading, tabIndex }) 
         });
     });
 
+    const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
+
     return (
         <VStack
             key={formula.id}
@@ -100,7 +103,7 @@ export default function FormulaRow({ formula, formulaDataIsLoading, tabIndex }) 
             <SkeletonText isLoaded={!formulaDataIsLoading}>
                 <HStack spacing="4" w="400px">
                     {!flippedCards ?
-                        <Card w="220px">
+                        <Card w="220px" bg={_cardBackground}>
                             <CardBody display="flex" justifyContent="center">
                                 <MotionImage
                                     variant="unstyled"

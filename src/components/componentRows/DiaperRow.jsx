@@ -1,8 +1,9 @@
 import { CheckIcon, CloseIcon, StarIcon } from '@chakra-ui/icons';
-import { Box, Button, Heading, HStack, Image, SkeletonCircle, SkeletonText, Text, Tooltip, VStack, Icon, Divider, Stack, Card, CardBody, Tag, TagLabel } from '@chakra-ui/react';
+import { Box, Button, Heading, HStack, Image, SkeletonCircle, SkeletonText, Text, Tooltip, VStack, Icon, Divider, Stack, Card, CardBody, Tag, TagLabel, useColorModeValue } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { firestore } from '../../firebaseConfig';
+import { cardBackground } from '../../defaultStyle';
 
 export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
     const MotionImage = motion(Image);
@@ -89,6 +90,8 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
         });
     });
 
+    const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
+
     return (
         <VStack
             key={diaper.id}
@@ -100,7 +103,7 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
             <SkeletonText isLoaded={!isDiapersLoading}>
                 <HStack spacing="4" w="400px">
                     {!flippedCards ?
-                        <Card w="220px">
+                        <Card w="220px" bg={_cardBackground}>
                             <CardBody display="flex" justifyContent="center">
                                 <MotionImage
                                     variant="unstyled"

@@ -1,10 +1,13 @@
-import { HStack } from '@chakra-ui/react';
+import { HStack, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
 import StrollerRow from '../componentRows/StrollerRow';
+import { screenBackground } from '../../defaultStyle';
 
 export default function StrollersDataTabPanel({ strollerData, strollerDataIsLoading, tabIndex }) {
+    const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
+
     return (
-        <HStack flexWrap={"wrap"} top="20" position="absolute" spacing="20">
+        <HStack flexWrap={"wrap"} marginTop="20" spacing="12" bg={_screenBackground}>
             {strollerData && strollerData.length > 0 && strollerData.map(stroller => {
                 return (
                     <StrollerRow

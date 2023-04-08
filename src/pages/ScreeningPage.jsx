@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Divider, Heading, HStack, IconButton, Text, Tooltip, useToast, VStack } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Divider, Heading, HStack, IconButton, Text, Tooltip, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
 import { auth, firestore } from '../firebaseConfig';
 import { DeleteIcon } from '@chakra-ui/icons';
 import { useNavigate } from 'react-router-dom';
 import ProgressBar from '../components/ProgressBar';
 import FormQuestion from '../components/FormQuestion';
+import { screenBackground } from '../defaultStyle';
 
 export default function ScreeningPage() {
     const toast = useToast();
@@ -107,8 +108,10 @@ export default function ScreeningPage() {
         setQuestions(options);
     };
 
+    const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
+
     return (
-        <Box w="100vw" h="100vh">
+        <Box w="100vw" h="100vh" bg={_screenBackground}>
             <ProgressBar progress={progress} />
             <Box padding="5">
                 {questions[currentQuestion] &&

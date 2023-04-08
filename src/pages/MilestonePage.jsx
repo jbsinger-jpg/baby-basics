@@ -1,4 +1,4 @@
-import { Box, Button, ButtonGroup, Card, CardBody, CardFooter, HStack, Heading, Icon, ListItem, Select, Stack, UnorderedList, VStack } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, Card, CardBody, CardFooter, HStack, Heading, Icon, ListItem, Select, Stack, UnorderedList, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import FloatingActionButtonsBabyInfo from '../components/FloatingActionButtonsBabyInfo';
 import GoogleMapsModal from '../components/modals/GoogleMapsModal';
@@ -8,6 +8,7 @@ import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
 import LocalCafeIcon from '@mui/icons-material/LocalCafe';
 import HearingIcon from '@mui/icons-material/Hearing';
 import AbcIcon from '@mui/icons-material/Abc';
+import { cardBackground, screenBackground } from '../defaultStyle';
 
 const promptOptions = [
     {
@@ -302,6 +303,9 @@ export default function MilestonePage() {
         }
     };
 
+    const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
+    const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
+
     const handleSearchPlacesDialogOpen = () => {
         setPlaces(true);
     };
@@ -315,10 +319,11 @@ export default function MilestonePage() {
                 setSearchPlaces={setPlaces}
                 searchPlaces={places}
             />
-            <HStack flexWrap={"wrap"} spacing="12" justifyContent="center" alignItems="start" marginTop="5">
+            <HStack flexWrap={"wrap"} spacing="12" justifyContent="center" alignItems="start" bg={_screenBackground}>
                 <Select
                     w="95vw"
                     marginBottom="10"
+                    marginTop="5"
                     placeholder='Select baby age'
                     value={selectedAge}
                     onChange={(event) => {
@@ -335,7 +340,7 @@ export default function MilestonePage() {
                 </Select>
                 <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
                     <Heading textDecoration="underline">Motor</Heading>
-                    <Card w="400px" h="450px">
+                    <Card w="400px" h="450px" bg={_cardBackground}>
                         <CardBody>
                             <Stack mt='6' spacing='3' alignItems="center">
                                 {!flippedMotorCard ?
@@ -384,7 +389,7 @@ export default function MilestonePage() {
                 </VStack>
                 <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
                     <Heading textDecoration="underline">Communication</Heading>
-                    <Card w="400px" h="450px">
+                    <Card w="400px" h="450px" bg={_cardBackground}>
                         <CardBody>
                             <Stack mt='6' spacing='3' alignItems="center">
                                 {!flippedCommunicationCard ?
@@ -434,7 +439,7 @@ export default function MilestonePage() {
                 </VStack>
                 <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
                     <Heading textDecoration="underline">Feeding</Heading>
-                    <Card w="400px" h="450px">
+                    <Card w="400px" h="450px" bg={_cardBackground}>
                         <CardBody>
                             <Stack mt='6' spacing='3' alignItems="center">
                                 {!flippedFeedingCard ?
@@ -483,7 +488,7 @@ export default function MilestonePage() {
                 </VStack>
                 <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
                     <Heading textDecoration="underline">Sensory</Heading>
-                    <Card w="400px" h="450px">
+                    <Card w="400px" h="450px" bg={_cardBackground}>
                         <CardBody>
                             <Stack mt='6' spacing='3' alignItems="center">
                                 {!flippedSensoryCard ?
@@ -532,7 +537,7 @@ export default function MilestonePage() {
                 </VStack>
                 <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
                     <Heading textDecoration="underline">Resources</Heading>
-                    <Card w="400px" h="450px">
+                    <Card w="400px" h="450px" bg={_cardBackground}>
                         <CardBody>
                             <Stack mt='6' spacing='3' alignItems="center">
                                 {!flippedResourcesCard ?
@@ -588,7 +593,7 @@ export default function MilestonePage() {
                 </VStack>
                 <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
                     <Heading textDecoration="underline">Potential Activities</Heading>
-                    <Card w="400px" h="450px">
+                    <Card w="400px" h="450px" bg={_cardBackground}>
                         <CardBody>
                             <Stack mt='6' spacing='3' alignItems="center">
                                 {!flippedActivitiesCard ?

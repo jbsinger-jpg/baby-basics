@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { auth, firestore, serverTimestamp } from '../firebaseConfig';
-import { Box, Button, HStack, IconButton, Input, Textarea, Tooltip } from '@chakra-ui/react';
+import { Box, Button, HStack, IconButton, Input, Textarea, Tooltip, useColorModeValue } from '@chakra-ui/react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Context from '../context/Context';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import ChatMessage from '../components/ChatMessage';
 import { SearchIcon } from '@chakra-ui/icons';
+import { screenBackground } from '../defaultStyle';
 
 function ForumMessagePage() {
     const [text, setText] = useState();
@@ -122,9 +123,10 @@ function ForumMessagePage() {
 
         setText('');
     };
+    const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
 
     return (
-        <Box w="100vw" h="100vh">
+        <Box w="100vw" h="100vh" bg={_screenBackground}>
             <Box w="100vw" justifyContent="space-between" display="flex" padding="3">
                 {orderByVoteCount ?
                     <Button onClick={() => setOrderByVoteCount(!orderByVoteCount)}>

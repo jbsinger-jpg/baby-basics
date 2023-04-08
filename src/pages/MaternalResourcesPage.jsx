@@ -1,4 +1,4 @@
-import { Box, Button, ButtonGroup, Card, CardBody, CardFooter, HStack, Heading, Icon, ListItem, Select, Stack, UnorderedList, VStack } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, Card, CardBody, CardFooter, HStack, Heading, Icon, ListItem, Select, Stack, UnorderedList, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import FloatingActionButtonsMaternalInfo from '../components/FloatingActionButtonsMaternalInfo';
 import GoogleMapsModal from '../components/modals/GoogleMapsModal';
@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import Woman2Icon from '@mui/icons-material/Woman2';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon';
+import { cardBackground, screenBackground } from '../defaultStyle';
 
 const trimesterPhaseInformation = [
   {
@@ -118,6 +119,11 @@ export default function MaternalResourcesPage() {
   const MotionBox = motion(Box);
   const MotionButton = motion(Button);
 
+  // Styling for color themes
+  //lhs=light, rhs=dark
+  const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
+  const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
+
   const handleSearchPlacesDialogOpen = () => {
     setSearchPlaces(true);
   };
@@ -151,8 +157,8 @@ export default function MaternalResourcesPage() {
   };
 
   return (
-    <HStack flexWrap={"wrap"} spacing="12" justifyContent="center" alignItems="start" marginTop="5" w="100vw">
-      <HStack alignItems="start" w="100vw" paddingLeft="5" spacing="5">
+    <HStack flexWrap={"wrap"} spacing="12" justifyContent="center" alignItems="start" w="100vw" bg={_screenBackground}>
+      <HStack alignItems="start" w="100vw" paddingLeft="5" spacing="5" marginTop="5">
         <MotionButton
           whileHover={{ scale: 1.2 }}
           whileTap={{ scale: 0.8 }}
@@ -178,7 +184,7 @@ export default function MaternalResourcesPage() {
       <HStack w="100vw" justifyContent="space-evenly" alignItems="start">
         <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
           <Heading textDecoration="underline">Recommendations</Heading>
-          <Card w="400px" h="450px">
+          <Card w="400px" h="450px" bg={_cardBackground}>
             <CardBody>
               <Stack mt='6' spacing='3' alignItems="center">
                 {!flippedRecommendationCard ?
@@ -227,7 +233,7 @@ export default function MaternalResourcesPage() {
         </VStack>
         <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
           <Heading textDecoration="underline">Resources</Heading>
-          <Card w="400px" h="450px">
+          <Card w="400px" h="450px" bg={_cardBackground}>
             <CardBody>
               <Stack mt='6' spacing='3' alignItems="center">
                 {!flippedResourcesCard ?
@@ -286,7 +292,7 @@ export default function MaternalResourcesPage() {
       <HStack w="100vw" justifyContent="space-evenly" alignItems="start">
         <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
           <Heading textDecoration="underline">Baby Development</Heading>
-          <Card w="400px" h="450px">
+          <Card w="400px" h="450px" bg={_cardBackground}>
             <CardBody>
               <Stack mt='6' spacing='3' alignItems="center">
                 {!flippedBabyDevelopmentCard ?
@@ -335,7 +341,7 @@ export default function MaternalResourcesPage() {
         </VStack>
         <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
           <Heading textDecoration="underline">Preggers Symptoms</Heading>
-          <Card w="400px" h="450px">
+          <Card w="400px" h="450px" bg={_cardBackground}>
             <CardBody>
               <Stack mt='6' spacing='3' alignItems="center">
                 {!flippedSymptomsCard ?

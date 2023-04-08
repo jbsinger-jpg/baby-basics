@@ -1,5 +1,5 @@
 import { CalendarIcon, ChatIcon, TimeIcon, WarningIcon } from '@chakra-ui/icons';
-import { Avatar, AvatarBadge, AvatarGroup, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useDisclosure, VStack } from '@chakra-ui/react';
+import { Avatar, AvatarBadge, AvatarGroup, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionDataOnce } from 'react-firebase-hooks/firestore';
 import { useNavigate } from 'react-router-dom';
@@ -20,6 +20,7 @@ import ToysDataTabPanel from '../components/tabPanels/ToysDataTabPanel';
 import MonitorsDataTabPanel from '../components/tabPanels/MonitorsDataTabPanel';
 import SeatsTabPanel from '../components/tabPanels/SeatsTabPanel';
 import StrollersDataTabPanel from '../components/tabPanels/StrollersDataTabPanel';
+import { screenBackground } from '../defaultStyle';
 
 export default function HomePage() {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -65,6 +66,11 @@ export default function HomePage() {
     const [settingsIsOpen, setSettingsIsOpen] = useState(false);
 
     const [searchPlaces, setSearchPlaces] = useState(false);
+
+    const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
+    const [screenHeight, setScreenHeight] = useState(window.innerHeight);
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
 
     const handleSearchPlacesDialogOpen = () => {
         setSearchPlaces(true);
@@ -236,8 +242,21 @@ export default function HomePage() {
             });
     }, []);
 
+    useEffect(() => {
+        function handleResize() {
+            setScreenHeight(window.innerHeight);
+            setScreenWidth(window.innerWidth);
+        }
+
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    }, [screenHeight, screenWidth]);
+
     return (
-        <>
+        <Box bg={_screenBackground} h={screenHeight} w={screenWidth}>
             <Drawer
                 isOpen={isOpen}
                 placement='left'
@@ -359,8 +378,8 @@ export default function HomePage() {
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>
-            <Tabs align='start' variant='enclosed' w="90vw" h="100vh" index={tabIndex} onChange={handleTabsChange}>
-                <TabList display="flex" justifyContent="space-between" w="99vw">
+            <Tabs align='start' variant='enclosed' index={tabIndex} onChange={handleTabsChange} bg={_screenBackground}>
+                <TabList display="flex" justifyContent="space-between">
                     <HStack spacing="-1">
                         <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
                             Clothes
@@ -492,6 +511,6 @@ export default function HomePage() {
                 tabIndex={tabIndex}
                 setTabIndex={setTabIndex}
             />
-        </>
+        </Box>
     );
 }

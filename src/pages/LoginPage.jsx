@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 // firebase
 import { auth, firestore } from '../firebaseConfig';
 import { GoogleAuthProvider } from "firebase/auth";
+import { cardBackground, screenBackground } from '../defaultStyle';
 
 export default function LoginPage() {
     const [email, setEmail] = useState("");
@@ -16,6 +17,9 @@ export default function LoginPage() {
     const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
+    const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
+    const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
+
 
     const toast = useToast();
     const navigate = useNavigate();
@@ -176,8 +180,8 @@ export default function LoginPage() {
     };
 
     return (
-        <Box w="100vw" h="100vh" display="flex" alignItems="center" justifyContent="center" bg={useColorModeValue("Dark", "Light") === "Dark" ? "gray.300" : null}>
-            <Card w="40vw" h="60vh" bg={useColorModeValue("Dark", "Light") === "Dark" ? "gray.400" : null}>
+        <Box w="100vw" h="100vh" display="flex" alignItems="center" justifyContent="center" bg={_screenBackground}>
+            <Card w="40vw" h="60vh" bg={_cardBackground}>
                 <Tabs variant='enclosed' isFitted>
                     <TabList>
                         <Tab _selected={{ bg: 'blackAlpha.400' }}>
