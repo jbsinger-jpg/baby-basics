@@ -47,15 +47,15 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex }) 
 
     const handleAddRating = async () => {
         let ratingSum = 0;
-        const diapersRef = await firestore.collection("diapers");
+        const clothingRef = await firestore.collection("clothing");
 
-        diapersRef.doc(clothing.id).collection("ratings").add({
+        clothingRef.doc(clothing.id).collection("ratings").add({
             rating: Number(rating),
         });
 
         // update the data with the new rating
-        const _total = (await diapersRef.doc(clothing.id).collection("ratings").get()).size;
-        const sum = (await diapersRef.doc(clothing.id).collection("ratings").get()).docs.map(doc => doc.data().rating);
+        const _total = (await clothingRef.doc(clothing.id).collection("ratings").get()).size;
+        const sum = (await clothingRef.doc(clothing.id).collection("ratings").get()).docs.map(doc => doc.data().rating);
 
         for (let i = 0; i < sum.length; i++) {
             ratingSum += sum[i];
@@ -75,7 +75,7 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex }) 
     useEffect(() => {
         let ratingSum = 0;
 
-        (firestore.collection("diapers").doc(clothing.id).collection("ratings").get()).then(snapshot => {
+        (firestore.collection("clothing").doc(clothing.id).collection("ratings").get()).then(snapshot => {
             const _total = snapshot.size;
             setTotal(_total);
             const sum = snapshot.docs.map(doc => doc.data().rating);

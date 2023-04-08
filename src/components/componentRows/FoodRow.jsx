@@ -47,15 +47,15 @@ export default function FoodRow({ food, isFoodDataLoading, tabIndex }) {
 
     const handleAddRating = async () => {
         let ratingSum = 0;
-        const diapersRef = await firestore.collection("diapers");
+        const foodRef = await firestore.collection("food");
 
-        diapersRef.doc(food.id).collection("ratings").add({
+        foodRef.doc(food.id).collection("ratings").add({
             rating: Number(rating),
         });
 
         // update the data with the new rating
-        const _total = (await diapersRef.doc(food.id).collection("ratings").get()).size;
-        const sum = (await diapersRef.doc(food.id).collection("ratings").get()).docs.map(doc => doc.data().rating);
+        const _total = (await foodRef.doc(food.id).collection("ratings").get()).size;
+        const sum = (await foodRef.doc(food.id).collection("ratings").get()).docs.map(doc => doc.data().rating);
 
         for (let i = 0; i < sum.length; i++) {
             ratingSum += sum[i];
@@ -75,7 +75,7 @@ export default function FoodRow({ food, isFoodDataLoading, tabIndex }) {
     useEffect(() => {
         let ratingSum = 0;
 
-        (firestore.collection("diapers").doc(food.id).collection("ratings").get()).then(snapshot => {
+        (firestore.collection("food").doc(food.id).collection("ratings").get()).then(snapshot => {
             const _total = snapshot.size;
             setTotal(_total);
             const sum = snapshot.docs.map(doc => doc.data().rating);
