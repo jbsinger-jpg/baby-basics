@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { auth, firestore, serverTimestamp } from '../firebaseConfig';
-import { Box, Button, HStack, IconButton, Input, Textarea, Tooltip, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, HStack, IconButton, Input, Textarea, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Context from '../context/Context';
 import 'firebase/compat/auth';
@@ -8,6 +8,7 @@ import 'firebase/compat/firestore';
 import ChatMessage from '../components/ChatMessage';
 import { SearchIcon } from '@chakra-ui/icons';
 import { screenBackground } from '../defaultStyle';
+import ColorModeToggleButton from '../components/ColorModeToggleButton';
 
 function ForumMessagePage() {
     const [text, setText] = useState();

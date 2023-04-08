@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { auth, firestore } from '../firebaseConfig';
 import { GoogleAuthProvider } from "firebase/auth";
 import { cardBackground, screenBackground } from '../defaultStyle';
+import ColorModeToggleButton from '../components/ColorModeToggleButton';
 
 export default function LoginPage() {
     const [email, setEmail] = useState("");
@@ -309,6 +310,13 @@ export default function LoginPage() {
                     </TabPanels>
                 </Tabs>
             </Card>
+            <VStack
+                top="14"
+                right="4"
+                position="fixed"
+            >
+                <ColorModeToggleButton />
+            </VStack>
         </Box>
     );
 }

@@ -5,26 +5,7 @@ import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
-const ColorModeToggleButton = () => {
-    const { toggleColorMode } = useColorMode();
-
-    return (
-        <Tooltip label="Change color mode">
-            <IconButton
-                icon={useColorModeValue("Dark", "Light") === "Dark" ? <MoonIcon height="30px" width="30px" /> : <SunIcon height="30px" width="30px" />}
-                onClick={toggleColorMode}
-                width="56px"
-                height="56px"
-                borderRadius="50%"
-                boxShadow="md"
-                _hover={{ boxShadow: "lg" }}
-            >
-                {useColorModeValue("Dark", "Light")}
-            </IconButton>
-        </Tooltip>
-    );
-};
+import ColorModeToggleButton from './ColorModeToggleButton';
 
 export default function FloatingActionButtonsMaternalInfo({ handleSearchPlacesDialogOpen }) {
     const navigate = useNavigate();

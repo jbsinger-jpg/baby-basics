@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import ProgressBar from '../components/ProgressBar';
 import FormQuestion from '../components/FormQuestion';
 import { screenBackground } from '../defaultStyle';
+import ColorModeToggleButton from '../components/ColorModeToggleButton';
 
 export default function ScreeningPage() {
     const toast = useToast();
@@ -112,6 +113,15 @@ export default function ScreeningPage() {
 
     return (
         <Box w="100vw" h="100vh" bg={_screenBackground}>
+            <VStack
+                top="14"
+                right="4"
+                position="fixed"
+                zIndex={999}
+
+            >
+                <ColorModeToggleButton />
+            </VStack>
             <ProgressBar progress={progress} />
             <Box padding="5">
                 {questions[currentQuestion] &&
