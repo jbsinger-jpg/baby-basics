@@ -1,7 +1,8 @@
 import { DeleteIcon } from '@chakra-ui/icons';
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, HStack, IconButton, Input, Select, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, VStack } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, HStack, IconButton, Input, Select, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { firestore } from '../../firebaseConfig';
+import { cardBackground } from '../../defaultStyle';
 
 export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOpen, setFoodData, setClothingData, setDiaperData, tabIndex, setTabIndex }) {
     const [stageOption, setStageOption] = useState(null);
@@ -19,6 +20,7 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
     const [diaperSize, setDiaperSize] = useState(null);
 
     const [searchTabIndex, setSearchTabIndex] = useState(tabIndex);
+    const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
 
     const handleTabsChange = (index) => {
         setSearchTabIndex(index);
@@ -56,44 +58,6 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
 
             setFoodData(foodData);
         }));
-
-        ////Inclusive Search
-        // if (stageOption) {
-        //     firestore.collection('food').where("stage", "==", stageOption)
-        //         .get()
-        //         .then(snapshot => {
-        //             snapshot.docs.forEach(doc => {
-        //                 options.push({ ...doc.data() });
-        //             });
-
-        //             const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
-        //             setFoodData(uniqueArray);
-        //         });
-        // }
-
-        // if (formattedFoodPrice && formattedFoodPrice > 0) {
-        //     firestore.collection('food').where("price", "<=", Number(formattedFoodPrice))
-        //         .get()
-        //         .then(snapshot => {
-        //             snapshot.docs.forEach(doc => {
-        //                 options.push({ ...doc.data() });
-        //             });
-        //             const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
-        //             setFoodData(uniqueArray);
-        //         });
-        // }
-
-        // if (foodBrand) {
-        //     firestore.collection('food').where("brand", "==", foodBrand)
-        //         .get()
-        //         .then(snapshot => {
-        //             snapshot.docs.forEach(doc => {
-        //                 options.push({ ...doc.data() });
-        //             });
-        //             const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
-        //             setFoodData(uniqueArray);
-        //         });
-        // }
 
         if (!stageOption && !foodPrice && !foodBrand) {
             firestore.collection('food')
@@ -225,7 +189,7 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
             size="md"
         >
             <AlertDialogOverlay />
-            <AlertDialogContent>
+            <AlertDialogContent bg={_cardBackground}>
                 <AlertDialogHeader>Filter Items</AlertDialogHeader>
                 <AlertDialogBody>
                     <Tabs align='start' variant='enclosed' w="100%" h="100%" isFitted index={searchTabIndex} onChange={handleTabsChange}>

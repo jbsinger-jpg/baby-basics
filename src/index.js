@@ -12,14 +12,14 @@ const config = {
   initialColorMode: "dark",
   useSystemColorMode: false,
 };
-const theme = extendTheme({ config });
 
+const customTheme = extendTheme({ ...config });
 
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <ChakraProvider theme={theme}>
-        <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+      <ChakraProvider theme={customTheme}>
+        <ColorModeScript initialColorMode={customTheme.config.initialColorMode} />
         <App />
       </ChakraProvider>
     </BrowserRouter>

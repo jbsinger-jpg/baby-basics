@@ -1,9 +1,9 @@
 import { CheckIcon, CloseIcon, StarIcon } from '@chakra-ui/icons';
-import { Box, Button, Divider, HStack, Image, SkeletonCircle, SkeletonText, Text, VStack, Icon, Stack, Card, CardBody, Tooltip, Heading, Tag, TagLabel, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Divider, HStack, Image, SkeletonCircle, SkeletonText, Text, VStack, Icon, Stack, Card, CardBody, Tooltip, Heading, Tag, TagLabel, useColorModeValue, CardFooter, CardHeader } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { firestore } from '../../firebaseConfig';
-import { cardBackground, screenBackground } from '../../defaultStyle';
+import { cardBackground } from '../../defaultStyle';
 
 export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex }) {
     const MotionImage = motion(Image);
@@ -95,18 +95,30 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex }) 
     return (
         <VStack
             key={clothing.id}
-            h="350px"
+            h="500px"
             spacing="3"
             paddingBottom="10"
         >
             <SkeletonCircle size='10' isLoaded={!clothingDataLoaded} />
             <SkeletonText isLoaded={!clothingDataLoaded}>
-                <HStack spacing="4" w="400px">
+                <HStack spacing="4" w="400px" alignItems="center" justifyContent="center">
                     {!flippedCards ?
-                        <Card w="220px" bg={_cardBackground}>
+                        <Card w="220px" bg={_cardBackground} justifyContent="center" alignItems="center">
+                            <CardHeader>
+                                <Tag
+                                    borderRadius='full'
+                                    colorScheme='blackAlpha'
+                                    size="lg"
+                                >
+                                    <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
+                                        {clothing.title}
+                                    </Text>
+                                </Tag>
+                            </CardHeader>
                             <CardBody display="flex" justifyContent="center">
                                 <MotionImage
                                     variant="unstyled"
+                                    borderRadius="3%"
                                     initial={buttonsPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
                                     animate={{ rotate: 0, scale: 1 }}
                                     onAnimationComplete={() => setButtonsPressed(false)}
@@ -121,10 +133,45 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex }) 
                                     style={{ width: 150, height: 200, resizeMode: 'cover' }}
                                 />
                             </CardBody>
+                            <CardFooter>
+                                {!flippedCards &&
+                                    <HStack
+                                        w="220px"
+                                        justifyContent="space-between"
+                                        paddingRight="4"
+                                        paddingLeft="4"
+                                    >
+                                        <MotionButton
+                                            // When the user uses their mouse
+                                            whileHover={{ scale: 1.2 }}
+                                            // When the user tabs
+                                            whileFocus={{ scale: 1.2 }}
+                                            as="a"
+                                            href={clothing.affiliateLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            Buy
+                                        </MotionButton>
+                                        <MotionButton
+                                            // When the user uses their mouse
+                                            whileHover={{ scale: 1.2 }}
+                                            // When the user tabs
+                                            whileFocus={{ scale: 1.2 }}
+                                            onClick={() => {
+                                                handleFlip();
+                                                handleButtonsTrigger();
+                                            }}
+                                        >
+                                            Rate
+                                        </MotionButton>
+                                    </HStack>
+                                }
+                            </CardFooter>
                         </Card>
                         :
                         <MotionBox
-                            h="300px"
+                            h="400px"
                             alignItems="center"
                             justifyContent="center"
                             display="flex"
@@ -197,78 +244,79 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex }) 
                             </TagLabel>
                         </Tag>
                         <Divider />
-                        <Tag
-                            borderRadius='full'
-                            variant='outline'
-                            colorScheme='blue'
-                        >
-                            <TagLabel>
-                                {clothing.brand}
-                            </TagLabel>
-                        </Tag>
+                        <VStack alignItems="start">
+                            <Text as="b" fontSize="13">Brand</Text>
+                            <Tag
+                                borderRadius='full'
+                                variant='outline'
+                                colorScheme='blue'
+                            >
+                                <TagLabel>
+                                    {clothing.brand}
+                                </TagLabel>
+                            </Tag>
+                        </VStack>
                         <Divider />
-                        <Tag
-                            borderRadius='full'
-                            variant='outline'
-                            colorScheme='orange'
-                        >
-                            <TagLabel>{clothing.description}</TagLabel>
-                        </Tag>
+                        <VStack alignItems="start">
+                            <Text as="b" fontSize="13">Description</Text>
+                            <Tag
+                                borderRadius='full'
+                                variant='outline'
+                                colorScheme='orange'
+                            >
+                                <TagLabel>{clothing.description}</TagLabel>
+                            </Tag>
+                        </VStack>
                         <Divider />
-
-                        <Tag
-                            borderRadius='full'
-                            variant='outline'
-                            colorScheme='gray'
-                        >
-                            <TagLabel>{"$" + clothing.price}</TagLabel>
-                        </Tag>
+                        <VStack>
+                            <Text as="b" fontSize="13">Price</Text>
+                            <Tag
+                                borderRadius='full'
+                                variant='outline'
+                                colorScheme='gray'
+                            >
+                                <TagLabel>{"$" + clothing.price}</TagLabel>
+                            </Tag>
+                        </VStack>
                         <Divider />
-                        <Tag
-                            borderRadius='full'
-                            variant='solid'
-                            colorScheme='telegram'
-                        >
-                            <TagLabel>{"Gender: " + clothing.gender}</TagLabel>
-                        </Tag>
+                        <VStack alignItems="start">
+                            <Text as="b" fontSize="13">Gender</Text>
+                            <Tag
+                                borderRadius='full'
+                                variant='solid'
+                                colorScheme='telegram'
+                            >
+                                <TagLabel>{clothing.gender}</TagLabel>
+                            </Tag>
+                        </VStack>
+                        <Divider />
+                        <VStack alignItems="start">
+                            <Text as="b" fontSize="13">Type</Text>
+                            <Tag
+                                borderRadius='full'
+                                variant='outline'
+                                colorScheme='pink'
+                            >
+                                <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
+                                    {clothing.type}
+                                </Text>
+                            </Tag>
+                        </VStack>
+                        <Divider />
+                        <VStack alignItems="start">
+                            <Text as="b" fontSize="13">Size</Text>
+                            <Tag
+                                borderRadius='full'
+                                variant='subtle'
+                                colorScheme='telegram'
+                            >
+                                <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
+                                    {clothing.size}
+                                </Text>
+                            </Tag>
+                        </VStack>
                     </VStack>
                 </HStack>
-            </SkeletonText>
-            <SkeletonText
-                isLoaded={!clothingDataLoaded}
-                w="400px"
-            >
-                {!flippedCards &&
-                    <HStack
-                        w="220px"
-                        justifyContent="space-between"
-                    >
-                        <MotionButton
-                            // When the user uses their mouse
-                            whileHover={{ scale: 1.2 }}
-                            // When the user tabs
-                            whileFocus={{ scale: 1.2 }}
-                            as="a"
-                            href={clothing.affiliateLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Buy
-                        </MotionButton>
-                        <MotionButton
-                            // When the user uses their mouse
-                            whileHover={{ scale: 1.2 }}
-                            // When the user tabs
-                            whileFocus={{ scale: 1.2 }}
-                            onClick={() => {
-                                handleFlip();
-                                handleButtonsTrigger();
-                            }}
-                        >
-                            Rate
-                        </MotionButton>
-                    </HStack>
-                }
             </SkeletonText>
         </VStack>
     );

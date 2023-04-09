@@ -353,28 +353,30 @@ export default function HomePage() {
                 onClose={() => setSettingsIsOpen(false)}
             >
                 <DrawerOverlay />
-                <DrawerContent>
+                <DrawerContent bg={_screenBackground}>
                     <DrawerCloseButton />
-                    <DrawerHeader>User Stuff</DrawerHeader>
+                    <DrawerHeader>Stuff for You!</DrawerHeader>
                     <DrawerBody>
-                        <Button leftIcon={<ChatIcon />} onClick={onOpen} >
-                            Chat with Peeps
-                        </Button>
-                        <Button
-                            as="a"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            href={`https://calendar.google.com/calendar/r?authuser=${auth?.currentUser?.email}&pli=1`}
-                            leftIcon={<CalendarIcon />}
-                        >
-                            Set Google Calendar Event
-                        </Button>
-                        <Button
-                            leftIcon={<WarningIcon />}
-                            onClick={() => setScreeningAlertDialogVisibile(true)}
-                        >
-                            About you
-                        </Button>
+                        <VStack alignItems="start" spacing="5">
+                            <Button leftIcon={<ChatIcon />} onClick={onOpen} >
+                                Chat with Peeps
+                            </Button>
+                            <Button
+                                as="a"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                href={`https://calendar.google.com/calendar/r?authuser=${auth?.currentUser?.email}&pli=1`}
+                                leftIcon={<CalendarIcon />}
+                            >
+                                Set Google Calendar Event
+                            </Button>
+                            <Button
+                                leftIcon={<WarningIcon />}
+                                onClick={() => setScreeningAlertDialogVisibile(true)}
+                            >
+                                About you
+                            </Button>
+                        </VStack>
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>
