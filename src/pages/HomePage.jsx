@@ -1,4 +1,4 @@
-import { CalendarIcon, ChatIcon, TimeIcon, WarningIcon } from '@chakra-ui/icons';
+import { CalendarIcon, ChatIcon, WarningIcon } from '@chakra-ui/icons';
 import { Avatar, AvatarBadge, AvatarGroup, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionDataOnce } from 'react-firebase-hooks/firestore';
@@ -29,10 +29,10 @@ export default function HomePage() {
     const currentUser = auth.currentUser;
     const [userDataPendingFriends] = useCollectionDataOnce(firestore.collection('users').doc(currentUser?.uid).collection("pendingFriends"), { idField: 'id' });
     const [userDataConfirmedFriends] = useCollectionDataOnce(firestore.collection('users').doc(currentUser?.uid).collection("confirmedFriends"), { idField: 'id' });
+    const [groups] = useCollectionDataOnce(firestore.collection('groups'), { idField: 'id' });
     const [alertDialogUser, setAlertDialogUser] = useState(null);
     const [alertDialogVisible, setAlertDialogVisible] = useState(false);
 
-    const [groupUsers, setGroupUsers] = useState(null);
     const [tabIndex, setTabIndex] = useState(0);
     // clothing data for search bar
     const [clothingData, setClothingData] = useState(null);
@@ -80,19 +80,6 @@ export default function HomePage() {
         setTabIndex(index);
     };
 
-    //-------------------------------------------------------------------------------
-    //-------------------------------------------------------------------------------
-    // if current user email doesn't exist don't prevent
-    // page from rendering
-    const currentUserEmail = auth?.currentUser?.email;
-    let starterGroupRef = firestore.collection('starter_group');
-    if (currentUserEmail) {
-        starterGroupRef = starterGroupRef.where("users", "array-contains", currentUserEmail);
-    }
-    const [starterGroup] = useCollectionDataOnce(starterGroupRef, { idField: 'id' });
-    //-------------------------------------------------------------------------------
-    //-------------------------------------------------------------------------------
-
     const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
 
     const handleDMPress = (user) => {
@@ -106,36 +93,13 @@ export default function HomePage() {
         setAlertDialogVisible(true);
     };
 
-    const handleForumButtonPress = () => {
-        navigate("/forum");
-    };
-
-    useEffect(() => {
-        if (starterGroup) {
-            let options = [];
-            let userOptions = [];
-
-            for (const group of starterGroup) {
-                for (let i = 0; i < group.users.length; i++) {
-                    options.push(group.users[i]);
-                }
-
-            }
-
-            if (options.length > 0)
-                firestore.collection('users')
-                    .where("email", "in", options)
-                    .get()
-                    .then(snapshot => {
-                        snapshot.docs.forEach(doc => {
-                            userOptions.push({ ...doc.data() });
-                        });
-
-                        setGroupUsers(userOptions);
-                    });
-
+    const handleForumButtonPress = (groupAlias) => {
+        if (groupAlias)
+            navigate(`/forum_${groupAlias}`);
+        else {
+            console.log("Could not redirect to the forum page wanted.");
         }
-    }, [starterGroup]);
+    };
 
     // initialize the page with the data from the data base
     useEffect(() => {
@@ -263,20 +227,38 @@ export default function HomePage() {
                 onClose={onClose}
             >
                 <DrawerOverlay />
-                <DrawerContent>
+                <DrawerContent bg={_screenBackground}>
                     <DrawerCloseButton />
                     <DrawerHeader>Message Other Parents!</DrawerHeader>
                     <DrawerBody>
                         <Tabs align='start' variant='enclosed' w="100%" h="100%" isFitted>
                             <TabList>
                                 <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                                    DM
+                                    Forums
                                 </Tab>
                                 <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                                    Forums
+                                    DM
                                 </Tab>
                             </TabList>
                             <TabPanels>
+                                <TabPanel>
+                                    <VStack w="100%" alignItems="start" spacing="12">
+                                        {groups && groups.map(group => {
+                                            return (
+                                                <Button variant="unstyled" onClick={() => handleForumButtonPress(group.alias)} key={group.name}>
+                                                    <Text>{group.name}</Text>
+                                                    <HStack>
+                                                        <AvatarGroup size='md' max={3}>
+                                                            {group.users && group.users.map(user => {
+                                                                return (<Avatar key={user.id} name={user.full_name} />);
+                                                            })}
+                                                        </AvatarGroup>
+                                                    </HStack>
+                                                </Button>
+                                            );
+                                        })}
+                                    </VStack>
+                                </TabPanel>
                                 <TabPanel>
                                     <VStack w="100%" alignItems="start" spacing="5">
                                         <Heading size="small">Pending Friends</Heading>
@@ -313,25 +295,6 @@ export default function HomePage() {
 
                                             );
                                         })}
-                                    </VStack>
-                                </TabPanel>
-                                <TabPanel>
-                                    <VStack w="100%" alignItems="start" spacing="12">
-                                        {starterGroup && starterGroup.map(group => {
-                                            return (
-                                                <Button variant="unstyled" onClick={handleForumButtonPress} key={group.name}>
-                                                    <HStack>
-                                                        <AvatarGroup size='md' max={3}>
-                                                            {groupUsers && groupUsers.map(user => {
-                                                                return (<Avatar key={user.id} name={user.full_name} />);
-                                                            })}
-                                                        </AvatarGroup>
-                                                    </HStack>
-                                                    <Text>{group.name}</Text>
-                                                </Button>
-                                            );
-                                        })
-                                        }
                                     </VStack>
                                 </TabPanel>
                             </TabPanels>
