@@ -7,6 +7,7 @@ import Woman2Icon from '@mui/icons-material/Woman2';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon';
 import { cardBackground, screenBackground } from '../defaultStyle';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 const trimesterPhaseInformation = [
   {
@@ -160,21 +161,18 @@ export default function MaternalResourcesPage() {
     <HStack flexWrap={"wrap"} spacing="12" justifyContent="center" alignItems="start" w="100vw" bg={_screenBackground}>
       <HStack alignItems="start" w="100vw" paddingLeft="5" spacing="5" marginTop="5">
         <MotionButton
-          whileHover={{ scale: 1.2 }}
           whileTap={{ scale: 0.8 }}
           onClick={() => { handleSelectedTrimesterChange(1); }}
         >
           Trimester 1
         </MotionButton>
         <MotionButton
-          whileHover={{ scale: 1.2 }}
           whileTap={{ scale: 0.8 }}
           onClick={() => { handleSelectedTrimesterChange(2); }}
         >
           Trimester 2
         </MotionButton>
         <MotionButton
-          whileHover={{ scale: 1.2 }}
           whileTap={{ scale: 0.8 }}
           onClick={() => { handleSelectedTrimesterChange(3); }}
         >
@@ -221,12 +219,15 @@ export default function MaternalResourcesPage() {
             </CardBody>
             <CardFooter>
               <ButtonGroup spacing='2' justifyContent={"space-between"}>
-                <Button onClick={() => {
-                  setFlippedRecommendationCard(!flippedRecommendationCard);
-                  setRecommendationsButtonPressed(true);
-                }}>
+                <MotionButton
+                  whileTap={{ scale: 0.8 }}
+                  leftIcon={<RefreshIcon />}
+                  onClick={() => {
+                    setFlippedRecommendationCard(!flippedRecommendationCard);
+                    setRecommendationsButtonPressed(true);
+                  }}>
                   flip
-                </Button>
+                </MotionButton>
               </ButtonGroup>
             </CardFooter>
           </Card>
@@ -278,12 +279,15 @@ export default function MaternalResourcesPage() {
             </CardBody>
             <CardFooter>
               <ButtonGroup spacing='2' justifyContent={"space-between"}>
-                <Button onClick={() => {
-                  setFlippedResourcesCard(!flippedResourcesCard);
-                  setResourceButtonPressed(true);
-                }}>
+                <MotionButton
+                  whileTap={{ scale: 0.8 }}
+                  leftIcon={<RefreshIcon />}
+                  onClick={() => {
+                    setFlippedResourcesCard(!flippedResourcesCard);
+                    setResourceButtonPressed(true);
+                  }}>
                   flip
-                </Button>
+                </MotionButton>
               </ButtonGroup>
             </CardFooter>
           </Card>
@@ -329,12 +333,15 @@ export default function MaternalResourcesPage() {
             </CardBody>
             <CardFooter>
               <ButtonGroup spacing='2' justifyContent={"space-between"}>
-                <Button onClick={() => {
-                  setFlippedBabyDevelopmentCard(!flippedBabyDevelopmentCard);
-                  setBabyDevelopmentButtonPressed(true);
-                }}>
+                <MotionButton
+                  whileTap={{ scale: 0.8 }}
+                  leftIcon={<RefreshIcon />}
+                  onClick={() => {
+                    setFlippedBabyDevelopmentCard(!flippedBabyDevelopmentCard);
+                    setBabyDevelopmentButtonPressed(true);
+                  }}>
                   flip
-                </Button>
+                </MotionButton>
               </ButtonGroup>
             </CardFooter>
           </Card>
@@ -378,12 +385,15 @@ export default function MaternalResourcesPage() {
             </CardBody>
             <CardFooter>
               <ButtonGroup spacing='2' justifyContent={"space-between"}>
-                <Button onClick={() => {
-                  setFlippedSymptomsCard(!flippedSymptomsCard);
-                  setSymptomsButtonPressed(true);
-                }}>
+                <MotionButton
+                  whileTap={{ scale: 0.8 }}
+                  leftIcon={<RefreshIcon />}
+                  onClick={() => {
+                    setFlippedSymptomsCard(!flippedSymptomsCard);
+                    setSymptomsButtonPressed(true);
+                  }}>
                   flip
-                </Button>
+                </MotionButton>
               </ButtonGroup>
             </CardFooter>
           </Card>
