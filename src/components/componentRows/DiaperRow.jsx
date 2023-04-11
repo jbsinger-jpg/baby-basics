@@ -287,6 +287,7 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                                 <TagLabel>{"Size: " + diaper.size}</TagLabel>
                             </Tag>
                         </VStack>
+                        <Divider />
                     </VStack>
                 </HStack>
             </SkeletonText>

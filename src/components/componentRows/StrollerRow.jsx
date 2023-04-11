@@ -1,5 +1,5 @@
 import { CheckIcon, CloseIcon, StarIcon } from '@chakra-ui/icons';
-import { Box, Button, Card, CardBody, CardFooter, Divider, HStack, Heading, Icon, Image, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, Divider, HStack, Heading, Icon, Image, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { firestore } from '../../firebaseConfig';
@@ -95,7 +95,7 @@ export default function StrollerRow({ stroller, strollerDataIsLoading, tabIndex 
     return (
         <VStack
             key={stroller.id}
-            h="350px"
+            h="500px"
             spacing="3"
             paddingBottom="10"
         >
@@ -104,6 +104,17 @@ export default function StrollerRow({ stroller, strollerDataIsLoading, tabIndex 
                 <HStack spacing="4" w="400px">
                     {!flippedCards ?
                         <Card w="220px" bg={_cardBackground}>
+                            <CardHeader>
+                                <Tag
+                                    borderRadius='full'
+                                    colorScheme='blackAlpha'
+                                    size="lg"
+                                >
+                                    <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
+                                        {stroller.title}
+                                    </Text>
+                                </Tag>
+                            </CardHeader>
                             <CardBody display="flex" justifyContent="center">
                                 <MotionImage
                                     variant="unstyled"
@@ -230,40 +241,41 @@ export default function StrollerRow({ stroller, strollerDataIsLoading, tabIndex 
                             </TagLabel>
                         </Tag>
                         <Divider />
-                        <Tag
-                            borderRadius='full'
-                            variant='outline'
-                            colorScheme='blue'
-                        >
-                            <TagLabel>
-                                {stroller.brand}
-                            </TagLabel>
-                        </Tag>
+                        <VStack alignItems="start">
+                            <Text as="b" fontSize="13">Brand</Text>
+                            <Tag
+                                borderRadius='full'
+                                variant='outline'
+                                colorScheme='blue'
+                            >
+                                <TagLabel>
+                                    {stroller.brand}
+                                </TagLabel>
+                            </Tag>
+                        </VStack>
                         <Divider />
-                        <Tag
-                            borderRadius='full'
-                            variant='outline'
-                            colorScheme='orange'
-                        >
-                            <TagLabel>{stroller.description}</TagLabel>
-                        </Tag>
+                        <VStack alignItems="start">
+                            <Text as="b" fontSize="13">Description</Text>
+                            <Tag
+                                borderRadius='full'
+                                variant='outline'
+                                colorScheme='orange'
+                            >
+                                <TagLabel>{stroller.description}</TagLabel>
+                            </Tag>
+                        </VStack>
                         <Divider />
-
-                        <Tag
-                            borderRadius='full'
-                            variant='outline'
-                            colorScheme='gray'
-                        >
-                            <TagLabel>{"$" + stroller.price}</TagLabel>
-                        </Tag>
+                        <VStack alignItems="start">
+                            <Text as="b" fontSize="13">Price</Text>
+                            <Tag
+                                borderRadius='full'
+                                variant='outline'
+                                colorScheme='gray'
+                            >
+                                <TagLabel>{"$" + stroller.price}</TagLabel>
+                            </Tag>
+                        </VStack>
                         <Divider />
-                        <Tag
-                            borderRadius='full'
-                            variant='solid'
-                            colorScheme='telegram'
-                        >
-                            {stroller.sizes && <TagLabel>{"Size: " + stroller.sizes}</TagLabel>}
-                        </Tag>
                     </VStack>
                 </HStack>
             </SkeletonText>

@@ -294,6 +294,7 @@ export default function MaternialRow({ maternial, maternialDataLoading, tabIndex
                                 </>
                             }
                         </VStack>
+                        <Divider />
                     </VStack>
                 </HStack>
             </SkeletonText>

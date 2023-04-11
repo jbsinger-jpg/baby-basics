@@ -1,5 +1,5 @@
 import { CheckIcon, CloseIcon, StarIcon } from '@chakra-ui/icons';
-import { Box, Button, Card, CardBody, CardFooter, Divider, HStack, Heading, Icon, Image, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, Divider, HStack, Heading, Icon, Image, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { firestore } from '../../firebaseConfig';
@@ -96,7 +96,7 @@ export default function SeatRow({ seat, seatDataIsLoading, tabIndex }) {
     return (
         <VStack
             key={seat.id}
-            h="350px"
+            h="500px"
             spacing="3"
             paddingBottom="10"
         >
@@ -105,6 +105,17 @@ export default function SeatRow({ seat, seatDataIsLoading, tabIndex }) {
                 <HStack spacing="4" w="400px">
                     {!flippedCards ?
                         <Card w="220px" bg={_cardBackground}>
+                            <CardHeader>
+                                <Tag
+                                    borderRadius='full'
+                                    colorScheme='blackAlpha'
+                                    size="lg"
+                                >
+                                    <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
+                                        {seat.title}
+                                    </Text>
+                                </Tag>
+                            </CardHeader>
                             <CardBody display="flex" justifyContent="center">
                                 <MotionImage
                                     variant="unstyled"
@@ -232,40 +243,41 @@ export default function SeatRow({ seat, seatDataIsLoading, tabIndex }) {
                             </TagLabel>
                         </Tag>
                         <Divider />
-                        <Tag
-                            borderRadius='full'
-                            variant='outline'
-                            colorScheme='blue'
-                        >
-                            <TagLabel>
-                                {seat.brand}
-                            </TagLabel>
-                        </Tag>
+                        <VStack alignItems="start">
+                            <Text as="b" fontSize="13">Brand</Text>
+                            <Tag
+                                borderRadius='full'
+                                variant='outline'
+                                colorScheme='blue'
+                            >
+                                <TagLabel>
+                                    {seat.brand}
+                                </TagLabel>
+                            </Tag>
+                        </VStack>
                         <Divider />
-                        <Tag
-                            borderRadius='full'
-                            variant='outline'
-                            colorScheme='orange'
-                        >
-                            <TagLabel>{seat.description}</TagLabel>
-                        </Tag>
+                        <VStack alignItems="start">
+                            <Text as="b" fontSize="13">Description</Text>
+                            <Tag
+                                borderRadius='full'
+                                variant='outline'
+                                colorScheme='orange'
+                            >
+                                <TagLabel>{seat.description}</TagLabel>
+                            </Tag>
+                        </VStack>
                         <Divider />
-
-                        <Tag
-                            borderRadius='full'
-                            variant='outline'
-                            colorScheme='gray'
-                        >
-                            <TagLabel>{"$" + seat.price}</TagLabel>
-                        </Tag>
+                        <VStack alignItems="start">
+                            <Text as="b" fontSize="13">Price</Text>
+                            <Tag
+                                borderRadius='full'
+                                variant='outline'
+                                colorScheme='gray'
+                            >
+                                <TagLabel>{"$" + seat.price}</TagLabel>
+                            </Tag>
+                        </VStack>
                         <Divider />
-                        <Tag
-                            borderRadius='full'
-                            variant='solid'
-                            colorScheme='telegram'
-                        >
-                            {seat.sizes && <TagLabel>{"Size: " + seat.sizes}</TagLabel>}
-                        </Tag>
                     </VStack>
                 </HStack>
             </SkeletonText>

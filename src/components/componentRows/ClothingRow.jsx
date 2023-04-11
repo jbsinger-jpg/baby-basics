@@ -315,6 +315,7 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex }) 
                                 </Text>
                             </Tag>
                         </VStack>
+                        <Divider />
                     </VStack>
                 </HStack>
             </SkeletonText>
