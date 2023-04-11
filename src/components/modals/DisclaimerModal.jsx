@@ -1,9 +1,11 @@
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { cardBackground } from '../../defaultStyle';
 
 export default function DisclaimerModal({ screeningAlertDialogVisibile, setScreeningAlertDialogVisibile }) {
     const navigate = useNavigate();
+    const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
 
     return (
         <AlertDialog
@@ -11,7 +13,7 @@ export default function DisclaimerModal({ screeningAlertDialogVisibile, setScree
             onClose={() => setScreeningAlertDialogVisibile(false)}
         >
             <AlertDialogOverlay>
-                <AlertDialogContent>
+                <AlertDialogContent bg={_cardBackground}>
                     <AlertDialogHeader fontSize='lg' fontWeight='bold'>
                         Demographic Disclaimer
                     </AlertDialogHeader>

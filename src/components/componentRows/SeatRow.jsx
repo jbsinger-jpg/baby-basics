@@ -108,7 +108,6 @@ export default function SeatRow({ seat, seatDataIsLoading, tabIndex }) {
                             <CardHeader>
                                 <Tag
                                     borderRadius='full'
-                                    colorScheme='blackAlpha'
                                     size="lg"
                                 >
                                     <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">

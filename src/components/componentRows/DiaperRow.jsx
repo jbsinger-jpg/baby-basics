@@ -107,7 +107,6 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                             <CardHeader justifyContent="center" alignItems="center">
                                 <Tag
                                     borderRadius='full'
-                                    colorScheme='blackAlpha'
                                     size="lg"
                                 >
                                     <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">

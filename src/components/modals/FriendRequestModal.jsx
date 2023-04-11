@@ -5,7 +5,6 @@ import { firestore } from '../../firebaseConfig';
 export default function FriendRequestModal({ alertDialogVisible, setAlertDialogVisible, alertDialogUser, currentUser }) {
     const [friendButtonIsLoading, setFriendButtonIsLoading] = useState(false);
 
-
     const handleFriendSubmission = async () => {
         setFriendButtonIsLoading(true);
         const usersRef = await firestore.collection("users");

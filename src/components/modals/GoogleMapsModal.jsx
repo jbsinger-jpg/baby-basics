@@ -1,5 +1,6 @@
-import { Button, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select } from '@chakra-ui/react';
+import { Button, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import { cardBackground } from '../../defaultStyle';
 
 const locations = [
     { key: 4, value: "birthing+classes", label: "Birthing Classes" },
@@ -22,6 +23,8 @@ export default function GoogleMapsModal({ searchPlaces, setSearchPlaces }) {
     // TODO: Make sure the fields you are searching get formatted via a form component instead of onChange event
     const [state, setState] = useState(null);
     const [city, setCity] = useState(null);
+    const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
+
 
     const formatLocationEntry = () => {
         if (city && state) {
@@ -49,7 +52,7 @@ export default function GoogleMapsModal({ searchPlaces, setSearchPlaces }) {
     return (
         <Modal isOpen={searchPlaces} onClose={() => setSearchPlaces(false)}>
             <ModalOverlay />
-            <ModalContent>
+            <ModalContent bg={_cardBackground}>
                 <ModalHeader>Search Places!</ModalHeader>
                 <ModalCloseButton />
                 <form onSubmit={redirectUser}>
