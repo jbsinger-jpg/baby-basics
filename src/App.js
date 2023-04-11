@@ -5,7 +5,6 @@ import HomePage from './pages/HomePage';
 import ForumMessagePage from "./pages/ForumMessagePage";
 import DirectMessagePage from "./pages/DirectMessagePage";
 import Context from './context/Context';
-import StarterForumTopicPage from "./pages/StarterForumTopicPage";
 import ScreeningPage from "./pages/ScreeningPage";
 import MilestonePage from "./pages/MilestonePage";
 import MaternalResourcesPage from "./pages/MaternalResourcesPage";
@@ -24,7 +23,6 @@ function App() {
         <Route path="screening" element={<ScreeningPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="message" element={<DirectMessagePage />} />
-        <Route path="forum" element={<StarterForumTopicPage />} />
         <Route path="forum_Prenatal" element={<PrenatalForumPage />} />
         <Route path="forum_BH" element={<BabyHealthForumPage />} />
         <Route path="forum_AAS" element={<AppointmentForumPage />} />
