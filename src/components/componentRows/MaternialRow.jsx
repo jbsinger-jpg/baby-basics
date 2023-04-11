@@ -1,5 +1,5 @@
 import { CheckIcon, CloseIcon, StarIcon } from '@chakra-ui/icons';
-import { Box, Button, Card, CardBody, Divider, HStack, Heading, Icon, Image, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, Divider, HStack, Heading, Icon, Image, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { firestore } from '../../firebaseConfig';
@@ -95,7 +95,7 @@ export default function MaternialRow({ maternial, maternialDataLoading, tabIndex
     return (
         <VStack
             key={maternial.id}
-            h="350px"
+            h="500px"
             spacing="3"
             paddingBottom="10"
         >
@@ -103,7 +103,18 @@ export default function MaternialRow({ maternial, maternialDataLoading, tabIndex
             <SkeletonText isLoaded={!maternialDataLoading}>
                 <HStack spacing="4" w="400px">
                     {!flippedCards ?
-                        <Card w="220px" bg={_cardBackground}>
+                        <Card w="220px" bg={_cardBackground} justifyContent="center" alignItems="center">
+                            <CardHeader>
+                                <Tag
+                                    borderRadius='full'
+                                    colorScheme='blackAlpha'
+                                    size="lg"
+                                >
+                                    <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
+                                        {maternial.title}
+                                    </Text>
+                                </Tag>
+                            </CardHeader>
                             <CardBody display="flex" justifyContent="center">
                                 <MotionImage
                                     variant="unstyled"
@@ -121,6 +132,41 @@ export default function MaternialRow({ maternial, maternialDataLoading, tabIndex
                                     style={{ width: 150, height: 200, resizeMode: 'cover' }}
                                 />
                             </CardBody>
+                            <CardFooter>
+                                {!flippedCards &&
+                                    <HStack
+                                        w="220px"
+                                        justifyContent="space-between"
+                                        paddingRight="4"
+                                        paddingLeft="4"
+                                    >
+                                        <MotionButton
+                                            // When the user uses their mouse
+                                            whileHover={{ scale: 1.2 }}
+                                            // When the user tabs
+                                            whileFocus={{ scale: 1.2 }}
+                                            as="a"
+                                            href={maternial.affiliateLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            Buy
+                                        </MotionButton>
+                                        <MotionButton
+                                            // When the user uses their mouse
+                                            whileHover={{ scale: 1.2 }}
+                                            // When the user tabs
+                                            whileFocus={{ scale: 1.2 }}
+                                            onClick={() => {
+                                                handleFlip();
+                                                handleButtonsTrigger();
+                                            }}
+                                        >
+                                            Rate
+                                        </MotionButton>
+                                    </HStack>
+                                }
+                            </CardFooter>
                         </Card>
                         :
                         <MotionBox
@@ -197,81 +243,59 @@ export default function MaternialRow({ maternial, maternialDataLoading, tabIndex
                             </TagLabel>
                         </Tag>
                         <Divider />
-                        <Tag
-                            borderRadius='full'
-                            variant='outline'
-                            colorScheme='blue'
-                        >
-                            <TagLabel>
-                                {maternial.brand}
-                            </TagLabel>
-                        </Tag>
-                        <Divider />
-                        <Tag
-                            borderRadius='full'
-                            variant='outline'
-                            colorScheme='orange'
-                        >
-                            <TagLabel>{maternial.description}</TagLabel>
-                        </Tag>
-                        <Divider />
-
-                        <Tag
-                            borderRadius='full'
-                            variant='outline'
-                            colorScheme='gray'
-                        >
-                            <TagLabel>{"$" + maternial.price}</TagLabel>
-                        </Tag>
-                        <Divider />
-                        {maternial.sizes &&
+                        <VStack alignItems="start">
+                            <Text as="b" fontSize="13">Brand</Text>
                             <Tag
                                 borderRadius='full'
-                                variant='solid'
-                                colorScheme='telegram'
+                                variant='outline'
+                                colorScheme='blue'
                             >
-                                <TagLabel>{"Size: " + maternial.sizes}</TagLabel>
+                                <TagLabel>
+                                    {maternial.brand}
+                                </TagLabel>
                             </Tag>
-                        }
+                        </VStack>
+                        <Divider />
+                        <VStack alignItems="start">
+                            <Text as="b" fontSize="13">Description</Text>
+                            <Tag
+                                borderRadius='full'
+                                variant='outline'
+                                colorScheme='orange'
+                            >
+                                <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
+                                    {maternial.description}
+                                </Text>
+                            </Tag>
+                        </VStack>
+                        <Divider />
+                        <VStack alignItems="start">
+                            <Text as="b" fontSize="13">Price</Text>
+                            <Tag
+                                borderRadius='full'
+                                variant='outline'
+                                colorScheme='gray'
+                            >
+                                <TagLabel>{"$" + maternial.price}</TagLabel>
+                            </Tag>
+                        </VStack>
+                        <Divider />
+                        <VStack alignItems="start">
+                            {maternial.sizes &&
+                                <>
+                                    <Text as="b" fontSize="13">Size</Text>
+                                    <Tag
+                                        borderRadius='full'
+                                        variant='solid'
+                                        colorScheme='telegram'
+                                    >
+                                        <TagLabel>{maternial.sizes}</TagLabel>
+                                    </Tag>
+                                </>
+                            }
+                        </VStack>
                     </VStack>
                 </HStack>
-            </SkeletonText>
-            <SkeletonText
-                isLoaded={!maternialDataLoading}
-                w="400px"
-            >
-                {!flippedCards &&
-                    <HStack
-                        w="220px"
-                        justifyContent="space-between"
-                    >
-                        <MotionButton
-                            // When the user uses their mouse
-                            whileHover={{ scale: 1.2 }}
-                            // When the user tabs
-                            whileFocus={{ scale: 1.2 }}
-                            as="a"
-                            href={maternial.affiliateLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Buy
-                        </MotionButton>
-                        <MotionButton
-                            // When the user uses their mouse
-                            whileHover={{ scale: 1.2 }}
-                            // When the user tabs
-                            whileFocus={{ scale: 1.2 }}
-                            onClick={() => {
-                                handleFlip();
-                                handleButtonsTrigger();
-                            }}
-                        >
-                            Rate
-                        </MotionButton>
-                    </HStack>
-
-                }
             </SkeletonText>
         </VStack>
     );

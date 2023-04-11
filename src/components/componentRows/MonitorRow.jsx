@@ -1,5 +1,5 @@
 import { CheckIcon, CloseIcon, StarIcon } from '@chakra-ui/icons';
-import { Box, Button, Card, CardBody, Divider, HStack, Heading, Icon, Image, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Card, CardBody, CardFooter, Divider, HStack, Heading, Icon, Image, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { firestore } from '../../firebaseConfig';
@@ -121,6 +121,40 @@ export default function MonitorRow({ monitor, monitorDataIsLoading, tabIndex }) 
                                     style={{ width: 150, height: 200, resizeMode: 'cover' }}
                                 />
                             </CardBody>
+                            <CardFooter>
+                                {!flippedCards &&
+                                    <HStack
+                                        w="220px"
+                                        justifyContent="space-between"
+                                    >
+                                        <MotionButton
+                                            // When the user uses their mouse
+                                            whileHover={{ scale: 1.2 }}
+                                            // When the user tabs
+                                            whileFocus={{ scale: 1.2 }}
+                                            as="a"
+                                            href={monitor.affiliateLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            Buy
+                                        </MotionButton>
+                                        <MotionButton
+                                            // When the user uses their mouse
+                                            whileHover={{ scale: 1.2 }}
+                                            // When the user tabs
+                                            whileFocus={{ scale: 1.2 }}
+                                            onClick={() => {
+                                                handleFlip();
+                                                handleButtonsTrigger();
+                                            }}
+                                        >
+                                            Rate
+                                        </MotionButton>
+                                    </HStack>
+
+                                }
+                            </CardFooter>
                         </Card>
                         :
                         <MotionBox
@@ -233,43 +267,6 @@ export default function MonitorRow({ monitor, monitorDataIsLoading, tabIndex }) 
                         </Tag>
                     </VStack>
                 </HStack>
-            </SkeletonText>
-            <SkeletonText
-                isLoaded={!monitorDataIsLoading}
-                w="400px"
-            >
-                {!flippedCards &&
-                    <HStack
-                        w="220px"
-                        justifyContent="space-between"
-                    >
-                        <MotionButton
-                            // When the user uses their mouse
-                            whileHover={{ scale: 1.2 }}
-                            // When the user tabs
-                            whileFocus={{ scale: 1.2 }}
-                            as="a"
-                            href={monitor.affiliateLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Buy
-                        </MotionButton>
-                        <MotionButton
-                            // When the user uses their mouse
-                            whileHover={{ scale: 1.2 }}
-                            // When the user tabs
-                            whileFocus={{ scale: 1.2 }}
-                            onClick={() => {
-                                handleFlip();
-                                handleButtonsTrigger();
-                            }}
-                        >
-                            Rate
-                        </MotionButton>
-                    </HStack>
-
-                }
             </SkeletonText>
         </VStack>
     );

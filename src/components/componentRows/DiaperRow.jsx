@@ -1,5 +1,5 @@
 import { CheckIcon, CloseIcon, StarIcon } from '@chakra-ui/icons';
-import { Box, Button, Heading, HStack, Image, SkeletonCircle, SkeletonText, Text, Tooltip, VStack, Icon, Divider, Stack, Card, CardBody, Tag, TagLabel, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Heading, HStack, Image, SkeletonCircle, SkeletonText, Text, Tooltip, VStack, Icon, Divider, Stack, Card, CardBody, Tag, TagLabel, useColorModeValue, CardHeader, CardFooter } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { firestore } from '../../firebaseConfig';
@@ -95,7 +95,7 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
     return (
         <VStack
             key={diaper.id}
-            h="350px"
+            h="500px"
             spacing="3"
             paddingBottom="10"
         >
@@ -104,6 +104,17 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                 <HStack spacing="4" w="400px">
                     {!flippedCards ?
                         <Card w="220px" bg={_cardBackground}>
+                            <CardHeader justifyContent="center" alignItems="center">
+                                <Tag
+                                    borderRadius='full'
+                                    colorScheme='blackAlpha'
+                                    size="lg"
+                                >
+                                    <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
+                                        {diaper.title}
+                                    </Text>
+                                </Tag>
+                            </CardHeader>
                             <CardBody display="flex" justifyContent="center">
                                 <MotionImage
                                     variant="unstyled"
@@ -121,6 +132,40 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                                     style={{ width: 150, height: 200, resizeMode: 'cover' }}
                                 />
                             </CardBody>
+                            <CardFooter>
+                                {!flippedCards &&
+                                    <HStack
+                                        w="220px"
+                                        justifyContent="space-between"
+                                    >
+                                        <MotionButton
+                                            // When the user uses their mouse
+                                            whileHover={{ scale: 1.2 }}
+                                            // When the user tabs
+                                            whileFocus={{ scale: 1.2 }}
+                                            as="a"
+                                            href={diaper.affiliateLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                        >
+                                            Buy
+                                        </MotionButton>
+                                        <MotionButton
+                                            // When the user uses their mouse
+                                            whileHover={{ scale: 1.2 }}
+                                            // When the user tabs
+                                            whileFocus={{ scale: 1.2 }}
+                                            onClick={() => {
+                                                handleFlip();
+                                                handleButtonsTrigger();
+                                            }}
+                                        >
+                                            Rate
+                                        </MotionButton>
+                                    </HStack>
+
+                                }
+                            </CardFooter>
                         </Card>
                         :
                         <MotionBox
@@ -197,79 +242,53 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                             </TagLabel>
                         </Tag>
                         <Divider />
-                        <Tag
-                            borderRadius='full'
-                            variant='outline'
-                            colorScheme='blue'
-                        >
-                            <TagLabel>
-                                {diaper.brand}
-                            </TagLabel>
-                        </Tag>
+                        <VStack alignItems="start">
+                            <Text as="b" fontSize="13">Brand</Text>
+                            <Tag
+                                borderRadius='full'
+                                variant='outline'
+                                colorScheme='blue'
+                            >
+                                <TagLabel>
+                                    {diaper.brand}
+                                </TagLabel>
+                            </Tag>
+                        </VStack>
                         <Divider />
-                        <Tag
-                            borderRadius='full'
-                            variant='outline'
-                            colorScheme='orange'
-                        >
-                            <TagLabel>{diaper.description}</TagLabel>
-                        </Tag>
+                        <VStack alignItems="start">
+                            <Text as="b" fontSize="13">Description</Text>
+                            <Tag
+                                borderRadius='full'
+                                variant='outline'
+                                colorScheme='orange'
+                            >
+                                <TagLabel>{diaper.description}</TagLabel>
+                            </Tag>
+                        </VStack>
                         <Divider />
-
-                        <Tag
-                            borderRadius='full'
-                            variant='outline'
-                            colorScheme='gray'
-                        >
-                            <TagLabel>{"$" + diaper.price}</TagLabel>
-                        </Tag>
+                        <VStack alignItems="start">
+                            <Text as="b" fontSize="13">Price</Text>
+                            <Tag
+                                borderRadius='full'
+                                variant='outline'
+                                colorScheme='gray'
+                            >
+                                <TagLabel>{"$" + diaper.price}</TagLabel>
+                            </Tag>
+                        </VStack>
                         <Divider />
-                        <Tag
-                            borderRadius='full'
-                            variant='solid'
-                            colorScheme='telegram'
-                        >
-                            <TagLabel>{"Size: " + diaper.size}</TagLabel>
-                        </Tag>
+                        <VStack alignItems="start">
+                            <Text as="b" fontSize="13">Size</Text>
+                            <Tag
+                                borderRadius='full'
+                                variant='solid'
+                                colorScheme='telegram'
+                            >
+                                <TagLabel>{"Size: " + diaper.size}</TagLabel>
+                            </Tag>
+                        </VStack>
                     </VStack>
                 </HStack>
-            </SkeletonText>
-            <SkeletonText
-                isLoaded={!isDiapersLoading}
-                w="400px"
-            >
-                {!flippedCards &&
-                    <HStack
-                        w="220px"
-                        justifyContent="space-between"
-                    >
-                        <MotionButton
-                            // When the user uses their mouse
-                            whileHover={{ scale: 1.2 }}
-                            // When the user tabs
-                            whileFocus={{ scale: 1.2 }}
-                            as="a"
-                            href={diaper.affiliateLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Buy
-                        </MotionButton>
-                        <MotionButton
-                            // When the user uses their mouse
-                            whileHover={{ scale: 1.2 }}
-                            // When the user tabs
-                            whileFocus={{ scale: 1.2 }}
-                            onClick={() => {
-                                handleFlip();
-                                handleButtonsTrigger();
-                            }}
-                        >
-                            Rate
-                        </MotionButton>
-                    </HStack>
-
-                }
             </SkeletonText>
         </VStack>
     );
