@@ -1,6 +1,6 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import { auth, firestore, serverTimestamp } from '../firebaseConfig';
-import { Box, Button, HStack, Textarea, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, HStack, Select, Textarea, VStack, useColorModeValue } from '@chakra-ui/react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Context from "../context/Context";
 import DMChatMessage from '../components/DMChatMessage';
@@ -10,6 +10,7 @@ import { wordFilter } from '../components/messaging/wordFilter';
 function DirectMessagePage() {
     const { data: selectedUser } = useContext(Context);
     const [text, setText] = useState();
+    const [fontSize, setFontSize] = useState("md");
     const messageBoxRef = useRef();
 
     const [chatRoomMessagesRecieved] = useCollectionData(
@@ -84,17 +85,32 @@ function DirectMessagePage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
 
     return (
-        <Box bg={_screenBackground} h="100vh">
-            <div style={{ height: 'calc(100vh - 175px)', overflowY: 'auto' }} ref={messageBoxRef}>
+        <Box w="100vw" h="100vh" bg={_screenBackground}>
+            <Box w="100vw" justifyContent="space-between" display="flex" padding="3">
+                <VStack spacing="4" w={"15vw"} alignItems={"start"}>
+                    <Select placeholder='font-size' value={fontSize} onChange={(event) => setFontSize(event.target.value)}>
+                        <option value='sm'>Small</option>
+                        <option value='md'>Medium</option>
+                        <option value='lg'>Large</option>
+                        <option value='xl'>XL</option>
+                        <option value='2xl'>2XL</option>
+                        <option value='3xl'>3XL</option>
+                        <option value='4xl'>4XL</option>
+                        <option value='5xl'>5XL</option>
+                        <option value='6xl'>thick</option>
+                    </Select>
+                </VStack>
+            </Box>
+            <div style={{ height: `calc(100vh - 240px)`, overflowY: 'auto' }} ref={messageBoxRef}>
                 {(chatRoomMessagesRecieved && chatRoomMessagesSent) &&
                     generateMessages()
                         .map((msg) => {
-                            return (<DMChatMessage key={msg.id} message={msg} />);
+                            return (<DMChatMessage key={msg.id} message={msg} fontSize={fontSize} />);
                         })
                 }
             </div>
             <form onSubmit={sendMessage}>
-                <Box w="100vw" padding="5" bottom="0" position="fixed" bg={_screenBackground}>
+                <Box w="100vw" padding="5" bottom="0" position="fixed">
                     <HStack>
                         <Textarea
                             value={text}
@@ -107,7 +123,7 @@ function DirectMessagePage() {
                     </HStack>
                 </Box>
             </form>
-        </Box>
+        </Box >
     );
 }
 

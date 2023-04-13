@@ -1,7 +1,7 @@
-import { Avatar, Box } from "@chakra-ui/react";
+import { Avatar, Box, Text } from "@chakra-ui/react";
 import { auth } from "../firebaseConfig";
 
-export default function DMChatMessage({ message }) {
+export default function DMChatMessage({ message, fontSize }) {
     const { text, uid, photoURL } = message;
     const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
 
@@ -10,7 +10,9 @@ export default function DMChatMessage({ message }) {
             <div style={{ display: 'flex', flexDirection: "row", alignItems: "center", gap: "10px" }}>
                 <Avatar src={photoURL || 'https://i.imgur.com/rFbS5ms.png'} alt="Avatar" />
                 <Box whiteSpace="pre-wrap">
-                    {text}
+                    <Text fontSize={fontSize}>
+                        {text}
+                    </Text>
                 </Box>
             </div>
         </div>
