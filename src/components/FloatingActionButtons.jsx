@@ -1,5 +1,5 @@
-import { HamburgerIcon, MoonIcon, SearchIcon, SunIcon, TimeIcon, UnlockIcon } from '@chakra-ui/icons';
-import { IconButton, Tooltip, VStack, useColorMode, useColorModeValue } from '@chakra-ui/react';
+import { HamburgerIcon, SearchIcon, UnlockIcon } from '@chakra-ui/icons';
+import { IconButton, Tooltip, VStack } from '@chakra-ui/react';
 import PregnantWomanOutlinedIcon from '@mui/icons-material/PregnantWomanOutlined';
 import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
 import MapIcon from '@mui/icons-material/Map';

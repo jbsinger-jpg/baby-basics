@@ -1,11 +1,11 @@
 import { ArrowDownIcon, ArrowUpIcon } from "@chakra-ui/icons";
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Avatar, Box, Button, Heading, HStack, IconButton, Text, Tooltip, useColorModeValue, useToast, VStack } from "@chakra-ui/react";
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Avatar, Box, Button, HStack, IconButton, Text, Tooltip, useColorModeValue, useToast, VStack } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import Context from "../context/Context";
 import { auth, firestore } from "../firebaseConfig";
 import { motion } from "framer-motion";
 
-export default function ChatMessage({ message }) {
+export default function ChatMessage({ message, fontSize }) {
     // TODO: Create an upvote system for the chat messages
     // Going to need to keep track of the following:
     // -- who previously upvoted
@@ -263,7 +263,9 @@ export default function ChatMessage({ message }) {
                     padding="5"
                     borderRadius="10"
                     bgColor={useColorModeValue("Dark", "Light") === "Dark" ? "gray.100" : "gray.600"}>
-                    {text}
+                    <Text fontSize={fontSize}>
+                        {text}
+                    </Text>
                 </Box>
             </HStack>
             <AlertDialog

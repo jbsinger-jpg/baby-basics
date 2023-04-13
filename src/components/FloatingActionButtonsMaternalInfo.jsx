@@ -1,5 +1,4 @@
-import { MoonIcon, SunIcon } from '@chakra-ui/icons';
-import { IconButton, Tooltip, VStack, useColorMode, useColorModeValue } from '@chakra-ui/react';
+import { IconButton, Tooltip, VStack } from '@chakra-ui/react';
 import MapIcon from '@mui/icons-material/Map';
 import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
 

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { auth, firestore, serverTimestamp } from '../firebaseConfig';
-import { Box, Button, HStack, IconButton, Input, Textarea, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, HStack, IconButton, Input, Select, Textarea, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Context from '../context/Context';
 import 'firebase/compat/auth';
@@ -8,12 +8,13 @@ import 'firebase/compat/firestore';
 import ChatMessage from '../components/ChatMessage';
 import { SearchIcon } from '@chakra-ui/icons';
 import { screenBackground } from '../defaultStyle';
-import ColorModeToggleButton from '../components/ColorModeToggleButton';
+import { wordFilter } from '../components/messaging/wordFilter';
 
 function ForumMessagePage() {
     const [text, setText] = useState();
     const [searchTerm, setSearchTerm] = useState("");
     const [searchButtonLoading, setSearchButtonLoading] = useState(false);
+    const [fontSize, setFontSize] = useState("md");
 
     // Data passed from StarterForumPage to here to get the messages to not have to remake a bunch of pages
     const { data: pageData, setData: setPageData } = useContext(Context);
@@ -103,7 +104,7 @@ function ForumMessagePage() {
         const userData = (await userDoc.get()).data();
 
         const docRef = await firestore.collection(pageData).add({
-            text: text,
+            text: wordFilter.clean(text),
             createdAt: serverTimestamp(),
             uid: uid,
             photoURL: photoURL,
@@ -129,28 +130,40 @@ function ForumMessagePage() {
     return (
         <Box w="100vw" h="100vh" bg={_screenBackground}>
             <Box w="100vw" justifyContent="space-between" display="flex" padding="3">
-                {orderByVoteCount ?
-                    <Button onClick={() => setOrderByVoteCount(!orderByVoteCount)}>
-                        Order By Created
-                    </Button>
-                    :
-                    <Button onClick={() => setOrderByVoteCount(!orderByVoteCount)}>
-                        Order By Vote
-                    </Button>
-                }
+                <VStack spacing="4" w={"15vw"} alignItems={"start"}>
+                    {orderByVoteCount ?
+                        <Button onClick={() => setOrderByVoteCount(!orderByVoteCount)}>
+                            Order By Created
+                        </Button>
+                        :
+                        <Button onClick={() => setOrderByVoteCount(!orderByVoteCount)}>
+                            Order By Vote
+                        </Button>
+                    }
+                    <Select placeholder='font-size' value={fontSize} onChange={(event) => setFontSize(event.target.value)}>
+                        <option value='sm'>Small</option>
+                        <option value='md'>Medium</option>
+                        <option value='lg'>Large</option>
+                        <option value='xl'>XL</option>
+                        <option value='2xl'>2XL</option>
+                        <option value='3xl'>3XL</option>
+                        <option value='4xl'>4XL</option>
+                        <option value='5xl'>5XL</option>
+                        <option value='6xl'>thick</option>
+                    </Select>
+                </VStack>
                 <HStack>
                     <Input placeholder='Search...' value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} />
                     <Tooltip label="Search">
                         <IconButton icon={<SearchIcon />} onClick={handleSearch} isLoading={searchButtonLoading} />
                     </Tooltip>
                 </HStack>
-
             </Box>
-            <div style={{ height: 'calc(100vh - 175px)', overflowY: 'auto' }} ref={messageBoxRef}>
+            <div style={{ height: `calc(100vh - 240px)`, overflowY: 'auto' }} ref={messageBoxRef}>
                 {(messages) &&
                     messages
                         .map((msg) => {
-                            return (<ChatMessage key={msg.id} message={msg} />);
+                            return (<ChatMessage key={msg.id} message={msg} fontSize={fontSize} />);
                         })
                 }
             </div>
@@ -168,7 +181,7 @@ function ForumMessagePage() {
                     </HStack>
                 </Box>
             </form>
-        </Box>
+        </Box >
     );
 }
 

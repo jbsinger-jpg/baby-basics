@@ -1,11 +1,11 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import { auth, firestore, serverTimestamp } from '../firebaseConfig';
-import { Box, Button, HStack, Textarea, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, HStack, Textarea, useColorModeValue } from '@chakra-ui/react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Context from "../context/Context";
 import DMChatMessage from '../components/DMChatMessage';
 import { screenBackground } from '../defaultStyle';
-import ColorModeToggleButton from '../components/ColorModeToggleButton';
+import { wordFilter } from '../components/messaging/wordFilter';
 
 function DirectMessagePage() {
     const { data: selectedUser } = useContext(Context);
@@ -61,7 +61,7 @@ function DirectMessagePage() {
         const { uid, photoURL } = auth.currentUser;
 
         await firestore.collection('messages').add({
-            text: text,
+            text: wordFilter.clean(text),
             createdAt: serverTimestamp(),
             uid: uid,
             photoURL: photoURL,

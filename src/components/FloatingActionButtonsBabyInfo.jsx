@@ -1,5 +1,4 @@
-import { MoonIcon, SunIcon } from '@chakra-ui/icons';
-import { IconButton, Tooltip, VStack, useColorMode, useColorModeValue } from '@chakra-ui/react';
+import { IconButton, Tooltip, VStack } from '@chakra-ui/react';
 import PregnantWomanOutlinedIcon from '@mui/icons-material/PregnantWomanOutlined';
 import MapIcon from '@mui/icons-material/Map';
 
