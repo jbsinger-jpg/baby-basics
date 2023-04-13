@@ -30,7 +30,14 @@ const trimesterPhaseInformation = [
     recommendations: [
       "Urine tests: if left untreated can trigger pre-term labor",
       "Blood tests: check Rh status, iron levels, blood sugar (gestional diabetes), rubella or HIV, Hep. B, and syphilis"
-    ]
+    ],
+    videos: [
+      { key: 0, value: "https://www.youtube.com/embed/jX2L20k6uTg", label: "Everything You Need to Know About the First Trimester of Pregnancy" },
+      { key: 1, value: "https://www.youtube.com/embed/81dQFYIJP60", label: "What I Wish I Knew About the First Trimester | OB-GYN Pregnancy VLOG" },
+      { key: 2, value: "https://www.youtube.com/embed/Jr4nt6XM3gA", label: "Ob-Gyn Answers the Most Commonly Asked Questions About First Trimester of Pregnancy - What to Expect" },
+      { key: 3, value: "https://www.youtube.com/embed/shLAZ6crUQU", label: "8 WEEKS PREGNANT + FIRST ULTRASOUND | What to Expect at FIRST Doctor Appointment During Pregnancy" },
+      { key: 4, value: "https://www.youtube.com/embed/x2sFwxX1Bzk", label: "How To Survive The First Trimester: Top Health Tips and Pregnancy Questions Answered" },
+    ],
   },
   {
     stage: 2,
@@ -54,6 +61,13 @@ const trimesterPhaseInformation = [
     recommendations: [
       "Swelling will cause changes to your circulation that make it hard for your blood to get from your legs to your heart." +
       "To help prevent this drink water throughout the day and exercise lightly but regularly to increase blood flow.",
+    ],
+    videos: [
+      { key: 0, value: "https://www.youtube.com/embed/7VtUWfHa7X4", label: "Ob-Gyn Answers Most Commonly Asked Questions About Second Trimester of Pregnancy - What to Expect" },
+      { key: 1, value: "https://www.youtube.com/embed/un3P0aUbtgM", label: "15 Common Second Trimester Symptoms and HOW TO HELP." },
+      { key: 2, value: "https://www.youtube.com/embed/Yyr4ti4ClRI", label: "Second Trimester Symptoms | What to Expect in your Second Trimester of Pregnancy!" },
+      { key: 3, value: "https://www.youtube.com/embed/0mXrirWAl4o", label: "ROUND LIGAMENT PAIN + GROIN PAIN DURING PREGNANCY" },
+      { key: 4, value: "https://www.youtube.com/embed/NJ6GgELmfJc", label: "Gender Identification - Ultrasound Scanning Technique" },
     ]
   },
   {
@@ -80,6 +94,9 @@ const trimesterPhaseInformation = [
       " because  Kegels can help heal perineal tissues, which are stretched during vaginal birth.",
       "Take prenatal vitamins",
       "Keep your teeth and gums healthy. Poor dental hygiene is linked to premature labor."
+    ],
+    videos: [
+      { key: 0, value: "https://www.youtube.com/embed/3pz6QxHOb30", label: "Pregnancy Week 30 | What to Expect in Your Third Trimester" },
     ]
   }
 ];
@@ -109,7 +126,7 @@ export default function MaternalResourcesPage() {
   const [selectedVideo, setSelectedVideo] = useState(null);
 
   const [selectedHyperLinks, setSelectedHyperLinks] = useState([]);
-  const [videos, setVideos] = useState(null);
+  const [videos, setVideos] = useState(trimesterPhaseInformation[0].videos);
 
   // FAB buttons
   const [searchPlaces, setSearchPlaces] = useState(false);
@@ -135,6 +152,7 @@ export default function MaternalResourcesPage() {
         setSelectedRecommendations(trimesterPhaseInformation[i].recommendations);
         setSelectedBabyDevelopment(trimesterPhaseInformation[i].babyDevelopment);
         setSelectedPregnantSymptoms(trimesterPhaseInformation[i].motherPregnancySymptoms);
+        setVideos(trimesterPhaseInformation[i].videos);
       }
     }
 
