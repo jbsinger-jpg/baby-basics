@@ -220,7 +220,7 @@ export default function HomePage() {
     }, [screenHeight, screenWidth]);
 
     return (
-        <Box bg={_screenBackground} h={screenHeight} w={screenWidth}>
+        <Box bg={_screenBackground} h={screenHeight} w={screenWidth - "10px"}>
             <Drawer
                 isOpen={isOpen}
                 placement='left'

@@ -176,8 +176,8 @@ export default function MaternalResourcesPage() {
   };
 
   return (
-    <HStack flexWrap={"wrap"} spacing="12" justifyContent="center" alignItems="start" w="100vw" bg={_screenBackground}>
-      <HStack alignItems="start" w="100vw" paddingLeft="5" spacing="5" marginTop="5">
+    <HStack flexWrap={"wrap"} spacing="12" justifyContent="center" alignItems="start" w="90vw" bg={_screenBackground}>
+      <HStack alignItems="start" w="100vw" paddingLeft="5" spacing="5" marginTop="5" paddingBottom="10">
         <MotionButton
           whileTap={{ scale: 0.8 }}
           onClick={() => { handleSelectedTrimesterChange(1); }}
