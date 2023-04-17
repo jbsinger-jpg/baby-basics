@@ -1,3 +1,3 @@
 
-export const screenBackground = { light: 'cyan.50', dark: 'gray.800' };
-export const cardBackground = { light: 'blue.50', dark: 'gray.700' };
+export const screenBackground = { light: 'teal.50', dark: 'gray.800' };
+export const cardBackground = { light: 'gray.400', dark: 'gray.700' };

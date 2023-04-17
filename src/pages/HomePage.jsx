@@ -20,7 +20,7 @@ import ToysDataTabPanel from '../components/tabPanels/ToysDataTabPanel';
 import MonitorsDataTabPanel from '../components/tabPanels/MonitorsDataTabPanel';
 import SeatsTabPanel from '../components/tabPanels/SeatsTabPanel';
 import StrollersDataTabPanel from '../components/tabPanels/StrollersDataTabPanel';
-import { screenBackground } from '../defaultStyle';
+import { cardBackground, screenBackground } from '../defaultStyle';
 
 export default function HomePage() {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -68,6 +68,7 @@ export default function HomePage() {
     const [searchPlaces, setSearchPlaces] = useState(false);
 
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
+    const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
     const [screenHeight, setScreenHeight] = useState(window.innerHeight);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const [addedPeople, setAddedPeople] = useState([]);
@@ -372,10 +373,10 @@ export default function HomePage() {
                                         Set Google Calendar Event
                                     </Button>
                                 </PopoverTrigger>
-                                <PopoverContent>
+                                <PopoverContent bg={_cardBackground}>
                                     <PopoverArrow />
                                     <PopoverCloseButton />
-                                    <PopoverHeader >Confirmation!</PopoverHeader>
+                                    <PopoverHeader> Confirmation! </PopoverHeader>
                                     <PopoverBody>
                                         <FormLabel htmlFor='email'>Guests</FormLabel>
                                         <VStack alignItems="start" spacing="5" paddingBottom="3">
