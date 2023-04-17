@@ -1,5 +1,5 @@
 import { CalendarIcon, ChatIcon, WarningIcon } from '@chakra-ui/icons';
-import { Avatar, AvatarBadge, AvatarGroup, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
+import { Avatar, AvatarBadge, AvatarGroup, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormLabel, Heading, HStack, Input, InputGroup, InputLeftAddon, InputRightAddon, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Select, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Textarea, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionDataOnce } from 'react-firebase-hooks/firestore';
 import { useNavigate } from 'react-router-dom';
@@ -70,6 +70,12 @@ export default function HomePage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
     const [screenHeight, setScreenHeight] = useState(window.innerHeight);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+    const [addedPeople, setAddedPeople] = useState([]);
+
+    const [selectedCalendar, setSelectedCalendar] = useState("default");
+    const [selectedFrequency, setSelectedFrequency] = useState("");
+    const [emailHost, setEmailHost] = useState("");
+    const [emailBody, setEmailBody] = useState("");
 
 
     const handleSearchPlacesDialogOpen = () => {
@@ -99,6 +105,40 @@ export default function HomePage() {
         else {
             console.log("Could not redirect to the forum page wanted.");
         }
+    };
+
+    const formatDateTime = () => {
+        const startTime = new Date();
+        const endTime = new Date();
+
+        endTime.setDate(endTime.getDate() + 1);
+        const dates = startTime.toISOString().replace(/-|:|\.\d+/g, '') + '/' + endTime.toISOString().replace(/-|:|\.\d+/g, '');
+        return dates;
+    };
+
+    const formatAddPeople = () => {
+        let options = [];
+
+        if (addedPeople && addedPeople.length > 0) {
+            options = addedPeople.join(",");
+        }
+
+        return options;
+    };
+
+    const formatFrequency = () => {
+        if (selectedFrequency) {
+            return `RRULE:FREQ%3D${selectedFrequency}`;
+        }
+
+        return "";
+    };
+
+    const handleAddGuest = () => {
+        const newPerson = `${emailBody}@${emailHost}.com`;
+
+        if (!addedPeople.includes(newPerson))
+            setAddedPeople([...addedPeople, newPerson]);
     };
 
     // initialize the page with the data from the data base
@@ -324,15 +364,56 @@ export default function HomePage() {
                             <Button leftIcon={<ChatIcon />} onClick={onOpen} >
                                 Chat with Peeps
                             </Button>
-                            <Button
-                                as="a"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                href={`https://calendar.google.com/calendar/r?authuser=${auth?.currentUser?.email}&pli=1`}
-                                leftIcon={<CalendarIcon />}
-                            >
-                                Set Google Calendar Event
-                            </Button>
+                            <Popover>
+                                <PopoverTrigger>
+                                    <Button
+                                        leftIcon={<CalendarIcon />}
+                                    >
+                                        Set Google Calendar Event
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent>
+                                    <PopoverArrow />
+                                    <PopoverCloseButton />
+                                    <PopoverHeader >Confirmation!</PopoverHeader>
+                                    <PopoverBody>
+                                        <FormLabel htmlFor='email'>Guests</FormLabel>
+                                        <VStack alignItems="start" spacing="5" paddingBottom="3">
+                                            <InputGroup>
+                                                <Input id='email' value={emailBody} onChange={(event) => setEmailBody(event.target.value)} />
+                                                <InputRightAddon>@</InputRightAddon>
+                                                <Input value={emailHost} onChange={(event) => setEmailHost(event.target.value)} />
+                                                <InputRightAddon>.com</InputRightAddon>
+                                            </InputGroup>
+                                            <Button onClick={handleAddGuest}> Add Guest </Button>
+                                            <Textarea readOnly placeholder='Guests...' value={addedPeople}></Textarea>
+                                        </VStack>
+                                        <FormLabel htmlFor='calendar'>Calendar</FormLabel>
+                                        <Select onChange={(event) => setSelectedCalendar(event.target.value)} value={selectedCalendar} id="calendar">
+                                            <option value="default"> default </option>
+                                            <option value="c068f1e23834e64cff97c8c0f0b824bfd77db21e7e184a603a03b65fb9ed18e6@group.calendar.google.com"> baby-basics </option>
+                                        </Select>
+                                        <FormLabel htmlFor='frequency'>Repeat</FormLabel>
+                                        <Select onChange={(event) => setSelectedFrequency(event.target.value)} value={selectedFrequency} id="frequency">
+                                            <option value=""> Never </option>
+                                            <option value="DAILY"> daily </option>
+                                            <option value="WEEKLY"> weekly </option>
+                                            <option value="MONTHLY"> monthly </option>
+                                            <option value="YEARLY"> yearly </option>
+                                        </Select>
+                                    </PopoverBody>
+                                    <PopoverFooter>
+                                        <Button
+                                            as="a"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            href={`https://www.google.com/calendar/render?action=TEMPLATE&dates=${formatDateTime()}&recur=${formatFrequency()}&add=${formatAddPeople()}&src=${selectedCalendar}`}
+                                        >
+                                            Create Event
+                                        </Button>
+                                    </PopoverFooter>
+                                </PopoverContent>
+                            </Popover>
                             <Button
                                 leftIcon={<WarningIcon />}
                                 onClick={() => setScreeningAlertDialogVisibile(true)}
