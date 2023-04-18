@@ -393,7 +393,6 @@ export default function HomePage() {
                                             <Box
                                                 placeholder='Guests...'
                                                 value={addedPeople.join(",")}
-                                                onKeyDown={handleKeyDown}
                                                 border="1px solid black"
                                                 borderRadius="5%"
                                                 p="4"
