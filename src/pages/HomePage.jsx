@@ -1,5 +1,5 @@
 import { CalendarIcon, ChatIcon, WarningIcon } from '@chakra-ui/icons';
-import { Avatar, AvatarBadge, AvatarGroup, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormLabel, Heading, HStack, Input, InputGroup, InputLeftAddon, InputRightAddon, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Select, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Textarea, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
+import { Avatar, AvatarBadge, AvatarGroup, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormLabel, Heading, HStack, Input, InputGroup, InputRightAddon, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Select, Tab, TabList, TabPanel, TabPanels, Tabs, Tag, TagCloseButton, TagLabel, Text, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionDataOnce } from 'react-firebase-hooks/firestore';
 import { useNavigate } from 'react-router-dom';
@@ -140,6 +140,10 @@ export default function HomePage() {
 
         if (!addedPeople.includes(newPerson))
             setAddedPeople([...addedPeople, newPerson]);
+    };
+
+    const handleTagDelete = (tagToDelete) => {
+        setAddedPeople(addedPeople.filter((tag) => tag !== tagToDelete));
     };
 
     // initialize the page with the data from the data base
@@ -333,7 +337,6 @@ export default function HomePage() {
                                                         </VStack>
                                                     </HStack>
                                                 </Button>
-
                                             );
                                         })}
                                     </VStack>
@@ -362,7 +365,7 @@ export default function HomePage() {
                     <DrawerHeader>Stuff for You!</DrawerHeader>
                     <DrawerBody>
                         <VStack alignItems="start" spacing="5">
-                            <Button leftIcon={<ChatIcon />} onClick={onOpen} >
+                            <Button leftIcon={<ChatIcon />} onClick={onOpen}>
                                 Chat with Peeps
                             </Button>
                             <Popover>
@@ -387,7 +390,24 @@ export default function HomePage() {
                                                 <InputRightAddon>.com</InputRightAddon>
                                             </InputGroup>
                                             <Button onClick={handleAddGuest}> Add Guest </Button>
-                                            <Textarea readOnly placeholder='Guests...' value={addedPeople}></Textarea>
+                                            <Box
+                                                placeholder='Guests...'
+                                                value={addedPeople.join(",")}
+                                                onKeyDown={handleKeyDown}
+                                                border="1px solid black"
+                                                borderRadius="5%"
+                                                p="4"
+                                                w="100%"
+                                                h="140px"
+                                                overflowY="auto"
+                                            >
+                                                {addedPeople.map((tag) => (
+                                                    <Tag key={tag} m="1" variant="solid" colorScheme="blue" size="sm">
+                                                        <TagLabel>{tag}</TagLabel>
+                                                        <TagCloseButton onClick={() => handleTagDelete(tag)} />
+                                                    </Tag>
+                                                ))}
+                                            </Box>
                                         </VStack>
                                         <FormLabel htmlFor='calendar'>Calendar</FormLabel>
                                         <Select onChange={(event) => setSelectedCalendar(event.target.value)} value={selectedCalendar} id="calendar">
