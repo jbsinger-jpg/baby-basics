@@ -1,6 +1,7 @@
 import { IconButton, Tooltip, VStack } from '@chakra-ui/react';
 import MapIcon from '@mui/icons-material/Map';
 import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
+import HomeIcon from '@mui/icons-material/Home';
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +12,10 @@ export default function FloatingActionButtonsMaternalInfo({ handleSearchPlacesDi
 
     const handleMilestoneResources = () => {
         navigate("/milestone");
+    };
+
+    const handleGoToHome = () => {
+        navigate("/");
     };
 
     return (
@@ -42,6 +47,18 @@ export default function FloatingActionButtonsMaternalInfo({ handleSearchPlacesDi
                     boxShadow="md"
                     _hover={{ boxShadow: "lg" }}
                     onClick={handleMilestoneResources}
+                >
+                </IconButton>
+            </Tooltip>
+            <Tooltip label="Home">
+                <IconButton
+                    icon={<HomeIcon fontSize="large" />}
+                    width="56px"
+                    height="56px"
+                    borderRadius="50%"
+                    boxShadow="md"
+                    _hover={{ boxShadow: "lg" }}
+                    onClick={handleGoToHome}
                 >
                 </IconButton>
             </Tooltip>

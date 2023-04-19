@@ -1,6 +1,7 @@
 import { IconButton, Tooltip, VStack } from '@chakra-ui/react';
 import PregnantWomanOutlinedIcon from '@mui/icons-material/PregnantWomanOutlined';
 import MapIcon from '@mui/icons-material/Map';
+import HomeIcon from '@mui/icons-material/Home';
 
 import React from 'react';
 import ColorModeToggleButton from './ColorModeToggleButton';
@@ -12,6 +13,10 @@ export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialog
 
     const handleMaternalResources = () => {
         navigate("/maternal");
+    };
+
+    const handleGoToHome = () => {
+        navigate("/");
     };
 
     return (
@@ -42,6 +47,18 @@ export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialog
                     boxShadow="md"
                     _hover={{ boxShadow: "lg" }}
                     onClick={handleMaternalResources}
+                >
+                </IconButton>
+            </Tooltip>
+            <Tooltip label="Home">
+                <IconButton
+                    icon={<HomeIcon fontSize="large" />}
+                    width="56px"
+                    height="56px"
+                    borderRadius="50%"
+                    boxShadow="md"
+                    _hover={{ boxShadow: "lg" }}
+                    onClick={handleGoToHome}
                 >
                 </IconButton>
             </Tooltip>
