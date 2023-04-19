@@ -8,6 +8,7 @@ import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
 import LocalCafeIcon from '@mui/icons-material/LocalCafe';
 import HearingIcon from '@mui/icons-material/Hearing';
 import AbcIcon from '@mui/icons-material/Abc';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { cardBackground, screenBackground } from '../defaultStyle';
 
 const promptOptions = [
@@ -377,10 +378,12 @@ export default function MilestonePage() {
                         </CardBody>
                         <CardFooter>
                             <ButtonGroup spacing='2' justifyContent={"space-between"}>
-                                <Button onClick={() => {
-                                    setFlippedMotorCard(!flippedMotorCard);
-                                    setMotorButtonPressed(true);
-                                }}>
+                                <Button
+                                    leftIcon={<RefreshIcon />}
+                                    onClick={() => {
+                                        setFlippedMotorCard(!flippedMotorCard);
+                                        setMotorButtonPressed(true);
+                                    }}>
                                     flip
                                 </Button>
                             </ButtonGroup>
@@ -427,10 +430,12 @@ export default function MilestonePage() {
                         </CardBody>
                         <CardFooter>
                             <ButtonGroup spacing='2' justifyContent={"space-between"}>
-                                <Button onClick={() => {
-                                    setFlippedCommunicationCard(!flippedCommunicationCard);
-                                    setCommunicationButtonPressed(true);
-                                }}>
+                                <Button
+                                    leftIcon={<RefreshIcon />}
+                                    onClick={() => {
+                                        setFlippedCommunicationCard(!flippedCommunicationCard);
+                                        setCommunicationButtonPressed(true);
+                                    }}>
                                     flip
                                 </Button>
                             </ButtonGroup>
@@ -476,10 +481,12 @@ export default function MilestonePage() {
                         </CardBody>
                         <CardFooter>
                             <ButtonGroup spacing='2' justifyContent={"space-between"}>
-                                <Button onClick={() => {
-                                    setFlippedFeedingCard(!flippedFeedingCard);
-                                    setFeedingButtonPressed(true);
-                                }}>
+                                <Button
+                                    leftIcon={<RefreshIcon />}
+                                    onClick={() => {
+                                        setFlippedFeedingCard(!flippedFeedingCard);
+                                        setFeedingButtonPressed(true);
+                                    }}>
                                     flip
                                 </Button>
                             </ButtonGroup>
@@ -525,10 +532,12 @@ export default function MilestonePage() {
                         </CardBody>
                         <CardFooter>
                             <ButtonGroup spacing='2' justifyContent={"space-between"}>
-                                <Button onClick={() => {
-                                    setFlippedSensoryCard(!flippedSensoryCard);
-                                    setSensoryButtonPressed(true);
-                                }}>
+                                <Button
+                                    leftIcon={<RefreshIcon />}
+                                    onClick={() => {
+                                        setFlippedSensoryCard(!flippedSensoryCard);
+                                        setSensoryButtonPressed(true);
+                                    }}>
                                     flip
                                 </Button>
                             </ButtonGroup>
@@ -581,10 +590,12 @@ export default function MilestonePage() {
                         </CardBody>
                         <CardFooter>
                             <ButtonGroup spacing='2' justifyContent={"space-between"}>
-                                <Button onClick={() => {
-                                    setFlippedResourcesCard(!flippedResourcesCard);
-                                    setResourceButtonPressed(true);
-                                }}>
+                                <Button
+                                    leftIcon={<RefreshIcon />}
+                                    onClick={() => {
+                                        setFlippedResourcesCard(!flippedResourcesCard);
+                                        setResourceButtonPressed(true);
+                                    }}>
                                     flip
                                 </Button>
                             </ButtonGroup>
@@ -630,10 +641,12 @@ export default function MilestonePage() {
                         </CardBody>
                         <CardFooter>
                             <ButtonGroup spacing='2' justifyContent={"space-between"}>
-                                <Button onClick={() => {
-                                    setFlippedActivitiesCard(!flippedActivitiesCard);
-                                    setActivitiesButtonPressed(true);
-                                }}>
+                                <Button
+                                    leftIcon={<RefreshIcon />}
+                                    onClick={() => {
+                                        setFlippedActivitiesCard(!flippedActivitiesCard);
+                                        setActivitiesButtonPressed(true);
+                                    }}>
                                     flip
                                 </Button>
                             </ButtonGroup>
