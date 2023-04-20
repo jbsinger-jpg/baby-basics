@@ -125,6 +125,7 @@ function ForumMessagePage() {
 
         setText('');
     };
+
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
 
     return (
@@ -182,7 +183,7 @@ function ForumMessagePage() {
                     </HStack>
                 </Box>
             </form>
-        </Box >
+        </Box>
     );
 }
 

@@ -5,9 +5,11 @@ import GoogleMapsModal from '../components/modals/GoogleMapsModal';
 import { motion } from 'framer-motion';
 import Woman2Icon from '@mui/icons-material/Woman2';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import CatchingPokemonIcon from '@mui/icons-material/CatchingPokemon';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { cardBackground, screenBackground } from '../defaultStyle';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import AnimatedButton from "../components/animated/AnimatedTrimesterButton";
+import AnimatedCard from '../components/animated/AnimatedCard';
 
 const trimesterPhaseInformation = [
   {
@@ -133,10 +135,8 @@ export default function MaternalResourcesPage() {
 
   // FAB buttons
   const [searchPlaces, setSearchPlaces] = useState(false);
-
   const [initialStage, setInitialStage] = useState(1);
 
-  const MotionIcon = motion(Icon);
   const MotionBox = motion(Box);
   const MotionButton = motion(Button);
 
@@ -181,78 +181,29 @@ export default function MaternalResourcesPage() {
   return (
     <HStack flexWrap={"wrap"} spacing="12" justifyContent="center" alignItems="start" w="100vw - 10px" bg={_screenBackground}>
       <HStack alignItems="start" w="100vw" paddingLeft="5" spacing="5" marginTop="5" paddingBottom="10">
-        <MotionButton
-          whileTap={{ scale: 0.8 }}
+        <AnimatedButton
+          title={"Trimester 1"}
           onClick={() => { handleSelectedTrimesterChange(1); }}
-        >
-          Trimester 1
-        </MotionButton>
-        <MotionButton
-          whileTap={{ scale: 0.8 }}
+        />
+        <AnimatedButton
+          title={"Trimester 2"}
           onClick={() => { handleSelectedTrimesterChange(2); }}
-        >
-          Trimester 2
-        </MotionButton>
-        <MotionButton
-          whileTap={{ scale: 0.8 }}
+        />
+        <AnimatedButton
+          title={"Trimester 3"}
           onClick={() => { handleSelectedTrimesterChange(3); }}
-        >
-          Trimester 3
-        </MotionButton>
+        />
       </HStack>
       <HStack w="100vw" justifyContent="space-evenly" alignItems="start">
-        <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
-          <Heading textDecoration="underline">Recommendations</Heading>
-          <Card w="400px" h="450px" bg={_cardBackground}>
-            <CardBody>
-              <Stack mt='6' spacing='3' alignItems="center">
-                {!flippedRecommendationCard ?
-                  <MotionIcon
-                    as={Woman2Icon}
-                    borderRadius='lg'
-                    initial={recommendationsButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
-                    animate={{ rotate: 0, scale: 1 }}
-                    onAnimationComplete={() => setRecommendationsButtonPressed(false)}
-                    transition={{
-                      type: "spring",
-                      stiffness: 260,
-                      damping: 20
-                    }}
-                    style={{ width: 300, height: 300, resizeMode: 'cover' }}
-                  />
-                  :
-                  <>
-                    <Heading size='md'> Key Points </Heading>
-                    <MotionBox
-                      initial={recommendationsButtonPressed ? { scale: 0 } : { scale: 1 }}
-                      animate={{ scale: 1 }}
-                      onAnimationComplete={() => setRecommendationsButtonPressed(false)}
-                      overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
-                      <UnorderedList spacing="2" paddingLeft="2">
-                        {selectedRecommendations.length > 0 && selectedRecommendations.map((milestone, index) => {
-                          return (<ListItem key={index}>{milestone}</ListItem>);
-                        })}
-                      </UnorderedList>
-                    </MotionBox>
-                  </>
-                }
-              </Stack>
-            </CardBody>
-            <CardFooter>
-              <ButtonGroup spacing='2' justifyContent={"space-between"}>
-                <MotionButton
-                  whileTap={{ scale: 0.8 }}
-                  leftIcon={<RefreshIcon />}
-                  onClick={() => {
-                    setFlippedRecommendationCard(!flippedRecommendationCard);
-                    setRecommendationsButtonPressed(true);
-                  }}>
-                  flip
-                </MotionButton>
-              </ButtonGroup>
-            </CardFooter>
-          </Card>
-        </VStack>
+        <AnimatedCard
+          flippedCard={flippedRecommendationCard}
+          setFlippedCard={setFlippedRecommendationCard}
+          cardIcon={Woman2Icon}
+          cardButtonPressed={recommendationsButtonPressed}
+          setCardButtonPressed={setRecommendationsButtonPressed}
+          selectedCardData={selectedRecommendations}
+          title={"Recommendations"}
+        />
         <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
           <Heading textDecoration="underline">Resources</Heading>
           <Card w="400px" h="450px" bg={_cardBackground}>
@@ -315,110 +266,24 @@ export default function MaternalResourcesPage() {
         </VStack>
       </HStack>
       <HStack w="100vw" justifyContent="space-evenly" alignItems="start">
-        <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
-          <Heading textDecoration="underline">Baby Development</Heading>
-          <Card w="400px" h="450px" bg={_cardBackground}>
-            <CardBody>
-              <Stack mt='6' spacing='3' alignItems="center">
-                {!flippedBabyDevelopmentCard ?
-                  <MotionIcon
-                    as={FavoriteBorderIcon}
-                    borderRadius='lg'
-                    initial={babyDevelopmentButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
-                    animate={{ rotate: 0, scale: 1 }}
-                    onAnimationComplete={() => setBabyDevelopmentButtonPressed(false)}
-                    transition={{
-                      type: "spring",
-                      stiffness: 260,
-                      damping: 20
-                    }}
-                    style={{ width: 300, height: 300, resizeMode: 'cover' }}
-                  />
-                  :
-                  <>
-                    <Heading size='md'> Key Points </Heading>
-                    <MotionBox
-                      initial={babyDevelopmentButtonPressed ? { scale: 0 } : { scale: 1 }}
-                      animate={{ scale: 1 }}
-                      onAnimationComplete={() => setBabyDevelopmentButtonPressed(false)}
-                      overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
-                      <UnorderedList spacing="2" paddingLeft="2">
-                        {selectedBabyDevelopment.length > 0 && selectedBabyDevelopment.map((milestone, index) => {
-                          return (<ListItem key={index}>{milestone}</ListItem>);
-                        })}
-                      </UnorderedList>
-                    </MotionBox>
-                  </>
-                }
-              </Stack>
-            </CardBody>
-            <CardFooter>
-              <ButtonGroup spacing='2' justifyContent={"space-between"}>
-                <MotionButton
-                  whileTap={{ scale: 0.8 }}
-                  leftIcon={<RefreshIcon />}
-                  onClick={() => {
-                    setFlippedBabyDevelopmentCard(!flippedBabyDevelopmentCard);
-                    setBabyDevelopmentButtonPressed(true);
-                  }}>
-                  flip
-                </MotionButton>
-              </ButtonGroup>
-            </CardFooter>
-          </Card>
-        </VStack>
-        <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
-          <Heading textDecoration="underline">Preggers Symptoms</Heading>
-          <Card w="400px" h="450px" bg={_cardBackground}>
-            <CardBody>
-              <Stack mt='6' spacing='3' alignItems="center">
-                {!flippedSymptomsCard ?
-                  <MotionIcon
-                    as={CatchingPokemonIcon}
-                    borderRadius='lg'
-                    initial={symptomsButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
-                    animate={{ rotate: 0, scale: 1 }}
-                    onAnimationComplete={() => setSymptomsButtonPressed(false)}
-                    transition={{
-                      type: "spring",
-                      stiffness: 260,
-                      damping: 20
-                    }}
-                    style={{ width: 300, height: 300, resizeMode: 'cover' }}
-                  />
-                  :
-                  <>
-                    <Heading size='md'> Key Points </Heading>
-                    <MotionBox
-                      initial={symptomsButtonPressed ? { scale: 0 } : { scale: 1 }}
-                      animate={{ scale: 1 }}
-                      onAnimationComplete={() => setSymptomsButtonPressed(false)}
-                      overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
-                      <UnorderedList spacing="2" paddingLeft="2">
-                        {selectedPregnantSymptoms.length > 0 && selectedPregnantSymptoms.map((milestone, index) => {
-                          return (<ListItem key={index}>{milestone}</ListItem>);
-                        })}
-                      </UnorderedList>
-                    </MotionBox>
-                  </>
-                }
-              </Stack>
-            </CardBody>
-            <CardFooter>
-              <ButtonGroup spacing='2' justifyContent={"space-between"}>
-                <MotionButton
-                  whileTap={{ scale: 0.8 }}
-                  leftIcon={<RefreshIcon />}
-                  onClick={() => {
-                    setFlippedSymptomsCard(!flippedSymptomsCard);
-                    setSymptomsButtonPressed(true);
-                  }}>
-                  flip
-                </MotionButton>
-              </ButtonGroup>
-            </CardFooter>
-          </Card>
-        </VStack>
+        <AnimatedCard
+          flippedCard={flippedBabyDevelopmentCard}
+          setFlippedCard={setFlippedBabyDevelopmentCard}
+          cardIcon={FavoriteBorderIcon}
+          cardButtonPressed={babyDevelopmentButtonPressed}
+          setCardButtonPressed={setBabyDevelopmentButtonPressed}
+          selectedCardData={selectedBabyDevelopment}
+          title={"Baby Development"}
+        />
+        <AnimatedCard
+          flippedCard={flippedSymptomsCard}
+          setFlippedCard={setFlippedSymptomsCard}
+          cardIcon={AutoAwesomeIcon}
+          cardButtonPressed={symptomsButtonPressed}
+          setCardButtonPressed={setSymptomsButtonPressed}
+          selectedCardData={selectedPregnantSymptoms}
+          title={"Pregnancy Symptoms"}
+        />
       </HStack>
       <FloatingActionButtonsMaternalInfo
         handleSearchPlacesDialogOpen={handleSearchPlacesDialogOpen}

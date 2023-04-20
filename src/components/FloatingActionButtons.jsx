@@ -96,11 +96,9 @@ export default function FloatingActionButtons({ setSettingsIsOpen, handleSearchP
                     _hover={{ boxShadow: "lg" }}
                     zIndex={999}
                     onClick={handleMilestones}
-                >
-                    Baby Milestones
-                </IconButton>
+                />
             </Tooltip>
-            <Tooltip label="Maternity Information">
+            <Tooltip label="Maternity">
                 <IconButton
                     icon={<PregnantWomanOutlinedIcon fontSize="large" />}
                     width="56px"
@@ -110,9 +108,7 @@ export default function FloatingActionButtons({ setSettingsIsOpen, handleSearchP
                     _hover={{ boxShadow: "lg" }}
                     zIndex={999}
                     onClick={handleMaternalResources}
-                >
-                    Baby Milestones
-                </IconButton>
+                />
             </Tooltip>
         </VStack>
     );

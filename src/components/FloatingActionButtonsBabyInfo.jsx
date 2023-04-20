@@ -38,7 +38,7 @@ export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialog
                     _hover={{ boxShadow: "lg" }}
                 />
             </Tooltip>
-            <Tooltip label="Maternity Information">
+            <Tooltip label="Maternity">
                 <IconButton
                     icon={<PregnantWomanOutlinedIcon fontSize="large" />}
                     width="56px"
