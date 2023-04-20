@@ -312,7 +312,7 @@ export default function MilestonePage() {
     };
 
     return (
-        <>
+        <Box bg={_screenBackground} paddingTop="2">
             <FloatingActionButtonsBabyInfo
                 handleSearchPlacesDialogOpen={handleSearchPlacesDialogOpen}
             />
@@ -320,25 +320,26 @@ export default function MilestonePage() {
                 setSearchPlaces={setPlaces}
                 searchPlaces={places}
             />
-            <HStack flexWrap={"wrap"} spacing="12" justifyContent="center" alignItems="start" bg={_screenBackground}>
-                <Select
-                    w="95vw"
-                    marginBottom="10"
-                    marginTop="5"
-                    placeholder='Select baby age'
-                    value={selectedAge}
-                    onChange={(event) => {
-                        setSelectedAge(event.target.value);
-                        handleAnswerChange(event);
-                    }}
-                >
-                    <option value="0-3M"> 0-3M </option>
-                    <option value="4-6M"> 4-6M </option>
-                    <option value="7-9M"> 7-9M </option>
-                    <option value="10-12M"> 10-12M </option>
-                    <option value="13-18M"> 13-18M </option>
-                    <option value="19-24M"> 19-24M </option>
-                </Select>
+            <Select
+                w="50vw"
+                marginBottom="10"
+                marginTop="5"
+                paddingLeft="5"
+                placeholder='Select baby age'
+                value={selectedAge}
+                onChange={(event) => {
+                    setSelectedAge(event.target.value);
+                    handleAnswerChange(event);
+                }}
+            >
+                <option value="0-3M"> 0-3M </option>
+                <option value="4-6M"> 4-6M </option>
+                <option value="7-9M"> 7-9M </option>
+                <option value="10-12M"> 10-12M </option>
+                <option value="13-18M"> 13-18M </option>
+                <option value="19-24M"> 19-24M </option>
+            </Select>
+            <HStack flexWrap={"wrap"} spacing="12" justifyContent="center" alignItems="start">
                 <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
                     <Heading textDecoration="underline">Motor</Heading>
                     <Card w="400px" h="450px" bg={_cardBackground}>
@@ -654,6 +655,6 @@ export default function MilestonePage() {
                     </Card>
                 </VStack>
             </HStack>
-        </>
+        </Box>
     );
 }
