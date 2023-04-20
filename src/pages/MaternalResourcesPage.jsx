@@ -29,7 +29,8 @@ const trimesterPhaseInformation = [
     ],
     recommendations: [
       "Urine tests: if left untreated can trigger pre-term labor",
-      "Blood tests: check Rh status, iron levels, blood sugar (gestional diabetes), rubella or HIV, Hep. B, and syphilis"
+      "Blood tests: check Rh status, iron levels, blood sugar (gestional diabetes), rubella or HIV, Hep. B, and syphilis",
+      "Taking prenatal vitamins with folic acid. This is linked to helping preventing certain birth defects, by helping with growth of the neural tube."
     ],
     videos: [
       { key: 0, value: "https://www.youtube.com/embed/jX2L20k6uTg", label: "Everything You Need to Know About the First Trimester of Pregnancy" },
@@ -60,7 +61,9 @@ const trimesterPhaseInformation = [
     ],
     recommendations: [
       "Swelling will cause changes to your circulation that make it hard for your blood to get from your legs to your heart." +
-      "To help prevent this drink water throughout the day and exercise lightly but regularly to increase blood flow.",
+      "To help prevent this drink water throughout the day and exercise lightly but regularly.",
+      "Another byproduct from the swelling might be carpal tunnel syndrome, to help with this it is recommended to either ice, stretch, or massage hands",
+      "Pelvic tilt exercises",
     ],
     videos: [
       { key: 0, value: "https://www.youtube.com/embed/7VtUWfHa7X4", label: "Ob-Gyn Answers Most Commonly Asked Questions About Second Trimester of Pregnancy - What to Expect" },
@@ -91,9 +94,9 @@ const trimesterPhaseInformation = [
     ],
     recommendations: [
       "Work out your pelvic floor by doing Kegel exercises. These exercises are important" +
-      " because  Kegels can help heal perineal tissues, which are stretched during vaginal birth.",
+      " because  Kegels can help prevent tear of the perineal tissues, which are stretched during vaginal birth.",
       "Take prenatal vitamins",
-      "Keep your teeth and gums healthy. Poor dental hygiene is linked to premature labor."
+      "Keep your teeth and gums healthy. Blood flow for a pregnant woman is going to increase drastically, which indirectly is going to affect your gum health."
     ],
     videos: [
       { key: 0, value: "https://www.youtube.com/embed/3pz6QxHOb30", label: "Pregnancy Week 30 | What to Expect in Your Third Trimester" },
