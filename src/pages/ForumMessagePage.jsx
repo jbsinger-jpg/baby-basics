@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { auth, firestore, serverTimestamp } from '../firebaseConfig';
-import { Box, Button, HStack, IconButton, Input, Select, Textarea, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, HStack, Heading, IconButton, Input, Select, Textarea, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Context from '../context/Context';
 import 'firebase/compat/auth';
@@ -140,7 +140,8 @@ function ForumMessagePage() {
                             Order By Vote
                         </Button>
                     }
-                    <Select placeholder='font-size' value={fontSize} onChange={(event) => setFontSize(event.target.value)}>
+                    <Heading size="sm">Font Size</Heading>
+                    <Select placeholder='Default' value={fontSize} onChange={(event) => setFontSize(event.target.value)}>
                         <option value='sm'>Small</option>
                         <option value='md'>Medium</option>
                         <option value='lg'>Large</option>

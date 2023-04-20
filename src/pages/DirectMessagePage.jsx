@@ -1,6 +1,6 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import { auth, firestore, serverTimestamp } from '../firebaseConfig';
-import { Box, Button, HStack, Select, Textarea, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, HStack, Heading, Select, Textarea, VStack, useColorModeValue } from '@chakra-ui/react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Context from "../context/Context";
 import DMChatMessage from '../components/DMChatMessage';
@@ -88,7 +88,8 @@ function DirectMessagePage() {
         <Box w="100vw" h="100vh" bg={_screenBackground}>
             <Box w="100vw" justifyContent="space-between" display="flex" padding="3">
                 <VStack spacing="4" w={"15vw"} alignItems={"start"}>
-                    <Select placeholder='font-size' value={fontSize} onChange={(event) => setFontSize(event.target.value)}>
+                    <Heading size="sm">Font Size</Heading>
+                    <Select placeholder='Default' value={fontSize} onChange={(event) => setFontSize(event.target.value)}>
                         <option value='sm'>Small</option>
                         <option value='md'>Medium</option>
                         <option value='lg'>Large</option>
