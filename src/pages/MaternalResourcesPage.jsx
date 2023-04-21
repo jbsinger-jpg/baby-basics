@@ -204,66 +204,15 @@ export default function MaternalResourcesPage() {
           selectedCardData={selectedRecommendations}
           title={"Recommendations"}
         />
-        <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
-          <Heading textDecoration="underline">Resources</Heading>
-          <Card w="400px" h="450px" bg={_cardBackground}>
-            <CardBody>
-              <Stack mt='6' spacing='3' alignItems="center">
-                {!flippedResourcesCard ?
-                  <>
-                    <Select
-                      placeholder='Select Video'
-                      value={selectedVideo}
-                      onChange={(event) => {
-                        setSelectedVideo(event.target.value);
-                      }}
-                    >
-                      {videos && videos.length > 0 && videos.map((video) => {
-                        return (<option value={video.value} key={video.key}>{video.label}</option>);
-                      })}
-                    </Select>
-                    <iframe
-                      height="250px"
-                      width="100%"
-                      src={selectedVideo || "https://www.youtube.com/embed/rv-fBnFbQAk"}
-                      title="YouTube video player"
-                      allowFullScreen
-                    />
-                  </>
-                  :
-                  <>
-                    <Heading size='md'> Key Resources </Heading>
-                    <MotionBox
-                      initial={resourceButtonPressed ? { scale: 0 } : { scale: 1 }}
-                      animate={{ scale: 1 }}
-                      onAnimationComplete={() => setResourceButtonPressed(false)}
-                      overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
-                      <UnorderedList spacing="2" paddingLeft="2">
-                        {selectedHyperLinks.length > 0 && selectedHyperLinks.map((milestone, index) => {
-                          return (<ListItem key={index}>{milestone}</ListItem>);
-                        })}
-                      </UnorderedList>
-                    </MotionBox>
-                  </>
-
-                }
-              </Stack>
-            </CardBody>
-            <CardFooter>
-              <ButtonGroup spacing='2' justifyContent={"space-between"}>
-                <MotionButton
-                  whileTap={{ scale: 0.8 }}
-                  leftIcon={<RefreshIcon />}
-                  onClick={() => {
-                    setFlippedResourcesCard(!flippedResourcesCard);
-                    setResourceButtonPressed(true);
-                  }}>
-                  flip
-                </MotionButton>
-              </ButtonGroup>
-            </CardFooter>
-          </Card>
-        </VStack>
+        <AnimatedCard
+          flippedCard={flippedResourcesCard}
+          setFlippedCard={setFlippedResourcesCard}
+          cardButtonPressed={resourceButtonPressed}
+          setCardButtonPressed={setResourceButtonPressed}
+          selectedCardData={selectedVideo}
+          videos={videos}
+          title={"Resources"}
+        />
       </HStack>
       <HStack w="100vw" justifyContent="space-evenly" alignItems="start">
         <AnimatedCard

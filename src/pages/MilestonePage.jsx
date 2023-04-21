@@ -10,6 +10,7 @@ import HearingIcon from '@mui/icons-material/Hearing';
 import AbcIcon from '@mui/icons-material/Abc';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { cardBackground, screenBackground } from '../defaultStyle';
+import AnimatedCard from '../components/animated/AnimatedCard';
 
 const promptOptions = [
     {
@@ -340,320 +341,60 @@ export default function MilestonePage() {
                 <option value="19-24M"> 19-24M </option>
             </Select>
             <HStack flexWrap={"wrap"} spacing="12" justifyContent="center" alignItems="start">
-                <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
-                    <Heading textDecoration="underline">Motor</Heading>
-                    <Card w="400px" h="450px" bg={_cardBackground}>
-                        <CardBody>
-                            <Stack mt='6' spacing='3' alignItems="center">
-                                {!flippedMotorCard ?
-                                    <MotionIcon
-                                        as={AccessibilityNewIcon}
-                                        borderRadius='lg'
-                                        initial={motorButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
-                                        animate={{ rotate: 0, scale: 1 }}
-                                        onAnimationComplete={() => setMotorButtonPressed(false)}
-                                        transition={{
-                                            type: "spring",
-                                            stiffness: 260,
-                                            damping: 20
-                                        }}
-                                        style={{ width: 300, height: 300, resizeMode: 'cover' }}
-                                    />
-                                    :
-                                    <>
-                                        <Heading size='md'> Key Points </Heading>
-                                        <MotionBox
-                                            initial={motorButtonPressed ? { scale: 0 } : { scale: 1 }}
-                                            animate={{ scale: 1 }}
-                                            onAnimationComplete={() => setMotorButtonPressed(false)}
-                                            overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
-                                            <UnorderedList spacing="2" paddingLeft="2">
-                                                {selectedMotorMilestones.length > 0 && selectedMotorMilestones.map((milestone, index) => {
-                                                    return (<ListItem key={index}>{milestone}</ListItem>);
-                                                })}
-                                            </UnorderedList>
-                                        </MotionBox>
-                                    </>
-                                }
-                            </Stack>
-                        </CardBody>
-                        <CardFooter>
-                            <ButtonGroup spacing='2' justifyContent={"space-between"}>
-                                <Button
-                                    leftIcon={<RefreshIcon />}
-                                    onClick={() => {
-                                        setFlippedMotorCard(!flippedMotorCard);
-                                        setMotorButtonPressed(true);
-                                    }}>
-                                    flip
-                                </Button>
-                            </ButtonGroup>
-                        </CardFooter>
-                    </Card>
-                </VStack>
-                <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
-                    <Heading textDecoration="underline">Communication</Heading>
-                    <Card w="400px" h="450px" bg={_cardBackground}>
-                        <CardBody>
-                            <Stack mt='6' spacing='3' alignItems="center">
-                                {!flippedCommunicationCard ?
-                                    <MotionIcon
-                                        as={ChatIcon}
-                                        borderRadius='lg'
-                                        initial={communicationButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
-                                        animate={{ rotate: 0, scale: 1 }}
-                                        onAnimationComplete={() => setCommunicationButtonPressed(false)}
-                                        transition={{
-                                            type: "spring",
-                                            stiffness: 260,
-                                            damping: 20
-                                        }}
-                                        style={{ width: 300, height: 300, resizeMode: 'cover' }}
-                                    />
-                                    :
-                                    <>
-                                        <Heading size='md'> Key Points </Heading>
-                                        <MotionBox
-                                            initial={communicationButtonPressed ? { scale: 0 } : { scale: 1 }}
-                                            animate={{ scale: 1 }}
-                                            onAnimationComplete={() => setCommunicationButtonPressed(false)}
-                                            overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex"
-                                        >
-                                            <UnorderedList spacing="2" paddingLeft="2">
-                                                {selectedCommunicationMilestones.length > 0 && selectedCommunicationMilestones.map((milestone, index) => {
-                                                    return (<ListItem key={index}>{milestone}</ListItem>);
-                                                })}
-                                            </UnorderedList>
-                                        </MotionBox>
-                                    </>
-                                }
-                            </Stack>
-                        </CardBody>
-                        <CardFooter>
-                            <ButtonGroup spacing='2' justifyContent={"space-between"}>
-                                <Button
-                                    leftIcon={<RefreshIcon />}
-                                    onClick={() => {
-                                        setFlippedCommunicationCard(!flippedCommunicationCard);
-                                        setCommunicationButtonPressed(true);
-                                    }}>
-                                    flip
-                                </Button>
-                            </ButtonGroup>
-                        </CardFooter>
-                    </Card>
-                </VStack>
-                <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
-                    <Heading textDecoration="underline">Feeding</Heading>
-                    <Card w="400px" h="450px" bg={_cardBackground}>
-                        <CardBody>
-                            <Stack mt='6' spacing='3' alignItems="center">
-                                {!flippedFeedingCard ?
-                                    <MotionIcon
-                                        as={LocalCafeIcon}
-                                        borderRadius='lg'
-                                        initial={feedingButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
-                                        animate={{ rotate: 0, scale: 1 }}
-                                        onAnimationComplete={() => setFeedingButtonPressed(false)}
-                                        transition={{
-                                            type: "spring",
-                                            stiffness: 260,
-                                            damping: 20
-                                        }}
-                                        style={{ width: 300, height: 300, resizeMode: 'cover' }}
-                                    />
-                                    :
-                                    <>
-                                        <Heading size='md'> Key Points </Heading>
-                                        <MotionBox
-                                            initial={feedingButtonPressed ? { scale: 0 } : { scale: 1 }}
-                                            animate={{ scale: 1 }}
-                                            onAnimationComplete={() => setFeedingButtonPressed(false)}
-                                            overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
-                                            <UnorderedList spacing="2" paddingLeft="2">
-                                                {selectedFeedingMilestones.length > 0 && selectedFeedingMilestones.map((milestone, index) => {
-                                                    return (<ListItem key={index}>{milestone}</ListItem>);
-                                                })}
-                                            </UnorderedList>
-                                        </MotionBox>
-                                    </>
-                                }
-                            </Stack>
-                        </CardBody>
-                        <CardFooter>
-                            <ButtonGroup spacing='2' justifyContent={"space-between"}>
-                                <Button
-                                    leftIcon={<RefreshIcon />}
-                                    onClick={() => {
-                                        setFlippedFeedingCard(!flippedFeedingCard);
-                                        setFeedingButtonPressed(true);
-                                    }}>
-                                    flip
-                                </Button>
-                            </ButtonGroup>
-                        </CardFooter>
-                    </Card>
-                </VStack>
-                <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
-                    <Heading textDecoration="underline">Sensory</Heading>
-                    <Card w="400px" h="450px" bg={_cardBackground}>
-                        <CardBody>
-                            <Stack mt='6' spacing='3' alignItems="center">
-                                {!flippedSensoryCard ?
-                                    <MotionIcon
-                                        as={HearingIcon}
-                                        borderRadius='lg'
-                                        initial={sensoryButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
-                                        animate={{ rotate: 0, scale: 1 }}
-                                        onAnimationComplete={() => setSensoryButtonPressed(false)}
-                                        transition={{
-                                            type: "spring",
-                                            stiffness: 260,
-                                            damping: 20
-                                        }}
-                                        style={{ width: 300, height: 300, resizeMode: 'cover' }}
-                                    />
-                                    :
-                                    <>
-                                        <Heading size='md'> Key Points </Heading>
-                                        <MotionBox
-                                            initial={sensoryButtonPressed ? { scale: 0 } : { scale: 1 }}
-                                            animate={{ scale: 1 }}
-                                            onAnimationComplete={() => setSensoryButtonPressed(false)}
-                                            overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
-                                            <UnorderedList spacing="2" paddingLeft="2">
-                                                {selectedSensoryMilestones.length > 0 && selectedSensoryMilestones.map((milestone, index) => {
-                                                    return (<ListItem key={index}>{milestone}</ListItem>);
-                                                })}
-                                            </UnorderedList>
-                                        </MotionBox>
-                                    </>
-                                }
-                            </Stack>
-                        </CardBody>
-                        <CardFooter>
-                            <ButtonGroup spacing='2' justifyContent={"space-between"}>
-                                <Button
-                                    leftIcon={<RefreshIcon />}
-                                    onClick={() => {
-                                        setFlippedSensoryCard(!flippedSensoryCard);
-                                        setSensoryButtonPressed(true);
-                                    }}>
-                                    flip
-                                </Button>
-                            </ButtonGroup>
-                        </CardFooter>
-                    </Card>
-                </VStack>
-                <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
-                    <Heading textDecoration="underline">Resources</Heading>
-                    <Card w="400px" h="450px" bg={_cardBackground}>
-                        <CardBody>
-                            <Stack mt='6' spacing='3' alignItems="center">
-                                {!flippedResourcesCard ?
-                                    <>
-                                        <Select
-                                            placeholder='Select Video'
-                                            value={selectedVideo}
-                                            onChange={(event) => {
-                                                setSelectedVideo(event.target.value);
-                                            }}
-                                        >
-                                            {videos && videos.length > 0 && videos.map((video) => {
-                                                return (<option value={video.value} key={video.key}>{video.label}</option>);
-                                            })}
-                                        </Select>
-                                        <iframe
-                                            height="250px"
-                                            width="100%"
-                                            src={selectedVideo || "https://www.youtube.com/embed/rv-fBnFbQAk"}
-                                            title="YouTube video player"
-                                            allowFullScreen
-                                        />
-                                    </>
-                                    :
-                                    <>
-                                        <Heading size='md'> Key Resources </Heading>
-                                        <MotionBox
-                                            initial={resourceButtonPressed ? { scale: 0 } : { scale: 1 }}
-                                            animate={{ scale: 1 }}
-                                            onAnimationComplete={() => setResourceButtonPressed(false)}
-                                            overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
-                                            <UnorderedList spacing="2" paddingLeft="2">
-                                                {selectedHyperLinks.length > 0 && selectedHyperLinks.map((milestone, index) => {
-                                                    return (<ListItem key={index}>{milestone}</ListItem>);
-                                                })}
-                                            </UnorderedList>
-                                        </MotionBox>
-                                    </>
-                                }
-                            </Stack>
-                        </CardBody>
-                        <CardFooter>
-                            <ButtonGroup spacing='2' justifyContent={"space-between"}>
-                                <Button
-                                    leftIcon={<RefreshIcon />}
-                                    onClick={() => {
-                                        setFlippedResourcesCard(!flippedResourcesCard);
-                                        setResourceButtonPressed(true);
-                                    }}>
-                                    flip
-                                </Button>
-                            </ButtonGroup>
-                        </CardFooter>
-                    </Card>
-                </VStack>
-                <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
-                    <Heading textDecoration="underline">Potential Activities</Heading>
-                    <Card w="400px" h="450px" bg={_cardBackground}>
-                        <CardBody>
-                            <Stack mt='6' spacing='3' alignItems="center">
-                                {!flippedActivitiesCard ?
-                                    <MotionIcon
-                                        as={AbcIcon}
-                                        borderRadius='lg'
-                                        initial={activitiesButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
-                                        animate={{ rotate: 0, scale: 1 }}
-                                        onAnimationComplete={() => setActivitiesButtonPressed(false)}
-                                        transition={{
-                                            type: "spring",
-                                            stiffness: 260,
-                                            damping: 20
-                                        }}
-                                        style={{ width: 300, height: 300, resizeMode: 'cover' }}
-                                    />
-                                    :
-                                    <>
-                                        <Heading size='md'> Key Points </Heading>
-                                        <MotionBox
-                                            initial={activitiesButtonPressed ? { scale: 0 } : { scale: 1 }}
-                                            animate={{ scale: 1 }}
-                                            onAnimationComplete={() => setActivitiesButtonPressed(false)}
-                                            overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
-                                            <UnorderedList spacing="2" paddingLeft="2">
-                                                {selectedActivities.length > 0 && selectedActivities.map((milestone, index) => {
-                                                    return (<ListItem key={index}>{milestone}</ListItem>);
-                                                })}
-                                            </UnorderedList>
-                                        </MotionBox>
-                                    </>
-                                }
-                            </Stack>
-                        </CardBody>
-                        <CardFooter>
-                            <ButtonGroup spacing='2' justifyContent={"space-between"}>
-                                <Button
-                                    leftIcon={<RefreshIcon />}
-                                    onClick={() => {
-                                        setFlippedActivitiesCard(!flippedActivitiesCard);
-                                        setActivitiesButtonPressed(true);
-                                    }}>
-                                    flip
-                                </Button>
-                            </ButtonGroup>
-                        </CardFooter>
-                    </Card>
-                </VStack>
+                <AnimatedCard
+                    flippedCard={flippedMotorCard}
+                    setFlippedCard={setFlippedMotorCard}
+                    cardIcon={AccessibilityNewIcon}
+                    cardButtonPressed={motorButtonPressed}
+                    setCardButtonPressed={setMotorButtonPressed}
+                    selectedCardData={selectedMotorMilestones}
+                    title={"Milestones"}
+                />
+                <AnimatedCard
+                    flippedCard={flippedCommunicationCard}
+                    setFlippedCard={setFlippedCommunicationCard}
+                    cardIcon={ChatIcon}
+                    cardButtonPressed={communicationButtonPressed}
+                    setCardButtonPressed={setCommunicationButtonPressed}
+                    selectedCardData={selectedCommunicationMilestones}
+                    title={"Communication"}
+                />
+                <AnimatedCard
+                    flippedCard={flippedFeedingCard}
+                    setFlippedCard={setFlippedFeedingCard}
+                    cardIcon={LocalCafeIcon}
+                    cardButtonPressed={feedingButtonPressed}
+                    setCardButtonPressed={setFeedingButtonPressed}
+                    selectedCardData={selectedFeedingMilestones}
+                    title={"Feeding"}
+                />
+                <AnimatedCard
+                    flippedCard={flippedSensoryCard}
+                    setFlippedCard={setFlippedSensoryCard}
+                    cardIcon={HearingIcon}
+                    cardButtonPressed={sensoryButtonPressed}
+                    setCardButtonPressed={setSensoryButtonPressed}
+                    selectedCardData={selectedSensoryMilestones}
+                    title={"Sensory"}
+                />
+                <AnimatedCard
+                    flippedCard={flippedResourcesCard}
+                    setFlippedCard={setFlippedResourcesCard}
+                    cardButtonPressed={resourceButtonPressed}
+                    setCardButtonPressed={setResourceButtonPressed}
+                    selectedCardData={selectedVideo}
+                    videos={videos}
+                    title={"Resources"}
+                />
+                <AnimatedCard
+                    flippedCard={flippedActivitiesCard}
+                    setFlippedCard={setFlippedActivitiesCard}
+                    cardIcon={AbcIcon}
+                    cardButtonPressed={activitiesButtonPressed}
+                    setCardButtonPressed={setActivitiesButtonPressed}
+                    selectedCardData={selectedActivities}
+                    title={"Potential Activities"}
+                />
             </HStack>
         </Box>
     );

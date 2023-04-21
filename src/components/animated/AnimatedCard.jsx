@@ -1,5 +1,5 @@
-import { Box, Button, ButtonGroup, Card, CardBody, CardFooter, Heading, Icon, ListItem, Stack, UnorderedList, VStack, useColorModeValue } from '@chakra-ui/react';
-import React from 'react';
+import { Box, Button, ButtonGroup, Card, CardBody, CardFooter, HStack, Heading, Icon, ListItem, Select, Stack, Text, UnorderedList, VStack, useColorModeValue } from '@chakra-ui/react';
+import React, { useState } from 'react';
 import { cardBackground } from '../../defaultStyle';
 import { motion } from 'framer-motion';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -11,12 +11,13 @@ export default function AnimatedCard({
     cardButtonPressed,
     setCardButtonPressed,
     selectedCardData,
-    title
+    title,
+    videos
 }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
     const MotionIcon = motion(Icon);
     const MotionBox = motion(Box);
-    const MotionButton = motion(Button);
+    const [selectedVideo, setSelectedVideo] = useState(null);
 
     return (
         <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
@@ -25,19 +26,44 @@ export default function AnimatedCard({
                 <CardBody>
                     <Stack mt='6' spacing='3' alignItems="center">
                         {!flippedCard ?
-                            <MotionIcon
-                                as={cardIcon}
-                                borderRadius='lg'
-                                initial={cardButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
-                                animate={{ rotate: 0, scale: 1 }}
-                                onAnimationComplete={() => setCardButtonPressed(false)}
-                                transition={{
-                                    type: "spring",
-                                    stiffness: 260,
-                                    damping: 20
-                                }}
-                                style={{ width: 300, height: 300, resizeMode: 'cover' }}
-                            />
+                            <>
+                                {videos ?
+                                    <>
+                                        <Select
+                                            placeholder='Select Video'
+                                            value={selectedVideo}
+                                            onChange={(event) => {
+                                                setSelectedVideo(event.target.value);
+                                            }}
+                                        >
+                                            {videos && videos.length > 0 && videos.map((video) => {
+                                                return (<option value={video.value} key={video.key}>{video.label}</option>);
+                                            })}
+                                        </Select>
+                                        <iframe
+                                            height="250px"
+                                            width="100%"
+                                            src={selectedVideo || "https://www.youtube.com/embed/rv-fBnFbQAk"}
+                                            title="YouTube video player"
+                                            allowFullScreen
+                                        />
+                                    </>
+                                    :
+                                    <MotionIcon
+                                        as={cardIcon}
+                                        borderRadius='lg'
+                                        initial={cardButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
+                                        animate={{ rotate: 0, scale: 1 }}
+                                        onAnimationComplete={() => setCardButtonPressed(false)}
+                                        transition={{
+                                            type: "spring",
+                                            stiffness: 260,
+                                            damping: 20
+                                        }}
+                                        style={{ width: 300, height: 300, resizeMode: 'cover' }}
+                                    />
+                                }
+                            </>
                             :
                             <>
                                 <Heading size='md'> Key Points </Heading>
@@ -47,7 +73,7 @@ export default function AnimatedCard({
                                     onAnimationComplete={() => setCardButtonPressed(false)}
                                     overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
                                     <UnorderedList spacing="2" paddingLeft="2">
-                                        {selectedCardData.length > 0 && selectedCardData.map((milestone, index) => {
+                                        {selectedCardData && selectedCardData.map((milestone, index) => {
                                             return (<ListItem key={index}>{milestone}</ListItem>);
                                         })}
                                     </UnorderedList>
@@ -58,15 +84,23 @@ export default function AnimatedCard({
                 </CardBody>
                 <CardFooter>
                     <ButtonGroup spacing='2' justifyContent={"space-between"}>
-                        <MotionButton
+                        <motion.button
+                            style={{ backgroundColor: useColorModeValue("#E2E8F0", "#4A5568"), padding: 10, borderRadius: "10%" }}
                             whileTap={{ scale: 0.8 }}
-                            leftIcon={<RefreshIcon />}
+                            whileHover={{ scale: 1.2 }}
+                            whileFocus={{ scale: 1.2 }}
                             onClick={() => {
                                 setFlippedCard(!flippedCard);
                                 setCardButtonPressed(true);
-                            }}>
-                            flip
-                        </MotionButton>
+                            }}
+                        >
+                            <HStack>
+                                <Icon as={RefreshIcon} />
+                                <Text as="b">
+                                    flip
+                                </Text>
+                            </HStack>
+                        </motion.button>
                     </ButtonGroup>
                 </CardFooter>
             </Card>
