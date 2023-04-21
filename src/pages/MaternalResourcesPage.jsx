@@ -1,13 +1,11 @@
-import { Box, Button, ButtonGroup, Card, CardBody, CardFooter, HStack, Heading, Icon, ListItem, Select, Stack, UnorderedList, VStack, useColorModeValue } from '@chakra-ui/react';
+import { HStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import FloatingActionButtonsMaternalInfo from '../components/FloatingActionButtonsMaternalInfo';
 import GoogleMapsModal from '../components/modals/GoogleMapsModal';
-import { motion } from 'framer-motion';
 import Woman2Icon from '@mui/icons-material/Woman2';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import { cardBackground, screenBackground } from '../defaultStyle';
-import RefreshIcon from '@mui/icons-material/Refresh';
+import { screenBackground } from '../defaultStyle';
 import AnimatedButton from "../components/animated/AnimatedTrimesterButton";
 import AnimatedCard from '../components/animated/AnimatedCard';
 
@@ -129,21 +127,15 @@ export default function MaternalResourcesPage() {
   const [flippedResourcesCard, setFlippedResourcesCard] = useState(false);
   const [resourceButtonPressed, setResourceButtonPressed] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
-
-  const [selectedHyperLinks, setSelectedHyperLinks] = useState([]);
   const [videos, setVideos] = useState(trimesterPhaseInformation[0].videos);
 
   // FAB buttons
   const [searchPlaces, setSearchPlaces] = useState(false);
   const [initialStage, setInitialStage] = useState(1);
 
-  const MotionBox = motion(Box);
-  const MotionButton = motion(Button);
-
   // Styling for color themes
   //lhs=light, rhs=dark
   const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
-  const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
 
   const handleSearchPlacesDialogOpen = () => {
     setSearchPlaces(true);

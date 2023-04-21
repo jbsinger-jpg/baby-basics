@@ -1,4 +1,4 @@
-import { Box, Button, ButtonGroup, Card, CardBody, CardFooter, HStack, Heading, Icon, ListItem, Select, Stack, Text, UnorderedList, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, ButtonGroup, Card, CardBody, CardFooter, HStack, Heading, Icon, ListItem, Select, Stack, Text, UnorderedList, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { cardBackground } from '../../defaultStyle';
 import { motion } from 'framer-motion';

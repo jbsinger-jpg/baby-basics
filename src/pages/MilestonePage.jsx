@@ -1,15 +1,13 @@
-import { Box, Button, ButtonGroup, Card, CardBody, CardFooter, HStack, Heading, Icon, ListItem, Select, Stack, UnorderedList, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, HStack, Select, useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import FloatingActionButtonsBabyInfo from '../components/FloatingActionButtonsBabyInfo';
 import GoogleMapsModal from '../components/modals/GoogleMapsModal';
-import { motion } from 'framer-motion';
 import ChatIcon from '@mui/icons-material/Chat';
 import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
 import LocalCafeIcon from '@mui/icons-material/LocalCafe';
 import HearingIcon from '@mui/icons-material/Hearing';
 import AbcIcon from '@mui/icons-material/Abc';
-import RefreshIcon from '@mui/icons-material/Refresh';
-import { cardBackground, screenBackground } from '../defaultStyle';
+import { screenBackground } from '../defaultStyle';
 import AnimatedCard from '../components/animated/AnimatedCard';
 
 const promptOptions = [
@@ -270,9 +268,6 @@ export default function MilestonePage() {
     const [flippedResourcesCard, setFlippedResourcesCard] = useState(false);
     const [resourceButtonPressed, setResourceButtonPressed] = useState(false);
 
-    const MotionBox = motion(Box);
-    const MotionIcon = motion(Icon);
-
     const handleAnswerChange = (event) => {
         if (flippedMotorCard)
             setMotorButtonPressed(true);
@@ -306,8 +301,6 @@ export default function MilestonePage() {
     };
 
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
-    const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
-
     const handleSearchPlacesDialogOpen = () => {
         setPlaces(true);
     };

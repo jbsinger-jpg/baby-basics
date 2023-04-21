@@ -109,6 +109,8 @@ export default function SeatRow({ seat, seatDataIsLoading, tabIndex }) {
                                 <Tag
                                     borderRadius='full'
                                     size="lg"
+                                    variant="outline"
+                                    color="wheat"
                                 >
                                     <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
                                         {seat.title}

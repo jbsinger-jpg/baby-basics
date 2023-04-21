@@ -35,7 +35,7 @@ export default function ScreeningPage() {
         },
         {
             question: "What is your nationality?",
-            choices: ["Asian", "White", "Hispanic or Latingo", "American Indian or Alaska Native", "Black or African American", "Native Hawaiian or Other Pacific Islander", "Multiple"],
+            choices: ["Asian", "White", "Hispanic or Latino", "American Indian or Alaska Native", "Black or African American", "Native Hawaiian or Other Pacific Islander", "Multiple"],
             queryField: "ethnicity",
             answer: null
         }
