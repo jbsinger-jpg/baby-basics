@@ -19,13 +19,28 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
     const [diaperBrand, setDiaperBrand] = useState(null);
     const [diaperPrice, setDiaperPrice] = useState(null);
     const [diaperSize, setDiaperSize] = useState(null);
+    const options = [
+        { key: 0, value: "Clothing", label: "Clothing" },
+        { key: 1, value: "Food", label: "Food" },
+        { key: 2, value: "Diapers", label: "Diapers" },
+    ];
+    const [selectedCategory, setSelectedCategory] = useState(options[tabIndex]?.value);
 
     const [searchTabIndex, setSearchTabIndex] = useState(tabIndex);
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
 
-    const handleTabsChange = (index) => {
-        setSearchTabIndex(index);
-        setTabIndex(index);
+    const handleTabsChange = (event) => {
+        let matchedValue = null;
+
+        for (const option of options) {
+            if (option.value === event.target.value) {
+                matchedValue = option;
+            }
+        }
+
+        setSearchTabIndex(matchedValue.key);
+        setTabIndex(matchedValue.key);
+        setSelectedCategory(event.target.value);
     };
 
     const handleFoodSearch = async () => {
@@ -225,144 +240,162 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
         { value: "Luvs", label: "Luvs", key: 2 },
     ];
 
+    const ClothingSearchBarItems = () => {
+        return (
+            <VStack display="flex" alignItems={"start"} width="100%">
+                <Text>Gender</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={genderOptions}
+                        value={clothingGender}
+                        onChange={(event) => { setClothingGender(event.target.value); }}
+                    />
+                </HStack>
+                <Text>Brand</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={brandOptions}
+                        value={clothingBrand}
+                        onChange={(event) => { setClothingBrand(event.target.value); }}
+                    />
+                </HStack>
+                <Text>Size</Text>
+                <HStack width="100%">
+                    <Input placeholder="size equal to..." value={clothingSize} onChange={(event) => setClothingSize(event.target.value)} />
+                </HStack>
+                <Text>Price</Text>
+                <HStack width="100%">
+                    <Input placeholder="price less than or equal to..." value={clothingPrice} onChange={(event) => setClothingPrice(event.target.value)} />
+                </HStack>
+                <Text>Type</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={clothingOptions}
+                        value={clothingType}
+                        onChange={(event) => { setClothingType(event.target.value); }}
+                    />
+                </HStack>
+            </VStack>
+        );
+    };
+
+    const FoodSearchBarItems = () => {
+        return (
+            <VStack display="flex" alignItems={"start"}>
+                <Text>Stage</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={stageOptions}
+                        value={stageOption}
+                        onChange={(event) => { setStageOption(event.target.value); }}
+                    />
+                </HStack>
+                <Text>Price</Text>
+                <HStack width="100%">
+                    <Input placeholder="price no more than..." value={foodPrice} onChange={(event) => setFoodPrice(event.target.value.replace(/[^0-9.-]/g, ""))} />
+                </HStack>
+                <Text>Brand</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={foodOptions}
+                        value={foodBrand}
+                        onChange={(event) => { setFoodBrand(event.target.value); }}
+                    />
+                </HStack>
+            </VStack>
+        );
+    };
+
+    const DiaperSearchBarItems = () => {
+        return (
+            <VStack display="flex" alignItems={"start"}>
+                <Text>Brand</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={diaperOptions}
+                        value={diaperBrand}
+                        onChange={(event) => { setFoodBrand(event.target.value); }}
+                    />
+                </HStack>
+                <Text>Price</Text>
+                <HStack width="100%">
+                    <Input placeholder="price no more than..." value={diaperPrice} onChange={(event) => setDiaperPrice(event.target.value.replace(/[^0-9.-]/g, ""))} />
+                </HStack>
+                <Text>Size</Text>
+                <HStack width="100%">
+                    <Input placeholder="size equal to..." value={diaperSize} onChange={(event) => setDiaperSize(event.target.value)} />
+                </HStack>
+            </VStack>
+        );
+    };
+
     return (
         <Card
             onClose={() => setSearchBarIsOpen(false)}
             bg={_cardBackground}
-            w="400px"
+            w="250px"
         >
             <CardHeader>Filter Items</CardHeader>
             <CardBody>
-                <Tabs align='start' variant='enclosed' w="100%" h="100%" isFitted index={searchTabIndex} onChange={handleTabsChange}>
-                    <TabList>
-                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                            Clothes
-                        </Tab>
-                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                            Food
-                        </Tab>
-                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                            Diapers
-                        </Tab>
-                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                            Utilities
-                        </Tab>
-                    </TabList>
+                <StyledSelect
+                    value={selectedCategory}
+                    options={options}
+                    onChange={handleTabsChange}
+                />
+                <Tabs align='start' variant='enclosed' w="100%" h="100%" isFitted index={searchTabIndex}>
                     <TabPanels>
                         <TabPanel>
-                            <VStack display="flex" alignItems={"start"} width="100%">
-                                <Text>Gender</Text>
-                                <HStack width="100%">
-                                    <StyledSelect
-                                        options={genderOptions}
-                                        value={clothingGender}
-                                        onChange={(event) => { setClothingGender(event.target.value); }}
+                            <ClothingSearchBarItems />
+                            <HStack justifyContent="space-between" mt="3">
+                                <Button onClick={handleClothingSearch}>Search</Button>
+                                <Tooltip label="Clear filters">
+                                    <IconButton icon={<DeleteIcon />} onClick={() => {
+                                        setClothingBrand("");
+                                        setClothingGender("");
+                                        setClothingPrice("");
+                                        setClothingSize("");
+                                        setClothingType("");
+                                    }}
                                     />
-                                </HStack>
-                                <Text>Brand</Text>
-                                <HStack width="100%">
-                                    <StyledSelect
-                                        options={brandOptions}
-                                        value={clothingBrand}
-                                        onChange={(event) => { setClothingBrand(event.target.value); }}
-                                    />
-                                </HStack>
-                                <Text>Size</Text>
-                                <HStack width="100%">
-                                    <Input placeholder="size equal to..." value={clothingSize} onChange={(event) => setClothingSize(event.target.value)} />
-                                </HStack>
-                                <Text>Price</Text>
-                                <HStack width="100%">
-                                    <Input placeholder="price less than or equal to..." value={clothingPrice} onChange={(event) => setClothingPrice(event.target.value)} />
-                                </HStack>
-                                <Text>Type</Text>
-                                <HStack width="100%">
-                                    <StyledSelect
-                                        options={clothingOptions}
-                                        value={clothingType}
-                                        onChange={(event) => { setClothingType(event.target.value); }}
-                                    />
-                                </HStack>
-                                <HStack>
-                                    <Button onClick={handleClothingSearch}>Search</Button>
-                                    <Tooltip label="Clear filters">
-                                        <IconButton icon={<DeleteIcon />} onClick={() => {
-                                            setClothingBrand("");
-                                            setClothingGender("");
-                                            setClothingPrice("");
-                                            setClothingSize("");
-                                            setClothingType("");
-                                        }}
-                                        />
-                                    </Tooltip>
-                                </HStack>
-                            </VStack>
+                                </Tooltip>
+                                <Button variant='outline' onClick={() => setSearchBarIsOpen(false)}>
+                                    Close
+                                </Button>
+                            </HStack>
                         </TabPanel>
                         <TabPanel>
-                            <VStack display="flex" alignItems={"start"}>
-                                <Text>Stage</Text>
-                                <HStack width="100%">
-                                    <StyledSelect
-                                        options={stageOptions}
-                                        value={stageOption}
-                                        onChange={(event) => { setStageOption(event.target.value); }}
+                            <FoodSearchBarItems />
+                            <HStack justifyContent="space-between" mt="3">
+                                <Button onClick={handleFoodSearch}>Search</Button>
+                                <Tooltip label="Clear filters">
+                                    <IconButton icon={<DeleteIcon />} onClick={() => {
+                                        setFoodBrand("");
+                                        setFoodPrice("");
+                                        setStageOption("");
+                                    }}
                                     />
-                                </HStack>
-                                <Text>Price</Text>
-                                <HStack width="100%">
-                                    <Input placeholder="price no more than..." value={foodPrice} onChange={(event) => setFoodPrice(event.target.value.replace(/[^0-9.-]/g, ""))} />
-                                </HStack>
-                                <Text>Brand</Text>
-                                <HStack width="100%">
-                                    <StyledSelect
-                                        options={foodOptions}
-                                        value={foodBrand}
-                                        onChange={(event) => { setFoodBrand(event.target.value); }}
-                                    />
-                                </HStack>
-                                <HStack>
-                                    <Button onClick={handleFoodSearch}>Search</Button>
-                                    <Tooltip label="Clear filters">
-                                        <IconButton icon={<DeleteIcon />} onClick={() => {
-                                            setFoodBrand("");
-                                            setFoodPrice("");
-                                            setStageOption("");
-                                        }}
-                                        />
-                                    </Tooltip>
-                                </HStack>
-                            </VStack>
+                                </Tooltip>
+                                <Button variant='outline' onClick={() => setSearchBarIsOpen(false)}>
+                                    Close
+                                </Button>
+                            </HStack>
                         </TabPanel>
                         <TabPanel>
-                            <VStack display="flex" alignItems={"start"}>
-                                <Text>Brand</Text>
-                                <HStack width="100%">
-                                    <StyledSelect
-                                        options={diaperOptions}
-                                        value={diaperBrand}
-                                        onChange={(event) => { setFoodBrand(event.target.value); }}
+                            <DiaperSearchBarItems />
+                            <HStack justifyContent="space-between" mt="3">
+                                <Button onClick={handleDiaperSearch}>Search</Button>
+                                <Tooltip label="Clear filters">
+                                    <IconButton icon={<DeleteIcon />} onClick={() => {
+                                        setDiaperBrand("");
+                                        setDiaperSize("");
+                                        setDiaperPrice("");
+                                    }}
                                     />
-                                </HStack>
-                                <Text>Price</Text>
-                                <HStack width="100%">
-                                    <Input placeholder="price no more than..." value={diaperPrice} onChange={(event) => setDiaperPrice(event.target.value.replace(/[^0-9.-]/g, ""))} />
-                                </HStack>
-                                <Text>Size</Text>
-                                <HStack width="100%">
-                                    <Input placeholder="size equal to..." value={diaperSize} onChange={(event) => setDiaperSize(event.target.value)} />
-                                </HStack>
-                                <HStack>
-                                    <Button onClick={handleDiaperSearch}>Search</Button>
-                                    <Tooltip label="Clear filters">
-                                        <IconButton icon={<DeleteIcon />} onClick={() => {
-                                            setDiaperBrand("");
-                                            setDiaperSize("");
-                                            setDiaperPrice("");
-                                        }}
-                                        />
-                                    </Tooltip>
-                                </HStack>
-                            </VStack>
+                                </Tooltip>
+                                <Button variant='outline' onClick={() => setSearchBarIsOpen(false)}>
+                                    Close
+                                </Button>
+                            </HStack>
                         </TabPanel>
                         <TabPanel>
                             Utilities
@@ -370,11 +403,6 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                     </TabPanels>
                 </Tabs>
             </CardBody>
-            <CardFooter>
-                <Button variant='outline' mr={3} onClick={() => setSearchBarIsOpen(false)}>
-                    Close
-                </Button>
-            </CardFooter>
         </Card >
     );
 }

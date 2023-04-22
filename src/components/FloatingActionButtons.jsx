@@ -34,6 +34,7 @@ export default function FloatingActionButtons({ setSettingsIsOpen, handleSearchP
             right="4"
             position="fixed"
             h="600px"
+            alignItems="start"
         >
             {searchBarIsOpen &&
                 <SearchBarAlertDialog
