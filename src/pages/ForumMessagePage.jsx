@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { auth, firestore, serverTimestamp } from '../firebaseConfig';
-import { Box, Button, HStack, Heading, IconButton, Input, Select, Textarea, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, HStack, Heading, IconButton, Input, Textarea, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Context from '../context/Context';
 import 'firebase/compat/auth';
@@ -9,6 +9,7 @@ import ChatMessage from '../components/ChatMessage';
 import { SearchIcon } from '@chakra-ui/icons';
 import { screenBackground } from '../defaultStyle';
 import { wordFilter } from '../components/messaging/wordFilter';
+import StyledSelect from '../components/StyledSelect';
 
 function ForumMessagePage() {
     const [text, setText] = useState();
@@ -127,6 +128,21 @@ function ForumMessagePage() {
     };
 
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
+    const options = [
+        { value: 'sm', label: "Small", key: 0 },
+        { value: 'md', label: "Medium", key: 1 },
+        { value: 'lg', label: "Large", key: 2 },
+        { value: 'xl', label: "XL", key: 3 },
+        { value: '2xl', label: "2XL", key: 4 },
+        { value: '3xl', label: "3XL", key: 5 },
+        { value: '4xl', label: "4XL", key: 6 },
+        { value: '5xl', label: "5XL", key: 7 },
+        { value: '6xl', label: "6XL", key: 8 },
+    ];
+
+    const handleFontSizeChange = (event) => {
+        setFontSize(event.target.value);
+    };
 
     return (
         <Box w="100vw" h="100vh" bg={_screenBackground}>
@@ -142,17 +158,11 @@ function ForumMessagePage() {
                         </Button>
                     }
                     <Heading size="sm">Font Size</Heading>
-                    <Select placeholder='Default' value={fontSize} onChange={(event) => setFontSize(event.target.value)}>
-                        <option value='sm'>Small</option>
-                        <option value='md'>Medium</option>
-                        <option value='lg'>Large</option>
-                        <option value='xl'>XL</option>
-                        <option value='2xl'>2XL</option>
-                        <option value='3xl'>3XL</option>
-                        <option value='4xl'>4XL</option>
-                        <option value='5xl'>5XL</option>
-                        <option value='6xl'>thick</option>
-                    </Select>
+                    <StyledSelect
+                        value={fontSize}
+                        onChange={handleFontSizeChange}
+                        options={options}
+                    />
                 </VStack>
                 <HStack>
                     <Input placeholder='Search...' value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} />

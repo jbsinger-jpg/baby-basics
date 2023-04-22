@@ -1,7 +1,8 @@
 import { CalendarIcon } from '@chakra-ui/icons';
-import { Box, Button, FormLabel, Input, InputGroup, InputRightAddon, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Select, Tag, TagCloseButton, TagLabel, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, FormLabel, Input, InputGroup, InputRightAddon, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Tag, TagCloseButton, TagLabel, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { cardBackground } from '../defaultStyle';
+import StyledSelect from './StyledSelect';
 
 export default function CustomPopOver() {
     const [selectedFrequency, setSelectedFrequency] = useState("");
@@ -60,6 +61,13 @@ export default function CustomPopOver() {
         setAddedPeople(addedPeople.filter((tag) => tag !== tagToDelete));
     };
 
+    const options = [
+        { value: "", label: "Never", key: 0 },
+        { value: "DAILY", label: "daily", key: 1 },
+        { value: "WEEKLY", label: "weekly", key: 2 },
+        { value: "MONTHLY", label: "monthly", key: 3 },
+        { value: "YEARLY", label: "yearly", key: 4 },
+    ];
 
     return (
         <Popover>
@@ -114,13 +122,11 @@ export default function CustomPopOver() {
                         </Box>
                     </VStack>
                     <FormLabel htmlFor='frequency'>Repeat</FormLabel>
-                    <Select onChange={(event) => setSelectedFrequency(event.target.value)} value={selectedFrequency} id="frequency">
-                        <option value=""> Never </option>
-                        <option value="DAILY"> daily </option>
-                        <option value="WEEKLY"> weekly </option>
-                        <option value="MONTHLY"> monthly </option>
-                        <option value="YEARLY"> yearly </option>
-                    </Select>
+                    <StyledSelect
+                        value={selectedFrequency}
+                        onChange={(event) => setSelectedFrequency(event.target.value)}
+                        options={options}
+                    />
                 </PopoverBody>
                 <PopoverFooter>
                     <Button

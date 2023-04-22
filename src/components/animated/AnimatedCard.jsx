@@ -1,8 +1,9 @@
-import { Box, ButtonGroup, Card, CardBody, CardFooter, HStack, Heading, Icon, ListItem, Select, Stack, Text, UnorderedList, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, ButtonGroup, Card, CardBody, CardFooter, HStack, Heading, Icon, ListItem, Stack, Text, UnorderedList, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { cardBackground } from '../../defaultStyle';
 import { motion } from 'framer-motion';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import StyledSelect from '../StyledSelect';
 
 export default function AnimatedCard({
     flippedCard,
@@ -29,17 +30,12 @@ export default function AnimatedCard({
                             <>
                                 {videos ?
                                     <>
-                                        <Select
-                                            placeholder='Select Video'
+                                        <StyledSelect
                                             value={selectedVideo}
-                                            onChange={(event) => {
-                                                setSelectedVideo(event.target.value);
-                                            }}
-                                        >
-                                            {videos && videos.length > 0 && videos.map((video) => {
-                                                return (<option value={video.value} key={video.key}>{video.label}</option>);
-                                            })}
-                                        </Select>
+                                            onChange={(event) => setSelectedVideo(event.target.value)}
+                                            options={videos}
+                                        />
+
                                         <iframe
                                             height="250px"
                                             width="100%"

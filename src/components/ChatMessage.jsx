@@ -1,5 +1,5 @@
 import { ArrowDownIcon, ArrowUpIcon } from "@chakra-ui/icons";
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Avatar, Box, Button, HStack, IconButton, Text, Tooltip, useColorModeValue, useToast, VStack } from "@chakra-ui/react";
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Avatar, Box, Button, HStack, IconButton, Tag, Text, Tooltip, useColorModeValue, useToast, VStack } from "@chakra-ui/react";
 import { useContext, useState } from "react";
 import Context from "../context/Context";
 import { auth, firestore } from "../firebaseConfig";
@@ -259,13 +259,20 @@ export default function ChatMessage({ message, fontSize }) {
                 </motion.button>
                 <Box
                     whiteSpace="pre-wrap"
-                    border={useColorModeValue("Dark", "Light") === "Dark" ? "1px solid black" : "1px solid white"}
-                    padding="5"
-                    borderRadius="10"
-                    bgColor={useColorModeValue("Dark", "Light") === "Dark" ? "gray.100" : "gray.600"}>
-                    <Text fontSize={fontSize}>
-                        {text}
-                    </Text>
+                >
+                    <Tag
+                        borderRadius="md"
+                        size="lg"
+                        variant="solid"
+                        colorScheme="teal"
+                    >
+                        <Text
+                            padding="4"
+                            fontSize={fontSize}
+                        >
+                            {text}
+                        </Text>
+                    </Tag>
                 </Box>
             </HStack>
             <AlertDialog

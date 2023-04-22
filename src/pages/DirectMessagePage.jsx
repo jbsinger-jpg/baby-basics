@@ -1,11 +1,12 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import { auth, firestore, serverTimestamp } from '../firebaseConfig';
-import { Box, Button, HStack, Heading, Select, Textarea, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, HStack, Heading, Textarea, VStack, useColorModeValue } from '@chakra-ui/react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Context from "../context/Context";
 import DMChatMessage from '../components/DMChatMessage';
 import { screenBackground } from '../defaultStyle';
 import { wordFilter } from '../components/messaging/wordFilter';
+import StyledSelect from '../components/StyledSelect';
 
 function DirectMessagePage() {
     const { data: selectedUser } = useContext(Context);
@@ -83,23 +84,32 @@ function DirectMessagePage() {
     }, [chatRoomMessagesSent]);
 
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
+    const handleFontSizeChange = (event) => {
+        setFontSize(event.target.value);
+    };
+
+    const options = [
+        { value: 'sm', label: "Small", key: 0 },
+        { value: 'md', label: "Medium", key: 1 },
+        { value: 'lg', label: "Large", key: 2 },
+        { value: 'xl', label: "XL", key: 3 },
+        { value: '2xl', label: "2XL", key: 4 },
+        { value: '3xl', label: "3XL", key: 5 },
+        { value: '4xl', label: "4XL", key: 6 },
+        { value: '5xl', label: "5XL", key: 7 },
+        { value: '6xl', label: "6XL", key: 8 },
+    ];
 
     return (
         <Box w="100vw" h="100vh" bg={_screenBackground}>
             <Box w="100vw" justifyContent="space-between" display="flex" padding="3">
                 <VStack spacing="4" w={"15vw"} alignItems={"start"}>
                     <Heading size="sm">Font Size</Heading>
-                    <Select placeholder='Default' value={fontSize} onChange={(event) => setFontSize(event.target.value)}>
-                        <option value='sm'>Small</option>
-                        <option value='md'>Medium</option>
-                        <option value='lg'>Large</option>
-                        <option value='xl'>XL</option>
-                        <option value='2xl'>2XL</option>
-                        <option value='3xl'>3XL</option>
-                        <option value='4xl'>4XL</option>
-                        <option value='5xl'>5XL</option>
-                        <option value='6xl'>thick</option>
-                    </Select>
+                    <StyledSelect
+                        value={fontSize}
+                        onChange={handleFontSizeChange}
+                        options={options}
+                    />
                 </VStack>
             </Box>
             <div style={{ height: `calc(100vh - 240px)`, overflowY: 'auto' }} ref={messageBoxRef}>

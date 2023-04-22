@@ -1,4 +1,4 @@
-import { Box, HStack, Select, useColorModeValue } from '@chakra-ui/react';
+import { Box, HStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import FloatingActionButtonsBabyInfo from '../components/FloatingActionButtonsBabyInfo';
 import GoogleMapsModal from '../components/modals/GoogleMapsModal';
@@ -9,6 +9,7 @@ import HearingIcon from '@mui/icons-material/Hearing';
 import AbcIcon from '@mui/icons-material/Abc';
 import { screenBackground } from '../defaultStyle';
 import AnimatedCard from '../components/animated/AnimatedCard';
+import StyledSelect from '../components/StyledSelect';
 
 const promptOptions = [
     {
@@ -305,6 +306,15 @@ export default function MilestonePage() {
         setPlaces(true);
     };
 
+    const options = [
+        { value: "0-3M", label: "0-3M", key: 0 },
+        { value: "4-6M", label: "4-6M", key: 1 },
+        { value: "7-9M", label: "7-9M", key: 2 },
+        { value: "10-12M", label: "10-12M", key: 3 },
+        { value: "13-18M", label: "13-18M", key: 4 },
+        { value: "19-24M", label: "19-24M", key: 5 },
+    ];
+
     return (
         <Box bg={_screenBackground} paddingTop="2">
             <FloatingActionButtonsBabyInfo
@@ -314,25 +324,18 @@ export default function MilestonePage() {
                 setSearchPlaces={setPlaces}
                 searchPlaces={places}
             />
-            <Select
+            <StyledSelect
                 w="50vw"
                 marginBottom="10"
                 marginTop="5"
                 paddingLeft="5"
-                placeholder='Select baby age'
+                options={options}
                 value={selectedAge}
                 onChange={(event) => {
                     setSelectedAge(event.target.value);
                     handleAnswerChange(event);
                 }}
-            >
-                <option value="0-3M"> 0-3M </option>
-                <option value="4-6M"> 4-6M </option>
-                <option value="7-9M"> 7-9M </option>
-                <option value="10-12M"> 10-12M </option>
-                <option value="13-18M"> 13-18M </option>
-                <option value="19-24M"> 19-24M </option>
-            </Select>
+            />
             <HStack flexWrap={"wrap"} spacing="12" justifyContent="center" alignItems="start">
                 <AnimatedCard
                     flippedCard={flippedMotorCard}

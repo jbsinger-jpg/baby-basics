@@ -1,6 +1,7 @@
-import { Button, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, useColorModeValue } from '@chakra-ui/react';
+import { Button, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { cardBackground } from '../../defaultStyle';
+import StyledSelect from '../StyledSelect';
 
 const locations = [
     { key: 4, value: "birthing+classes", label: "Birthing Classes" },
@@ -57,16 +58,11 @@ export default function GoogleMapsModal({ searchPlaces, setSearchPlaces }) {
                 <ModalCloseButton />
                 <form onSubmit={redirectUser}>
                     <ModalBody>
-                        <Select
-                            placeholder='Select a place'
-                            onChange={(event) => {
-                                setSelectedLocation(event.target.value);
-                            }}
-                        >
-                            {locations && locations.length > 0 && locations.map((location) => {
-                                return (<option value={location.value} key={location.key}>{location.label}</option>);
-                            })}
-                        </Select>
+                        <StyledSelect
+                            value={selectedLocation}
+                            onChange={(event) => setSelectedLocation(event.target.value)}
+                            options={locations}
+                        />
                         <Heading size="md">City</Heading>
                         <Input value={city} onChange={event => setCity(event.target.value)} placeholder='leave blank for near you' />
                         <Heading size="md">State</Heading>
@@ -84,6 +80,6 @@ export default function GoogleMapsModal({ searchPlaces, setSearchPlaces }) {
                     </ModalFooter>
                 </form>
             </ModalContent>
-        </Modal>
+        </Modal >
     );
 }

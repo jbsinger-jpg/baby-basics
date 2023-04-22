@@ -1,4 +1,4 @@
-import { Avatar, Box, Text } from "@chakra-ui/react";
+import { Avatar, Box, Tag, Text } from "@chakra-ui/react";
 import { auth } from "../firebaseConfig";
 
 export default function DMChatMessage({ message, fontSize }) {
@@ -10,9 +10,23 @@ export default function DMChatMessage({ message, fontSize }) {
             <div style={{ display: 'flex', flexDirection: "row", alignItems: "center", gap: "10px" }}>
                 <Avatar src={photoURL || 'https://i.imgur.com/rFbS5ms.png'} alt="Avatar" />
                 <Box whiteSpace="pre-wrap">
-                    <Text fontSize={fontSize}>
-                        {text}
-                    </Text>
+                    <Box
+                        whiteSpace="pre-wrap"
+                    >
+                        <Tag
+                            borderRadius="md"
+                            size="lg"
+                            variant="solid"
+                            colorScheme="teal"
+                        >
+                            <Text
+                                padding="4"
+                                fontSize={fontSize}
+                            >
+                                {text}
+                            </Text>
+                        </Tag>
+                    </Box>
                 </Box>
             </div>
         </div>

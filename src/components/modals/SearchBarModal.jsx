@@ -1,8 +1,9 @@
 import { DeleteIcon } from '@chakra-ui/icons';
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, HStack, IconButton, Input, Select, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, HStack, IconButton, Input, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { firestore } from '../../firebaseConfig';
 import { cardBackground } from '../../defaultStyle';
+import StyledSelect from '../StyledSelect';
 
 export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOpen, setFoodData, setClothingData, setDiaperData, tabIndex, setTabIndex }) {
     const [stageOption, setStageOption] = useState(null);
@@ -181,6 +182,49 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
         //eslint-disable-next-line
     }, [searchBarIsOpen]);
 
+    const genderOptions = [
+        { value: "boy", label: "boy", key: 0 },
+        { value: "girl", label: "girl", key: 1 },
+    ];
+
+    const brandOptions = [
+        { value: "Carters", label: "Carters", key: 0 },
+        { value: "Gender", label: "Gerber", key: 1 },
+        { value: "Renotemy", label: "Renotemy", key: 2 },
+        { value: "Burt's Bees Baby", label: "Burt's Bees Baby", key: 3 },
+    ];
+
+    const clothingOptions = [
+        { value: "footie", label: "footie", key: 0 },
+        { value: "shirt", label: "shirt", key: 1 },
+        { value: "pants", label: "pants", key: 2 },
+        { value: "bodysuits", label: "bodysuits", key: 3 },
+        { value: "romper", label: "romper", key: 4 },
+        { value: "sunsuit", label: "sunsuit", key: 5 },
+        { value: "dress", label: "dress", key: 6 },
+    ];
+
+    const stageOptions = [
+        { value: "1", label: "1", key: 0 },
+        { value: "2", label: "2", key: 1 },
+        { value: "3", label: "3", key: 2 },
+    ];
+
+    const foodOptions = [
+        { value: "Plum Organics", label: "Plum Organics", key: 0 },
+        { value: "Happy Baby", label: "Happy Baby", key: 1 },
+        { value: "Beech-Nut", label: "Beech-Nut", key: 2 },
+        { value: "Mama Bear", label: "Mama Bear", key: 3 },
+        { value: "Gerber", label: "Gerber", key: 4 },
+        { value: "Sprouts", label: "Sprouts", key: 5 },
+    ];
+
+    const diaperOptions = [
+        { value: "Pampers", label: "Pampers", key: 0 },
+        { value: "Huggies", label: "Huggies", key: 1 },
+        { value: "Luvs", label: "Luvs", key: 2 },
+    ];
+
     return (
         <AlertDialog
             isOpen={searchBarIsOpen}
@@ -212,19 +256,19 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                                 <VStack display="flex" alignItems={"start"} width="100%">
                                     <Text>Gender</Text>
                                     <HStack width="100%">
-                                        <Select placeholder='Select option' value={clothingGender} onChange={(event) => { setClothingGender(event.target.value); }}>
-                                            <option value='boy'>boy</option>
-                                            <option value='girl'>girl</option>
-                                        </Select>
+                                        <StyledSelect
+                                            options={genderOptions}
+                                            value={clothingGender}
+                                            onChange={(event) => { setClothingGender(event.target.value); }}
+                                        />
                                     </HStack>
                                     <Text>Brand</Text>
                                     <HStack width="100%">
-                                        <Select placeholder='Select option' value={clothingBrand} onChange={(event) => { setClothingBrand(event.target.value); }}>
-                                            <option value='Carters'> Carters </option>
-                                            <option value='Gerber'>Gerber</option>
-                                            <option value='Renotemy'>Renotemy</option>
-                                            <option value="Burt's Bees Baby">Burt's Bees Baby</option>
-                                        </Select>
+                                        <StyledSelect
+                                            options={brandOptions}
+                                            value={clothingBrand}
+                                            onChange={(event) => { setClothingBrand(event.target.value); }}
+                                        />
                                     </HStack>
                                     <Text>Size</Text>
                                     <HStack width="100%">
@@ -236,15 +280,11 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                                     </HStack>
                                     <Text>Type</Text>
                                     <HStack width="100%">
-                                        <Select placeholder='Select option' value={clothingType} onChange={(event) => { setClothingType(event.target.value); }}>
-                                            <option value='footie'>footie</option>
-                                            <option value='shirt'>shirt</option>
-                                            <option value='pants'>pants</option>
-                                            <option value='bodysuits'>bodysuits</option>
-                                            <option value='romper'>romper</option>
-                                            <option value='sunsuit'>sunsuit</option>
-                                            <option value='dress'>dress</option>
-                                        </Select>
+                                        <StyledSelect
+                                            options={clothingOptions}
+                                            value={clothingType}
+                                            onChange={(event) => { setClothingType(event.target.value); }}
+                                        />
                                     </HStack>
                                     <HStack>
                                         <Button onClick={handleClothingSearch}>Search</Button>
@@ -265,11 +305,11 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                                 <VStack display="flex" alignItems={"start"}>
                                     <Text>Stage</Text>
                                     <HStack width="100%">
-                                        <Select placeholder='Select option' value={stageOption} onChange={(event) => { setStageOption(event.target.value); }}>
-                                            <option value='1'>1</option>
-                                            <option value='2'>2</option>
-                                            <option value='3'>3</option>
-                                        </Select>
+                                        <StyledSelect
+                                            options={stageOptions}
+                                            value={stageOption}
+                                            onChange={(event) => { setStageOption(event.target.value); }}
+                                        />
                                     </HStack>
                                     <Text>Price</Text>
                                     <HStack width="100%">
@@ -277,14 +317,11 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                                     </HStack>
                                     <Text>Brand</Text>
                                     <HStack width="100%">
-                                        <Select placeholder='Select option' value={foodBrand} onChange={(event) => { setFoodBrand(event.target.value); }}>
-                                            <option value='Plum Organics'> Plum Organics </option>
-                                            <option value='Happy Baby'>Happy Baby</option>
-                                            <option value='Beech-Nut'>Beech-Nut</option>
-                                            <option value='Mama Bear'>Mama Bear</option>
-                                            <option value='Gerber'>Gerber</option>
-                                            <option value='Sprouts'>Sprouts</option>
-                                        </Select>
+                                        <StyledSelect
+                                            options={foodOptions}
+                                            value={foodBrand}
+                                            onChange={(event) => { setFoodBrand(event.target.value); }}
+                                        />
                                     </HStack>
                                     <HStack>
                                         <Button onClick={handleFoodSearch}>Search</Button>
@@ -303,11 +340,11 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                                 <VStack display="flex" alignItems={"start"}>
                                     <Text>Brand</Text>
                                     <HStack width="100%">
-                                        <Select placeholder='Select option' value={diaperBrand} onChange={(event) => { setDiaperBrand(event.target.value); }}>
-                                            <option value='Pampers'>Pampers</option>
-                                            <option value='Huggies'>Huggies</option>
-                                            <option value='Luvs'>Luvs</option>
-                                        </Select>
+                                        <StyledSelect
+                                            options={diaperOptions}
+                                            value={diaperBrand}
+                                            onChange={(event) => { setFoodBrand(event.target.value); }}
+                                        />
                                     </HStack>
                                     <Text>Price</Text>
                                     <HStack width="100%">
@@ -342,6 +379,6 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                     </Button>
                 </AlertDialogFooter>
             </AlertDialogContent>
-        </AlertDialog>
+        </AlertDialog >
     );
 }
