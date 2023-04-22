@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useContext } from 'react';
 import { auth, firestore, serverTimestamp } from '../firebaseConfig';
-import { Box, Button, HStack, Heading, IconButton, Input, Textarea, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, HStack, Heading, IconButton, Input, Text, Textarea, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Context from '../context/Context';
 import 'firebase/compat/auth';
@@ -10,6 +10,7 @@ import { SearchIcon } from '@chakra-ui/icons';
 import { screenBackground } from '../defaultStyle';
 import { wordFilter } from '../components/messaging/wordFilter';
 import StyledSelect from '../components/StyledSelect';
+import { motion } from "framer-motion";
 
 function ForumMessagePage() {
     const [text, setText] = useState();
@@ -187,9 +188,21 @@ function ForumMessagePage() {
                             onChange={handleTextAreaChange}
                             placeholder="Type your message here..."
                         />
-                        <Button type="submit" disabled={!text}>
-                            Send
-                        </Button>
+                        <motion.button
+                            type="submit"
+                            disabled={!text}
+                            style={{ backgroundColor: useColorModeValue("#E2E8F0", "#2D3748"), padding: 10, borderRadius: "5%" }}
+                            whileTap={{
+                                scale: 0.8,
+                                borderRadius: "100%",
+                            }}
+                            whileHover={{ scale: 1.2 }}
+                            whileFocus={{ scale: 1.2 }}
+                        >
+                            <Text as="b">
+                                Send
+                            </Text>
+                        </motion.button>
                     </HStack>
                 </Box>
             </form>
