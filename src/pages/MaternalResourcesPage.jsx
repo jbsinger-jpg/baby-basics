@@ -18,6 +18,17 @@ const trimesterPhaseInformation = [
       "Week 5-8: Formation of major organs and body systems, including the heart, brain, spinal cord, and limbs",
       "Week 9-12: Formation of the fetus, which looks more like a human with distinct facial features, fingers, and toes. The fetus is also able to move, and the organs continue to develop."
     ],
+    hyperlinks: [
+      "https://www.babylist.com/hello-baby/first-trimester?g_acctid=878-527-6823&g_adgroupid=139460490400&g_adid=599148936233&g_adtype=search&g_campaign=Content-MidPerformance&g_campaignid=12573456625&g_keyword=first%20trimester&g_keywordid=kwd-295615942039&g_network=g&utm_campaign=Content-MidPerformance&utm_content=599148936233&utm_medium=paid-search&utm_source=g&utm_term=139460490400&gclid=Cj0KCQjwocShBhCOARIsAFVYq0gs8gUTEG1yPYBep-iDAME5cUv77X31lmmSBY49eEmGYHTZHJ5Ik9IaAipiEALw_wcB",
+      "https://www.whattoexpect.com/pregnancy/pregnancy-health/first-prenatal-appointment/#:~:text=The%20first%20prenatal%20appointment%20usually,several%20weeks%20(or%20longer).",
+      "https://www.healthpartners.com/blog/first-prenatal-appointment/#:~:text=The%20timing%20of%20your%20first,re%206%2D12%20weeks%20pregnant.",
+      "https://pubmed.ncbi.nlm.nih.gov/6356942/#:~:text=During%20the%20course%20of%20gestation,acting%20as%20an%20arteriovenous%20shunt.",
+      "https://my.clevelandclinic.org/health/articles/9699-first-trimester",
+      "https://www.mountsinai.org/health-library/symptoms/morning-sickness",
+      "https://www.cancer.gov/publications/dictionaries/cancer-terms/def/pelvic-exam",
+      "https://www.mayoclinic.org/tests-procedures/pelvic-exam/about/pac-20385135",
+      "https://www.hopkinsmedicine.org/health/wellness-and-prevention/the-first-trimester#:~:text=The%20neural%20tube%20(which%20becomes,The%20heart%20is%20beating."
+    ],
     motherPregnancySymptoms: [
       "Breast tenderness and swelling",
       "Fatigue",
@@ -47,6 +58,12 @@ const trimesterPhaseInformation = [
       "Week 17 - 20: The fetus grows rapidly and weighs around 10 ounces.Hair, eyebrows, and eyelashes begin to grow.The mother may feel the baby's movements for the first time.",
       "Week 21 - 24: The fetus continues to grow and gain weight.The lungs are developing, and the baby may practice breathing movements.The skin is still thin and translucent.",
       "Week 25-28: The fetus is now viable, meaning it has a chance of survival if born prematurely. The eyes can open and close, and the baby can hear sounds outside the womb."
+    ],
+    hyperlinks: [
+      "https://www.mayoclinic.org/healthy-lifestyle/pregnancy-week-by-week/expert-answers/leg-cramps-during-pregnancy/faq-20057766",
+      "https://www.whattoexpect.com/second-trimester-of-pregnancy.aspx",
+      "https://my.clevelandclinic.org/health/diseases/12345-umbilical-cord-prolapse",
+      "https://americanpregnancy.org/healthy-pregnancy/labor-and-birth/kegel-exercises/",
     ],
     motherPregnancySymptoms: [
       "Growing belly",
@@ -79,6 +96,13 @@ const trimesterPhaseInformation = [
       "Week 29-32: The fetus continues to gain weight and fill out. The bones are fully formed but still soft and pliable. The baby's movements may feel stronger and more frequent.",
       "Week 33-36: The baby's growth slows down, and the lungs are nearly fully developed. The baby may settle into a head-down position in preparation for birth.",
       "Week 37-40: The baby is considered full-term and ready for birth. The average weight is around 7.5 pounds, but it can vary widely. The baby's head may engage in the pelvis in preparation for delivery."
+    ],
+    hyperlinks: [
+      "https://utswmed.org/medblog/braxton-hicks-contractions/",
+      "https://www.whattoexpect.com/pregnancy/symptoms-and-solutions/mucous-plug.aspx",
+      "https://www.whattoexpect.com/third-trimester-of-pregnancy.aspx",
+      "https://www.marchofdimes.org/find-support/topics/birth/contractions-and-signs-labor",
+      "https://www.marchofdimes.org/pregnancy-week-week?gclid=Cj0KCQjwocShBhCOARIsAFVYq0ilLgAfOCu9X-iUjy8DiEyihdeni0lCOw6SWtMIFhfig0xtPj34tP0aAp6sEALw_wcB#38",
     ],
     motherPregnancySymptoms: [
       "Braxton Hicks contractions become more frequent and intense",
@@ -126,8 +150,8 @@ export default function MaternalResourcesPage() {
   // resources/videos
   const [flippedResourcesCard, setFlippedResourcesCard] = useState(false);
   const [resourceButtonPressed, setResourceButtonPressed] = useState(false);
-  const [selectedVideo, setSelectedVideo] = useState(null);
   const [videos, setVideos] = useState(trimesterPhaseInformation[0].videos);
+  const [selectedHyperLinks, setSelectedHyperLinks] = useState(trimesterPhaseInformation[0].hyperlinks);
 
   // FAB buttons
   const [searchPlaces, setSearchPlaces] = useState(false);
@@ -148,6 +172,7 @@ export default function MaternalResourcesPage() {
         setSelectedBabyDevelopment(trimesterPhaseInformation[i].babyDevelopment);
         setSelectedPregnantSymptoms(trimesterPhaseInformation[i].motherPregnancySymptoms);
         setVideos(trimesterPhaseInformation[i].videos);
+        setSelectedHyperLinks(trimesterPhaseInformation[i].hyperlinks);
       }
     }
 
@@ -201,7 +226,7 @@ export default function MaternalResourcesPage() {
           setFlippedCard={setFlippedResourcesCard}
           cardButtonPressed={resourceButtonPressed}
           setCardButtonPressed={setResourceButtonPressed}
-          selectedCardData={selectedVideo}
+          selectedCardData={selectedHyperLinks}
           videos={videos}
           title={"Resources"}
         />

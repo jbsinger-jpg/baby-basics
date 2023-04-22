@@ -13,6 +13,13 @@ export default function StyledSelect({ value, onChange, options, w, marginBottom
             marginTop={marginTop}
             paddingLeft={paddingLeft}
         >
+            <option
+                style={{ backgroundColor: _optionColor }}
+                value={''}
+                key="-1"
+            >
+                N/A
+            </option>
             {options.length > 0 && options.map(option => {
                 return (
                     <option

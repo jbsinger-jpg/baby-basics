@@ -1,4 +1,4 @@
-import { Box, ButtonGroup, Card, CardBody, CardFooter, HStack, Heading, Icon, ListItem, Stack, Text, UnorderedList, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, ButtonGroup, Card, CardBody, CardFooter, HStack, Heading, Icon, Link, ListItem, Stack, Text, UnorderedList, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { cardBackground } from '../../defaultStyle';
 import { motion } from 'framer-motion';
@@ -35,11 +35,10 @@ export default function AnimatedCard({
                                             onChange={(event) => setSelectedVideo(event.target.value)}
                                             options={videos}
                                         />
-
                                         <iframe
                                             height="250px"
                                             width="100%"
-                                            src={selectedVideo || "https://www.youtube.com/embed/rv-fBnFbQAk"}
+                                            src={selectedVideo || require('../../devbackground.png')}
                                             title="YouTube video player"
                                             allowFullScreen
                                         />
@@ -63,17 +62,40 @@ export default function AnimatedCard({
                             :
                             <>
                                 <Heading size='md'> Key Points </Heading>
-                                <MotionBox
-                                    initial={cardButtonPressed ? { scale: 0 } : { scale: 1 }}
-                                    animate={{ scale: 1 }}
-                                    onAnimationComplete={() => setCardButtonPressed(false)}
-                                    overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
-                                    <UnorderedList spacing="2" paddingLeft="2">
-                                        {selectedCardData && selectedCardData.map((milestone, index) => {
-                                            return (<ListItem key={index}>{milestone}</ListItem>);
-                                        })}
-                                    </UnorderedList>
-                                </MotionBox>
+                                {videos ?
+                                    <MotionBox
+                                        initial={cardButtonPressed ? { scale: 0 } : { scale: 1 }}
+                                        animate={{ scale: 1 }}
+                                        onAnimationComplete={() => setCardButtonPressed(false)}
+                                        overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
+                                        <UnorderedList spacing="2" paddingLeft="2">
+                                            {selectedCardData && selectedCardData.map((milestone, index) => {
+                                                return (
+                                                    <ListItem key={index}>
+                                                        <Link
+                                                            href={milestone.link}
+                                                            isExternal
+                                                        >
+                                                            {milestone.name}
+                                                        </Link>
+                                                    </ListItem>
+                                                );
+                                            })}
+                                        </UnorderedList>
+                                    </MotionBox>
+                                    :
+                                    <MotionBox
+                                        initial={cardButtonPressed ? { scale: 0 } : { scale: 1 }}
+                                        animate={{ scale: 1 }}
+                                        onAnimationComplete={() => setCardButtonPressed(false)}
+                                        overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
+                                        <UnorderedList spacing="2" paddingLeft="2">
+                                            {selectedCardData && selectedCardData.map((milestone, index) => {
+                                                return (<ListItem key={index}>{milestone}</ListItem>);
+                                            })}
+                                        </UnorderedList>
+                                    </MotionBox>
+                                }
                             </>
                         }
                     </Stack>

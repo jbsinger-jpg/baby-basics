@@ -41,10 +41,22 @@ const promptOptions = [
             "Sucks and swallows well during feeding"
         ],
         hyperlinks: [
-            "https://raisingchildren.net.au/newborns/development/development-tracker/0-1-month#:~:text=Newborn%20development%20at%200%2D1%20month%3A%20what's%20happening,-Cuddling%2C%20sleeping%2C%20feeding&text=Your%20baby's%20brain%20is%20growing,your%20face%20with%20their%20eyes.",
-            "https://pathways.org/baby-milestones-calendar/?gclid=Cj0KCQjwiZqhBhCJARIsACHHEH86vfPyH6tvUXwPDgWU8jpb7cU43bPforCV23MfAutajr02Jbf9nEoaAll_EALw_wcB",
-            "https://dadsadventure.com/your-babys-playmate/?gclid=CjwKCAjwrJ-hBhB7EiwAuyBVXeIezd00HCI0y_zL4c0J1PWXy0LN8DGY8huixsRVWDEFhz8b37_eNBoC7VIQAvD_BwE",
-            "https://www.healthychildren.org/English/ages-stages/baby/Pages/default.aspx"
+            {
+                link: "https://raisingchildren.net.au/newborns/development/development-tracker/0-1-month#:~:text=Newborn%20development%20at%200%2D1%20month%3A%20what's%20happening,-Cuddling%2C%20sleeping%2C%20feeding&text=Your%20baby's%20brain%20is%20growing,your%20face%20with%20their%20eyes.",
+                name: "raisingchildren.net: Baby Development"
+            },
+            {
+                link: "https://pathways.org/baby-milestones-calendar/?gclid=Cj0KCQjwiZqhBhCJARIsACHHEH86vfPyH6tvUXwPDgWU8jpb7cU43bPforCV23MfAutajr02Jbf9nEoaAll_EALw_wcB",
+                name: "pathway.org: Activities"
+            },
+            {
+                link: "https://dadsadventure.com/your-babys-playmate/?gclid=CjwKCAjwrJ-hBhB7EiwAuyBVXeIezd00HCI0y_zL4c0J1PWXy0LN8DGY8huixsRVWDEFhz8b37_eNBoC7VIQAvD_BwE",
+                name: "dadsadventure.com: Activities"
+            },
+            {
+                link: "https://www.healthychildren.org/English/ages-stages/baby/Pages/default.aspx",
+                name: "healthychildren.org: Development"
+            },
         ],
         videos: [
             { value: "https://www.youtube.com/embed/kc7nN-r5y2I", label: "How To Play With 0-3 Month Old Newborn", key: 0 },
@@ -82,10 +94,22 @@ const promptOptions = [
             "Begins to eat cereals and pureed foods – Smooth, pureed food (single ingredient only), like carrots, sweet potato, squash, apples, pears"
         ],
         hyperlinks: [
-            "https://pathways.org/growth-development/4-6-months/milestones/",
-            "https://www.mayoclinic.org/healthy-lifestyle/infant-and-toddler-health/in-depth/infant-development/art-20048178",
-            "https://www.choc.org/primary-care/ages-stages/4-to-6-months/",
-            "https://www.cdc.gov/ncbddd/actearly/milestones/milestones-6mo.html"
+            {
+                link: "https://pathways.org/growth-development/4-6-months/milestones/",
+                name: "pathways.org: Development"
+            },
+            {
+                link: "https://www.mayoclinic.org/healthy-lifestyle/infant-and-toddler-health/in-depth/infant-development/art-20048178",
+                name: "mayoclinic.org: Development"
+            },
+            {
+                link: "https://www.choc.org/primary-care/ages-stages/4-to-6-months/",
+                name: "choc.org: Development"
+            },
+            {
+                link: "https://www.cdc.gov/ncbddd/actearly/milestones/milestones-6mo.html",
+                name: "cdc.gov: Development"
+            },
         ],
         videos: [
             { value: "https://www.youtube.com/embed/Y_8nlwkioLw", label: "MONTESSORI AT HOME", key: 0 },
@@ -123,10 +147,22 @@ const promptOptions = [
             "Shows strong reaction to new smells and tastes"
         ],
         hyperlinks: [
-            "https://pathways.org/growth-development/7-9-months/milestones/",
-            "https://www.beaumont.org/services/childrens/health-safety/your-growing-child-7-9-months",
-            "https://www.cdc.gov/ncbddd/actearly/milestones/milestones-9mo.html",
-            "https://rainydaymum.co.uk/activity-ideas-to-do-with-your-7-month-old/"
+            {
+                link: "https://pathways.org/growth-development/7-9-months/milestones/",
+                name: "pathways.org: Development"
+            },
+            {
+                link: "https://www.beaumont.org/services/childrens/health-safety/your-growing-child-7-9-months",
+                name: "beaumont.org: Development"
+            },
+            {
+                link: "https://www.cdc.gov/ncbddd/actearly/milestones/milestones-9mo.html",
+                name: "cdc.gov: Development"
+            },
+            {
+                link: "https://rainydaymum.co.uk/activity-ideas-to-do-with-your-7-month-old/",
+                name: "rainydaymum.co: Activities"
+            },
         ],
         videos: [
             { value: "https://www.youtube.com/embed/hxQr75hrZDE", label: "7-Month-Old Baby - What to Expect", key: 0 },
@@ -163,10 +199,22 @@ const promptOptions = [
             "Might be ready to start self feeding with utensils"
         ],
         hyperlinks: [
-            "https://pathways.org/growth-development/10-12-months/milestones/",
-            "https://www.mayoclinic.org/healthy-lifestyle/infant-and-toddler-health/in-depth/infant-development/art-20047380#:~:text=From%20ages%2010%20to%2012,lead%20to%20walking%20without%20support.",
-            "https://www.choc.org/primary-care/ages-stages/10-to-12-months/",
-            "https://www.peanut-app.io/blog/activities-for-10-month-old"
+            {
+                link: "https://pathways.org/growth-development/10-12-months/milestones/",
+                name: "Pathways.org: Milestones"
+            },
+            {
+                link: "https://www.mayoclinic.org/healthy-lifestyle/infant-and-toddler-health/in-depth/infant-development/art-20047380#:~:text=From%20ages%2010%20to%2012,lead%20to%20walking%20without%20support.",
+                name: "Mayo Clinic: Infant Development"
+            },
+            {
+                link: "https://www.choc.org/primary-care/ages-stages/10-to-12-months/",
+                name: "Choc.org: Infant Development"
+            },
+            {
+                link: "https://www.peanut-app.io/blog/activities-for-10-month-old",
+                name: "Peanut App: Fun Activities"
+            },
         ],
         videos: [
             { value: "https://www.youtube.com/embed/LFmrmSfxqAw", label: "BRAIN DEVELOPMENT ACTIVITIES", key: 0 },
@@ -202,9 +250,18 @@ const promptOptions = [
             "Holds and drinks from a cup"
         ],
         hyperlinks: [
-            "https://pathways.org/growth-development/13-18-months/milestones/",
-            "https://edn.ne.gov/cms/developmental-milestones-13-through-18-months",
-            "https://chicklink.com/20-activities-for-a-toddler/"
+            {
+                link: "https://pathways.org/growth-development/13-18-months/milestones/",
+                name: "pathways.org: Development"
+            },
+            {
+                link: "https://edn.ne.gov/cms/developmental-milestones-13-through-18-months",
+                name: "Nebraska Early Development Network: Development"
+            },
+            {
+                link: "https://chicklink.com/20-activities-for-a-toddler/",
+                name: "chicklink.com: Activities"
+            },
         ],
         videos: [
             { value: "https://www.youtube.com/embed/DlwFzb145Ps", label: "Activities for 15-18 Month Olds", key: 0 },
@@ -238,9 +295,22 @@ const promptOptions = [
             "None"
         ],
         hyperlinks: [
-            "https://pathways.org/growth-development/19-24-months/milestones/",
-            "https://edn.ne.gov/cms/developmental-milestones-19-through-24-months",
-            "https://chicklink.com/activities-for-18-24-month-olds/"
+            {
+                link: "https://pathways.org/growth-development/19-24-months/milestones/",
+                name: "pathways.org: Development"
+            },
+            {
+                link: "https://edn.ne.gov/cms/developmental-milestones-19-through-24-months",
+                name: "Nebraska Early Development Network: Development"
+            },
+            {
+                link: "https://chicklink.com/activities-for-18-24-month-olds/",
+                name: "chicklink.com: Activities"
+            },
+        ],
+        videos: [
+            { value: "https://www.youtube.com/embed/-2C--4gay2c", label: "19-24 Month Communication Milestones", key: 0 },
+            { value: "https://www.youtube.com/embed/TqEYIICWf0c", label: "HOW TO PLAY WITH YOUR 19 MONTH OLD", key: 1 },
         ]
     },
 ];
@@ -254,7 +324,6 @@ export default function MilestonePage() {
     const [selectedSensoryMilestones, setSelectedSensoryMilestones] = useState(promptOptions[0].sensoryMilestones);
     const [selectedHyperLinks, setSelectedHyperLinks] = useState(promptOptions[0].hyperlinks);
     const [videos, setVideos] = useState(promptOptions[0]?.videos);
-    const [selectedVideo, setSelectedVideo] = useState(null);
     const [places, setPlaces] = useState(false);
     const [motorButtonPressed, setMotorButtonPressed] = useState(false);
     const [flippedMotorCard, setFlippedMotorCard] = useState(false);
@@ -378,7 +447,7 @@ export default function MilestonePage() {
                     setFlippedCard={setFlippedResourcesCard}
                     cardButtonPressed={resourceButtonPressed}
                     setCardButtonPressed={setResourceButtonPressed}
-                    selectedCardData={selectedVideo}
+                    selectedCardData={selectedHyperLinks}
                     videos={videos}
                     title={"Resources"}
                 />

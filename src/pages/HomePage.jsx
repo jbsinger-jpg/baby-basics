@@ -443,6 +443,12 @@ export default function HomePage() {
                 setSettingsIsOpen={setSettingsIsOpen}
                 currentUser={currentUser}
                 setSearchBarIsOpen={setSearchBarIsOpen}
+                searchBarIsOpen={searchBarIsOpen}
+                setFoodData={setFoodData}
+                setClothingData={setClothingData}
+                setDiaperData={setDiaperData}
+                tabIndex={tabIndex}
+                setTabIndex={setTabIndex}
             />
             <GoogleMapsModal
                 searchPlaces={searchPlaces}
@@ -457,15 +463,6 @@ export default function HomePage() {
                 setAlertDialogVisible={setAlertDialogVisible}
                 alertDialogUser={alertDialogUser}
                 currentUser={currentUser}
-            />
-            <SearchBarModal
-                searchBarIsOpen={searchBarIsOpen}
-                setSearchBarIsOpen={setSearchBarIsOpen}
-                setFoodData={setFoodData}
-                setClothingData={setClothingData}
-                setDiaperData={setDiaperData}
-                tabIndex={tabIndex}
-                setTabIndex={setTabIndex}
             />
         </Box >
     );

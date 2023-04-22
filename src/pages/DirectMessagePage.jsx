@@ -1,6 +1,6 @@
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import { auth, firestore, serverTimestamp } from '../firebaseConfig';
-import { Box, Button, HStack, Heading, Text, Textarea, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, HStack, Heading, Text, Textarea, VStack, useColorModeValue } from '@chakra-ui/react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Context from "../context/Context";
 import DMChatMessage from '../components/DMChatMessage';
