@@ -106,7 +106,7 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex }) 
                         <Card w="220px" bg={_cardBackground} justifyContent="center" alignItems="center">
                             <CardHeader>
                                 <Tag
-                                    borderRadius='full'
+                                    borderRadius="md"
                                     size="lg"
                                     variant="outline"
                                     color="wheat"

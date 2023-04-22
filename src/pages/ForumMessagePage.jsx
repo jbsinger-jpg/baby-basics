@@ -180,7 +180,7 @@ function ForumMessagePage() {
                 }
             </div>
             <form onSubmit={sendMessage}>
-                <Box w="100vw" padding="5" bottom="0" position="fixed">
+                <Box w="100vw" padding="5" bottom="-5" position="fixed">
                     <HStack>
                         <Textarea
                             value={text}

@@ -107,7 +107,7 @@ export default function SeatRow({ seat, seatDataIsLoading, tabIndex }) {
                         <Card w="220px" bg={_cardBackground}>
                             <CardHeader>
                                 <Tag
-                                    borderRadius='full'
+                                    borderRadius="md"
                                     size="lg"
                                     variant="outline"
                                     color="wheat"

@@ -106,7 +106,7 @@ export default function ToyRow({ toy, toyDataIsLoading, tabIndex }) {
                         <Card w="220px" bg={_cardBackground}>
                             <CardHeader>
                                 <Tag
-                                    borderRadius='full'
+                                    borderRadius="md"
                                     size="lg"
                                     variant="outline"
                                     color="wheat"
@@ -229,7 +229,6 @@ export default function ToyRow({ toy, toyDataIsLoading, tabIndex }) {
                                 </HStack>
                             </VStack>
                         </MotionBox>
-
                     }
                     <VStack spacing="1" width={150} justifyContent="center" alignItems="start">
                         <Tag

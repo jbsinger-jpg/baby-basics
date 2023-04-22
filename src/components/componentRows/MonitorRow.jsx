@@ -106,7 +106,7 @@ export default function MonitorRow({ monitor, monitorDataIsLoading, tabIndex }) 
                         <Card w="220px" bg={_cardBackground}>
                             <CardHeader>
                                 <Tag
-                                    borderRadius='full'
+                                    borderRadius="md"
                                     size="lg"
                                     variant="outline"
                                     color="wheat"
