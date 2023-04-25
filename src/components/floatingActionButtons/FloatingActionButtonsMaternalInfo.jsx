@@ -1,18 +1,17 @@
 import { IconButton, Tooltip, VStack } from '@chakra-ui/react';
-import PregnantWomanOutlinedIcon from '@mui/icons-material/PregnantWomanOutlined';
 import MapIcon from '@mui/icons-material/Map';
+import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
 import HomeIcon from '@mui/icons-material/Home';
 
 import React from 'react';
-import ColorModeToggleButton from './ColorModeToggleButton';
-
 import { useNavigate } from 'react-router-dom';
+import ColorModeToggleButton from '../ColorModeToggleButton';
 
-export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialogOpen }) {
+export default function FloatingActionButtonsMaternalInfo({ handleSearchPlacesDialogOpen }) {
     const navigate = useNavigate();
 
-    const handleMaternalResources = () => {
-        navigate("/maternal");
+    const handleMilestoneResources = () => {
+        navigate("/milestone");
     };
 
     const handleGoToHome = () => {
@@ -25,6 +24,7 @@ export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialog
             right="4"
             position="fixed"
             zIndex={999}
+
         >
             <ColorModeToggleButton />
             <Tooltip label="Look up a Location">
@@ -38,15 +38,15 @@ export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialog
                     _hover={{ boxShadow: "lg" }}
                 />
             </Tooltip>
-            <Tooltip label="Maternity">
+            <Tooltip label="Baby Milestones">
                 <IconButton
-                    icon={<PregnantWomanOutlinedIcon fontSize="large" />}
+                    icon={<BabyChangingStationIcon fontSize="large" />}
                     width="56px"
                     height="56px"
                     borderRadius="50%"
                     boxShadow="md"
                     _hover={{ boxShadow: "lg" }}
-                    onClick={handleMaternalResources}
+                    onClick={handleMilestoneResources}
                 >
                 </IconButton>
             </Tooltip>

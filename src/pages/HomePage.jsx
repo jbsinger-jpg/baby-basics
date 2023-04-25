@@ -11,7 +11,7 @@ import FoodDataTabPanel from '../components/tabPanels/FoodDataTabPanel';
 import DiaperDataTabPanel from '../components/tabPanels/DiaperDataTabPanel';
 import MaternalDataTabPanel from '../components/tabPanels/MaternalDataTabPanel';
 import GoogleMapsModal from '../components/modals/GoogleMapsModal';
-import FloatingActionButtons from '../components/FloatingActionButtons';
+import FloatingActionButtons from '../components/floatingActionButtons/FloatingActionButtons';
 import DisclaimerModal from '../components/modals/DisclaimerModal';
 import FriendRequestModal from '../components/modals/FriendRequestModal';
 import FormulaDataTabPanel from '../components/tabPanels/FormulaDataTabPanel';

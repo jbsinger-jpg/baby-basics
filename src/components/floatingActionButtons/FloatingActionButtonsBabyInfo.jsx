@@ -1,17 +1,18 @@
 import { IconButton, Tooltip, VStack } from '@chakra-ui/react';
+import PregnantWomanOutlinedIcon from '@mui/icons-material/PregnantWomanOutlined';
 import MapIcon from '@mui/icons-material/Map';
-import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
 import HomeIcon from '@mui/icons-material/Home';
 
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import ColorModeToggleButton from './ColorModeToggleButton';
+import ColorModeToggleButton from '../ColorModeToggleButton';
 
-export default function FloatingActionButtonsMaternalInfo({ handleSearchPlacesDialogOpen }) {
+import { useNavigate } from 'react-router-dom';
+
+export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialogOpen }) {
     const navigate = useNavigate();
 
-    const handleMilestoneResources = () => {
-        navigate("/milestone");
+    const handleMaternalResources = () => {
+        navigate("/maternal");
     };
 
     const handleGoToHome = () => {
@@ -24,7 +25,6 @@ export default function FloatingActionButtonsMaternalInfo({ handleSearchPlacesDi
             right="4"
             position="fixed"
             zIndex={999}
-
         >
             <ColorModeToggleButton />
             <Tooltip label="Look up a Location">
@@ -38,15 +38,15 @@ export default function FloatingActionButtonsMaternalInfo({ handleSearchPlacesDi
                     _hover={{ boxShadow: "lg" }}
                 />
             </Tooltip>
-            <Tooltip label="Baby Milestones">
+            <Tooltip label="Maternity">
                 <IconButton
-                    icon={<BabyChangingStationIcon fontSize="large" />}
+                    icon={<PregnantWomanOutlinedIcon fontSize="large" />}
                     width="56px"
                     height="56px"
                     borderRadius="50%"
                     boxShadow="md"
                     _hover={{ boxShadow: "lg" }}
-                    onClick={handleMilestoneResources}
+                    onClick={handleMaternalResources}
                 >
                 </IconButton>
             </Tooltip>

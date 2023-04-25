@@ -6,8 +6,8 @@ import MapIcon from '@mui/icons-material/Map';
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import ColorModeToggleButton from './ColorModeToggleButton';
-import SearchBarAlertDialog from './modals/SearchBarModal';
+import ColorModeToggleButton from '../ColorModeToggleButton';
+import SearchBarAlertDialog from '../modals/SearchBarModal';
 
 export default function FloatingActionButtons({ setSettingsIsOpen, handleSearchPlacesDialogOpen, currentUser, setSearchBarIsOpen, searchBarIsOpen, setFoodData, setClothingData, setDiaperData, tabIndex, setTabIndex }) {
     const navigate = useNavigate();

@@ -3,11 +3,11 @@ import { auth, firestore, serverTimestamp } from '../firebaseConfig';
 import { Box, HStack, Heading, Text, Textarea, VStack, useColorModeValue } from '@chakra-ui/react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Context from "../context/Context";
-import DMChatMessage from '../components/DMChatMessage';
 import { screenBackground } from '../defaultStyle';
 import { wordFilter } from '../components/messaging/wordFilter';
 import StyledSelect from '../components/StyledSelect';
 import { motion } from 'framer-motion';
+import DMChatMessage from '../components/messaging/DMChatMessage';
 
 function DirectMessagePage() {
     const { data: selectedUser } = useContext(Context);
@@ -117,7 +117,13 @@ function DirectMessagePage() {
                 {(chatRoomMessagesRecieved && chatRoomMessagesSent) &&
                     generateMessages()
                         .map((msg) => {
-                            return (<DMChatMessage key={msg.id} message={msg} fontSize={fontSize} />);
+                            return (
+                                <DMChatMessage
+                                    key={msg.id}
+                                    message={msg}
+                                    fontSize={fontSize}
+                                />
+                            );
                         })
                 }
             </div>

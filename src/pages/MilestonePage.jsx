@@ -1,6 +1,5 @@
 import { Box, HStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import FloatingActionButtonsBabyInfo from '../components/FloatingActionButtonsBabyInfo';
 import GoogleMapsModal from '../components/modals/GoogleMapsModal';
 import ChatIcon from '@mui/icons-material/Chat';
 import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
@@ -10,6 +9,7 @@ import AbcIcon from '@mui/icons-material/Abc';
 import { screenBackground } from '../defaultStyle';
 import AnimatedCard from '../components/animated/AnimatedCard';
 import StyledSelect from '../components/StyledSelect';
+import FloatingActionButtonsBabyInfo from '../components/floatingActionButtons/FloatingActionButtonsBabyInfo';
 
 const promptOptions = [
     {

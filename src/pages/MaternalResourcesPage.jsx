@@ -1,6 +1,5 @@
 import { HStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import FloatingActionButtonsMaternalInfo from '../components/FloatingActionButtonsMaternalInfo';
 import GoogleMapsModal from '../components/modals/GoogleMapsModal';
 import Woman2Icon from '@mui/icons-material/Woman2';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -8,6 +7,7 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { screenBackground } from '../defaultStyle';
 import AnimatedButton from "../components/animated/AnimatedTrimesterButton";
 import AnimatedCard from '../components/animated/AnimatedCard';
+import FloatingActionButtonsMaternalInfo from '../components/floatingActionButtons/FloatingActionButtonsMaternalInfo';
 
 const trimesterPhaseInformation = [
   {

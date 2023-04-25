@@ -1,5 +1,5 @@
 import { Avatar, Box, Tag, Text } from "@chakra-ui/react";
-import { auth } from "../firebaseConfig";
+import { auth } from "../../firebaseConfig";
 
 export default function DMChatMessage({ message, fontSize }) {
     const { text, uid, photoURL } = message;

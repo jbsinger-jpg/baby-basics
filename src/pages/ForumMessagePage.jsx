@@ -5,12 +5,12 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Context from '../context/Context';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
-import ChatMessage from '../components/ChatMessage';
 import { SearchIcon } from '@chakra-ui/icons';
 import { screenBackground } from '../defaultStyle';
 import { wordFilter } from '../components/messaging/wordFilter';
 import StyledSelect from '../components/StyledSelect';
 import { motion } from "framer-motion";
+import ChatMessage from '../components/messaging/ChatMessage';
 
 function ForumMessagePage() {
     const [text, setText] = useState();
@@ -176,7 +176,13 @@ function ForumMessagePage() {
                 {(messages) &&
                     messages
                         .map((msg) => {
-                            return (<ChatMessage key={msg.id} message={msg} fontSize={fontSize} />);
+                            return (
+                                <ChatMessage
+                                    key={msg.id}
+                                    message={msg}
+                                    fontSize={fontSize}
+                                />
+                            );
                         })
                 }
             </div>
