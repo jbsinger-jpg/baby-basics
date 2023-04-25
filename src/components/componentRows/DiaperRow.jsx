@@ -95,7 +95,7 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
     return (
         <VStack
             key={diaper.id}
-            h="500px"
+            h="550px"
             spacing="3"
             paddingBottom="10"
         >

@@ -1,8 +1,8 @@
 import { DeleteIcon } from '@chakra-ui/icons';
-import { Button, Card, CardBody, CardFooter, CardHeader, HStack, IconButton, Input, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, HStack, IconButton, Input, TabPanel, TabPanels, Tabs, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { firestore } from '../../firebaseConfig';
-import { cardBackground } from '../../defaultStyle';
+import { cardBackground, screenBackground } from '../../defaultStyle';
 import StyledSelect from '../StyledSelect';
 
 export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOpen, setFoodData, setClothingData, setDiaperData, tabIndex, setTabIndex }) {
@@ -19,15 +19,18 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
     const [diaperBrand, setDiaperBrand] = useState(null);
     const [diaperPrice, setDiaperPrice] = useState(null);
     const [diaperSize, setDiaperSize] = useState(null);
+
     const options = [
         { key: 0, value: "Clothing", label: "Clothing" },
         { key: 1, value: "Food", label: "Food" },
         { key: 2, value: "Diapers", label: "Diapers" },
     ];
+
     const [selectedCategory, setSelectedCategory] = useState(options[tabIndex]?.value);
 
     const [searchTabIndex, setSearchTabIndex] = useState(tabIndex);
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
+    const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
 
     const handleTabsChange = (event) => {
         let matchedValue = null;
@@ -193,9 +196,10 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
     useEffect(() => {
         if (searchBarIsOpen) {
             setSearchTabIndex(tabIndex);
+            setSelectedCategory(options[tabIndex]?.value);
         }
         //eslint-disable-next-line
-    }, [searchBarIsOpen]);
+    }, [searchBarIsOpen, tabIndex]);
 
     const genderOptions = [
         { value: "boy", label: "boy", key: 0 },
@@ -240,7 +244,7 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
         { value: "Luvs", label: "Luvs", key: 2 },
     ];
 
-    const ClothingSearchBarItems = () => {
+    const getClothingSearchBarItems = () => {
         return (
             <VStack display="flex" alignItems={"start"} width="100%">
                 <Text>Gender</Text>
@@ -279,7 +283,7 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
         );
     };
 
-    const FoodSearchBarItems = () => {
+    const getFoodSearchBarItems = () => {
         return (
             <VStack display="flex" alignItems={"start"}>
                 <Text>Stage</Text>
@@ -306,7 +310,7 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
         );
     };
 
-    const DiaperSearchBarItems = () => {
+    const getDiaperSearchBarItems = () => {
         return (
             <VStack display="flex" alignItems={"start"}>
                 <Text>Brand</Text>
@@ -314,7 +318,7 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                     <StyledSelect
                         options={diaperOptions}
                         value={diaperBrand}
-                        onChange={(event) => { setFoodBrand(event.target.value); }}
+                        onChange={(event) => { setDiaperBrand(event.target.value); }}
                     />
                 </HStack>
                 <Text>Price</Text>
@@ -329,80 +333,88 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
         );
     };
 
+    const handleClearSearch = () => {
+        if (searchTabIndex === 0) {
+            // clear clothing entry
+            setClothingBrand("");
+            setClothingGender("");
+            setClothingPrice("");
+            setClothingSize("");
+            setClothingType("");
+        }
+        else if (searchTabIndex === 1) {
+            // clear food entry
+            setFoodBrand("");
+            setFoodPrice("");
+            setStageOption("");
+        }
+        else if (searchTabIndex === 2) {
+            // clear diaper entry
+            setDiaperBrand("");
+            setDiaperPrice("");
+            setDiaperSize("");
+        }
+    };
+
+    const handleSwitchSearch = () => {
+        if (searchTabIndex === 0) {
+            return handleClothingSearch();
+        }
+        else if (searchTabIndex === 1) {
+            return handleFoodSearch();
+        }
+        else if (searchTabIndex === 2) {
+            return handleDiaperSearch();
+        }
+    };
+
     return (
-        <Card
+        <Drawer
             onClose={() => setSearchBarIsOpen(false)}
             bg={_cardBackground}
             w="250px"
+            isOpen={searchBarIsOpen}
+            placement='right'
         >
-            <CardHeader>Filter Items</CardHeader>
-            <CardBody>
-                <StyledSelect
-                    value={selectedCategory}
-                    options={options}
-                    onChange={handleTabsChange}
-                />
-                <Tabs align='start' variant='enclosed' w="100%" h="100%" isFitted index={searchTabIndex}>
-                    <TabPanels>
-                        <TabPanel>
-                            <ClothingSearchBarItems />
-                            <HStack justifyContent="space-between" mt="3">
-                                <Button onClick={handleClothingSearch}>Search</Button>
-                                <Tooltip label="Clear filters">
-                                    <IconButton icon={<DeleteIcon />} onClick={() => {
-                                        setClothingBrand("");
-                                        setClothingGender("");
-                                        setClothingPrice("");
-                                        setClothingSize("");
-                                        setClothingType("");
-                                    }}
-                                    />
-                                </Tooltip>
-                                <Button variant='outline' onClick={() => setSearchBarIsOpen(false)}>
-                                    Close
-                                </Button>
-                            </HStack>
-                        </TabPanel>
-                        <TabPanel>
-                            <FoodSearchBarItems />
-                            <HStack justifyContent="space-between" mt="3">
-                                <Button onClick={handleFoodSearch}>Search</Button>
-                                <Tooltip label="Clear filters">
-                                    <IconButton icon={<DeleteIcon />} onClick={() => {
-                                        setFoodBrand("");
-                                        setFoodPrice("");
-                                        setStageOption("");
-                                    }}
-                                    />
-                                </Tooltip>
-                                <Button variant='outline' onClick={() => setSearchBarIsOpen(false)}>
-                                    Close
-                                </Button>
-                            </HStack>
-                        </TabPanel>
-                        <TabPanel>
-                            <DiaperSearchBarItems />
-                            <HStack justifyContent="space-between" mt="3">
-                                <Button onClick={handleDiaperSearch}>Search</Button>
-                                <Tooltip label="Clear filters">
-                                    <IconButton icon={<DeleteIcon />} onClick={() => {
-                                        setDiaperBrand("");
-                                        setDiaperSize("");
-                                        setDiaperPrice("");
-                                    }}
-                                    />
-                                </Tooltip>
-                                <Button variant='outline' onClick={() => setSearchBarIsOpen(false)}>
-                                    Close
-                                </Button>
-                            </HStack>
-                        </TabPanel>
-                        <TabPanel>
-                            Utilities
-                        </TabPanel>
-                    </TabPanels>
-                </Tabs>
-            </CardBody>
-        </Card >
+            <DrawerOverlay />
+            <DrawerContent bg={_screenBackground}>
+                <DrawerHeader>Filter Items</DrawerHeader>
+                <DrawerBody>
+                    <StyledSelect
+                        value={selectedCategory}
+                        options={options}
+                        onChange={handleTabsChange}
+                    />
+                    <Tabs align='start' variant='enclosed' w="100%" h="90%" isFitted index={searchTabIndex}>
+                        <TabPanels>
+                            <TabPanel>
+                                {getClothingSearchBarItems()}
+                            </TabPanel>
+                            <TabPanel>
+                                {getFoodSearchBarItems()}
+                            </TabPanel>
+                            <TabPanel>
+                                {getDiaperSearchBarItems()}
+                            </TabPanel>
+                            <TabPanel>
+                                Utilities
+                            </TabPanel>
+                        </TabPanels>
+                    </Tabs>
+                </DrawerBody>
+                <DrawerFooter justifyContent="space-between">
+                    <Button onClick={handleSwitchSearch}>Search</Button>
+                    <Tooltip label="Clear filters">
+                        <IconButton
+                            icon={<DeleteIcon />}
+                            onClick={handleClearSearch}
+                        />
+                    </Tooltip>
+                    <Button variant='outline' onClick={() => setSearchBarIsOpen(false)}>
+                        Close
+                    </Button>
+                </DrawerFooter>
+            </DrawerContent>
+        </Drawer>
     );
 }

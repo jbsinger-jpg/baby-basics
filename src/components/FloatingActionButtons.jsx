@@ -36,17 +36,15 @@ export default function FloatingActionButtons({ setSettingsIsOpen, handleSearchP
             h="600px"
             alignItems="start"
         >
-            {searchBarIsOpen &&
-                <SearchBarAlertDialog
-                    searchBarIsOpen={searchBarIsOpen}
-                    setSearchBarIsOpen={setSearchBarIsOpen}
-                    setFoodData={setFoodData}
-                    setClothingData={setClothingData}
-                    setDiaperData={setDiaperData}
-                    tabIndex={tabIndex}
-                    setTabIndex={setTabIndex}
-                />
-            }
+            <SearchBarAlertDialog
+                searchBarIsOpen={searchBarIsOpen}
+                setSearchBarIsOpen={setSearchBarIsOpen}
+                setFoodData={setFoodData}
+                setClothingData={setClothingData}
+                setDiaperData={setDiaperData}
+                tabIndex={tabIndex}
+                setTabIndex={setTabIndex}
+            />
             <VStack>
                 <ColorModeToggleButton />
                 <Tooltip label="Look up a Location">
