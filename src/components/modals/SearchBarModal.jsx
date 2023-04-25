@@ -356,7 +356,7 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
         }
     };
 
-    const handleSwitchSearch = () => {
+    const handleGenericSearch = () => {
         if (searchTabIndex === 0) {
             return handleClothingSearch();
         }
@@ -403,7 +403,7 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                     </Tabs>
                 </DrawerBody>
                 <DrawerFooter justifyContent="space-between">
-                    <Button onClick={handleSwitchSearch}>Search</Button>
+                    <Button onClick={handleGenericSearch}>Search</Button>
                     <Tooltip label="Clear filters">
                         <IconButton
                             icon={<DeleteIcon />}
