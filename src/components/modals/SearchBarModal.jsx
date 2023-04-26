@@ -20,10 +20,35 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
     const [diaperPrice, setDiaperPrice] = useState(null);
     const [diaperSize, setDiaperSize] = useState(null);
 
+    const [maternalBrand, setMaternalBrand] = useState(null);
+    const [maternalPrice, setMaternalPrice] = useState(null);
+
+    const [formulaPrice, setFormulaPrice] = useState(null);
+    const [formulaBrand, setFormulaBrand] = useState(null);
+
+    const [toyBrand, setToyBrand] = useState(null);
+    const [toyPrice, setToyPrice] = useState(null);
+
+    const [monitorBrand, setMonitorBrand] = useState(null);
+    const [monitorPrice, setMonitorPrice] = useState(null);
+
+    const [seatBrand, setSeatBrand] = useState(null);
+    const [seatPrice, setSeatPrice] = useState(null);
+
+    const [strollerBrand, setStrollerBrand] = useState(null);
+    const [strollerPrice, setStrollerPrice] = useState(null);
+
     const options = [
         { key: 0, value: "Clothing", label: "Clothing" },
         { key: 1, value: "Food", label: "Food" },
         { key: 2, value: "Diapers", label: "Diapers" },
+        { key: 3, value: "Baby Hygiene", label: "Baby Hygiene" },
+        { key: 4, value: "Maternal", label: "Maternal" },
+        { key: 5, value: "Formula", label: "Formula" },
+        { key: 6, value: "Toys", label: "Toys" },
+        { key: 7, value: "Monitors", label: "Monitors" },
+        { key: 8, value: "Seats", label: "Seats" },
+        { key: 9, value: "Strollers", label: "Strollers" },
     ];
 
     const [selectedCategory, setSelectedCategory] = useState(options[tabIndex]?.value);
@@ -244,6 +269,63 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
         { value: "Luvs", label: "Luvs", key: 2 },
     ];
 
+    const maternalOptions = [
+        { value: "Ekouaer", label: "Ekouaer", key: 0 },
+        { value: "Bearsland", label: "Bearsland", key: 1 },
+        { value: "Floerns", label: "Floerns", key: 2 },
+        { value: "One A Day", label: "One A Day", key: 3 },
+        { value: "AZMED", label: "AZMED", key: 4 },
+        { value: "FridaBaby", label: "FridaBaby", key: 5 },
+        { value: "POSHDIVAH", label: "POSHDIVAH", key: 6 },
+        { value: "VONQA", label: "VONQA", key: 7 },
+        { value: "Frida", label: "Frida", key: 8 },
+        { value: "Medela", label: "Medela", key: 9 },
+        { value: "Bellababy", label: "Bellababy", key: 10 },
+    ];
+
+    const formulaOptions = [
+        { value: "Similac", label: "Similac", key: 0 },
+        { value: "Enfamil", label: "Enfamil", key: 1 },
+        { value: "Nutramigen", label: "Nutramigen", key: 2 },
+        { value: "HeyValue", label: "HeyValue", key: 3 },
+    ];
+
+    const toyOptions = [
+        { value: "toytoy", label: "toytoy", key: 0 },
+        { value: "TOY Life", label: "TOY Life", key: 1 },
+        { value: "STEAM", label: "STEAM", key: 2 },
+        { value: "fisher-price", label: "fisher-price", key: 3 },
+        { value: "SSK", label: "SSK", key: 4 },
+        { value: "beetoy", label: "beetoy", key: 5 },
+    ];
+
+    const monitorOptions = [
+        { value: "Sekery", label: "Sekery", key: 0 },
+        { value: "VTech", label: "VTech", key: 1 },
+        { value: "Momcozy", label: "Momcozy", key: 2 },
+        { value: "Owlet", label: "Owlet", key: 3 },
+        { value: "Infant Optics", label: "Infant Optics", key: 4 },
+        { value: "Nanit", label: "Nanit", key: 5 },
+        { value: "IFamily", label: "IFamily", key: 6 },
+    ];
+
+    const strollerOptions = [
+        { value: "Graco", label: "Graco", key: 0 },
+        { value: "Baby Trend", label: "Baby Trend", key: 1 },
+        { value: "Chicco", label: "Chicco", key: 2 },
+        { value: "Blahoo", label: "Blahoo", key: 3 },
+        { value: "Doona", label: "Doona", key: 4 },
+        { value: "BOB Gear", label: "BOB Gear", key: 5 },
+        { value: "Joolz", label: "Joolz", key: 6 },
+    ];
+
+    const seatOptions = [
+        { value: "Graco", label: "Graco", key: 0 },
+        { value: "Evenflo", label: "Evenflo", key: 1 },
+        { value: "MESA", label: "MESA", key: 2 },
+        { value: "Chicco", label: "Chicco", key: 3 },
+    ];
+
     const getClothingSearchBarItems = () => {
         return (
             <VStack display="flex" alignItems={"start"} width="100%">
@@ -323,11 +405,157 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                 </HStack>
                 <Text>Price</Text>
                 <HStack width="100%">
-                    <Input placeholder="price no more than..." value={diaperPrice} onChange={(event) => setDiaperPrice(event.target.value.replace(/[^0-9.-]/g, ""))} />
+                    <Input
+                        placeholder="price no more than..."
+                        value={diaperPrice}
+                        onChange={(event) => setDiaperPrice(event.target.value.replace(/[^0-9.-]/g, ""))}
+                    />
                 </HStack>
                 <Text>Size</Text>
                 <HStack width="100%">
-                    <Input placeholder="size equal to..." value={diaperSize} onChange={(event) => setDiaperSize(event.target.value)} />
+                    <Input
+                        placeholder="size equal to..."
+                        value={diaperSize}
+                        onChange={(event) => setDiaperSize(event.target.value)}
+                    />
+                </HStack>
+            </VStack>
+        );
+    };
+
+    const getMaternalSearchBarItems = () => {
+        return (
+            <VStack display="flex" alignItems={"start"}>
+                <Text>Brand</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={maternalOptions}
+                        value={maternalBrand}
+                        onChange={(event) => { setMaternalBrand(event.target.value); }}
+                    />
+                </HStack>
+                <Text>Price</Text>
+                <HStack width="100%">
+                    <Input
+                        placeholder="price no more than..."
+                        value={maternalPrice}
+                        onChange={(event) => setMaternalPrice(event.target.value.replace(/[^0-9.-]/g, ""))}
+                    />
+                </HStack>
+            </VStack>
+        );
+    };
+
+    const getFormulaSearchBarItems = () => {
+        return (
+            <VStack display="flex" alignItems={"start"}>
+                <Text>Brand</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={formulaOptions}
+                        value={formulaBrand}
+                        onChange={(event) => { setFormulaBrand(event.target.value); }}
+                    />
+                </HStack>
+                <Text>Price</Text>
+                <HStack width="100%">
+                    <Input
+                        placeholder="price no more than..."
+                        value={formulaPrice}
+                        onChange={(event) => setFormulaPrice(event.target.value.replace(/[^0-9.-]/g, ""))}
+                    />
+                </HStack>
+            </VStack>
+        );
+    };
+
+    const getToySearchBarItems = () => {
+        return (
+            <VStack display="flex" alignItems={"start"}>
+                <Text>Brand</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={toyOptions}
+                        value={toyBrand}
+                        onChange={(event) => { setToyBrand(event.target.value); }}
+                    />
+                </HStack>
+                <Text>Price</Text>
+                <HStack width="100%">
+                    <Input
+                        placeholder="price no more than..."
+                        value={toyPrice}
+                        onChange={(event) => setToyPrice(event.target.value.replace(/[^0-9.-]/g, ""))}
+                    />
+                </HStack>
+            </VStack>
+        );
+    };
+
+    const getMonitorSearchBarItems = () => {
+        return (
+            <VStack display="flex" alignItems={"start"}>
+                <Text>Brand</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={monitorOptions}
+                        value={monitorBrand}
+                        onChange={(event) => { setMonitorBrand(event.target.value); }}
+                    />
+                </HStack>
+                <Text>Price</Text>
+                <HStack width="100%">
+                    <Input
+                        placeholder="price no more than..."
+                        value={monitorPrice}
+                        onChange={(event) => setMonitorPrice(event.target.value.replace(/[^0-9.-]/g, ""))}
+                    />
+                </HStack>
+            </VStack>
+        );
+    };
+
+    const getStrollerSearchBarItems = () => {
+        return (
+            <VStack display="flex" alignItems={"start"}>
+                <Text>Brand</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={strollerOptions}
+                        value={strollerBrand}
+                        onChange={(event) => { setStrollerBrand(event.target.value); }}
+                    />
+                </HStack>
+                <Text>Price</Text>
+                <HStack width="100%">
+                    <Input
+                        placeholder="price no more than..."
+                        value={strollerPrice}
+                        onChange={(event) => setStrollerPrice(event.target.value.replace(/[^0-9.-]/g, ""))}
+                    />
+                </HStack>
+            </VStack>
+        );
+    };
+
+    const getSeatSearchBarItems = () => {
+        return (
+            <VStack display="flex" alignItems={"start"}>
+                <Text>Brand</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={seatOptions}
+                        value={seatBrand}
+                        onChange={(event) => { setSeatBrand(event.target.value); }}
+                    />
+                </HStack>
+                <Text>Price</Text>
+                <HStack width="100%">
+                    <Input
+                        placeholder="price no more than..."
+                        value={seatPrice}
+                        onChange={(event) => setSeatPrice(event.target.value.replace(/[^0-9.-]/g, ""))}
+                    />
                 </HStack>
             </VStack>
         );
@@ -353,6 +581,41 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
             setDiaperBrand("");
             setDiaperPrice("");
             setDiaperSize("");
+        }
+        else if (searchTabIndex === 4) {
+            // clear maternal entry
+            setMaternalBrand("");
+            setMaternalPrice("");
+        }
+        else if (searchTabIndex === 5) {
+            // clear maternal entry
+            setMaternalBrand("");
+            setMaternalPrice("");
+        }
+        else if (searchTabIndex === 6) {
+            // clear formula entry
+            setFormulaBrand("");
+            setFormulaPrice("");
+        }
+        else if (searchTabIndex === 7) {
+            // clear toy entry
+            setToyBrand("");
+            setToyPrice("");
+        }
+        else if (searchTabIndex === 8) {
+            // clear monitor entry
+            setMonitorBrand("");
+            setMonitorPrice("");
+        }
+        else if (searchTabIndex === 9) {
+            // clear monitor entry
+            setSeatBrand("");
+            setSeatPrice("");
+        }
+        else if (searchTabIndex === 10) {
+            // clear monitor entry
+            setStrollerBrand("");
+            setStrollerPrice("");
         }
     };
 
@@ -397,7 +660,25 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                                 {getDiaperSearchBarItems()}
                             </TabPanel>
                             <TabPanel>
-                                Utilities
+                                Hygiene
+                            </TabPanel>
+                            <TabPanel>
+                                {getMaternalSearchBarItems()}
+                            </TabPanel>
+                            <TabPanel>
+                                {getFormulaSearchBarItems()}
+                            </TabPanel>
+                            <TabPanel>
+                                {getToySearchBarItems()}
+                            </TabPanel>
+                            <TabPanel>
+                                {getMonitorSearchBarItems()}
+                            </TabPanel>
+                            <TabPanel>
+                                {getSeatSearchBarItems()}
+                            </TabPanel>
+                            <TabPanel>
+                                {getStrollerSearchBarItems()}
                             </TabPanel>
                         </TabPanels>
                     </Tabs>
