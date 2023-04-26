@@ -5,7 +5,21 @@ import { firestore } from '../../firebaseConfig';
 import { cardBackground, screenBackground } from '../../defaultStyle';
 import StyledSelect from '../StyledSelect';
 
-export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOpen, setFoodData, setClothingData, setDiaperData, tabIndex, setTabIndex }) {
+export default function SearchBarAlertDialog({
+    searchBarIsOpen,
+    setSearchBarIsOpen,
+    setFoodData,
+    setClothingData,
+    setDiaperData,
+    setMaternalData,
+    setFormulaData,
+    setToyData,
+    setMonitorData,
+    setSeatData,
+    setStrollerData,
+    tabIndex,
+    setTabIndex
+}) {
     const [stageOption, setStageOption] = useState(null);
     const [foodPrice, setFoodPrice] = useState(null);
     const [foodBrand, setFoodBrand] = useState(null);
@@ -216,6 +230,174 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
                     setDiaperData(uniqueArray);
                 });
         }
+    };
+
+    const handleMaternalSearch = async () => {
+        let maternalOptions = [];
+        let maternalData = [];
+
+        const formattedMaternalPrice = Number(maternalPrice).toFixed(2);
+        let maternalRef = await firestore.collection('maternal_clothes');
+
+        if (maternalBrand) {
+            maternalOptions.push({ dbField: "brand", operator: "==", operand: clothingBrand });
+        }
+
+        if (formattedMaternalPrice && formattedMaternalPrice > 0) {
+            maternalOptions.push({ dbField: "price", operator: "<=", operand: Number(formattedMaternalPrice) });
+        }
+
+        for (let i = 0; i < maternalOptions.length; i++) {
+            maternalRef = await maternalRef.where(maternalOptions[i].dbField, maternalOptions[i].operator, maternalOptions[i].operand);
+        }
+
+        maternalRef.get().then((querySnapshot => {
+            querySnapshot.docs.forEach(doc => {
+                maternalRef.push({ ...doc.data() });
+            });
+
+            setMaternalData(maternalRef);
+        }));
+
+        if (!maternalBrand && !maternalPrice) {
+            firestore.collection('maternal_clothes')
+                .get()
+                .then(snapshot => {
+                    snapshot.docs.forEach(doc => {
+                        maternalData.push({ ...maternalData.data() });
+                    });
+
+                    const uniqueArray = [...new Set(maternalData.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+                    setMaternalData(uniqueArray);
+                });
+        }
+
+    };
+
+    const handleFormulaSearch = async () => {
+        let formulaOptions = [];
+        let formulaData = [];
+
+        const formattedFormulaPrice = Number(formulaPrice).toFixed(2);
+        let formulaRef = await firestore.collection('formula');
+
+        if (formulaBrand) {
+            formulaOptions.push({ dbField: "brand", operator: "==", operand: formulaBrand });
+        }
+
+        if (formattedFormulaPrice && formattedFormulaPrice > 0) {
+            maternalOptions.push({ dbField: "price", operator: "<=", operand: Number(formattedFormulaPrice) });
+        }
+
+        for (let i = 0; i < maternalOptions.length; i++) {
+            formulaRef = await formulaRef.where(formulaOptions[i].dbField, formulaOptions[i].operator, formulaOptions[i].operand);
+        }
+
+        formulaRef.get().then((querySnapshot => {
+            querySnapshot.docs.forEach(doc => {
+                formulaRef.push({ ...doc.data() });
+            });
+
+            setFormulaData(formulaRef);
+        }));
+
+        if (!formulaBrand && !formulaPrice) {
+            firestore.collection('formula')
+                .get()
+                .then(snapshot => {
+                    snapshot.docs.forEach(doc => {
+                        formulaData.push({ ...formulaData.data() });
+                    });
+
+                    const uniqueArray = [...new Set(formulaData.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+                    setFormulaData(uniqueArray);
+                });
+        }
+
+    };
+
+    const handleToySearch = async () => {
+        let toyOptions = [];
+        let toyData = [];
+
+        const formattedToyPrice = Number(toyPrice).toFixed(2);
+        let toyRef = await firestore.collection('toys');
+
+        if (formulaBrand) {
+            formulaOptions.push({ dbField: "brand", operator: "==", operand: formulaBrand });
+        }
+
+        if (formattedToyPrice && formattedToyPrice > 0) {
+            toyOptions.push({ dbField: "price", operator: "<=", operand: Number(formattedToyPrice) });
+        }
+
+        for (let i = 0; i < toyOptions.length; i++) {
+            toyRef = await toyRef.where(toyOptions[i].dbField, toyOptions[i].operator, toyOptions[i].operand);
+        }
+
+        toyRef.get().then((querySnapshot => {
+            querySnapshot.docs.forEach(doc => {
+                toyRef.push({ ...doc.data() });
+            });
+
+            setToyData(toyRef);
+        }));
+
+        if (!toyBrand && !toyPrice) {
+            firestore.collection('toys')
+                .get()
+                .then(snapshot => {
+                    snapshot.docs.forEach(doc => {
+                        toyData.push({ ...toyData.data() });
+                    });
+
+                    const uniqueArray = [...new Set(toyData.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+                    setToyData(uniqueArray);
+                });
+        }
+
+    };
+
+    const handleMonitorSearch = async () => {
+        let monitorOptions = [];
+        let monitorData = [];
+
+        const formattedMonitorPrice = Number(monitorPrice).toFixed(2);
+        let monitorRef = await firestore.collection('monitors');
+
+        if (formulaBrand) {
+            monitorOptions.push({ dbField: "brand", operator: "==", operand: monitorBrand });
+        }
+
+        if (formattedMonitorPrice && formattedMonitorPrice > 0) {
+            monitorOptions.push({ dbField: "price", operator: "<=", operand: Number(formattedMonitorPrice) });
+        }
+
+        for (let i = 0; i < toyOptions.length; i++) {
+            monitorRef = await monitorRef.where(monitorOptions[i].dbField, monitorOptions[i].operator, monitorOptions[i].operand);
+        }
+
+        monitorRef.get().then((querySnapshot => {
+            querySnapshot.docs.forEach(doc => {
+                monitorRef.push({ ...doc.data() });
+            });
+
+            setMonitorData(monitorRef);
+        }));
+
+        if (!monitorBrand && !monitorPrice) {
+            firestore.collection('monitors')
+                .get()
+                .then(snapshot => {
+                    snapshot.docs.forEach(doc => {
+                        monitorData.push({ ...monitorData.data() });
+                    });
+
+                    const uniqueArray = [...new Set(monitorData.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+                    setMonitorData(uniqueArray);
+                });
+        }
+
     };
 
     useEffect(() => {
@@ -628,6 +810,24 @@ export default function SearchBarAlertDialog({ searchBarIsOpen, setSearchBarIsOp
         }
         else if (searchTabIndex === 2) {
             return handleDiaperSearch();
+        }
+        else if (searchTabIndex === 4) {
+            return handleMaternalSearch();
+        }
+        else if (searchTabIndex === 5) {
+            return handleFormulaSearch();
+        }
+        else if (searchTabIndex === 6) {
+            return handleToySearch();
+        }
+        else if (searchTabIndex === 6) {
+            return handleMonitorSearch();
+        }
+        else if (searchTabIndex === 6) {
+            return handleToySearch();
+        }
+        else if (searchTabIndex === 6) {
+            return handleToySearch();
         }
     };
 
