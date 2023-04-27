@@ -105,18 +105,20 @@ export default function SeatRow({ seat, seatDataIsLoading, tabIndex }) {
                 <HStack spacing="4" w="400px">
                     {!flippedCards ?
                         <Card w="220px" bg={_cardBackground}>
-                            <CardHeader>
-                                <Tag
-                                    borderRadius="md"
-                                    size="lg"
-                                    variant="outline"
-                                    color="wheat"
-                                >
-                                    <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
-                                        {seat.title}
-                                    </Text>
-                                </Tag>
-                            </CardHeader>
+                            {seat.title &&
+                                <CardHeader>
+                                    <Tag
+                                        borderRadius="md"
+                                        size="lg"
+                                        variant="outline"
+                                        color="wheat"
+                                    >
+                                        <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
+                                            {seat.title}
+                                        </Text>
+                                    </Tag>
+                                </CardHeader>
+                            }
                             <CardBody display="flex" justifyContent="center">
                                 <MotionImage
                                     variant="unstyled"
@@ -257,16 +259,18 @@ export default function SeatRow({ seat, seatDataIsLoading, tabIndex }) {
                             </Tag>
                         </VStack>
                         <Divider />
-                        <VStack alignItems="start">
-                            <Text as="b" fontSize="13">Description</Text>
-                            <Tag
-                                borderRadius='full'
-                                variant='outline'
-                                colorScheme='orange'
-                            >
-                                <TagLabel>{seat.description}</TagLabel>
-                            </Tag>
-                        </VStack>
+                        {seat.description &&
+                            <VStack alignItems="start">
+                                <Text as="b" fontSize="13">Description</Text>
+                                <Tag
+                                    borderRadius='full'
+                                    variant='outline'
+                                    colorScheme='orange'
+                                >
+                                    <TagLabel>{seat.description}</TagLabel>
+                                </Tag>
+                            </VStack>
+                        }
                         <Divider />
                         <VStack alignItems="start">
                             <Text as="b" fontSize="13">Price</Text>

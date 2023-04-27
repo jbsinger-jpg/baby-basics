@@ -254,16 +254,18 @@ export default function ToyRow({ toy, toyDataIsLoading, tabIndex }) {
                             </Tag>
                         </VStack>
                         <Divider />
-                        <VStack alignItems="start">
-                            <Text as="b" fontSize="13">Description</Text>
-                            <Tag
-                                borderRadius='full'
-                                variant='outline'
-                                colorScheme='orange'
-                            >
-                                <TagLabel>{toy.description}</TagLabel>
-                            </Tag>
-                        </VStack>
+                        {toy.description &&
+                            <VStack alignItems="start">
+                                <Text as="b" fontSize="13">Description</Text>
+                                <Tag
+                                    borderRadius='full'
+                                    variant='outline'
+                                    colorScheme='orange'
+                                >
+                                    <TagLabel>{toy.description}</TagLabel>
+                                </Tag>
+                            </VStack>
+                        }
                         <Divider />
                         <VStack alignItems="start">
                             <Text as="b" fontSize="13">Price</Text>

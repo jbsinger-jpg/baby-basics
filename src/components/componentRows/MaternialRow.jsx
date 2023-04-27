@@ -260,7 +260,7 @@ export default function MaternialRow({ maternial, maternialDataLoading, tabIndex
                         <VStack alignItems="start">
                             <Text as="b" fontSize="13">Description</Text>
                             <Tag
-                                borderRadius='full'
+                                borderRadius='md'
                                 variant='outline'
                                 colorScheme='orange'
                             >

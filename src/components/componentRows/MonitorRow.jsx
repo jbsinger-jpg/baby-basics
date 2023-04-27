@@ -104,18 +104,20 @@ export default function MonitorRow({ monitor, monitorDataIsLoading, tabIndex }) 
                 <HStack spacing="4" w="400px">
                     {!flippedCards ?
                         <Card w="220px" bg={_cardBackground}>
-                            <CardHeader>
-                                <Tag
-                                    borderRadius="md"
-                                    size="lg"
-                                    variant="outline"
-                                    color="wheat"
-                                >
-                                    <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
-                                        {monitor.title}
-                                    </Text>
-                                </Tag>
-                            </CardHeader>
+                            {monitor.title &&
+                                <CardHeader>
+                                    <Tag
+                                        borderRadius="md"
+                                        size="lg"
+                                        variant="outline"
+                                        color="wheat"
+                                    >
+                                        <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
+                                            {monitor.title}
+                                        </Text>
+                                    </Tag>
+                                </CardHeader>
+                            }
                             <CardBody display="flex" justifyContent="center">
                                 <MotionImage
                                     variant="unstyled"

@@ -104,18 +104,20 @@ export default function StrollerRow({ stroller, strollerDataIsLoading, tabIndex 
                 <HStack spacing="4" w="400px">
                     {!flippedCards ?
                         <Card w="220px" bg={_cardBackground}>
-                            <CardHeader>
-                                <Tag
-                                    borderRadius="md"
-                                    size="lg"
-                                    variant="outline"
-                                    color="wheat"
-                                >
-                                    <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
-                                        {stroller.title}
-                                    </Text>
-                                </Tag>
-                            </CardHeader>
+                            {stroller.title &&
+                                <CardHeader>
+                                    <Tag
+                                        borderRadius="md"
+                                        size="lg"
+                                        variant="outline"
+                                        color="wheat"
+                                    >
+                                        <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
+                                            {stroller.title}
+                                        </Text>
+                                    </Tag>
+                                </CardHeader>
+                            }
                             <CardBody display="flex" justifyContent="center">
                                 <MotionImage
                                     variant="unstyled"
@@ -255,16 +257,18 @@ export default function StrollerRow({ stroller, strollerDataIsLoading, tabIndex 
                             </Tag>
                         </VStack>
                         <Divider />
-                        <VStack alignItems="start">
-                            <Text as="b" fontSize="13">Description</Text>
-                            <Tag
-                                borderRadius='full'
-                                variant='outline'
-                                colorScheme='orange'
-                            >
-                                <TagLabel>{stroller.description}</TagLabel>
-                            </Tag>
-                        </VStack>
+                        {stroller.description &&
+                            <VStack alignItems="start">
+                                <Text as="b" fontSize="13">Description</Text>
+                                <Tag
+                                    borderRadius='full'
+                                    variant='outline'
+                                    colorScheme='orange'
+                                >
+                                    <TagLabel>{stroller.description}</TagLabel>
+                                </Tag>
+                            </VStack>
+                        }
                         <Divider />
                         <VStack alignItems="start">
                             <Text as="b" fontSize="13">Price</Text>

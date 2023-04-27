@@ -1,7 +1,8 @@
-import { Button, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useColorModeValue } from '@chakra-ui/react';
+import { Button, HStack, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { cardBackground } from '../../defaultStyle';
 import StyledSelect from '../StyledSelect';
+import { motion } from "framer-motion";
 
 const locations = [
     { key: 4, value: "birthing+classes", label: "Birthing Classes" },
@@ -19,13 +20,11 @@ const locations = [
 export default function GoogleMapsModal({ searchPlaces, setSearchPlaces }) {
     // Searching Logic
     const [selectedLocation, setSelectedLocation] = useState(null);
-
-    // TODO: Make sure the city and state are in acceptable formats for search
-    // TODO: Make sure the fields you are searching get formatted via a form component instead of onChange event
     const [state, setState] = useState(null);
     const [city, setCity] = useState(null);
+    const [zip, setZip] = useState(null);
+    const [country, setCountry] = useState(null);
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
-
 
     const formatLocationEntry = () => {
         if (city && state) {
@@ -58,18 +57,45 @@ export default function GoogleMapsModal({ searchPlaces, setSearchPlaces }) {
                 <ModalCloseButton />
                 <form onSubmit={redirectUser}>
                     <ModalBody>
-                        <StyledSelect
-                            value={selectedLocation}
-                            onChange={(event) => setSelectedLocation(event.target.value)}
-                            options={locations}
-                        />
-                        <Heading size="md">City</Heading>
-                        <Input value={city} onChange={event => setCity(event.target.value)} placeholder='leave blank for near you' />
-                        <Heading size="md">State</Heading>
-                        <Input value={state} onChange={event => setState(event.target.value)} placeholder='leave blank for near you' />
+                        <VStack alignItems="start">
+                            <Heading size="md">Locations</Heading>
+                            <StyledSelect
+                                value={selectedLocation}
+                                onChange={(event) => setSelectedLocation(event.target.value)}
+                                options={locations}
+                            />
+                        </VStack>
+                        <HStack paddingTop={2} paddingBottom={2}>
+                            <VStack alignItems="start">
+                                <Heading size="md">City</Heading>
+                                <Input value={city} onChange={event => setCity(event.target.value)} placeholder='leave blank for near you' />
+                            </VStack>
+                            <VStack alignItems="start">
+                                <Heading size="md">State</Heading>
+                                <Input value={state} onChange={event => setState(event.target.value)} placeholder='leave blank for near you' />
+                            </VStack>
+                            <VStack alignItems="start">
+                                <Heading size="md">Zip</Heading>
+                                <Input value={zip} onChange={event => setZip(event.target.value)} placeholder='leave blank for near you' />
+                            </VStack>
+                        </HStack>
+                        <HStack>
+                            <VStack alignItems="start">
+                                <Heading size="md">Country</Heading>
+                                <Input
+                                    whileHover={{ scale: 1.2 }}
+                                    value={country}
+                                    onChange={event => setCountry(event.target.value)}
+                                    placeholder='leave blank for near you'
+                                />
+                            </VStack>
+                        </HStack>
                     </ModalBody>
                     <ModalFooter>
-                        <Button mr={3} onClick={() => setSearchPlaces(false)}>
+                        <Button
+                            mr={3}
+                            onClick={() => setSearchPlaces(false)}
+                        >
                             Close
                         </Button>
                         <Button
