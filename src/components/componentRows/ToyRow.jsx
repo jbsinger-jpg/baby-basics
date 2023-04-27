@@ -272,7 +272,7 @@ export default function ToyRow({ toy, toyDataIsLoading, tabIndex }) {
                                 variant='outline'
                                 colorScheme='gray'
                             >
-                                <TagLabel>{"$" + toy.price}</TagLabel>
+                                <TagLabel>{"$" + toy.price?.toFixed(2)}</TagLabel>
                             </Tag>
                         </VStack>
                         <Divider />

@@ -446,6 +446,12 @@ export default function HomePage() {
                 setFoodData={setFoodData}
                 setClothingData={setClothingData}
                 setDiaperData={setDiaperData}
+                setMaternalData={setMaternialData}
+                setFormulaData={setFormulaData}
+                setToyData={setToyData}
+                setMonitorData={setMonitorData}
+                setSeatData={setSeatData}
+                setStrollerData={setStrollerData}
                 tabIndex={tabIndex}
                 setTabIndex={setTabIndex}
             />

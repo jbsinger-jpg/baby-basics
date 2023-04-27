@@ -240,7 +240,7 @@ export default function SearchBarAlertDialog({
         let maternalRef = await firestore.collection('maternal_clothes');
 
         if (maternalBrand) {
-            maternalOptions.push({ dbField: "brand", operator: "==", operand: clothingBrand });
+            maternalOptions.push({ dbField: "brand", operator: "==", operand: maternalBrand });
         }
 
         if (formattedMaternalPrice && formattedMaternalPrice > 0) {
@@ -253,10 +253,10 @@ export default function SearchBarAlertDialog({
 
         maternalRef.get().then((querySnapshot => {
             querySnapshot.docs.forEach(doc => {
-                maternalRef.push({ ...doc.data() });
+                maternalData.push({ ...doc.data() });
             });
 
-            setMaternalData(maternalRef);
+            setMaternalData(maternalData);
         }));
 
         if (!maternalBrand && !maternalPrice) {
@@ -264,7 +264,7 @@ export default function SearchBarAlertDialog({
                 .get()
                 .then(snapshot => {
                     snapshot.docs.forEach(doc => {
-                        maternalData.push({ ...maternalData.data() });
+                        maternalData.push({ ...doc.data() });
                     });
 
                     const uniqueArray = [...new Set(maternalData.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
@@ -286,19 +286,19 @@ export default function SearchBarAlertDialog({
         }
 
         if (formattedFormulaPrice && formattedFormulaPrice > 0) {
-            maternalOptions.push({ dbField: "price", operator: "<=", operand: Number(formattedFormulaPrice) });
+            formulaOptions.push({ dbField: "price", operator: "<=", operand: Number(formattedFormulaPrice) });
         }
 
-        for (let i = 0; i < maternalOptions.length; i++) {
+        for (let i = 0; i < formulaOptions.length; i++) {
             formulaRef = await formulaRef.where(formulaOptions[i].dbField, formulaOptions[i].operator, formulaOptions[i].operand);
         }
 
         formulaRef.get().then((querySnapshot => {
             querySnapshot.docs.forEach(doc => {
-                formulaRef.push({ ...doc.data() });
+                formulaData.push({ ...doc.data() });
             });
 
-            setFormulaData(formulaRef);
+            setFormulaData(formulaData);
         }));
 
         if (!formulaBrand && !formulaPrice) {
@@ -306,7 +306,7 @@ export default function SearchBarAlertDialog({
                 .get()
                 .then(snapshot => {
                     snapshot.docs.forEach(doc => {
-                        formulaData.push({ ...formulaData.data() });
+                        formulaData.push({ ...doc.data() });
                     });
 
                     const uniqueArray = [...new Set(formulaData.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
@@ -323,8 +323,8 @@ export default function SearchBarAlertDialog({
         const formattedToyPrice = Number(toyPrice).toFixed(2);
         let toyRef = await firestore.collection('toys');
 
-        if (formulaBrand) {
-            formulaOptions.push({ dbField: "brand", operator: "==", operand: formulaBrand });
+        if (toyBrand) {
+            toyOptions.push({ dbField: "brand", operator: "==", operand: toyBrand });
         }
 
         if (formattedToyPrice && formattedToyPrice > 0) {
@@ -337,10 +337,10 @@ export default function SearchBarAlertDialog({
 
         toyRef.get().then((querySnapshot => {
             querySnapshot.docs.forEach(doc => {
-                toyRef.push({ ...doc.data() });
+                toyData.push({ ...doc.data() });
             });
 
-            setToyData(toyRef);
+            setToyData(toyData);
         }));
 
         if (!toyBrand && !toyPrice) {
@@ -348,14 +348,13 @@ export default function SearchBarAlertDialog({
                 .get()
                 .then(snapshot => {
                     snapshot.docs.forEach(doc => {
-                        toyData.push({ ...toyData.data() });
+                        toyData.push({ ...doc.data() });
                     });
 
                     const uniqueArray = [...new Set(toyData.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
                     setToyData(uniqueArray);
                 });
         }
-
     };
 
     const handleMonitorSearch = async () => {
@@ -365,7 +364,7 @@ export default function SearchBarAlertDialog({
         const formattedMonitorPrice = Number(monitorPrice).toFixed(2);
         let monitorRef = await firestore.collection('monitors');
 
-        if (formulaBrand) {
+        if (monitorBrand) {
             monitorOptions.push({ dbField: "brand", operator: "==", operand: monitorBrand });
         }
 
@@ -373,16 +372,16 @@ export default function SearchBarAlertDialog({
             monitorOptions.push({ dbField: "price", operator: "<=", operand: Number(formattedMonitorPrice) });
         }
 
-        for (let i = 0; i < toyOptions.length; i++) {
+        for (let i = 0; i < monitorOptions.length; i++) {
             monitorRef = await monitorRef.where(monitorOptions[i].dbField, monitorOptions[i].operator, monitorOptions[i].operand);
         }
 
         monitorRef.get().then((querySnapshot => {
             querySnapshot.docs.forEach(doc => {
-                monitorRef.push({ ...doc.data() });
+                monitorData.push({ ...doc.data() });
             });
 
-            setMonitorData(monitorRef);
+            setMonitorData(monitorData);
         }));
 
         if (!monitorBrand && !monitorPrice) {
@@ -390,14 +389,95 @@ export default function SearchBarAlertDialog({
                 .get()
                 .then(snapshot => {
                     snapshot.docs.forEach(doc => {
-                        monitorData.push({ ...monitorData.data() });
+                        monitorData.push({ ...doc.data() });
                     });
 
                     const uniqueArray = [...new Set(monitorData.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
                     setMonitorData(uniqueArray);
                 });
         }
+    };
 
+    const handleStrollerSearch = async () => {
+        let strollerOptions = [];
+        let strollerData = [];
+
+        const formattedStrollerPrice = Number(strollerPrice).toFixed(2);
+        let strollerRef = await firestore.collection('strollers');
+
+        if (strollerBrand) {
+            strollerOptions.push({ dbField: "brand", operator: "==", operand: strollerBrand });
+        }
+
+        if (formattedStrollerPrice && formattedStrollerPrice > 0) {
+            strollerOptions.push({ dbField: "price", operator: "<=", operand: Number(formattedStrollerPrice) });
+        }
+
+        for (let i = 0; i < strollerOptions.length; i++) {
+            strollerRef = await strollerRef.where(strollerOptions[i].dbField, strollerOptions[i].operator, strollerOptions[i].operand);
+        }
+
+        strollerRef.get().then((querySnapshot => {
+            querySnapshot.docs.forEach(doc => {
+                strollerData.push({ ...doc.data() });
+            });
+
+            setStrollerData(strollerData);
+        }));
+
+        if (!strollerBrand && !strollerPrice) {
+            firestore.collection('strollers')
+                .get()
+                .then(snapshot => {
+                    snapshot.docs.forEach(doc => {
+                        strollerData.push({ ...doc.data() });
+                    });
+
+                    const uniqueArray = [...new Set(strollerData.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+                    setStrollerData(uniqueArray);
+                });
+        }
+    };
+
+    const handleSeatSearch = async () => {
+        let seatOptions = [];
+        let seatData = [];
+
+        const formattedSeatPrice = Number(seatPrice).toFixed(2);
+        let seatRef = await firestore.collection('car_seats');
+
+        if (formulaBrand) {
+            seatOptions.push({ dbField: "brand", operator: "==", operand: seatBrand });
+        }
+
+        if (formattedSeatPrice && formattedSeatPrice > 0) {
+            seatOptions.push({ dbField: "price", operator: "<=", operand: Number(formattedSeatPrice) });
+        }
+
+        for (let i = 0; i < seatOptions.length; i++) {
+            seatRef = await seatRef.where(seatOptions[i].dbField, seatOptions[i].operator, seatOptions[i].operand);
+        }
+
+        seatRef.get().then((querySnapshot => {
+            querySnapshot.docs.forEach(doc => {
+                seatData.push({ ...doc.data() });
+            });
+
+            setSeatData(seatData);
+        }));
+
+        if (!seatBrand && !seatPrice) {
+            firestore.collection('car_seats')
+                .get()
+                .then(snapshot => {
+                    snapshot.docs.forEach(doc => {
+                        seatData.push({ ...doc.data() });
+                    });
+
+                    const uniqueArray = [...new Set(seatData.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+                    setSeatData(uniqueArray);
+                });
+        }
     };
 
     useEffect(() => {
@@ -817,17 +897,23 @@ export default function SearchBarAlertDialog({
         else if (searchTabIndex === 5) {
             return handleFormulaSearch();
         }
-        else if (searchTabIndex === 6) {
+        else if (searchTabIndex === 4) {
             return handleToySearch();
         }
-        else if (searchTabIndex === 6) {
+        else if (searchTabIndex === 5) {
             return handleMonitorSearch();
         }
         else if (searchTabIndex === 6) {
             return handleToySearch();
         }
-        else if (searchTabIndex === 6) {
-            return handleToySearch();
+        else if (searchTabIndex === 7) {
+            return handleMonitorSearch();
+        }
+        else if (searchTabIndex === 8) {
+            return handleSeatSearch();
+        }
+        else if (searchTabIndex === 9) {
+            return handleStrollerSearch();
         }
     };
 

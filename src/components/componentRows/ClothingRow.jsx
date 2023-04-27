@@ -276,7 +276,7 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex }) 
                                 variant='outline'
                                 colorScheme='gray'
                             >
-                                <TagLabel>{"$" + clothing.price}</TagLabel>
+                                <TagLabel>{"$" + clothing.price?.toFixed(2)}</TagLabel>
                             </Tag>
                         </VStack>
                         <Divider />
@@ -307,7 +307,7 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex }) 
                         <VStack alignItems="start">
                             <Text as="b" fontSize="13">Size</Text>
                             <Tag
-                                borderRadius='full'
+                                borderRadius="md"
                                 variant='subtle'
                                 colorScheme='telegram'
                             >

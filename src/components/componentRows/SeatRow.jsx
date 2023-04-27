@@ -275,7 +275,7 @@ export default function SeatRow({ seat, seatDataIsLoading, tabIndex }) {
                                 variant='outline'
                                 colorScheme='gray'
                             >
-                                <TagLabel>{"$" + seat.price}</TagLabel>
+                                <TagLabel>{"$" + seat.price?.toFixed(2)}</TagLabel>
                             </Tag>
                         </VStack>
                         <Divider />

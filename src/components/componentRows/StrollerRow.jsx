@@ -273,7 +273,7 @@ export default function StrollerRow({ stroller, strollerDataIsLoading, tabIndex 
                                 variant='outline'
                                 colorScheme='gray'
                             >
-                                <TagLabel>{"$" + stroller.price}</TagLabel>
+                                <TagLabel>{"$" + stroller.price?.toFixed(2)}</TagLabel>
                             </Tag>
                         </VStack>
                         <Divider />

@@ -259,7 +259,7 @@ export default function MonitorRow({ monitor, monitorDataIsLoading, tabIndex }) 
                         <VStack alignItems="start">
                             <Text as="b" fontSize="13">Description</Text>
                             <Tag
-                                borderRadius='full'
+                                borderRadius="md"
                                 variant='outline'
                                 colorScheme='orange'
                             >
@@ -276,7 +276,7 @@ export default function MonitorRow({ monitor, monitorDataIsLoading, tabIndex }) 
                                 variant='outline'
                                 colorScheme='gray'
                             >
-                                <TagLabel>{"$" + monitor.price}</TagLabel>
+                                <TagLabel>{"$" + monitor.price?.toFixed(2)}</TagLabel>
                             </Tag>
                         </VStack>
                         <Divider />

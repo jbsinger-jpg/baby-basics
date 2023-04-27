@@ -9,7 +9,24 @@ import { useNavigate } from 'react-router-dom';
 import ColorModeToggleButton from '../ColorModeToggleButton';
 import SearchBarAlertDialog from '../modals/SearchBarModal';
 
-export default function FloatingActionButtons({ setSettingsIsOpen, handleSearchPlacesDialogOpen, currentUser, setSearchBarIsOpen, searchBarIsOpen, setFoodData, setClothingData, setDiaperData, tabIndex, setTabIndex }) {
+export default function FloatingActionButtons({
+    setSettingsIsOpen,
+    handleSearchPlacesDialogOpen,
+    currentUser,
+    setSearchBarIsOpen,
+    searchBarIsOpen,
+    setFoodData,
+    setClothingData,
+    setDiaperData,
+    setMaternalData,
+    setFormulaData,
+    setToyData,
+    setMonitorData,
+    setSeatData,
+    setStrollerData,
+    tabIndex,
+    setTabIndex
+}) {
     const navigate = useNavigate();
 
     const handleSettingsPress = () => {
@@ -42,6 +59,12 @@ export default function FloatingActionButtons({ setSettingsIsOpen, handleSearchP
                 setFoodData={setFoodData}
                 setClothingData={setClothingData}
                 setDiaperData={setDiaperData}
+                setMaternalData={setMaternalData}
+                setFormulaData={setFormulaData}
+                setToyData={setToyData}
+                setMonitorData={setMonitorData}
+                setSeatData={setSeatData}
+                setStrollerData={setStrollerData}
                 tabIndex={tabIndex}
                 setTabIndex={setTabIndex}
             />

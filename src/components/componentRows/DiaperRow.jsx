@@ -274,7 +274,7 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                                 variant='outline'
                                 colorScheme='gray'
                             >
-                                <TagLabel>{"$" + diaper.price}</TagLabel>
+                                <TagLabel>{"$" + diaper.price?.toFixed(2)}</TagLabel>
                             </Tag>
                         </VStack>
                         <Divider />

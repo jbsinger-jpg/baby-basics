@@ -276,7 +276,7 @@ export default function FormulaRow({ formula, formulaDataIsLoading, tabIndex }) 
                                 variant='outline'
                                 colorScheme='gray'
                             >
-                                <TagLabel>{"$" + formula.price}</TagLabel>
+                                <TagLabel>{"$" + formula.price?.toFixed(2)}</TagLabel>
                             </Tag>
                         </VStack>
                         <Divider />

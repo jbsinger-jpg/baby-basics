@@ -275,7 +275,7 @@ export default function FoodRow({ food, isFoodDataLoading, tabIndex }) {
                                 variant='outline'
                                 colorScheme='gray'
                             >
-                                <TagLabel>{"$" + food.price}</TagLabel>
+                                <TagLabel>{"$" + food.price?.toFixed(2)}</TagLabel>
                             </Tag>
                         </VStack>
                         <VStack alignItems="start">
