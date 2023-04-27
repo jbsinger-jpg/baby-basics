@@ -1,5 +1,5 @@
 import { CheckIcon, CloseIcon, StarIcon } from '@chakra-ui/icons';
-import { Box, Button, Divider, HStack, Image, SkeletonCircle, SkeletonText, Text, VStack, Icon, Stack, Card, CardBody, Tooltip, Heading, Tag, TagLabel, useColorModeValue, CardFooter, CardHeader } from '@chakra-ui/react';
+import { Box, Button, Divider, HStack, SkeletonCircle, SkeletonText, Text, VStack, Icon, Stack, Card, CardBody, Tooltip, Heading, Tag, TagLabel, useColorModeValue, CardFooter, CardHeader, CircularProgress } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { firestore } from '../../firebaseConfig';
@@ -7,7 +7,6 @@ import { cardBackground } from '../../defaultStyle';
 import ReactImageMagnify from '@blacklab/react-image-magnify';
 
 export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex }) {
-    const MotionReactMagnify = motion(ReactImageMagnify);
     const MotionBox = motion(Box);
     const MotionButton = motion(Button);
 
@@ -129,7 +128,7 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex }) 
                                     }}
                                 >
                                     {/* Prevent image from exploding in dimensions */}
-                                    {tabIndex === 0 &&
+                                    {(tabIndex === 0 && !buttonsPressed) &&
                                         <ReactImageMagnify
                                             imageProps={{
                                                 src: clothing.image,
@@ -148,6 +147,9 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex }) 
                                         />
                                     }
                                 </motion.div>
+                                {buttonsPressed &&
+                                    <CircularProgress isIndeterminate color={_cardBackground} />
+                                }
                             </CardBody>
                             <CardFooter>
                                 {!flippedCards &&

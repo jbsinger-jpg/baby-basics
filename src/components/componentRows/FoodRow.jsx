@@ -1,5 +1,5 @@
 import { CheckIcon, CloseIcon, StarIcon } from '@chakra-ui/icons';
-import { Divider, HStack, Image, SkeletonCircle, SkeletonText, Text, VStack, Icon, Stack, Box, Button, Card, CardBody, Tooltip, Heading, Tag, TagLabel, useColorModeValue, CardHeader, CardFooter } from '@chakra-ui/react';
+import { Divider, HStack, SkeletonCircle, SkeletonText, Text, VStack, Icon, Stack, Box, Button, Card, CardBody, Tooltip, Heading, Tag, TagLabel, useColorModeValue, CardHeader, CardFooter, CircularProgress } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { firestore } from '../../firebaseConfig';
@@ -128,7 +128,7 @@ export default function FoodRow({ food, isFoodDataLoading, tabIndex }) {
                                     }}
                                 >
                                     {/* Prevent image from exploding in dimensions */}
-                                    {tabIndex === 1 &&
+                                    {(tabIndex === 1 && !buttonsPressed) &&
                                         <ReactImageMagnify
                                             imageProps={{
                                                 src: food.image,
@@ -147,6 +147,9 @@ export default function FoodRow({ food, isFoodDataLoading, tabIndex }) {
                                         />
                                     }
                                 </motion.div>
+                                {buttonsPressed &&
+                                    <CircularProgress isIndeterminate color={_cardBackground} />
+                                }
                             </CardBody>
                             <CardFooter>
                                 {!flippedCards &&

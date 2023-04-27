@@ -1,12 +1,12 @@
 import { CheckIcon, CloseIcon, StarIcon } from '@chakra-ui/icons';
-import { Box, Button, Heading, HStack, Image, SkeletonCircle, SkeletonText, Text, Tooltip, VStack, Icon, Divider, Stack, Card, CardBody, Tag, TagLabel, useColorModeValue, CardHeader, CardFooter } from '@chakra-ui/react';
+import { Box, Button, Heading, HStack, SkeletonCircle, SkeletonText, Text, Tooltip, VStack, Icon, Divider, Stack, Card, CardBody, Tag, TagLabel, useColorModeValue, CardHeader, CardFooter, CircularProgress } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { firestore } from '../../firebaseConfig';
 import { cardBackground } from '../../defaultStyle';
+import ReactImageMagnify from '@blacklab/react-image-magnify';
 
 export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
-    const MotionImage = motion(Image);
     const MotionBox = motion(Box);
     const MotionButton = motion(Button);
 
@@ -117,8 +117,7 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                                 </Tag>
                             </CardHeader>
                             <CardBody display="flex" justifyContent="center">
-                                <MotionImage
-                                    variant="unstyled"
+                                <motion.div
                                     initial={buttonsPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
                                     animate={{ rotate: 0, scale: 1 }}
                                     onAnimationComplete={() => setButtonsPressed(false)}
@@ -127,11 +126,30 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                                         stiffness: 260,
                                         damping: 20
                                     }}
-                                    src={diaper.image}
-                                    size="sm"
-                                    alt="Alternate Text"
-                                    style={{ width: 150, height: 200, resizeMode: 'cover' }}
-                                />
+                                >
+                                    {/* Prevent image from exploding in dimensions */}
+                                    {(tabIndex === 2 && !buttonsPressed) &&
+                                        <ReactImageMagnify
+                                            imageProps={{
+                                                src: diaper.image,
+                                                width: 150,
+                                                height: 200,
+                                            }}
+                                            magnifiedImageProps={{
+                                                src: diaper.image,
+                                                width: 600,
+                                                height: 800
+                                            }}
+                                            magnifyContainerProps={{
+                                                height: 300,
+                                                width: 400
+                                            }}
+                                        />
+                                    }
+                                </motion.div>
+                                {buttonsPressed &&
+                                    <CircularProgress isIndeterminate color={_cardBackground} />
+                                }
                             </CardBody>
                             <CardFooter>
                                 {!flippedCards &&
@@ -170,7 +188,7 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                         </Card>
                         :
                         <MotionBox
-                            h="300px"
+                            h="550px"
                             alignItems="center"
                             justifyContent="center"
                             display="flex"
@@ -188,12 +206,19 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                                         </HStack>
                                     </Tooltip>
                                 </HStack>
-                                <HStack>
-                                    <Rating />
-                                    <Tooltip label="Total">
-                                        <Heading size="xs">{total}</Heading>
-                                    </Tooltip>
-                                </HStack>
+                                <Box
+                                    h={220}
+                                    alignItems="center"
+                                    justifyContent="center"
+                                    display="flex"
+                                >
+                                    <HStack>
+                                        <Rating />
+                                        <Tooltip label="Total">
+                                            <Heading size="xs">{total}</Heading>
+                                        </Tooltip>
+                                    </HStack>
+                                </Box>
                                 <HStack justifyContent="space-between" w="220px">
                                     <MotionButton
                                         whileTap={{

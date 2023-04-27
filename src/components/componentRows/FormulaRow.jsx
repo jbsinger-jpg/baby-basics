@@ -1,12 +1,12 @@
 import { CheckIcon, CloseIcon, StarIcon } from '@chakra-ui/icons';
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, Divider, HStack, Heading, Icon, Image, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, CircularProgress, Divider, HStack, Heading, Icon, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { firestore } from '../../firebaseConfig';
 import { cardBackground } from '../../defaultStyle';
+import ReactImageMagnify from '@blacklab/react-image-magnify';
 
 export default function FormulaRow({ formula, formulaDataIsLoading, tabIndex }) {
-    const MotionImage = motion(Image);
     const MotionBox = motion(Box);
     const MotionButton = motion(Button);
 
@@ -117,8 +117,7 @@ export default function FormulaRow({ formula, formulaDataIsLoading, tabIndex }) 
                                 </Tag>
                             </CardHeader>
                             <CardBody display="flex" justifyContent="center">
-                                <MotionImage
-                                    variant="unstyled"
+                                <motion.div
                                     initial={buttonsPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
                                     animate={{ rotate: 0, scale: 1 }}
                                     onAnimationComplete={() => setButtonsPressed(false)}
@@ -127,11 +126,30 @@ export default function FormulaRow({ formula, formulaDataIsLoading, tabIndex }) 
                                         stiffness: 260,
                                         damping: 20
                                     }}
-                                    src={formula.image}
-                                    size="sm"
-                                    alt="Alternate Text"
-                                    style={{ width: 150, height: 200, resizeMode: 'cover' }}
-                                />
+                                >
+                                    {/* Prevent image from exploding in dimensions */}
+                                    {(tabIndex === 5 && !buttonsPressed) &&
+                                        <ReactImageMagnify
+                                            imageProps={{
+                                                src: formula.image,
+                                                width: 150,
+                                                height: 200,
+                                            }}
+                                            magnifiedImageProps={{
+                                                src: formula.image,
+                                                width: 600,
+                                                height: 800
+                                            }}
+                                            magnifyContainerProps={{
+                                                height: 300,
+                                                width: 400
+                                            }}
+                                        />
+                                    }
+                                </motion.div>
+                                {buttonsPressed &&
+                                    <CircularProgress isIndeterminate color={_cardBackground} />
+                                }
                             </CardBody>
                             <CardFooter>
                                 {!flippedCards &&
@@ -172,7 +190,7 @@ export default function FormulaRow({ formula, formulaDataIsLoading, tabIndex }) 
                         </Card>
                         :
                         <MotionBox
-                            h="300px"
+                            h="500px"
                             alignItems="center"
                             justifyContent="center"
                             display="flex"
@@ -190,12 +208,19 @@ export default function FormulaRow({ formula, formulaDataIsLoading, tabIndex }) 
                                         </HStack>
                                     </Tooltip>
                                 </HStack>
-                                <HStack>
-                                    <Rating />
-                                    <Tooltip label="Total">
-                                        <Heading size="xs">{total}</Heading>
-                                    </Tooltip>
-                                </HStack>
+                                <Box
+                                    h={220}
+                                    alignItems="center"
+                                    justifyContent="center"
+                                    display="flex"
+                                >
+                                    <HStack>
+                                        <Rating />
+                                        <Tooltip label="Total">
+                                            <Heading size="xs">{total}</Heading>
+                                        </Tooltip>
+                                    </HStack>
+                                </Box>
                                 <HStack justifyContent="space-between" w="220px">
                                     <MotionButton
                                         whileTap={{
