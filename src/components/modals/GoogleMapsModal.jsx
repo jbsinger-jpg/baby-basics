@@ -2,7 +2,6 @@ import { Button, HStack, Heading, Input, Modal, ModalBody, ModalCloseButton, Mod
 import React, { useState } from 'react';
 import { cardBackground } from '../../defaultStyle';
 import StyledSelect from '../StyledSelect';
-import { motion } from "framer-motion";
 
 const locations = [
     { key: 4, value: "birthing+classes", label: "Birthing Classes" },

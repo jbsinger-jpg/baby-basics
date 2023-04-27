@@ -4,9 +4,9 @@ import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { firestore } from '../../firebaseConfig';
 import { cardBackground } from '../../defaultStyle';
+import ReactImageMagnify from '@blacklab/react-image-magnify';
 
 export default function FoodRow({ food, isFoodDataLoading, tabIndex }) {
-    const MotionImage = motion(Image);
     const MotionBox = motion(Box);
     const MotionButton = motion(Button);
 
@@ -117,8 +117,7 @@ export default function FoodRow({ food, isFoodDataLoading, tabIndex }) {
                                 </Tag>
                             </CardHeader>
                             <CardBody display="flex" justifyContent="center">
-                                <MotionImage
-                                    variant="unstyled"
+                                <motion.div
                                     initial={buttonsPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
                                     animate={{ rotate: 0, scale: 1 }}
                                     onAnimationComplete={() => setButtonsPressed(false)}
@@ -127,11 +126,27 @@ export default function FoodRow({ food, isFoodDataLoading, tabIndex }) {
                                         stiffness: 260,
                                         damping: 20
                                     }}
-                                    src={food.image}
-                                    size="sm"
-                                    alt="Alternate Text"
-                                    style={{ width: 150, height: 200, resizeMode: 'cover' }}
-                                />
+                                >
+                                    {/* Prevent image from exploding in dimensions */}
+                                    {tabIndex === 1 &&
+                                        <ReactImageMagnify
+                                            imageProps={{
+                                                src: food.image,
+                                                width: 150,
+                                                height: 200,
+                                            }}
+                                            magnifiedImageProps={{
+                                                src: food.image,
+                                                width: 600,
+                                                height: 800
+                                            }}
+                                            magnifyContainerProps={{
+                                                height: 300,
+                                                width: 400
+                                            }}
+                                        />
+                                    }
+                                </motion.div>
                             </CardBody>
                             <CardFooter>
                                 {!flippedCards &&
@@ -189,12 +204,19 @@ export default function FoodRow({ food, isFoodDataLoading, tabIndex }) {
                                         </HStack>
                                     </Tooltip>
                                 </HStack>
-                                <HStack>
-                                    <Rating />
-                                    <Tooltip label="Total">
-                                        <Heading size="xs">{total}</Heading>
-                                    </Tooltip>
-                                </HStack>
+                                <Box
+                                    h={200}
+                                    alignItems="center"
+                                    justifyContent="center"
+                                    display="flex"
+                                >
+                                    <HStack>
+                                        <Rating />
+                                        <Tooltip label="Total">
+                                            <Heading size="xs">{total}</Heading>
+                                        </Tooltip>
+                                    </HStack>
+                                </Box>
                                 <HStack justifyContent="space-between" w="220px">
                                     <MotionButton
                                         whileTap={{
@@ -275,7 +297,7 @@ export default function FoodRow({ food, isFoodDataLoading, tabIndex }) {
                                 variant='outline'
                                 colorScheme='gray'
                             >
-                                <TagLabel>{"$" + food.price?.toFixed(2)}</TagLabel>
+                                <TagLabel>{"$" + food.price?.toFixed()}</TagLabel>
                             </Tag>
                         </VStack>
                         <VStack alignItems="start">

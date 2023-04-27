@@ -4,9 +4,10 @@ import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { firestore } from '../../firebaseConfig';
 import { cardBackground } from '../../defaultStyle';
+import ReactImageMagnify from '@blacklab/react-image-magnify';
 
 export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex }) {
-    const MotionImage = motion(Image);
+    const MotionReactMagnify = motion(ReactImageMagnify);
     const MotionBox = motion(Box);
     const MotionButton = motion(Button);
 
@@ -117,9 +118,7 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex }) 
                                 </Tag>
                             </CardHeader>
                             <CardBody display="flex" justifyContent="center">
-                                <MotionImage
-                                    variant="unstyled"
-                                    borderRadius="3%"
+                                <motion.div
                                     initial={buttonsPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
                                     animate={{ rotate: 0, scale: 1 }}
                                     onAnimationComplete={() => setButtonsPressed(false)}
@@ -128,11 +127,27 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex }) 
                                         stiffness: 260,
                                         damping: 20
                                     }}
-                                    src={clothing.image}
-                                    size="sm"
-                                    alt="Alternate Text"
-                                    style={{ width: 150, height: 200, resizeMode: 'cover' }}
-                                />
+                                >
+                                    {/* Prevent image from exploding in dimensions */}
+                                    {tabIndex === 0 &&
+                                        <ReactImageMagnify
+                                            imageProps={{
+                                                src: clothing.image,
+                                                width: 150,
+                                                height: 200,
+                                            }}
+                                            magnifiedImageProps={{
+                                                src: clothing.image,
+                                                width: 600,
+                                                height: 800
+                                            }}
+                                            magnifyContainerProps={{
+                                                height: 300,
+                                                width: 400
+                                            }}
+                                        />
+                                    }
+                                </motion.div>
                             </CardBody>
                             <CardFooter>
                                 {!flippedCards &&
@@ -190,12 +205,19 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex }) 
                                         </HStack>
                                     </Tooltip>
                                 </HStack>
-                                <HStack>
-                                    <Rating />
-                                    <Tooltip label="Total">
-                                        <Heading size="xs">{total}</Heading>
-                                    </Tooltip>
-                                </HStack>
+                                <Box
+                                    h={200}
+                                    alignItems="center"
+                                    justifyContent="center"
+                                    display="flex"
+                                >
+                                    <HStack>
+                                        <Rating />
+                                        <Tooltip label="Total">
+                                            <Heading size="xs">{total}</Heading>
+                                        </Tooltip>
+                                    </HStack>
+                                </Box>
                                 <HStack justifyContent="space-between" w="220px">
                                     <MotionButton
                                         whileTap={{
