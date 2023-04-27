@@ -1,9 +1,10 @@
 import { CheckIcon, CloseIcon, StarIcon } from '@chakra-ui/icons';
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, Divider, HStack, Heading, Icon, Image, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, CircularProgress, Divider, HStack, Heading, Icon, Image, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { firestore } from '../../firebaseConfig';
 import { cardBackground } from '../../defaultStyle';
+import ReactImageMagnify from '@blacklab/react-image-magnify';
 
 export default function StrollerRow({ stroller, strollerDataIsLoading, tabIndex }) {
     const MotionImage = motion(Image);
@@ -119,8 +120,7 @@ export default function StrollerRow({ stroller, strollerDataIsLoading, tabIndex 
                                 </CardHeader>
                             }
                             <CardBody display="flex" justifyContent="center">
-                                <MotionImage
-                                    variant="unstyled"
+                                <motion.div
                                     initial={buttonsPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
                                     animate={{ rotate: 0, scale: 1 }}
                                     onAnimationComplete={() => setButtonsPressed(false)}
@@ -129,11 +129,30 @@ export default function StrollerRow({ stroller, strollerDataIsLoading, tabIndex 
                                         stiffness: 260,
                                         damping: 20
                                     }}
-                                    src={stroller?.image}
-                                    size="sm"
-                                    alt="Alternate Text"
-                                    style={{ width: 150, height: 200, resizeMode: 'cover' }}
-                                />
+                                >
+                                    {/* Prevent image from exploding in dimensions */}
+                                    {(tabIndex === 8 && !buttonsPressed) &&
+                                        <ReactImageMagnify
+                                            imageProps={{
+                                                src: stroller.image,
+                                                width: 150,
+                                                height: 200,
+                                            }}
+                                            magnifiedImageProps={{
+                                                src: stroller.image,
+                                                width: 600,
+                                                height: 800
+                                            }}
+                                            magnifyContainerProps={{
+                                                height: 300,
+                                                width: 400
+                                            }}
+                                        />
+                                    }
+                                </motion.div>
+                                {buttonsPressed &&
+                                    <CircularProgress isIndeterminate color={_cardBackground} />
+                                }
                             </CardBody>
                             <CardFooter>
                                 {!flippedCards &&
