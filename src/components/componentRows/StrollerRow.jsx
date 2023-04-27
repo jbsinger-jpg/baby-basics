@@ -1,5 +1,5 @@
 import { CheckIcon, CloseIcon, StarIcon } from '@chakra-ui/icons';
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, CircularProgress, Divider, HStack, Heading, Icon, Image, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, CircularProgress, Divider, HStack, Heading, Icon, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { firestore } from '../../firebaseConfig';
@@ -7,7 +7,6 @@ import { cardBackground } from '../../defaultStyle';
 import ReactImageMagnify from '@blacklab/react-image-magnify';
 
 export default function StrollerRow({ stroller, strollerDataIsLoading, tabIndex }) {
-    const MotionImage = motion(Image);
     const MotionBox = motion(Box);
     const MotionButton = motion(Button);
 
