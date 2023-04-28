@@ -209,12 +209,19 @@ export default function SeatRow({ seat, seatDataIsLoading, tabIndex }) {
                                         </HStack>
                                     </Tooltip>
                                 </HStack>
-                                <HStack>
-                                    <Rating />
-                                    <Tooltip label="Total">
-                                        <Heading size="xs">{total}</Heading>
-                                    </Tooltip>
-                                </HStack>
+                                <Box
+                                    h={220}
+                                    alignItems="center"
+                                    justifyContent="center"
+                                    display="flex"
+                                >
+                                    <HStack>
+                                        <Rating />
+                                        <Tooltip label="Total">
+                                            <Heading size="xs">{total}</Heading>
+                                        </Tooltip>
+                                    </HStack>
+                                </Box>
                                 <HStack justifyContent="space-between" w="220px">
                                     <MotionButton
                                         whileTap={{

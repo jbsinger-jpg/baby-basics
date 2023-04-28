@@ -130,7 +130,7 @@ export default function StrollerRow({ stroller, strollerDataIsLoading, tabIndex 
                                     }}
                                 >
                                     {/* Prevent image from exploding in dimensions */}
-                                    {(tabIndex === 8 && !buttonsPressed) &&
+                                    {(tabIndex === 9 && !buttonsPressed) &&
                                         <ReactImageMagnify
                                             imageProps={{
                                                 src: stroller.image,
@@ -207,12 +207,19 @@ export default function StrollerRow({ stroller, strollerDataIsLoading, tabIndex 
                                         </HStack>
                                     </Tooltip>
                                 </HStack>
-                                <HStack>
-                                    <Rating />
-                                    <Tooltip label="Total">
-                                        <Heading size="xs">{total}</Heading>
-                                    </Tooltip>
-                                </HStack>
+                                <Box
+                                    h={220}
+                                    alignItems="center"
+                                    justifyContent="center"
+                                    display="flex"
+                                >
+                                    <HStack>
+                                        <Rating />
+                                        <Tooltip label="Total">
+                                            <Heading size="xs">{total}</Heading>
+                                        </Tooltip>
+                                    </HStack>
+                                </Box>
                                 <HStack justifyContent="space-between" w="220px">
                                     <MotionButton
                                         whileTap={{
