@@ -97,7 +97,6 @@ export default function ScreeningPage() {
     };
 
     const progress = (currentQuestion / questions.length) * 100;
-
     const handleReset = () => {
         let options = [];
 
@@ -107,11 +106,10 @@ export default function ScreeningPage() {
 
         setQuestions(options);
     };
-
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
 
     return (
-        <Box w="100vw" h="100vh" bg={_screenBackground}>
+        <Box w="100vw" h="100vh" bg={_screenBackground} overflow="hidden">
             <VStack
                 top="14"
                 right="4"
@@ -122,44 +120,48 @@ export default function ScreeningPage() {
                 <ColorModeToggleButton />
             </VStack>
             <ProgressBar progress={progress} />
-            <Box padding="5" h="500px">
+            <HStack justifyContent={'space-between'} alignItems={'center'} paddingRight="10px" paddingLeft="10px">
                 {questions[currentQuestion] &&
-                    <FormQuestion
-                        question={questions[currentQuestion].question}
-                        choices={questions[currentQuestion].choices}
-                        onSelect={handleSelect}
-                    />
+                    <Button onClick={handleBackButtonPress}>
+                        Back
+                    </Button>
                 }
-                {!questions[currentQuestion] && (
-                    <VStack>
-                        <Heading size="md">Thanks for completing the form!</Heading>
-                        <Heading size="sm">Your answers</Heading>
-                        <Divider />
-                        <VStack spacing="3" textAlign="start">
-                            {questions.map((question, index) => (
-                                <Box width="100vw" paddingLeft="10">
-                                    <Text key={question.question}> {question.question}</Text>
-                                    <Text key={index}> Answer: {question.answer}</Text>
-                                </Box>
-                            ))}
+                <Box padding="5" h="500px">
+                    {questions[currentQuestion] &&
+                        <FormQuestion
+                            question={questions[currentQuestion].question}
+                            choices={questions[currentQuestion].choices}
+                            onSelect={handleSelect}
+                        />
+                    }
+                    {!questions[currentQuestion] && (
+                        <VStack>
+                            <Heading size="md">Thanks for completing the form!</Heading>
+                            <Heading size="sm">Your answers</Heading>
+                            <Divider />
+                            <VStack spacing="3" textAlign="start">
+                                {questions.map((question, index) => (
+                                    <Box width="100vw" paddingLeft="10">
+                                        <Text key={question.question}> {question.question}</Text>
+                                        <Text key={index}> Answer: {question.answer}</Text>
+                                    </Box>
+                                ))}
+                            </VStack>
+                            <HStack alignItems="start">
+                                <Button onClick={handleBackButtonPress}>
+                                    Back
+                                </Button>
+                                <Button onClick={() => setScreeningAlertDialogVisibile(true)}>
+                                    Confirm Answers
+                                </Button>
+                                <Tooltip label="Clear Answers">
+                                    <IconButton icon={<DeleteIcon />} onClick={handleReset} />
+                                </Tooltip>
+                            </HStack>
                         </VStack>
-                    </VStack>
-                )}
-            </Box>
-            <HStack width="100vw" paddingRight="5" paddingLeft="5">
-                <Button onClick={handleBackButtonPress}>
-                    Back
-                </Button>
-                {!questions[currentQuestion] ?
-                    <HStack>
-                        <Button onClick={() => setScreeningAlertDialogVisibile(true)}>
-                            Confirm Answers
-                        </Button>
-                        <Tooltip label="Clear Answers">
-                            <IconButton icon={<DeleteIcon />} onClick={handleReset} />
-                        </Tooltip>
-                    </HStack>
-                    :
+                    )}
+                </Box>
+                {questions[currentQuestion] &&
                     <Button onClick={handleNextButtonPress}>
                         Next
                     </Button>

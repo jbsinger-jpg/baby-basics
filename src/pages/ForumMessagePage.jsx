@@ -1,22 +1,22 @@
-import React, { useState, useRef, useEffect, useContext } from 'react';
-import { auth, firestore, serverTimestamp } from '../firebaseConfig';
+import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, HStack, Heading, IconButton, Input, Text, Textarea, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
+import React, { useState, useRef, useEffect, useContext } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
-import Context from '../context/Context';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
-import { SearchIcon } from '@chakra-ui/icons';
-import { screenBackground } from '../defaultStyle';
-import { wordFilter } from '../components/messaging/wordFilter';
-import StyledSelect from '../components/StyledSelect';
 import { motion } from "framer-motion";
 import ChatMessage from '../components/messaging/ChatMessage';
+import StyledSelect from '../components/StyledSelect';
+import { wordFilter } from '../components/messaging/wordFilter';
+import Context from '../context/Context';
+import { screenBackground } from '../defaultStyle';
+import { auth, firestore, serverTimestamp } from '../firebaseConfig';
 
 function ForumMessagePage() {
+    const [fontSize, setFontSize] = useState("md");
     const [text, setText] = useState();
     const [searchTerm, setSearchTerm] = useState("");
     const [searchButtonLoading, setSearchButtonLoading] = useState(false);
-    const [fontSize, setFontSize] = useState("md");
 
     // Data passed from StarterForumPage to here to get the messages to not have to remake a bunch of pages
     const { data: pageData, setData: setPageData } = useContext(Context);
