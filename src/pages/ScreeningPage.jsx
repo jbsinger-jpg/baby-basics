@@ -62,14 +62,13 @@ export default function ScreeningPage() {
 
     const handleAnswerSubmit = async () => {
         setAnswerButtonIsLoading(true);
-        const userRef = await firestore.collection("users").doc(auth?.currentUser?.uid);
         let options = {};
 
         for (let i = 0; i < questions.length; i++) {
             options[questions[i].queryField] = questions[i].answer;
         }
 
-        userRef.update({
+        await firestore.collection("users").doc(auth?.currentUser?.uid).collection("screening_questions").doc(auth?.currentUser?.uid).set({
             ...options
         })
             .then(() => {
@@ -123,7 +122,7 @@ export default function ScreeningPage() {
                 <ColorModeToggleButton />
             </VStack>
             <ProgressBar progress={progress} />
-            <Box padding="5">
+            <Box padding="5" h="500px">
                 {questions[currentQuestion] &&
                     <FormQuestion
                         question={questions[currentQuestion].question}
@@ -147,7 +146,7 @@ export default function ScreeningPage() {
                     </VStack>
                 )}
             </Box>
-            <HStack position="absolute" bottom="10" justifyContent="space-between" width="100vw" paddingRight="5" paddingLeft="5">
+            <HStack width="100vw" paddingRight="5" paddingLeft="5">
                 <Button onClick={handleBackButtonPress}>
                     Back
                 </Button>

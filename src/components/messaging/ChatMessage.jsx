@@ -6,13 +6,7 @@ import { auth, firestore } from "../../firebaseConfig";
 import { motion } from "framer-motion";
 
 export default function ChatMessage({ message, fontSize }) {
-    // TODO: Create an upvote system for the chat messages
-    // Going to need to keep track of the following:
-    // -- who previously upvoted
-    // -- the entire message list
-    // -- the currently selected message?? 
-
-    const { text, photoURL, voteCount, id, sender, sender_full_name } = message;
+    const { text, photoURL, voteCount, id, sender, sender_full_name, uid } = message;
     const toast = useToast();
     const { data: pageData } = useContext(Context);
     const [messageVoteCount, setMessageVoteCount] = useState(voteCount);
@@ -148,19 +142,12 @@ export default function ChatMessage({ message, fontSize }) {
 
     const handleShowUserInfo = async () => {
         if (sender !== auth.currentUser.email) {
-            const userRef = await firestore.collection("users");
-            const userQuery = userRef.where("email", "==", sender);
-            userQuery.get()
-                .then(snapshot => {
-                    snapshot.docs.forEach(doc => {
-                        setAlertDialogData({ ...doc.data() });
-                    });
+            const userDoc = await firestore.collection("users").doc(uid);
+            const screeningQuestions = await userDoc.collection("screening_questions");
+            const data = (await screeningQuestions.doc(uid).get()).data();
 
-                    setAlertDialogVisible(true);
-                })
-                .catch(error => {
-                    console.log(error);
-                });
+            setAlertDialogData(data);
+            setAlertDialogVisible(true);
         }
         else {
             toast({
@@ -285,7 +272,7 @@ export default function ChatMessage({ message, fontSize }) {
                             User Demographic
                         </AlertDialogHeader>
                         <AlertDialogBody>
-                            {alertDialogData.children_total || alertDialogData.children_simultaneous || alertDialogData.marital || alertDialogData.ethnicity ?
+                            {alertDialogData?.children_total || alertDialogData?.children_simultaneous || alertDialogData?.marital || alertDialogData?.ethnicity ?
                                 <>
                                     {alertDialogData?.full_name &&
                                         <Text>
