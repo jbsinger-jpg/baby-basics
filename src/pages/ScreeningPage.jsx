@@ -19,29 +19,34 @@ export default function ScreeningPage() {
             question: "What is your marital status?",
             choices: ["Married", "Seperated", "Widowed", "Never Married"],
             queryField: "marital",
-            answer: null
+            answer: null,
+            isNumeric: false
         },
         {
             question: "How many children do you have in total?",
             choices: ["1", "2", "3", "4", "5+"],
             queryField: "children_total",
-            answer: null
+            answer: null,
+            isNumeric: true
         },
         {
             question: "How many children born at the same time?",
-            choices: ["N/A", "Twins", "Triplets", "Quadruplets", "Quintuplets", "Sextuplets", "a lot..."],
+            choices: ["N/A", "Twins", "Triplets", "Quadruplets", "Quintuplets", "Sextuplets"],
             queryField: "children_simultaneous",
-            answer: null
+            answer: null,
+            isNumeric: false
         },
         {
             question: "What is your nationality?",
             choices: ["Asian", "White", "Hispanic or Latino", "American Indian or Alaska Native", "Black or African American", "Native Hawaiian or Other Pacific Islander", "Multiple"],
             queryField: "ethnicity",
-            answer: null
+            answer: null,
+            isNumeric: false
         }
     ]);
 
     const handleSelect = (choice) => {
+        console.log("Choice: ", choice);
         const newQuestions = [...questions];
         newQuestions[currentQuestion].answer = choice;
         setQuestions(newQuestions);
@@ -119,7 +124,9 @@ export default function ScreeningPage() {
             >
                 <ColorModeToggleButton />
             </VStack>
-            <ProgressBar progress={progress} />
+            <ProgressBar
+                progress={progress}
+            />
             <HStack justifyContent={'space-between'} alignItems={'center'} paddingRight="10px" paddingLeft="10px">
                 {questions[currentQuestion] &&
                     <Button onClick={handleBackButtonPress}>
@@ -131,7 +138,9 @@ export default function ScreeningPage() {
                         <FormQuestion
                             question={questions[currentQuestion].question}
                             choices={questions[currentQuestion].choices}
-                            onSelect={handleSelect}
+                            isNumeric={questions[currentQuestion].isNumeric}
+                            onChange={handleSelect}
+                            answer={questions[currentQuestion].answer}
                         />
                     }
                     {!questions[currentQuestion] && (
