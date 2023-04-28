@@ -46,7 +46,6 @@ export default function ScreeningPage() {
     ]);
 
     const handleSelect = (choice) => {
-        console.log("Choice: ", choice);
         const newQuestions = [...questions];
         newQuestions[currentQuestion].answer = choice;
         setQuestions(newQuestions);
@@ -120,14 +119,16 @@ export default function ScreeningPage() {
                 right="4"
                 position="fixed"
                 zIndex={999}
-
             >
                 <ColorModeToggleButton />
             </VStack>
-            <ProgressBar
-                progress={progress}
-            />
-            <HStack justifyContent={'space-between'} alignItems={'center'} paddingRight="10px" paddingLeft="10px">
+            <ProgressBar progress={progress} />
+            <HStack
+                justifyContent={'center'}
+                alignItems={'end'}
+                paddingRight="10px"
+                paddingLeft="10px"
+            >
                 {questions[currentQuestion] &&
                     <Button onClick={handleBackButtonPress}>
                         Back
@@ -144,11 +145,11 @@ export default function ScreeningPage() {
                         />
                     }
                     {!questions[currentQuestion] && (
-                        <VStack>
+                        <VStack spacing="3">
                             <Heading size="md">Thanks for completing the form!</Heading>
                             <Heading size="sm">Your answers</Heading>
                             <Divider />
-                            <VStack spacing="3" textAlign="start">
+                            <VStack spacing="3" textAlign="center">
                                 {questions.map((question, index) => (
                                     <Box width="100vw" paddingLeft="10">
                                         <Text key={question.question}> {question.question}</Text>

@@ -7,8 +7,8 @@ export default function FormQuestion({ question, choices, onChange, isNumeric, a
 
     return (
         <RadioGroup>
-            <VStack alignItems="start">
-                <Heading size="md">{question}</Heading>
+            <VStack alignItems="start" w="500px">
+                <Heading size="md" alignSelf="center">{question}</Heading>
                 {choices.map((choice, index) => (
                     <motion.div
                         whileHover={{ scale: 1.2 }}
