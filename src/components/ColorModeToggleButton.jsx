@@ -6,9 +6,17 @@ export default function ColorModeToggleButton() {
     const { toggleColorMode } = useColorMode();
 
     return (
-        <Tooltip label="Change color mode">
+        <Tooltip
+            label="Change color mode"
+            placement="auto"
+        >
             <IconButton
-                icon={useColorModeValue("Dark", "Light") === "Dark" ? <MoonIcon height="30px" width="30px" /> : <SunIcon height="30px" width="30px" />}
+                icon={
+                    useColorModeValue("Dark", "Light") === "Dark" ?
+                        <MoonIcon height="30px" width="30px" />
+                        :
+                        <SunIcon height="30px" width="30px" />
+                }
                 onClick={toggleColorMode}
                 width="56px"
                 height="56px"

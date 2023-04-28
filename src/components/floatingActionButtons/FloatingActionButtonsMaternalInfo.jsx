@@ -1,4 +1,4 @@
-import { IconButton, Tooltip, VStack } from '@chakra-ui/react';
+import { VStack } from '@chakra-ui/react';
 import MapIcon from '@mui/icons-material/Map';
 import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
 import HomeIcon from '@mui/icons-material/Home';
@@ -6,6 +6,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import ColorModeToggleButton from '../ColorModeToggleButton';
+import FabTemplate from './StandardFab';
 
 export default function FloatingActionButtonsMaternalInfo({ handleSearchPlacesDialogOpen }) {
     const navigate = useNavigate();
@@ -27,41 +28,21 @@ export default function FloatingActionButtonsMaternalInfo({ handleSearchPlacesDi
 
         >
             <ColorModeToggleButton />
-            <Tooltip label="Look up a Location">
-                <IconButton
-                    onClick={handleSearchPlacesDialogOpen}
-                    icon={<MapIcon fontSize="large" />}
-                    width="56px"
-                    height="56px"
-                    borderRadius="50%"
-                    boxShadow="md"
-                    _hover={{ boxShadow: "lg" }}
-                />
-            </Tooltip>
-            <Tooltip label="Baby Milestones">
-                <IconButton
-                    icon={<BabyChangingStationIcon fontSize="large" />}
-                    width="56px"
-                    height="56px"
-                    borderRadius="50%"
-                    boxShadow="md"
-                    _hover={{ boxShadow: "lg" }}
-                    onClick={handleMilestoneResources}
-                >
-                </IconButton>
-            </Tooltip>
-            <Tooltip label="Home">
-                <IconButton
-                    icon={<HomeIcon fontSize="large" />}
-                    width="56px"
-                    height="56px"
-                    borderRadius="50%"
-                    boxShadow="md"
-                    _hover={{ boxShadow: "lg" }}
-                    onClick={handleGoToHome}
-                >
-                </IconButton>
-            </Tooltip>
+            <FabTemplate
+                label="Look up a Location"
+                onClick={handleSearchPlacesDialogOpen}
+                icon={<MapIcon fontSize="large" />}
+            />
+            <FabTemplate
+                label="Baby Milestones"
+                onClick={handleMilestoneResources}
+                icon={<BabyChangingStationIcon fontSize="large" />}
+            />
+            <FabTemplate
+                label="Home"
+                onClick={handleGoToHome}
+                icon={<HomeIcon fontSize="large" />}
+            />
         </VStack>
     );
 }

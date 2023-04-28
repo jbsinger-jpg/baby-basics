@@ -8,10 +8,10 @@ export default function MaternalDataTabPanel({ maternialData, maternialDataLoadi
 
     return (
         <HStack flexWrap={"wrap"} marginTop="20" spacing="12" bg={_screenBackground}>
-            {maternialData && maternialData.length > 0 && maternialData.map(maternial => {
+            {maternialData && maternialData.length > 0 && maternialData.map((maternial, index) => {
                 return (
                     <MaternialRow
-                        key={maternial.id}
+                        key={index}
                         maternial={maternial}
                         maternialDataLoading={maternialDataLoading}
                         tabIndex={tabIndex}

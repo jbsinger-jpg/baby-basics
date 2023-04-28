@@ -1,5 +1,5 @@
 import { HamburgerIcon, SearchIcon, UnlockIcon } from '@chakra-ui/icons';
-import { HStack, IconButton, Tooltip, VStack } from '@chakra-ui/react';
+import { HStack, VStack } from '@chakra-ui/react';
 import PregnantWomanOutlinedIcon from '@mui/icons-material/PregnantWomanOutlined';
 import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
 import MapIcon from '@mui/icons-material/Map';
@@ -8,6 +8,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import ColorModeToggleButton from '../ColorModeToggleButton';
 import SearchBarAlertDialog from '../modals/SearchBarModal';
+import FabTemplate from './StandardFab';
 
 export default function FloatingActionButtons({
     setSettingsIsOpen,
@@ -70,82 +71,40 @@ export default function FloatingActionButtons({
             />
             <VStack>
                 <ColorModeToggleButton />
-                <Tooltip label="Look up a Location">
-                    <IconButton
-                        onClick={handleSearchPlacesDialogOpen}
-                        icon={<MapIcon fontSize="large" />}
-                        width="56px"
-                        height="56px"
-                        borderRadius="50%"
-                        boxShadow="md"
-                        _hover={{ boxShadow: "lg" }}
-                        zIndex={999}
-                    />
-                </Tooltip>
-                <Tooltip label="Log in">
-                    <IconButton
-                        icon={<UnlockIcon height="30px" width="30px" />}
-                        onClick={handleLogin}
-                        width="56px"
-                        height="56px"
-                        borderRadius="50%"
-                        boxShadow="md"
-                        _hover={{ boxShadow: "lg" }}
-                        zIndex={999}
-                    />
-                </Tooltip>
+                <FabTemplate
+                    icon={<MapIcon fontSize="large" />}
+                    onClick={handleSearchPlacesDialogOpen}
+                    label={"Look up a Location"}
+                />
+                <FabTemplate
+                    icon={<UnlockIcon height="30px" width="30px" />}
+                    onClick={handleLogin}
+                    label={"Log in"}
+                />
                 {currentUser ?
-                    <Tooltip label="User Account">
-                        <IconButton
-                            icon={<HamburgerIcon height="30px" width="30px" />}
-                            onClick={handleSettingsPress}
-                            width="56px"
-                            height="56px"
-                            borderRadius="50%"
-                            boxShadow="md"
-                            _hover={{ boxShadow: "lg" }}
-                            zIndex={999}
-                        />
-                    </Tooltip>
+                    <FabTemplate
+                        icon={<HamburgerIcon height="30px" width="30px" />}
+                        onClick={handleSettingsPress}
+                        label={"User Account"}
+                    />
                     :
                     null
                 }
-                <Tooltip label="Search">
-                    <IconButton
-                        icon={<SearchIcon height="30px" width="30px" />}
-                        onClick={() => setSearchBarIsOpen(true)}
-                        width="56px"
-                        height="56px"
-                        borderRadius="50%"
-                        boxShadow="md"
-                        _hover={{ boxShadow: "lg" }}
-                        zIndex={999}
-                    />
-                </Tooltip>
-                <Tooltip label="Baby Milestones">
-                    <IconButton
-                        icon={<BabyChangingStationIcon fontSize="large" />}
-                        width="56px"
-                        height="56px"
-                        borderRadius="50%"
-                        boxShadow="md"
-                        _hover={{ boxShadow: "lg" }}
-                        zIndex={999}
-                        onClick={handleMilestones}
-                    />
-                </Tooltip>
-                <Tooltip label="Maternity">
-                    <IconButton
-                        icon={<PregnantWomanOutlinedIcon fontSize="large" />}
-                        width="56px"
-                        height="56px"
-                        borderRadius="50%"
-                        boxShadow="md"
-                        _hover={{ boxShadow: "lg" }}
-                        zIndex={999}
-                        onClick={handleMaternalResources}
-                    />
-                </Tooltip>
+                <FabTemplate
+                    icon={<SearchIcon height="30px" width="30px" />}
+                    onClick={() => setSearchBarIsOpen(true)}
+                    label={"Search"}
+                />
+                <FabTemplate
+                    icon={<BabyChangingStationIcon fontSize="large" />}
+                    onClick={handleMilestones}
+                    label={"Baby Milestones"}
+                />
+                <FabTemplate
+                    icon={<PregnantWomanOutlinedIcon fontSize="large" />}
+                    onClick={handleMaternalResources}
+                    label={"Maternity"}
+                />
             </VStack>
         </HStack>
 
