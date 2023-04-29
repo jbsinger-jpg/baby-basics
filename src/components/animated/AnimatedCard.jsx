@@ -1,8 +1,11 @@
+// module imports
 import { Box, ButtonGroup, Card, CardBody, CardFooter, HStack, Heading, Icon, Link, ListItem, Stack, Text, UnorderedList, VStack, useColorModeValue } from '@chakra-ui/react';
-import React, { useState } from 'react';
-import { cardBackground } from '../../defaultStyle';
-import { motion } from 'framer-motion';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+
+// relative imports
+import { cardBackground } from '../../defaultStyle';
 import StyledSelect from '../StyledSelect';
 
 export default function AnimatedCard({

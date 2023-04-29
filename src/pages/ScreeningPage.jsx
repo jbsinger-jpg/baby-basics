@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+// module imports
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Divider, Heading, HStack, IconButton, Text, Tooltip, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
-import { auth, firestore } from '../firebaseConfig';
 import { DeleteIcon } from '@chakra-ui/icons';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+// relative imports
+import ColorModeToggleButton from '../components/ColorModeToggleButton';
 import ProgressBar from '../components/ProgressBar';
 import FormQuestion from '../components/FormQuestion';
 import { screenBackground } from '../defaultStyle';
-import ColorModeToggleButton from '../components/ColorModeToggleButton';
+import { auth, firestore } from '../firebaseConfig';
 
 export default function ScreeningPage() {
     const toast = useToast();

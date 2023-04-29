@@ -1,7 +1,10 @@
+// module imports
+import { AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, HStack, Text } from '@chakra-ui/react';
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+// relative imports
 import Context from '../context/Context';
-import { AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, HStack, Text } from '@chakra-ui/react';
 
 export default function GeneralAccordianItem({ question, description, pageDataContext }) {
     const navigate = useNavigate();

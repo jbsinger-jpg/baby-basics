@@ -1,11 +1,13 @@
+// module imports
 import { HamburgerIcon, SearchIcon, UnlockIcon } from '@chakra-ui/icons';
 import { HStack, VStack } from '@chakra-ui/react';
 import PregnantWomanOutlinedIcon from '@mui/icons-material/PregnantWomanOutlined';
 import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
 import MapIcon from '@mui/icons-material/Map';
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+
+// relative imports
 import ColorModeToggleButton from '../ColorModeToggleButton';
 import SearchBarAlertDialog from '../modals/SearchBarModal';
 import FabTemplate from './StandardFab';

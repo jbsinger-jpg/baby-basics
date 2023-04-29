@@ -1,5 +1,9 @@
+// module imports
 import { useColorModeValue } from "@chakra-ui/react";
 import { motion } from "framer-motion";
+
+// relative imports
+// none
 
 export default function ProgressBar({ progress }) {
     const progressBarVariants = {

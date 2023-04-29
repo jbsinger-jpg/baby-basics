@@ -1,3 +1,4 @@
+// module imports
 import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, HStack, Heading, IconButton, Input, Text, Textarea, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useState, useRef, useEffect, useContext } from 'react';
@@ -5,6 +6,8 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import { motion } from "framer-motion";
+
+// relative imports
 import ChatMessage from '../components/messaging/ChatMessage';
 import StyledSelect from '../components/StyledSelect';
 import { wordFilter } from '../components/messaging/wordFilter';

@@ -1,6 +1,9 @@
-import React from 'react';
-import ToyRow from '../componentRows/ToyRow';
+// module imports
 import { HStack, useColorModeValue } from '@chakra-ui/react';
+import React from 'react';
+
+// relative imports
+import ToyRow from '../componentRows/ToyRow';
 import { screenBackground } from '../../defaultStyle';
 
 export default function ToysDataTabPanel({ toyData, toyDataIsLoading, tabIndex }) {

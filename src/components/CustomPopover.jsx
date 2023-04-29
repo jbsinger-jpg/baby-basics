@@ -1,6 +1,9 @@
+// module imports
 import { CalendarIcon } from '@chakra-ui/icons';
 import { Box, Button, FormLabel, Input, InputGroup, InputRightAddon, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Tag, TagCloseButton, TagLabel, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
+
+// relative imports
 import { cardBackground } from '../defaultStyle';
 import StyledSelect from './StyledSelect';
 

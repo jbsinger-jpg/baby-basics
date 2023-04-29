@@ -1,3 +1,4 @@
+// module imports
 import React from 'react';
 import { motion } from "framer-motion";
 import { Text, useColorModeValue } from '@chakra-ui/react';

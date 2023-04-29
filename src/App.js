@@ -1,5 +1,8 @@
+// module imports
 import { Routes, Route } from "react-router-dom";
 import { useState } from "react";
+
+// relative imports
 import LoginPage from './pages/LoginPage';
 import HomePage from './pages/HomePage';
 import ForumMessagePage from "./pages/ForumMessagePage";

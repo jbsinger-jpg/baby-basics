@@ -1,15 +1,18 @@
+// module imports
+import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import Woman2Icon from '@mui/icons-material/Woman2';
 import { Box, HStack, IconButton, useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import GoogleMapsModal from '../components/modals/GoogleMapsModal';
-import Woman2Icon from '@mui/icons-material/Woman2';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
-import { screenBackground } from '../defaultStyle';
+
+// relative imports
 import AnimatedButton from "../components/animated/AnimatedTrimesterButton";
 import AnimatedCard from '../components/animated/AnimatedCard';
 import FloatingActionButtonsMaternalInfo from '../components/floatingActionButtons/FloatingActionButtonsMaternalInfo';
-import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import GoogleMapsModal from '../components/modals/GoogleMapsModal';
 import { trimesterPhaseInformation } from '../components/staticPageData/baby-maternal-info';
+import { screenBackground } from '../defaultStyle';
 
 // TODO: Order information based on the trimester
 // TODO: Break down information into one page

@@ -1,8 +1,11 @@
+// module imports
 import { Accordion, VStack, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
-import { screenBackground } from '../defaultStyle';
-import { allAppointmentData } from '../components/staticPageData/forumData';
+
+// relative imports
 import GeneralAccordianItem from '../components/GeneralAccordianItem';
+import { allAppointmentData } from '../components/staticPageData/forumData';
+import { screenBackground } from '../defaultStyle';
 
 export default function AppointmentForumPage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);

@@ -1,5 +1,9 @@
+// module imports
 import { IconButton, Tooltip } from '@chakra-ui/react';
 import React from 'react';
+
+// relative imports
+// none
 
 export default function FabTemplate({ onClick, icon, label }) {
     return (

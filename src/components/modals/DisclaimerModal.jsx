@@ -1,6 +1,9 @@
+// module imports
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+
+// relative imports
 import { cardBackground } from '../../defaultStyle';
 
 export default function DisclaimerModal({ screeningAlertDialogVisibile, setScreeningAlertDialogVisibile }) {

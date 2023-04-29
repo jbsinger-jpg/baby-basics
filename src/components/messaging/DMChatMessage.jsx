@@ -1,4 +1,7 @@
+// module imports
 import { Avatar, Box, Tag, Text } from "@chakra-ui/react";
+
+// relative imports
 import { auth } from "../../firebaseConfig";
 
 export default function DMChatMessage({ message, fontSize }) {

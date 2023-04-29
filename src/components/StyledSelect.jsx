@@ -1,5 +1,9 @@
+// module imports
 import { Select, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
+
+// relative imports
+// none
 
 export default function StyledSelect({ value, onChange, options, w, marginBottom, marginTop, paddingLeft }) {
     const _optionColor = useColorModeValue("#E6FFFA", "#1A202C");

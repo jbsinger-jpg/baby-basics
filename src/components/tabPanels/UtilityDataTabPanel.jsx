@@ -1,6 +1,10 @@
+// module imports
 import { HStack, Image, SkeletonCircle, SkeletonText, Text, VStack } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React from 'react';
+
+// relative imports
+// none
 
 export default function UtilityDataTabPanel({ utilityData, isUtilitiesLoading }) {
     const MotionVStack = motion(VStack);

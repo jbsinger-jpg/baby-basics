@@ -1,10 +1,13 @@
+// module imports
+import ReactImageMagnify from '@blacklab/react-image-magnify';
 import { CheckIcon, CloseIcon, StarIcon } from '@chakra-ui/icons';
 import { Box, Button, Card, CardBody, CardFooter, CardHeader, CircularProgress, Divider, HStack, Heading, Icon, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
+
+// relative imports
 import { firestore } from '../../firebaseConfig';
 import { cardBackground } from '../../defaultStyle';
-import ReactImageMagnify from '@blacklab/react-image-magnify';
 
 export default function ToyRow({ toy, toyDataIsLoading, tabIndex }) {
     const MotionBox = motion(Box);

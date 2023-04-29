@@ -1,15 +1,14 @@
+// module imports
 import { Accordion, VStack, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
+
+// relative imports
 import { screenBackground } from '../defaultStyle';
 import GeneralAccordianItem from '../components/GeneralAccordianItem';
 import { allPrenatalData } from '../components/staticPageData/forumData';
 
 export default function PrenatalForumPage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
-
-    // Question
-    // General Description
-    // Page Data Context
 
     return (
         <VStack spacing="3" bg={_screenBackground} h="100vh">

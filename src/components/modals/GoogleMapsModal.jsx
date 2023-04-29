@@ -1,5 +1,8 @@
+// module imports
 import { Button, HStack, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
+
+// relative imports
 import { cardBackground } from '../../defaultStyle';
 import StyledSelect from '../StyledSelect';
 

@@ -1,6 +1,10 @@
+// module imports
 import { Heading, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Radio, RadioGroup, VStack } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useState } from "react";
+
+// relative imports
+// none
 
 export default function FormQuestion({ question, choices, onChange, isNumeric, answer }) {
     const [formAnswer, setFormAnswer] = useState(answer);

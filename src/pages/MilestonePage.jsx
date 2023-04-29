@@ -1,4 +1,4 @@
-import { Box, Button, HStack, IconButton, useColorModeValue } from '@chakra-ui/react';
+import { Box, HStack, IconButton, useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import GoogleMapsModal from '../components/modals/GoogleMapsModal';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -180,6 +180,6 @@ export default function MilestonePage() {
                     icon={<ChevronRightIcon />}
                 />
             </HStack>
-        </Box >
+        </Box>
     );
 }

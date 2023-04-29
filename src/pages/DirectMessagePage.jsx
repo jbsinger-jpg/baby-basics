@@ -1,13 +1,16 @@
-import React, { useState, useRef, useContext, useEffect } from 'react';
-import { auth, firestore, serverTimestamp } from '../firebaseConfig';
+// module imports
 import { Box, HStack, Heading, Text, Textarea, VStack, useColorModeValue } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
+import React, { useState, useRef, useContext, useEffect } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
-import Context from "../context/Context";
-import { screenBackground } from '../defaultStyle';
+
+// relative imports
+import DMChatMessage from '../components/messaging/DMChatMessage';
 import { wordFilter } from '../components/messaging/wordFilter';
 import StyledSelect from '../components/StyledSelect';
-import { motion } from 'framer-motion';
-import DMChatMessage from '../components/messaging/DMChatMessage';
+import Context from "../context/Context";
+import { screenBackground } from '../defaultStyle';
+import { auth, firestore, serverTimestamp } from '../firebaseConfig';
 
 function DirectMessagePage() {
     const { data: selectedUser } = useContext(Context);

@@ -1,6 +1,9 @@
+// module imports
 import { ArrowDownIcon, ArrowUpIcon } from "@chakra-ui/icons";
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Avatar, Box, Button, HStack, IconButton, Tag, Text, Tooltip, useToast, VStack } from "@chakra-ui/react";
 import { useContext, useState } from "react";
+
+// relative imports
 import Context from "../../context/Context";
 import { auth, firestore } from "../../firebaseConfig";
 import { motion } from "framer-motion";

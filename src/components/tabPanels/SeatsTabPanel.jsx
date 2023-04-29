@@ -1,5 +1,8 @@
+// module imports
 import { HStack, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
+
+// relative imports
 import SeatRow from '../componentRows/SeatRow';
 import { screenBackground } from '../../defaultStyle';
 

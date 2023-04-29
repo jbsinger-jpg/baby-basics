@@ -1,10 +1,12 @@
+// module imports
 import { VStack } from '@chakra-ui/react';
 import MapIcon from '@mui/icons-material/Map';
 import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
 import HomeIcon from '@mui/icons-material/Home';
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+
+// relative imports
 import ColorModeToggleButton from '../ColorModeToggleButton';
 import FabTemplate from './StandardFab';
 

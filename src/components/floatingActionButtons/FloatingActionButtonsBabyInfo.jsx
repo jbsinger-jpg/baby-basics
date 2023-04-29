@@ -1,12 +1,13 @@
+// module imports
 import { VStack } from '@chakra-ui/react';
 import PregnantWomanOutlinedIcon from '@mui/icons-material/PregnantWomanOutlined';
 import MapIcon from '@mui/icons-material/Map';
 import HomeIcon from '@mui/icons-material/Home';
-
 import React from 'react';
-import ColorModeToggleButton from '../ColorModeToggleButton';
-
 import { useNavigate } from 'react-router-dom';
+
+// relative imports
+import ColorModeToggleButton from '../ColorModeToggleButton';
 import FabTemplate from './StandardFab';
 
 export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialogOpen }) {

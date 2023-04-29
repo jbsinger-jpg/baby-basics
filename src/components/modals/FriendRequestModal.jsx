@@ -1,5 +1,8 @@
+// module imports
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button } from '@chakra-ui/react';
 import React, { useState } from 'react';
+
+// relative imports
 import { firestore } from '../../firebaseConfig';
 
 export default function FriendRequestModal({ alertDialogVisible, setAlertDialogVisible, alertDialogUser, currentUser }) {

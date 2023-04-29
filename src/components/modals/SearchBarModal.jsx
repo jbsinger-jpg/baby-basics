@@ -1,6 +1,9 @@
+// module imports
 import { DeleteIcon } from '@chakra-ui/icons';
 import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, HStack, IconButton, Input, TabPanel, TabPanels, Tabs, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
+
+// relative imports
 import { firestore } from '../../firebaseConfig';
 import { cardBackground, screenBackground } from '../../defaultStyle';
 import StyledSelect from '../StyledSelect';
@@ -20,38 +23,354 @@ export default function SearchBarAlertDialog({
     tabIndex,
     setTabIndex
 }) {
+    // food
     const [stageOption, setStageOption] = useState(null);
     const [foodPrice, setFoodPrice] = useState(null);
     const [foodBrand, setFoodBrand] = useState(null);
+    const stageOptions = [
+        { value: "1", label: "1", key: 0 },
+        { value: "2", label: "2", key: 1 },
+        { value: "3", label: "3", key: 2 },
+    ];
+    const foodOptions = [
+        { value: "Plum Organics", label: "Plum Organics", key: 0 },
+        { value: "Happy Baby", label: "Happy Baby", key: 1 },
+        { value: "Beech-Nut", label: "Beech-Nut", key: 2 },
+        { value: "Mama Bear", label: "Mama Bear", key: 3 },
+        { value: "Gerber", label: "Gerber", key: 4 },
+        { value: "Sprouts", label: "Sprouts", key: 5 },
+    ];
+    const getFoodSearchBarItems = () => {
+        return (
+            <VStack display="flex" alignItems={"start"}>
+                <Text>Stage</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={stageOptions}
+                        value={stageOption}
+                        onChange={(event) => { setStageOption(event.target.value); }}
+                    />
+                </HStack>
+                <Text>Price</Text>
+                <HStack width="100%">
+                    <Input placeholder="price no more than..." value={foodPrice} onChange={(event) => setFoodPrice(event.target.value.replace(/[^0-9.-]/g, ""))} />
+                </HStack>
+                <Text>Brand</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={foodOptions}
+                        value={foodBrand}
+                        onChange={(event) => { setFoodBrand(event.target.value); }}
+                    />
+                </HStack>
+            </VStack>
+        );
+    };
 
+    // clothing
     const [clothingBrand, setClothingBrand] = useState(null);
     const [clothingGender, setClothingGender] = useState(null);
     const [clothingPrice, setClothingPrice] = useState(null);
     const [clothingSize, setClothingSize] = useState(null);
     const [clothingType, setClothingType] = useState(null);
+    const genderOptions = [
+        { value: "boy", label: "boy", key: 0 },
+        { value: "girl", label: "girl", key: 1 },
+    ];
+    const brandOptions = [
+        { value: "Carters", label: "Carters", key: 0 },
+        { value: "Gerber", label: "Gerber", key: 1 },
+        { value: "Renotemy", label: "Renotemy", key: 2 },
+        { value: "Burt's Bees Baby", label: "Burt's Bees Baby", key: 3 },
+    ];
+    const clothingOptions = [
+        { value: "footie", label: "footie", key: 0 },
+        { value: "shirt", label: "shirt", key: 1 },
+        { value: "pants", label: "pants", key: 2 },
+        { value: "bodysuits", label: "bodysuits", key: 3 },
+        { value: "romper", label: "romper", key: 4 },
+        { value: "sunsuit", label: "sunsuit", key: 5 },
+        { value: "dress", label: "dress", key: 6 },
+    ];
+    const getClothingSearchBarItems = () => {
+        return (
+            <VStack display="flex" alignItems={"start"} width="100%">
+                <Text>Gender</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={genderOptions}
+                        value={clothingGender}
+                        onChange={(event) => { setClothingGender(event.target.value); }}
+                    />
+                </HStack>
+                <Text>Brand</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={brandOptions}
+                        value={clothingBrand}
+                        onChange={(event) => { setClothingBrand(event.target.value); }}
+                    />
+                </HStack>
+                <Text>Size</Text>
+                <HStack width="100%">
+                    <Input placeholder="size equal to..." value={clothingSize} onChange={(event) => setClothingSize(event.target.value)} />
+                </HStack>
+                <Text>Price</Text>
+                <HStack width="100%">
+                    <Input placeholder="price less than or equal to..." value={clothingPrice} onChange={(event) => setClothingPrice(event.target.value)} />
+                </HStack>
+                <Text>Type</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={clothingOptions}
+                        value={clothingType}
+                        onChange={(event) => { setClothingType(event.target.value); }}
+                    />
+                </HStack>
+            </VStack>
+        );
+    };
 
+    // diaper
     const [diaperBrand, setDiaperBrand] = useState(null);
     const [diaperPrice, setDiaperPrice] = useState(null);
     const [diaperSize, setDiaperSize] = useState(null);
-
+    const diaperOptions = [
+        { value: "Pampers", label: "Pampers", key: 0 },
+        { value: "Huggies", label: "Huggies", key: 1 },
+        { value: "Luvs", label: "Luvs", key: 2 },
+    ];
+    const getDiaperSearchBarItems = () => {
+        return (
+            <VStack display="flex" alignItems={"start"}>
+                <Text>Brand</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={diaperOptions}
+                        value={diaperBrand}
+                        onChange={(event) => { setDiaperBrand(event.target.value); }}
+                    />
+                </HStack>
+                <Text>Price</Text>
+                <HStack width="100%">
+                    <Input
+                        placeholder="price no more than..."
+                        value={diaperPrice}
+                        onChange={(event) => setDiaperPrice(event.target.value.replace(/[^0-9.-]/g, ""))}
+                    />
+                </HStack>
+                <Text>Size</Text>
+                <HStack width="100%">
+                    <Input
+                        placeholder="size equal to..."
+                        value={diaperSize}
+                        onChange={(event) => setDiaperSize(event.target.value)}
+                    />
+                </HStack>
+            </VStack>
+        );
+    };
+    // maternal
     const [maternalBrand, setMaternalBrand] = useState(null);
     const [maternalPrice, setMaternalPrice] = useState(null);
-
+    const maternalOptions = [
+        { value: "Ekouaer", label: "Ekouaer", key: 0 },
+        { value: "Bearsland", label: "Bearsland", key: 1 },
+        { value: "Floerns", label: "Floerns", key: 2 },
+        { value: "One A Day", label: "One A Day", key: 3 },
+        { value: "AZMED", label: "AZMED", key: 4 },
+        { value: "FridaBaby", label: "FridaBaby", key: 5 },
+        { value: "POSHDIVAH", label: "POSHDIVAH", key: 6 },
+        { value: "VONQA", label: "VONQA", key: 7 },
+        { value: "Frida", label: "Frida", key: 8 },
+        { value: "Medela", label: "Medela", key: 9 },
+        { value: "Bellababy", label: "Bellababy", key: 10 },
+    ];
+    const getMaternalSearchBarItems = () => {
+        return (
+            <VStack display="flex" alignItems={"start"}>
+                <Text>Brand</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={maternalOptions}
+                        value={maternalBrand}
+                        onChange={(event) => { setMaternalBrand(event.target.value); }}
+                    />
+                </HStack>
+                <Text>Price</Text>
+                <HStack width="100%">
+                    <Input
+                        placeholder="price no more than..."
+                        value={maternalPrice}
+                        onChange={(event) => setMaternalPrice(event.target.value.replace(/[^0-9.-]/g, ""))}
+                    />
+                </HStack>
+            </VStack>
+        );
+    };
+    // formula
     const [formulaPrice, setFormulaPrice] = useState(null);
     const [formulaBrand, setFormulaBrand] = useState(null);
-
+    const formulaOptions = [
+        { value: "Similac", label: "Similac", key: 0 },
+        { value: "Enfamil", label: "Enfamil", key: 1 },
+        { value: "Nutramigen", label: "Nutramigen", key: 2 },
+        { value: "HeyValue", label: "HeyValue", key: 3 },
+    ];
+    const getFormulaSearchBarItems = () => {
+        return (
+            <VStack display="flex" alignItems={"start"}>
+                <Text>Brand</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={formulaOptions}
+                        value={formulaBrand}
+                        onChange={(event) => { setFormulaBrand(event.target.value); }}
+                    />
+                </HStack>
+                <Text>Price</Text>
+                <HStack width="100%">
+                    <Input
+                        placeholder="price no more than..."
+                        value={formulaPrice}
+                        onChange={(event) => setFormulaPrice(event.target.value.replace(/[^0-9.-]/g, ""))}
+                    />
+                </HStack>
+            </VStack>
+        );
+    };
+    // toy
     const [toyBrand, setToyBrand] = useState(null);
     const [toyPrice, setToyPrice] = useState(null);
-
+    const toyOptions = [
+        { value: "toytoy", label: "toytoy", key: 0 },
+        { value: "TOY Life", label: "TOY Life", key: 1 },
+        { value: "STEAM", label: "STEAM", key: 2 },
+        { value: "fisher-price", label: "fisher-price", key: 3 },
+        { value: "SSK", label: "SSK", key: 4 },
+        { value: "beetoy", label: "beetoy", key: 5 },
+    ];
+    const getToySearchBarItems = () => {
+        return (
+            <VStack display="flex" alignItems={"start"}>
+                <Text>Brand</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={toyOptions}
+                        value={toyBrand}
+                        onChange={(event) => { setToyBrand(event.target.value); }}
+                    />
+                </HStack>
+                <Text>Price</Text>
+                <HStack width="100%">
+                    <Input
+                        placeholder="price no more than..."
+                        value={toyPrice}
+                        onChange={(event) => setToyPrice(event.target.value.replace(/[^0-9.-]/g, ""))}
+                    />
+                </HStack>
+            </VStack>
+        );
+    };
+    // monitor
     const [monitorBrand, setMonitorBrand] = useState(null);
     const [monitorPrice, setMonitorPrice] = useState(null);
-
+    const monitorOptions = [
+        { value: "Sekery", label: "Sekery", key: 0 },
+        { value: "VTech", label: "VTech", key: 1 },
+        { value: "Momcozy", label: "Momcozy", key: 2 },
+        { value: "Owlet", label: "Owlet", key: 3 },
+        { value: "Infant Optics", label: "Infant Optics", key: 4 },
+        { value: "Nanit", label: "Nanit", key: 5 },
+        { value: "IFamily", label: "IFamily", key: 6 },
+    ];
+    const getMonitorSearchBarItems = () => {
+        return (
+            <VStack display="flex" alignItems={"start"}>
+                <Text>Brand</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={monitorOptions}
+                        value={monitorBrand}
+                        onChange={(event) => { setMonitorBrand(event.target.value); }}
+                    />
+                </HStack>
+                <Text>Price</Text>
+                <HStack width="100%">
+                    <Input
+                        placeholder="price no more than..."
+                        value={monitorPrice}
+                        onChange={(event) => setMonitorPrice(event.target.value.replace(/[^0-9.-]/g, ""))}
+                    />
+                </HStack>
+            </VStack>
+        );
+    };
+    // seat
     const [seatBrand, setSeatBrand] = useState(null);
     const [seatPrice, setSeatPrice] = useState(null);
-
+    const seatOptions = [
+        { value: "Graco", label: "Graco", key: 0 },
+        { value: "Evenflo", label: "Evenflo", key: 1 },
+        { value: "MESA", label: "MESA", key: 2 },
+        { value: "Chicco", label: "Chicco", key: 3 },
+    ];
+    const getSeatSearchBarItems = () => {
+        return (
+            <VStack display="flex" alignItems={"start"}>
+                <Text>Brand</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={seatOptions}
+                        value={seatBrand}
+                        onChange={(event) => { setSeatBrand(event.target.value); }}
+                    />
+                </HStack>
+                <Text>Price</Text>
+                <HStack width="100%">
+                    <Input
+                        placeholder="price no more than..."
+                        value={seatPrice}
+                        onChange={(event) => setSeatPrice(event.target.value.replace(/[^0-9.-]/g, ""))}
+                    />
+                </HStack>
+            </VStack>
+        );
+    };
+    // stroller
     const [strollerBrand, setStrollerBrand] = useState(null);
     const [strollerPrice, setStrollerPrice] = useState(null);
-
+    const strollerOptions = [
+        { value: "Graco", label: "Graco", key: 0 },
+        { value: "Baby Trend", label: "Baby Trend", key: 1 },
+        { value: "Chicco", label: "Chicco", key: 2 },
+        { value: "Blahoo", label: "Blahoo", key: 3 },
+        { value: "Doona", label: "Doona", key: 4 },
+        { value: "BOB Gear", label: "BOB Gear", key: 5 },
+        { value: "Joolz", label: "Joolz", key: 6 },
+    ];
+    const getStrollerSearchBarItems = () => {
+        return (
+            <VStack display="flex" alignItems={"start"}>
+                <Text>Brand</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={strollerOptions}
+                        value={strollerBrand}
+                        onChange={(event) => { setStrollerBrand(event.target.value); }}
+                    />
+                </HStack>
+                <Text>Price</Text>
+                <HStack width="100%">
+                    <Input
+                        placeholder="price no more than..."
+                        value={strollerPrice}
+                        onChange={(event) => setStrollerPrice(event.target.value.replace(/[^0-9.-]/g, ""))}
+                    />
+                </HStack>
+            </VStack>
+        );
+    };
     const options = [
         { key: 0, value: "Clothing", label: "Clothing" },
         { key: 1, value: "Food", label: "Food" },
@@ -64,9 +383,7 @@ export default function SearchBarAlertDialog({
         { key: 8, value: "Seats", label: "Seats" },
         { key: 9, value: "Strollers", label: "Strollers" },
     ];
-
     const [selectedCategory, setSelectedCategory] = useState(options[tabIndex]?.value);
-
     const [searchTabIndex, setSearchTabIndex] = useState(tabIndex);
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
@@ -487,341 +804,6 @@ export default function SearchBarAlertDialog({
         }
         //eslint-disable-next-line
     }, [searchBarIsOpen, tabIndex]);
-
-    const genderOptions = [
-        { value: "boy", label: "boy", key: 0 },
-        { value: "girl", label: "girl", key: 1 },
-    ];
-
-    const brandOptions = [
-        { value: "Carters", label: "Carters", key: 0 },
-        { value: "Gender", label: "Gerber", key: 1 },
-        { value: "Renotemy", label: "Renotemy", key: 2 },
-        { value: "Burt's Bees Baby", label: "Burt's Bees Baby", key: 3 },
-    ];
-
-    const clothingOptions = [
-        { value: "footie", label: "footie", key: 0 },
-        { value: "shirt", label: "shirt", key: 1 },
-        { value: "pants", label: "pants", key: 2 },
-        { value: "bodysuits", label: "bodysuits", key: 3 },
-        { value: "romper", label: "romper", key: 4 },
-        { value: "sunsuit", label: "sunsuit", key: 5 },
-        { value: "dress", label: "dress", key: 6 },
-    ];
-
-    const stageOptions = [
-        { value: "1", label: "1", key: 0 },
-        { value: "2", label: "2", key: 1 },
-        { value: "3", label: "3", key: 2 },
-    ];
-
-    const foodOptions = [
-        { value: "Plum Organics", label: "Plum Organics", key: 0 },
-        { value: "Happy Baby", label: "Happy Baby", key: 1 },
-        { value: "Beech-Nut", label: "Beech-Nut", key: 2 },
-        { value: "Mama Bear", label: "Mama Bear", key: 3 },
-        { value: "Gerber", label: "Gerber", key: 4 },
-        { value: "Sprouts", label: "Sprouts", key: 5 },
-    ];
-
-    const diaperOptions = [
-        { value: "Pampers", label: "Pampers", key: 0 },
-        { value: "Huggies", label: "Huggies", key: 1 },
-        { value: "Luvs", label: "Luvs", key: 2 },
-    ];
-
-    const maternalOptions = [
-        { value: "Ekouaer", label: "Ekouaer", key: 0 },
-        { value: "Bearsland", label: "Bearsland", key: 1 },
-        { value: "Floerns", label: "Floerns", key: 2 },
-        { value: "One A Day", label: "One A Day", key: 3 },
-        { value: "AZMED", label: "AZMED", key: 4 },
-        { value: "FridaBaby", label: "FridaBaby", key: 5 },
-        { value: "POSHDIVAH", label: "POSHDIVAH", key: 6 },
-        { value: "VONQA", label: "VONQA", key: 7 },
-        { value: "Frida", label: "Frida", key: 8 },
-        { value: "Medela", label: "Medela", key: 9 },
-        { value: "Bellababy", label: "Bellababy", key: 10 },
-    ];
-
-    const formulaOptions = [
-        { value: "Similac", label: "Similac", key: 0 },
-        { value: "Enfamil", label: "Enfamil", key: 1 },
-        { value: "Nutramigen", label: "Nutramigen", key: 2 },
-        { value: "HeyValue", label: "HeyValue", key: 3 },
-    ];
-
-    const toyOptions = [
-        { value: "toytoy", label: "toytoy", key: 0 },
-        { value: "TOY Life", label: "TOY Life", key: 1 },
-        { value: "STEAM", label: "STEAM", key: 2 },
-        { value: "fisher-price", label: "fisher-price", key: 3 },
-        { value: "SSK", label: "SSK", key: 4 },
-        { value: "beetoy", label: "beetoy", key: 5 },
-    ];
-
-    const monitorOptions = [
-        { value: "Sekery", label: "Sekery", key: 0 },
-        { value: "VTech", label: "VTech", key: 1 },
-        { value: "Momcozy", label: "Momcozy", key: 2 },
-        { value: "Owlet", label: "Owlet", key: 3 },
-        { value: "Infant Optics", label: "Infant Optics", key: 4 },
-        { value: "Nanit", label: "Nanit", key: 5 },
-        { value: "IFamily", label: "IFamily", key: 6 },
-    ];
-
-    const strollerOptions = [
-        { value: "Graco", label: "Graco", key: 0 },
-        { value: "Baby Trend", label: "Baby Trend", key: 1 },
-        { value: "Chicco", label: "Chicco", key: 2 },
-        { value: "Blahoo", label: "Blahoo", key: 3 },
-        { value: "Doona", label: "Doona", key: 4 },
-        { value: "BOB Gear", label: "BOB Gear", key: 5 },
-        { value: "Joolz", label: "Joolz", key: 6 },
-    ];
-
-    const seatOptions = [
-        { value: "Graco", label: "Graco", key: 0 },
-        { value: "Evenflo", label: "Evenflo", key: 1 },
-        { value: "MESA", label: "MESA", key: 2 },
-        { value: "Chicco", label: "Chicco", key: 3 },
-    ];
-
-    const getClothingSearchBarItems = () => {
-        return (
-            <VStack display="flex" alignItems={"start"} width="100%">
-                <Text>Gender</Text>
-                <HStack width="100%">
-                    <StyledSelect
-                        options={genderOptions}
-                        value={clothingGender}
-                        onChange={(event) => { setClothingGender(event.target.value); }}
-                    />
-                </HStack>
-                <Text>Brand</Text>
-                <HStack width="100%">
-                    <StyledSelect
-                        options={brandOptions}
-                        value={clothingBrand}
-                        onChange={(event) => { setClothingBrand(event.target.value); }}
-                    />
-                </HStack>
-                <Text>Size</Text>
-                <HStack width="100%">
-                    <Input placeholder="size equal to..." value={clothingSize} onChange={(event) => setClothingSize(event.target.value)} />
-                </HStack>
-                <Text>Price</Text>
-                <HStack width="100%">
-                    <Input placeholder="price less than or equal to..." value={clothingPrice} onChange={(event) => setClothingPrice(event.target.value)} />
-                </HStack>
-                <Text>Type</Text>
-                <HStack width="100%">
-                    <StyledSelect
-                        options={clothingOptions}
-                        value={clothingType}
-                        onChange={(event) => { setClothingType(event.target.value); }}
-                    />
-                </HStack>
-            </VStack>
-        );
-    };
-
-    const getFoodSearchBarItems = () => {
-        return (
-            <VStack display="flex" alignItems={"start"}>
-                <Text>Stage</Text>
-                <HStack width="100%">
-                    <StyledSelect
-                        options={stageOptions}
-                        value={stageOption}
-                        onChange={(event) => { setStageOption(event.target.value); }}
-                    />
-                </HStack>
-                <Text>Price</Text>
-                <HStack width="100%">
-                    <Input placeholder="price no more than..." value={foodPrice} onChange={(event) => setFoodPrice(event.target.value.replace(/[^0-9.-]/g, ""))} />
-                </HStack>
-                <Text>Brand</Text>
-                <HStack width="100%">
-                    <StyledSelect
-                        options={foodOptions}
-                        value={foodBrand}
-                        onChange={(event) => { setFoodBrand(event.target.value); }}
-                    />
-                </HStack>
-            </VStack>
-        );
-    };
-
-    const getDiaperSearchBarItems = () => {
-        return (
-            <VStack display="flex" alignItems={"start"}>
-                <Text>Brand</Text>
-                <HStack width="100%">
-                    <StyledSelect
-                        options={diaperOptions}
-                        value={diaperBrand}
-                        onChange={(event) => { setDiaperBrand(event.target.value); }}
-                    />
-                </HStack>
-                <Text>Price</Text>
-                <HStack width="100%">
-                    <Input
-                        placeholder="price no more than..."
-                        value={diaperPrice}
-                        onChange={(event) => setDiaperPrice(event.target.value.replace(/[^0-9.-]/g, ""))}
-                    />
-                </HStack>
-                <Text>Size</Text>
-                <HStack width="100%">
-                    <Input
-                        placeholder="size equal to..."
-                        value={diaperSize}
-                        onChange={(event) => setDiaperSize(event.target.value)}
-                    />
-                </HStack>
-            </VStack>
-        );
-    };
-
-    const getMaternalSearchBarItems = () => {
-        return (
-            <VStack display="flex" alignItems={"start"}>
-                <Text>Brand</Text>
-                <HStack width="100%">
-                    <StyledSelect
-                        options={maternalOptions}
-                        value={maternalBrand}
-                        onChange={(event) => { setMaternalBrand(event.target.value); }}
-                    />
-                </HStack>
-                <Text>Price</Text>
-                <HStack width="100%">
-                    <Input
-                        placeholder="price no more than..."
-                        value={maternalPrice}
-                        onChange={(event) => setMaternalPrice(event.target.value.replace(/[^0-9.-]/g, ""))}
-                    />
-                </HStack>
-            </VStack>
-        );
-    };
-
-    const getFormulaSearchBarItems = () => {
-        return (
-            <VStack display="flex" alignItems={"start"}>
-                <Text>Brand</Text>
-                <HStack width="100%">
-                    <StyledSelect
-                        options={formulaOptions}
-                        value={formulaBrand}
-                        onChange={(event) => { setFormulaBrand(event.target.value); }}
-                    />
-                </HStack>
-                <Text>Price</Text>
-                <HStack width="100%">
-                    <Input
-                        placeholder="price no more than..."
-                        value={formulaPrice}
-                        onChange={(event) => setFormulaPrice(event.target.value.replace(/[^0-9.-]/g, ""))}
-                    />
-                </HStack>
-            </VStack>
-        );
-    };
-
-    const getToySearchBarItems = () => {
-        return (
-            <VStack display="flex" alignItems={"start"}>
-                <Text>Brand</Text>
-                <HStack width="100%">
-                    <StyledSelect
-                        options={toyOptions}
-                        value={toyBrand}
-                        onChange={(event) => { setToyBrand(event.target.value); }}
-                    />
-                </HStack>
-                <Text>Price</Text>
-                <HStack width="100%">
-                    <Input
-                        placeholder="price no more than..."
-                        value={toyPrice}
-                        onChange={(event) => setToyPrice(event.target.value.replace(/[^0-9.-]/g, ""))}
-                    />
-                </HStack>
-            </VStack>
-        );
-    };
-
-    const getMonitorSearchBarItems = () => {
-        return (
-            <VStack display="flex" alignItems={"start"}>
-                <Text>Brand</Text>
-                <HStack width="100%">
-                    <StyledSelect
-                        options={monitorOptions}
-                        value={monitorBrand}
-                        onChange={(event) => { setMonitorBrand(event.target.value); }}
-                    />
-                </HStack>
-                <Text>Price</Text>
-                <HStack width="100%">
-                    <Input
-                        placeholder="price no more than..."
-                        value={monitorPrice}
-                        onChange={(event) => setMonitorPrice(event.target.value.replace(/[^0-9.-]/g, ""))}
-                    />
-                </HStack>
-            </VStack>
-        );
-    };
-
-    const getStrollerSearchBarItems = () => {
-        return (
-            <VStack display="flex" alignItems={"start"}>
-                <Text>Brand</Text>
-                <HStack width="100%">
-                    <StyledSelect
-                        options={strollerOptions}
-                        value={strollerBrand}
-                        onChange={(event) => { setStrollerBrand(event.target.value); }}
-                    />
-                </HStack>
-                <Text>Price</Text>
-                <HStack width="100%">
-                    <Input
-                        placeholder="price no more than..."
-                        value={strollerPrice}
-                        onChange={(event) => setStrollerPrice(event.target.value.replace(/[^0-9.-]/g, ""))}
-                    />
-                </HStack>
-            </VStack>
-        );
-    };
-
-    const getSeatSearchBarItems = () => {
-        return (
-            <VStack display="flex" alignItems={"start"}>
-                <Text>Brand</Text>
-                <HStack width="100%">
-                    <StyledSelect
-                        options={seatOptions}
-                        value={seatBrand}
-                        onChange={(event) => { setSeatBrand(event.target.value); }}
-                    />
-                </HStack>
-                <Text>Price</Text>
-                <HStack width="100%">
-                    <Input
-                        placeholder="price no more than..."
-                        value={seatPrice}
-                        onChange={(event) => setSeatPrice(event.target.value.replace(/[^0-9.-]/g, ""))}
-                    />
-                </HStack>
-            </VStack>
-        );
-    };
 
     const handleClearSearch = () => {
         if (searchTabIndex === 0) {

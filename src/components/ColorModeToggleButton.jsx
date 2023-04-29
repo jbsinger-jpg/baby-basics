@@ -1,6 +1,10 @@
+// module imports
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import { IconButton, Tooltip, useColorMode, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
+
+// relative imports
+// none
 
 export default function ColorModeToggleButton() {
     const { toggleColorMode } = useColorMode();

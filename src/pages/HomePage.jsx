@@ -1,9 +1,11 @@
+// module imports
 import { ChatIcon, WarningIcon } from '@chakra-ui/icons';
 import { Avatar, AvatarBadge, AvatarGroup, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionDataOnce } from 'react-firebase-hooks/firestore';
 import { useNavigate } from 'react-router-dom';
 
+// relative imports
 import { auth, firestore } from '../firebaseConfig';
 import Context from '../context/Context';
 import ClothingDataTabPanel from '../components/tabPanels/ClothingDataTabPanel';
@@ -23,53 +25,65 @@ import { screenBackground } from '../defaultStyle';
 import CustomPopOver from '../components/CustomPopover';
 
 export default function HomePage() {
+    // hooks
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { setData: setUser } = useContext(Context);
     const navigate = useNavigate();
+    // firebase data
     const currentUser = auth.currentUser;
     const [userDataPendingFriends] = useCollectionDataOnce(firestore.collection('users').doc(currentUser?.uid).collection("pendingFriends"), { idField: 'id' });
     const [userDataConfirmedFriends] = useCollectionDataOnce(firestore.collection('users').doc(currentUser?.uid).collection("confirmedFriends"), { idField: 'id' });
     const [groups] = useCollectionDataOnce(firestore.collection('groups'), { idField: 'id' });
+
+    // useState variables
     const [alertDialogUser, setAlertDialogUser] = useState(null);
     const [alertDialogVisible, setAlertDialogVisible] = useState(false);
-
     const [tabIndex, setTabIndex] = useState(0);
+
     // clothing data for search bar
     const [clothingData, setClothingData] = useState(null);
     const [isClothingDataLoading, setIsClothingDataLoading] = useState(true);
+
     // food data for search bar
     const [foodData, setFoodData] = useState(null);
     const [isFoodDataLoading, setIsFoodDataLoading] = useState(true);
+
     // diaper data for search bar
     const [diaperData, setDiaperData] = useState(null);
     const [isDiapersLoading, setIsDiapersLoading] = useState(true);
 
+    // maternial data 
     const [maternialData, setMaternialData] = useState(null);
     const [maternialDataIsLoading, setMaternialDataIsLoading] = useState(true);
 
+    // formula data
     const [formulaData, setFormulaData] = useState(null);
     const [formulaDataIsLoading, setFormulaDataIsLoading] = useState(true);
 
+    // toy data
     const [toyData, setToyData] = useState(null);
     const [toyDataIsLoading, setToyDataIsLoading] = useState(true);
 
+    // monitor data
     const [monitorData, setMonitorData] = useState(null);
     const [monitorDataIsLoading, setMonitorDataIsLoading] = useState(true);
 
+    // seat data
     const [seatData, setSeatData] = useState(null);
     const [seatDataIsLoading, setSeatDataIsLoading] = useState(true);
 
+    // stroller data
     const [strollerData, setStrollerData] = useState(null);
     const [strollerDataIsLoading, setStrollerDataIsLoading] = useState(true);
 
     const [screeningAlertDialogVisibile, setScreeningAlertDialogVisibile] = useState(false);
     const [settingsIsOpen, setSettingsIsOpen] = useState(false);
-
     const [searchPlaces, setSearchPlaces] = useState(false);
 
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
     const [screenHeight, setScreenHeight] = useState(window.innerHeight);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+    const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
 
     const handleSearchPlacesDialogOpen = () => {
         setSearchPlaces(true);
@@ -78,8 +92,6 @@ export default function HomePage() {
     const handleTabsChange = (index) => {
         setTabIndex(index);
     };
-
-    const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
 
     const handleDMPress = (user) => {
         // TODO: Pass the user to the message page

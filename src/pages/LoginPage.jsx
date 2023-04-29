@@ -1,10 +1,11 @@
+// module imports
 import { Box, Button, Card, HStack, Input, Tab, TabList, TabPanel, TabPanels, Tabs, VStack, useToast, IconButton, useColorModeValue, FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import React, { useState } from 'react';
 import validator from 'validator';
 import { useNavigate } from 'react-router-dom';
 
-// firebase
+// relative imports
 import { auth, firestore } from '../firebaseConfig';
 import { GoogleAuthProvider } from "firebase/auth";
 import { cardBackground, screenBackground } from '../defaultStyle';
@@ -20,8 +21,6 @@ export default function LoginPage() {
     const [lastName, setLastName] = useState("");
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
-
-
     const toast = useToast();
     const navigate = useNavigate();
 
