@@ -286,11 +286,13 @@ export default function StrollerRow({ stroller, strollerDataIsLoading, tabIndex 
                             <VStack alignItems="start">
                                 <Text as="b" fontSize="13">Description</Text>
                                 <Tag
-                                    borderRadius='full'
+                                    borderRadius='md'
                                     variant='outline'
                                     colorScheme='orange'
                                 >
-                                    <TagLabel>{stroller.description}</TagLabel>
+                                    <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
+                                        {stroller.title}
+                                    </Text>
                                 </Tag>
                             </VStack>
                         }

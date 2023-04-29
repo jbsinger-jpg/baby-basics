@@ -850,32 +850,22 @@ export default function SearchBarAlertDialog({
             setMaternalPrice("");
         }
         else if (searchTabIndex === 5) {
-            // clear maternal entry
-            setMaternalBrand("");
-            setMaternalPrice("");
-        }
-        else if (searchTabIndex === 6) {
-            // clear formula entry
             setFormulaBrand("");
             setFormulaPrice("");
         }
-        else if (searchTabIndex === 7) {
-            // clear toy entry
+        else if (searchTabIndex === 6) {
             setToyBrand("");
             setToyPrice("");
         }
-        else if (searchTabIndex === 8) {
-            // clear monitor entry
+        else if (searchTabIndex === 7) {
             setMonitorBrand("");
             setMonitorPrice("");
         }
-        else if (searchTabIndex === 9) {
-            // clear monitor entry
+        else if (searchTabIndex === 8) {
             setSeatBrand("");
             setSeatPrice("");
         }
-        else if (searchTabIndex === 10) {
-            // clear monitor entry
+        else if (searchTabIndex === 9) {
             setStrollerBrand("");
             setStrollerPrice("");
         }

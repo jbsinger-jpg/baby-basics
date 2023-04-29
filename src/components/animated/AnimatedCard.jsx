@@ -16,6 +16,7 @@ export default function AnimatedCard({
     videos
 }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
+    const linkColor = useColorModeValue("blue.500", "blue.200");
     const MotionIcon = motion(Icon);
     const MotionBox = motion(Box);
     const [selectedVideo, setSelectedVideo] = useState(null);
@@ -75,6 +76,7 @@ export default function AnimatedCard({
                                                         <Link
                                                             href={milestone.link}
                                                             isExternal
+                                                            color={linkColor}
                                                         >
                                                             {milestone.name}
                                                         </Link>
