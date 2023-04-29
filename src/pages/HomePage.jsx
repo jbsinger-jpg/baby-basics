@@ -94,7 +94,6 @@ export default function HomePage() {
     };
 
     const handleDMPress = (user) => {
-        // TODO: Pass the user to the message page
         setUser(user.email);
         navigate("/message");
     };

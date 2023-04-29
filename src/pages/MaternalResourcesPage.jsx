@@ -14,9 +14,6 @@ import GoogleMapsModal from '../components/modals/GoogleMapsModal';
 import { trimesterPhaseInformation } from '../components/staticPageData/baby-maternal-info';
 import { screenBackground } from '../defaultStyle';
 
-// TODO: Order information based on the trimester
-// TODO: Break down information into one page
-
 export default function MaternalResourcesPage() {
   // recommendations
   const [flippedRecommendationCard, setFlippedRecommendationCard] = useState(false);

@@ -5,12 +5,6 @@ import Context from '../context/Context';
 import { screenBackground } from '../defaultStyle';
 
 export default function StarterForumTopicPage() {
-
-    // TODO: Have the questions categorized in the following forum groups
-    // 1) Before pregnancy
-    // 2) During pregnancy
-    // 3) After pregnancy
-
     const navigate = useNavigate();
     const { setData: setPageData } = useContext(Context);
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
