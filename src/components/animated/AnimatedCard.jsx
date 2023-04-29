@@ -36,8 +36,8 @@ export default function AnimatedCard({
                                             options={videos}
                                         />
                                         <iframe
-                                            height="250px"
-                                            width="100%"
+                                            height="197px"
+                                            width="350px"
                                             src={selectedVideo || require('../../devbackground.png')}
                                             title="YouTube video player"
                                             allowFullScreen

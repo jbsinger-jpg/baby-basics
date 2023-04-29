@@ -1,4 +1,4 @@
-import { HStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, HStack, IconButton, useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import GoogleMapsModal from '../components/modals/GoogleMapsModal';
 import Woman2Icon from '@mui/icons-material/Woman2';
@@ -8,6 +8,7 @@ import { screenBackground } from '../defaultStyle';
 import AnimatedButton from "../components/animated/AnimatedTrimesterButton";
 import AnimatedCard from '../components/animated/AnimatedCard';
 import FloatingActionButtonsMaternalInfo from '../components/floatingActionButtons/FloatingActionButtonsMaternalInfo';
+import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 
 const trimesterPhaseInformation = [
   {
@@ -19,15 +20,43 @@ const trimesterPhaseInformation = [
       "Week 9-12: Formation of the fetus, which looks more like a human with distinct facial features, fingers, and toes. The fetus is also able to move, and the organs continue to develop."
     ],
     hyperlinks: [
-      "https://www.babylist.com/hello-baby/first-trimester?g_acctid=878-527-6823&g_adgroupid=139460490400&g_adid=599148936233&g_adtype=search&g_campaign=Content-MidPerformance&g_campaignid=12573456625&g_keyword=first%20trimester&g_keywordid=kwd-295615942039&g_network=g&utm_campaign=Content-MidPerformance&utm_content=599148936233&utm_medium=paid-search&utm_source=g&utm_term=139460490400&gclid=Cj0KCQjwocShBhCOARIsAFVYq0gs8gUTEG1yPYBep-iDAME5cUv77X31lmmSBY49eEmGYHTZHJ5Ik9IaAipiEALw_wcB",
-      "https://www.whattoexpect.com/pregnancy/pregnancy-health/first-prenatal-appointment/#:~:text=The%20first%20prenatal%20appointment%20usually,several%20weeks%20(or%20longer).",
-      "https://www.healthpartners.com/blog/first-prenatal-appointment/#:~:text=The%20timing%20of%20your%20first,re%206%2D12%20weeks%20pregnant.",
-      "https://pubmed.ncbi.nlm.nih.gov/6356942/#:~:text=During%20the%20course%20of%20gestation,acting%20as%20an%20arteriovenous%20shunt.",
-      "https://my.clevelandclinic.org/health/articles/9699-first-trimester",
-      "https://www.mountsinai.org/health-library/symptoms/morning-sickness",
-      "https://www.cancer.gov/publications/dictionaries/cancer-terms/def/pelvic-exam",
-      "https://www.mayoclinic.org/tests-procedures/pelvic-exam/about/pac-20385135",
-      "https://www.hopkinsmedicine.org/health/wellness-and-prevention/the-first-trimester#:~:text=The%20neural%20tube%20(which%20becomes,The%20heart%20is%20beating."
+      {
+        name: "First Trimester of Pregnancy",
+        link: "https://www.babylist.com/hello-baby/first-trimester?g_acctid=878-527-6823&g_adgroupid=139460490400&g_adid=599148936233&g_adtype=search&g_campaign=Content-MidPerformance&g_campaignid=12573456625&g_keyword=first%20trimester&g_keywordid=kwd-295615942039&g_network=g&utm_campaign=Content-MidPerformance&utm_content=599148936233&utm_medium=paid-search&utm_source=g&utm_term=139460490400&gclid=Cj0KCQjwocShBhCOARIsAFVYq0gs8gUTEG1yPYBep-iDAME5cUv77X31lmmSBY49eEmGYHTZHJ5Ik9IaAipiEALw_wcB",
+      },
+      {
+        name: "Prenatal Visit",
+        link: "https://www.whattoexpect.com/pregnancy/pregnancy-health/first-prenatal-appointment/#:~:text=The%20first%20prenatal%20appointment%20usually,several%20weeks%20(or%20longer).",
+      },
+      {
+        name: "First Prenatal Appointment",
+        link: "https://www.healthpartners.com/blog/first-prenatal-appointment/#:~:text=The%20timing%20of%20your%20first,re%206%2D12%20weeks%20pregnant.",
+      },
+      {
+        name: "Pregnancy Health Changes",
+        link: "https://pubmed.ncbi.nlm.nih.gov/6356942/#:~:text=During%20the%20course%20of%20gestation,acting%20as%20an%20arteriovenous%20shunt.",
+      },
+      {
+        name: "First Trimester Information",
+        link: "https://my.clevelandclinic.org/health/articles/9699-first-trimester",
+
+      },
+      {
+        name: "Morning Sickness Recommendations",
+        link: "https://www.mountsinai.org/health-library/symptoms/morning-sickness",
+      },
+      {
+        name: "Pelvic Exam Information",
+        link: "https://www.cancer.gov/publications/dictionaries/cancer-terms/def/pelvic-exam",
+      },
+      {
+        name: "Pelvic Exam Information",
+        link: "https://www.mayoclinic.org/tests-procedures/pelvic-exam/about/pac-20385135",
+      },
+      {
+        name: "Growth and Development of Baby First Trimester",
+        link: "https://www.hopkinsmedicine.org/health/wellness-and-prevention/the-first-trimester#:~:text=The%20neural%20tube%20(which%20becomes,The%20heart%20is%20beating.",
+      }
     ],
     motherPregnancySymptoms: [
       "Breast tenderness and swelling",
@@ -60,10 +89,22 @@ const trimesterPhaseInformation = [
       "Week 25-28: The fetus is now viable, meaning it has a chance of survival if born prematurely. The eyes can open and close, and the baby can hear sounds outside the womb."
     ],
     hyperlinks: [
-      "https://www.mayoclinic.org/healthy-lifestyle/pregnancy-week-by-week/expert-answers/leg-cramps-during-pregnancy/faq-20057766",
-      "https://www.whattoexpect.com/second-trimester-of-pregnancy.aspx",
-      "https://my.clevelandclinic.org/health/diseases/12345-umbilical-cord-prolapse",
-      "https://americanpregnancy.org/healthy-pregnancy/labor-and-birth/kegel-exercises/",
+      {
+        name: "Pregnancy week-by-week",
+        link: "https://www.mayoclinic.org/healthy-lifestyle/pregnancy-week-by-week/expert-answers/leg-cramps-during-pregnancy/faq-20057766"
+      },
+      {
+        name: "Pregnancy Symptoms: Second Trimester",
+        link: "https://www.whattoexpect.com/second-trimester-of-pregnancy.aspx",
+      },
+      {
+        name: "Umbilical Cord Prolapse",
+        link: "https://my.clevelandclinic.org/health/diseases/12345-umbilical-cord-prolapse",
+      },
+      {
+        name: "Kegel Exercises",
+        link: "https://americanpregnancy.org/healthy-pregnancy/labor-and-birth/kegel-exercises/",
+      }
     ],
     motherPregnancySymptoms: [
       "Growing belly",
@@ -98,11 +139,26 @@ const trimesterPhaseInformation = [
       "Week 37-40: The baby is considered full-term and ready for birth. The average weight is around 7.5 pounds, but it can vary widely. The baby's head may engage in the pelvis in preparation for delivery."
     ],
     hyperlinks: [
-      "https://utswmed.org/medblog/braxton-hicks-contractions/",
-      "https://www.whattoexpect.com/pregnancy/symptoms-and-solutions/mucous-plug.aspx",
-      "https://www.whattoexpect.com/third-trimester-of-pregnancy.aspx",
-      "https://www.marchofdimes.org/find-support/topics/birth/contractions-and-signs-labor",
-      "https://www.marchofdimes.org/pregnancy-week-week?gclid=Cj0KCQjwocShBhCOARIsAFVYq0ilLgAfOCu9X-iUjy8DiEyihdeni0lCOw6SWtMIFhfig0xtPj34tP0aAp6sEALw_wcB#38",
+      {
+        name: "Braxton Hicks Contractions",
+        link: "https://utswmed.org/medblog/braxton-hicks-contractions/",
+      },
+      {
+        name: "Losing Mucus Plug",
+        link: "https://www.whattoexpect.com/pregnancy/symptoms-and-solutions/mucous-plug.aspx",
+      },
+      {
+        name: "What to Expect Third Trimester",
+        link: "https://www.whattoexpect.com/third-trimester-of-pregnancy.aspx",
+      },
+      {
+        name: "Pregnancy Week by Week",
+        link: "https://www.marchofdimes.org/pregnancy-week-week?gclid=Cj0KCQjwocShBhCOARIsAFVYq0ilLgAfOCu9X-iUjy8DiEyihdeni0lCOw6SWtMIFhfig0xtPj34tP0aAp6sEALw_wcB#38",
+      },
+      {
+        name: "Signs of Genuine Labor",
+        link: "https://www.marchofdimes.org/find-support/topics/birth/contractions-and-signs-labor",
+      },
     ],
     motherPregnancySymptoms: [
       "Braxton Hicks contractions become more frequent and intense",
@@ -160,6 +216,7 @@ export default function MaternalResourcesPage() {
   // Styling for color themes
   //lhs=light, rhs=dark
   const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
+  const [cardRotated, setCardRotated] = useState(false);
 
   const handleSearchPlacesDialogOpen = () => {
     setSearchPlaces(true);
@@ -196,7 +253,7 @@ export default function MaternalResourcesPage() {
   };
 
   return (
-    <HStack flexWrap={"wrap"} spacing="12" justifyContent="center" alignItems="start" w="100vw - 10px" bg={_screenBackground}>
+    <Box bg={_screenBackground} paddingTop="2" h="100vh">
       <HStack alignItems="start" w="100vw" paddingLeft="5" spacing="5" marginTop="5" paddingBottom="10">
         <AnimatedButton
           title={"Trimester 1"}
@@ -211,44 +268,63 @@ export default function MaternalResourcesPage() {
           onClick={() => { handleSelectedTrimesterChange(3); }}
         />
       </HStack>
-      <HStack w="100vw" justifyContent="space-evenly" alignItems="start">
-        <AnimatedCard
-          flippedCard={flippedRecommendationCard}
-          setFlippedCard={setFlippedRecommendationCard}
-          cardIcon={Woman2Icon}
-          cardButtonPressed={recommendationsButtonPressed}
-          setCardButtonPressed={setRecommendationsButtonPressed}
-          selectedCardData={selectedRecommendations}
-          title={"Recommendations"}
+      <HStack
+        w="100vw"
+        flexWrap="wrap"
+        spacing="4"
+        justifyContent="space-evenly"
+        alignItems="center"
+      >
+        <IconButton
+          onClick={() => setCardRotated(!cardRotated)}
+          icon={<ChevronLeftIcon />}
         />
-        <AnimatedCard
-          flippedCard={flippedResourcesCard}
-          setFlippedCard={setFlippedResourcesCard}
-          cardButtonPressed={resourceButtonPressed}
-          setCardButtonPressed={setResourceButtonPressed}
-          selectedCardData={selectedHyperLinks}
-          videos={videos}
-          title={"Resources"}
-        />
-      </HStack>
-      <HStack w="100vw" justifyContent="space-evenly" alignItems="start">
-        <AnimatedCard
-          flippedCard={flippedBabyDevelopmentCard}
-          setFlippedCard={setFlippedBabyDevelopmentCard}
-          cardIcon={FavoriteBorderIcon}
-          cardButtonPressed={babyDevelopmentButtonPressed}
-          setCardButtonPressed={setBabyDevelopmentButtonPressed}
-          selectedCardData={selectedBabyDevelopment}
-          title={"Baby Development"}
-        />
-        <AnimatedCard
-          flippedCard={flippedSymptomsCard}
-          setFlippedCard={setFlippedSymptomsCard}
-          cardIcon={AutoAwesomeIcon}
-          cardButtonPressed={symptomsButtonPressed}
-          setCardButtonPressed={setSymptomsButtonPressed}
-          selectedCardData={selectedPregnantSymptoms}
-          title={"Pregnancy Symptoms"}
+        {cardRotated ?
+          <>
+            <AnimatedCard
+              flippedCard={flippedRecommendationCard}
+              setFlippedCard={setFlippedRecommendationCard}
+              cardIcon={Woman2Icon}
+              cardButtonPressed={recommendationsButtonPressed}
+              setCardButtonPressed={setRecommendationsButtonPressed}
+              selectedCardData={selectedRecommendations}
+              title={"Recommendations"}
+            />
+            <AnimatedCard
+              flippedCard={flippedSymptomsCard}
+              setFlippedCard={setFlippedSymptomsCard}
+              cardIcon={AutoAwesomeIcon}
+              cardButtonPressed={symptomsButtonPressed}
+              setCardButtonPressed={setSymptomsButtonPressed}
+              selectedCardData={selectedPregnantSymptoms}
+              title={"Pregnancy Symptoms"}
+            />
+          </>
+          :
+          <>
+            <AnimatedCard
+              flippedCard={flippedBabyDevelopmentCard}
+              setFlippedCard={setFlippedBabyDevelopmentCard}
+              cardIcon={FavoriteBorderIcon}
+              cardButtonPressed={babyDevelopmentButtonPressed}
+              setCardButtonPressed={setBabyDevelopmentButtonPressed}
+              selectedCardData={selectedBabyDevelopment}
+              title={"Baby Development"}
+            />
+            <AnimatedCard
+              flippedCard={flippedResourcesCard}
+              setFlippedCard={setFlippedResourcesCard}
+              cardButtonPressed={resourceButtonPressed}
+              setCardButtonPressed={setResourceButtonPressed}
+              selectedCardData={selectedHyperLinks}
+              videos={videos}
+              title={"Resources"}
+            />
+          </>
+        }
+        <IconButton
+          onClick={() => setCardRotated(!cardRotated)}
+          icon={<ChevronRightIcon />}
         />
       </HStack>
       <FloatingActionButtonsMaternalInfo
@@ -258,6 +334,6 @@ export default function MaternalResourcesPage() {
         searchPlaces={searchPlaces}
         setSearchPlaces={setSearchPlaces}
       />
-    </HStack>
+    </Box>
   );
 }

@@ -1,4 +1,4 @@
-import { Box, HStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, HStack, IconButton, useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import GoogleMapsModal from '../components/modals/GoogleMapsModal';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -10,6 +10,7 @@ import { screenBackground } from '../defaultStyle';
 import AnimatedCard from '../components/animated/AnimatedCard';
 import StyledSelect from '../components/StyledSelect';
 import FloatingActionButtonsBabyInfo from '../components/floatingActionButtons/FloatingActionButtonsBabyInfo';
+import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 
 const promptOptions = [
     {
@@ -337,6 +338,7 @@ export default function MilestonePage() {
     const [flippedActivitiesCard, setFlippedActivitiesCard] = useState(false);
     const [flippedResourcesCard, setFlippedResourcesCard] = useState(false);
     const [resourceButtonPressed, setResourceButtonPressed] = useState(false);
+    const [cardRotated, setCardRotated] = useState(false);
 
     const handleAnswerChange = (event) => {
         if (flippedMotorCard)
@@ -385,7 +387,7 @@ export default function MilestonePage() {
     ];
 
     return (
-        <Box bg={_screenBackground} paddingTop="2">
+        <Box bg={_screenBackground} paddingTop="2" h="100vh">
             <FloatingActionButtonsBabyInfo
                 handleSearchPlacesDialogOpen={handleSearchPlacesDialogOpen}
             />
@@ -405,62 +407,82 @@ export default function MilestonePage() {
                     handleAnswerChange(event);
                 }}
             />
-            <HStack flexWrap={"wrap"} spacing="12" justifyContent="center" alignItems="start">
-                <AnimatedCard
-                    flippedCard={flippedMotorCard}
-                    setFlippedCard={setFlippedMotorCard}
-                    cardIcon={AccessibilityNewIcon}
-                    cardButtonPressed={motorButtonPressed}
-                    setCardButtonPressed={setMotorButtonPressed}
-                    selectedCardData={selectedMotorMilestones}
-                    title={"Milestones"}
+            <HStack
+                flexWrap="wrap"
+                spacing="4"
+                justifyContent="center"
+                alignItems="center"
+            >
+                <IconButton
+                    onClick={() => setCardRotated(!cardRotated)}
+                    icon={<ChevronLeftIcon />}
                 />
-                <AnimatedCard
-                    flippedCard={flippedCommunicationCard}
-                    setFlippedCard={setFlippedCommunicationCard}
-                    cardIcon={ChatIcon}
-                    cardButtonPressed={communicationButtonPressed}
-                    setCardButtonPressed={setCommunicationButtonPressed}
-                    selectedCardData={selectedCommunicationMilestones}
-                    title={"Communication"}
-                />
-                <AnimatedCard
-                    flippedCard={flippedFeedingCard}
-                    setFlippedCard={setFlippedFeedingCard}
-                    cardIcon={LocalCafeIcon}
-                    cardButtonPressed={feedingButtonPressed}
-                    setCardButtonPressed={setFeedingButtonPressed}
-                    selectedCardData={selectedFeedingMilestones}
-                    title={"Feeding"}
-                />
-                <AnimatedCard
-                    flippedCard={flippedSensoryCard}
-                    setFlippedCard={setFlippedSensoryCard}
-                    cardIcon={HearingIcon}
-                    cardButtonPressed={sensoryButtonPressed}
-                    setCardButtonPressed={setSensoryButtonPressed}
-                    selectedCardData={selectedSensoryMilestones}
-                    title={"Sensory"}
-                />
-                <AnimatedCard
-                    flippedCard={flippedResourcesCard}
-                    setFlippedCard={setFlippedResourcesCard}
-                    cardButtonPressed={resourceButtonPressed}
-                    setCardButtonPressed={setResourceButtonPressed}
-                    selectedCardData={selectedHyperLinks}
-                    videos={videos}
-                    title={"Resources"}
-                />
-                <AnimatedCard
-                    flippedCard={flippedActivitiesCard}
-                    setFlippedCard={setFlippedActivitiesCard}
-                    cardIcon={AbcIcon}
-                    cardButtonPressed={activitiesButtonPressed}
-                    setCardButtonPressed={setActivitiesButtonPressed}
-                    selectedCardData={selectedActivities}
-                    title={"Potential Activities"}
+                {cardRotated ?
+                    <>
+                        <AnimatedCard
+                            flippedCard={flippedMotorCard}
+                            setFlippedCard={setFlippedMotorCard}
+                            cardIcon={AccessibilityNewIcon}
+                            cardButtonPressed={motorButtonPressed}
+                            setCardButtonPressed={setMotorButtonPressed}
+                            selectedCardData={selectedMotorMilestones}
+                            title={"Milestones"}
+                        />
+                        <AnimatedCard
+                            flippedCard={flippedCommunicationCard}
+                            setFlippedCard={setFlippedCommunicationCard}
+                            cardIcon={ChatIcon}
+                            cardButtonPressed={communicationButtonPressed}
+                            setCardButtonPressed={setCommunicationButtonPressed}
+                            selectedCardData={selectedCommunicationMilestones}
+                            title={"Communication"}
+                        />
+                        <AnimatedCard
+                            flippedCard={flippedFeedingCard}
+                            setFlippedCard={setFlippedFeedingCard}
+                            cardIcon={LocalCafeIcon}
+                            cardButtonPressed={feedingButtonPressed}
+                            setCardButtonPressed={setFeedingButtonPressed}
+                            selectedCardData={selectedFeedingMilestones}
+                            title={"Feeding"}
+                        />
+                    </>
+                    :
+                    <>
+                        <AnimatedCard
+                            flippedCard={flippedSensoryCard}
+                            setFlippedCard={setFlippedSensoryCard}
+                            cardIcon={HearingIcon}
+                            cardButtonPressed={sensoryButtonPressed}
+                            setCardButtonPressed={setSensoryButtonPressed}
+                            selectedCardData={selectedSensoryMilestones}
+                            title={"Sensory"}
+                        />
+                        <AnimatedCard
+                            flippedCard={flippedResourcesCard}
+                            setFlippedCard={setFlippedResourcesCard}
+                            cardButtonPressed={resourceButtonPressed}
+                            setCardButtonPressed={setResourceButtonPressed}
+                            selectedCardData={selectedHyperLinks}
+                            videos={videos}
+                            title={"Resources"}
+                        />
+                        <AnimatedCard
+                            flippedCard={flippedActivitiesCard}
+                            setFlippedCard={setFlippedActivitiesCard}
+                            cardIcon={AbcIcon}
+                            cardButtonPressed={activitiesButtonPressed}
+                            setCardButtonPressed={setActivitiesButtonPressed}
+                            selectedCardData={selectedActivities}
+                            title={"Potential Activities"}
+                        />
+                    </>
+                }
+                <IconButton
+                    onClick={() => setCardRotated(!cardRotated)}
+                    icon={<ChevronRightIcon />}
                 />
             </HStack>
-        </Box>
+        </Box >
     );
 }
