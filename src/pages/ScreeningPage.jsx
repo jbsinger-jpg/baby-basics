@@ -6,9 +6,10 @@ import { useNavigate } from 'react-router-dom';
 
 // relative imports
 import ColorModeToggleButton from '../components/ColorModeToggleButton';
-import ProgressBar from '../components/ProgressBar';
 import FormQuestion from '../components/FormQuestion';
-import { screenBackground } from '../defaultStyle';
+import { wordFilter } from '../components/messaging/wordFilter';
+import ProgressBar from '../components/ProgressBar';
+import { cardBackground, screenBackground } from '../defaultStyle';
 import { auth, firestore } from '../firebaseConfig';
 
 export default function ScreeningPage() {
@@ -17,6 +18,7 @@ export default function ScreeningPage() {
     const [answerButtonIsLoading, setAnswerButtonIsLoading] = useState(false);
     const [screeningAlertDialogVisibile, setScreeningAlertDialogVisibile] = useState(false);
     const navigate = useNavigate();
+    const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
     const [questions, setQuestions] = useState([
         {
             question: "What is your marital status?",
@@ -50,10 +52,9 @@ export default function ScreeningPage() {
 
     const handleSelect = (choice) => {
         const newQuestions = [...questions];
-        newQuestions[currentQuestion].answer = choice;
+        newQuestions[currentQuestion].answer = wordFilter.clean(choice);
         setQuestions(newQuestions);
     };
-
 
     const handleBackButtonPress = () => {
         if (currentQuestion !== 0) {
@@ -185,8 +186,13 @@ export default function ScreeningPage() {
                 onClose={() => setScreeningAlertDialogVisibile(false)}
             >
                 <AlertDialogOverlay>
-                    <AlertDialogContent>
-                        <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                    <AlertDialogContent
+                        bgColor={_cardBackground}
+                    >
+                        <AlertDialogHeader
+                            fontSize='lg'
+                            fontWeight='bold'
+                        >
                             Submit Answers
                         </AlertDialogHeader>
                         <AlertDialogBody>
@@ -194,10 +200,16 @@ export default function ScreeningPage() {
                             double check that your answers are correct.
                         </AlertDialogBody>
                         <AlertDialogFooter>
-                            <Button onClick={() => setScreeningAlertDialogVisibile(false)}>
+                            <Button
+                                onClick={() => setScreeningAlertDialogVisibile(false)}
+                            >
                                 Cancel
                             </Button>
-                            <Button onClick={handleAnswerSubmit} isLoading={answerButtonIsLoading} ml={3}>
+                            <Button
+                                onClick={handleAnswerSubmit}
+                                isLoading={answerButtonIsLoading}
+                                ml={3}
+                            >
                                 Go Home
                             </Button>
                         </AlertDialogFooter>

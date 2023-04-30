@@ -1,5 +1,5 @@
 // module imports
-import { Box, ButtonGroup, Card, CardBody, CardFooter, HStack, Heading, Icon, Link, ListItem, Stack, Text, UnorderedList, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, ButtonGroup, Card, CardBody, CardFooter, HStack, Heading, Icon, Link, ListItem, Stack, Text, Tooltip, UnorderedList, VStack, useColorModeValue } from '@chakra-ui/react';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { motion } from 'framer-motion';
 import React, { useState } from 'react';
@@ -75,15 +75,21 @@ export default function AnimatedCard({
                                         <UnorderedList spacing="2" paddingLeft="2">
                                             {selectedCardData && selectedCardData.map((milestone, index) => {
                                                 return (
-                                                    <ListItem key={index}>
-                                                        <Link
-                                                            href={milestone.link}
-                                                            isExternal
-                                                            color={linkColor}
-                                                        >
-                                                            {milestone.name}
-                                                        </Link>
-                                                    </ListItem>
+                                                    <Tooltip
+                                                        label={milestone.mission_statement ? milestone.mission_statement : null}
+                                                        hasArrow
+                                                        placement="left-end"
+                                                    >
+                                                        <ListItem key={index}>
+                                                            <Link
+                                                                href={milestone.link}
+                                                                isExternal
+                                                                color={linkColor}
+                                                            >
+                                                                {milestone.name}
+                                                            </Link>
+                                                        </ListItem>
+                                                    </Tooltip>
                                                 );
                                             })}
                                         </UnorderedList>

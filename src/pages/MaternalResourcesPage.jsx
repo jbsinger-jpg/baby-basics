@@ -52,11 +52,11 @@ export default function MaternalResourcesPage() {
   const handleSelectedTrimesterChange = (buttonStage) => {
     for (let i = 0; i < trimesterPhaseInformation.length; i++) {
       if (trimesterPhaseInformation[i].stage === buttonStage) {
-        setSelectedRecommendations(trimesterPhaseInformation[i].recommendations);
-        setSelectedBabyDevelopment(trimesterPhaseInformation[i].babyDevelopment);
-        setSelectedPregnantSymptoms(trimesterPhaseInformation[i].motherPregnancySymptoms);
-        setVideos(trimesterPhaseInformation[i].videos);
-        setSelectedHyperLinks(trimesterPhaseInformation[i].hyperlinks);
+        setSelectedRecommendations(trimesterPhaseInformation[i]?.recommendations);
+        setSelectedBabyDevelopment(trimesterPhaseInformation[i]?.babyDevelopment);
+        setSelectedPregnantSymptoms(trimesterPhaseInformation[i]?.motherPregnancySymptoms);
+        setVideos(trimesterPhaseInformation[i]?.videos);
+        setSelectedHyperLinks(trimesterPhaseInformation[i]?.hyperlinks);
       }
     }
 
@@ -93,6 +93,10 @@ export default function MaternalResourcesPage() {
         <AnimatedButton
           title={"Trimester 3"}
           onClick={() => { handleSelectedTrimesterChange(3); }}
+        />
+        <AnimatedButton
+          title={"Programs"}
+          onClick={() => { handleSelectedTrimesterChange(null); }}
         />
       </HStack>
       <HStack

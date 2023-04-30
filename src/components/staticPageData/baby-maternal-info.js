@@ -473,6 +473,45 @@ const trimesterPhaseInformation = [
         videos: [
             { key: 0, value: "https://www.youtube.com/embed/3pz6QxHOb30", label: "Pregnancy Week 30 | What to Expect in Your Third Trimester" },
         ]
+    },
+    {
+        stage: null,
+        babyDevelopment: [],
+        hyperlinks: [
+            {
+                name: "Universal Home Visiting",
+                link: "https://thelawmakernetwork.org/policy/home-visiting/",
+                mission_statement: "Provide maternal health care visits for low income families (check avaliability per location)"
+            },
+            {
+                name: "CDC Vaccines for Children Program",
+                link: "https://www.cdc.gov/vaccines/programs/vfc/index.html",
+                mission_statement: "Provide vaccines at no cost to children who might not otherwise be vaccinated because of inability to pay (if elligible)."
+            },
+            {
+                name: "Project Fatherhood",
+                link: "https://www.childrensinstitute.org/project-fatherhood/",
+                mission_statement: "To cultivate nurturing and knowledgeable families to protect and meaningfully enhance the welfare and stability of vulnerable children and their families."
+            },
+            {
+                name: "Parents as Teachers",
+                link: "https://parentsasteachers.org/",
+                mission_statement: "To promote the optimal early development, learning and health of children by supporting and engaging their parents and caregivers.",
+            },
+            {
+                name: "Baby Talk",
+                link: "https://babytalk.org/",
+                mission_statement: "Mission is to positively impact child development by nurturing healthy and responsive relationships during the critical early years."
+            },
+            {
+                name: "Safe Kids",
+                link: "https://www.safekids.org/safetytips",
+                mission_statement: "To help families and communities keep kids safe from injuries."
+            },
+        ],
+        motherPregnancySymptoms: [],
+        recommendations: [],
+        videos: []
     }
 ];
 
