@@ -15,6 +15,8 @@ import { trimesterPhaseInformation } from '../components/staticPageData/baby-mat
 import { screenBackground } from '../defaultStyle';
 
 export default function MaternalResourcesPage() {
+  const [stage, setStage] = useState(trimesterPhaseInformation[0].stage);
+
   // recommendations
   const [flippedRecommendationCard, setFlippedRecommendationCard] = useState(false);
   const [recommendationsButtonPressed, setRecommendationsButtonPressed] = useState(false);
@@ -57,6 +59,7 @@ export default function MaternalResourcesPage() {
         setSelectedPregnantSymptoms(trimesterPhaseInformation[i]?.motherPregnancySymptoms);
         setVideos(trimesterPhaseInformation[i]?.videos);
         setSelectedHyperLinks(trimesterPhaseInformation[i]?.hyperlinks);
+        setStage(trimesterPhaseInformation[i].stage);
       }
     }
 
@@ -106,42 +109,62 @@ export default function MaternalResourcesPage() {
         justifyContent="space-evenly"
         alignItems="center"
       >
-        <IconButton
-          onClick={() => setCardRotated(!cardRotated)}
-          icon={<ChevronLeftIcon />}
-        />
-        {cardRotated ?
+        {stage ?
           <>
-            <AnimatedCard
-              flippedCard={flippedRecommendationCard}
-              setFlippedCard={setFlippedRecommendationCard}
-              cardIcon={Woman2Icon}
-              cardButtonPressed={recommendationsButtonPressed}
-              setCardButtonPressed={setRecommendationsButtonPressed}
-              selectedCardData={selectedRecommendations}
-              title={"Recommendations"}
+            <IconButton
+              onClick={() => setCardRotated(!cardRotated)}
+              icon={<ChevronLeftIcon />}
             />
-            <AnimatedCard
-              flippedCard={flippedSymptomsCard}
-              setFlippedCard={setFlippedSymptomsCard}
-              cardIcon={AutoAwesomeIcon}
-              cardButtonPressed={symptomsButtonPressed}
-              setCardButtonPressed={setSymptomsButtonPressed}
-              selectedCardData={selectedPregnantSymptoms}
-              title={"Pregnancy Symptoms"}
+            {cardRotated ?
+              <>
+                <AnimatedCard
+                  flippedCard={flippedRecommendationCard}
+                  setFlippedCard={setFlippedRecommendationCard}
+                  cardIcon={Woman2Icon}
+                  cardButtonPressed={recommendationsButtonPressed}
+                  setCardButtonPressed={setRecommendationsButtonPressed}
+                  selectedCardData={selectedRecommendations}
+                  title={"Recommendations"}
+                />
+                <AnimatedCard
+                  flippedCard={flippedSymptomsCard}
+                  setFlippedCard={setFlippedSymptomsCard}
+                  cardIcon={AutoAwesomeIcon}
+                  cardButtonPressed={symptomsButtonPressed}
+                  setCardButtonPressed={setSymptomsButtonPressed}
+                  selectedCardData={selectedPregnantSymptoms}
+                  title={"Pregnancy Symptoms"}
+                />
+              </>
+              :
+              <>
+                <AnimatedCard
+                  flippedCard={flippedBabyDevelopmentCard}
+                  setFlippedCard={setFlippedBabyDevelopmentCard}
+                  cardIcon={FavoriteBorderIcon}
+                  cardButtonPressed={babyDevelopmentButtonPressed}
+                  setCardButtonPressed={setBabyDevelopmentButtonPressed}
+                  selectedCardData={selectedBabyDevelopment}
+                  title={"Baby Development"}
+                />
+                <AnimatedCard
+                  flippedCard={flippedResourcesCard}
+                  setFlippedCard={setFlippedResourcesCard}
+                  cardButtonPressed={resourceButtonPressed}
+                  setCardButtonPressed={setResourceButtonPressed}
+                  selectedCardData={selectedHyperLinks}
+                  videos={videos}
+                  title={"Resources"}
+                />
+              </>
+            }
+            <IconButton
+              onClick={() => setCardRotated(!cardRotated)}
+              icon={<ChevronRightIcon />}
             />
           </>
           :
           <>
-            <AnimatedCard
-              flippedCard={flippedBabyDevelopmentCard}
-              setFlippedCard={setFlippedBabyDevelopmentCard}
-              cardIcon={FavoriteBorderIcon}
-              cardButtonPressed={babyDevelopmentButtonPressed}
-              setCardButtonPressed={setBabyDevelopmentButtonPressed}
-              selectedCardData={selectedBabyDevelopment}
-              title={"Baby Development"}
-            />
             <AnimatedCard
               flippedCard={flippedResourcesCard}
               setFlippedCard={setFlippedResourcesCard}
@@ -152,11 +175,8 @@ export default function MaternalResourcesPage() {
               title={"Resources"}
             />
           </>
+
         }
-        <IconButton
-          onClick={() => setCardRotated(!cardRotated)}
-          icon={<ChevronRightIcon />}
-        />
       </HStack>
       <FloatingActionButtonsMaternalInfo
         handleSearchPlacesDialogOpen={handleSearchPlacesDialogOpen}
