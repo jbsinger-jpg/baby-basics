@@ -25,7 +25,7 @@ export default function GoogleMapsModal({ searchPlaces, setSearchPlaces }) {
     const [state, setState] = useState(null);
     const [city, setCity] = useState(null);
     const [zip, setZip] = useState(null);
-    const [country, setCountry] = useState(null);
+    const [county, setCounty] = useState(null);
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
 
     const formatLocationEntry = () => {
@@ -76,20 +76,20 @@ export default function GoogleMapsModal({ searchPlaces, setSearchPlaces }) {
                                 <Heading size="md">State</Heading>
                                 <Input value={state} onChange={event => setState(event.target.value)} placeholder='leave blank for near you' />
                             </VStack>
-                            <VStack alignItems="start">
-                                <Heading size="md">Zip</Heading>
-                                <Input value={zip} onChange={event => setZip(event.target.value)} placeholder='leave blank for near you' />
-                            </VStack>
                         </HStack>
                         <HStack>
                             <VStack alignItems="start">
-                                <Heading size="md">Country</Heading>
+                                <Heading size="md">County</Heading>
                                 <Input
                                     whileHover={{ scale: 1.2 }}
-                                    value={country}
-                                    onChange={event => setCountry(event.target.value)}
+                                    value={county}
+                                    onChange={event => setCounty(event.target.value)}
                                     placeholder='leave blank for near you'
                                 />
+                            </VStack>
+                            <VStack alignItems="start">
+                                <Heading size="md">Zip</Heading>
+                                <Input value={zip} onChange={event => setZip(event.target.value)} placeholder='leave blank for near you' />
                             </VStack>
                         </HStack>
                     </ModalBody>
