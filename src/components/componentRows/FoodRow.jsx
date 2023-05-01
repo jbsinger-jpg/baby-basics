@@ -313,7 +313,7 @@ export default function FoodRow({ food, isFoodDataLoading, tabIndex }) {
                                 variant='solid'
                                 colorScheme='telegram'
                             >
-                                <TagLabel>{"Stage: " + food.stage}</TagLabel>
+                                <TagLabel>{food.stage}</TagLabel>
                             </Tag>
                         </VStack>
                         <Divider />

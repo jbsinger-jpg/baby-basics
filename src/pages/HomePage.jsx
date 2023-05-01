@@ -23,6 +23,7 @@ import SeatsTabPanel from '../components/tabPanels/SeatsTabPanel';
 import StrollersDataTabPanel from '../components/tabPanels/StrollersDataTabPanel';
 import { screenBackground } from '../defaultStyle';
 import CustomPopOver from '../components/CustomPopover';
+import VitaminDataTabPanel from '../components/tabPanels/VitaminDataTabPanel';
 
 export default function HomePage() {
     // hooks
@@ -75,6 +76,9 @@ export default function HomePage() {
     // stroller data
     const [strollerData, setStrollerData] = useState(null);
     const [strollerDataIsLoading, setStrollerDataIsLoading] = useState(true);
+
+    const [vitaminData, setVitaminData] = useState(null);
+    const [vitaminDataIsLoading, setVitaminDataIsLoading] = useState(true);
 
     const [screeningAlertDialogVisibile, setScreeningAlertDialogVisibile] = useState(false);
     const [settingsIsOpen, setSettingsIsOpen] = useState(false);
@@ -212,6 +216,17 @@ export default function HomePage() {
 
                 setStrollerData(options);
                 setStrollerDataIsLoading(false);
+                options = [];
+            });
+
+        firestore.collection('vitamins').get()
+            .then(snapshot => {
+                snapshot.docs.forEach(doc => {
+                    options.push({ ...doc.data() });
+                });
+
+                setVitaminData(options);
+                setVitaminDataIsLoading(false);
                 options = [];
             });
     }, []);
@@ -357,7 +372,7 @@ export default function HomePage() {
                             Diapers
                         </Tab>
                         <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                            Baby Hygiene
+                            Vitamins
                         </Tab>
                         <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
                             Maternal
@@ -402,7 +417,11 @@ export default function HomePage() {
                         />
                     </TabPanel>
                     <TabPanel>
-                        Baby Hygiene
+                        <VitaminDataTabPanel
+                            vitaminData={vitaminData}
+                            vitaminDataIsLoading={vitaminDataIsLoading}
+                            tabIndex={tabIndex}
+                        />
                     </TabPanel>
                     <TabPanel>
                         <MaternalDataTabPanel
@@ -463,6 +482,7 @@ export default function HomePage() {
                 setMonitorData={setMonitorData}
                 setSeatData={setSeatData}
                 setStrollerData={setStrollerData}
+                setVitaminData={setVitaminData}
                 tabIndex={tabIndex}
                 setTabIndex={setTabIndex}
             />

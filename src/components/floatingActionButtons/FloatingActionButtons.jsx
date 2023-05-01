@@ -27,6 +27,7 @@ export default function FloatingActionButtons({
     setMonitorData,
     setSeatData,
     setStrollerData,
+    setVitaminData,
     tabIndex,
     setTabIndex
 }) {
@@ -68,6 +69,7 @@ export default function FloatingActionButtons({
                 setMonitorData={setMonitorData}
                 setSeatData={setSeatData}
                 setStrollerData={setStrollerData}
+                setVitaminData={setVitaminData}
                 tabIndex={tabIndex}
                 setTabIndex={setTabIndex}
             />

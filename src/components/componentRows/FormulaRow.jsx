@@ -289,11 +289,14 @@ export default function FormulaRow({ formula, formulaDataIsLoading, tabIndex }) 
                         <VStack alignItems="start">
                             <Text as="b" fontSize="13">Description</Text>
                             <Tag
-                                borderRadius='full'
-                                variant='outline'
-                                colorScheme='orange'
+                                borderRadius="md"
+                                size="lg"
+                                variant="outline"
+                                color="wheat"
                             >
-                                <TagLabel>{formula.description}</TagLabel>
+                                <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
+                                    {formula.description}
+                                </Text>
                             </Tag>
                         </VStack>
                         <Divider />

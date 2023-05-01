@@ -51,7 +51,7 @@ export default function StrollerRow({ stroller, strollerDataIsLoading, tabIndex 
 
     const handleAddRating = async () => {
         let ratingSum = 0;
-        const strollerRef = await firestore.collection("seats");
+        const strollerRef = await firestore.collection("strollers");
 
         strollerRef.doc(stroller.id).collection("ratings").add({
             rating: Number(rating),

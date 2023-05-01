@@ -1,7 +1,7 @@
 // module imports
+import { CheckIcon, CloseIcon, Icon, StarIcon } from '@chakra-ui/icons';
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, CircularProgress, Divider, HStack, Heading, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import ReactImageMagnify from '@blacklab/react-image-magnify';
-import { CheckIcon, CloseIcon, StarIcon } from '@chakra-ui/icons';
-import { Box, Button, Heading, HStack, SkeletonCircle, SkeletonText, Text, Tooltip, VStack, Icon, Divider, Stack, Card, CardBody, Tag, TagLabel, useColorModeValue, CardHeader, CardFooter, CircularProgress } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 
@@ -9,10 +9,9 @@ import React, { useEffect, useState } from 'react';
 import { firestore } from '../../firebaseConfig';
 import { cardBackground } from '../../defaultStyle';
 
-export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
+export default function VitaminRow({ vitamin, vitaminDataIsLoading, tabIndex }) {
     const MotionBox = motion(Box);
     const MotionButton = motion(Button);
-
     const [flippedCards, setFlippedCards] = useState(false);
     const [buttonsPressed, setButtonsPressed] = useState(false);
     const [rating, setRating] = useState(0);
@@ -51,15 +50,15 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
 
     const handleAddRating = async () => {
         let ratingSum = 0;
-        const diapersRef = await firestore.collection("diapers");
+        const vitaminRef = await firestore.collection("vitamins");
 
-        diapersRef.doc(diaper.id).collection("ratings").add({
+        vitaminRef.doc(vitamin.id).collection("ratings").add({
             rating: Number(rating),
         });
 
         // update the data with the new rating
-        const _total = (await diapersRef.doc(diaper.id).collection("ratings").get()).size;
-        const sum = (await diapersRef.doc(diaper.id).collection("ratings").get()).docs.map(doc => doc.data().rating);
+        const _total = (await vitaminRef.doc(vitamin.id).collection("ratings").get()).size;
+        const sum = (await vitaminRef.doc(vitamin.id).collection("ratings").get()).docs.map(doc => doc.data().rating);
 
         for (let i = 0; i < sum.length; i++) {
             ratingSum += sum[i];
@@ -79,7 +78,7 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
     useEffect(() => {
         let ratingSum = 0;
 
-        (firestore.collection("diapers").doc(diaper.id).collection("ratings").get()).then(snapshot => {
+        (firestore.collection("vitamins").doc(vitamin.id).collection("ratings").get()).then(snapshot => {
             const _total = snapshot.size;
             setTotal(_total);
             const sum = snapshot.docs.map(doc => doc.data().rating);
@@ -97,28 +96,30 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
 
     return (
         <VStack
-            key={diaper.id}
-            h="550px"
+            key={vitamin.id}
+            h="500px"
             spacing="3"
             paddingBottom="10"
         >
-            <SkeletonCircle size='10' isLoaded={!isDiapersLoading} />
-            <SkeletonText isLoaded={!isDiapersLoading}>
+            <SkeletonCircle size='10' isLoaded={!vitaminDataIsLoading} />
+            <SkeletonText isLoaded={!vitaminDataIsLoading}>
                 <HStack spacing="4" w="400px">
                     {!flippedCards ?
                         <Card w="220px" bg={_cardBackground}>
-                            <CardHeader justifyContent="center" alignItems="center">
-                                <Tag
-                                    borderRadius="md"
-                                    size="lg"
-                                    variant="outline"
-                                    color="wheat"
-                                >
-                                    <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
-                                        {diaper.title}
-                                    </Text>
-                                </Tag>
-                            </CardHeader>
+                            {vitamin.title &&
+                                <CardHeader>
+                                    <Tag
+                                        borderRadius="md"
+                                        size="lg"
+                                        variant="outline"
+                                        color="wheat"
+                                    >
+                                        <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
+                                            {vitamin.title}
+                                        </Text>
+                                    </Tag>
+                                </CardHeader>
+                            }
                             <CardBody display="flex" justifyContent="center">
                                 <motion.div
                                     initial={buttonsPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
@@ -131,15 +132,15 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                                     }}
                                 >
                                     {/* Prevent image from exploding in dimensions */}
-                                    {(tabIndex === 2 && !buttonsPressed) &&
+                                    {(tabIndex === 3 && !buttonsPressed) &&
                                         <ReactImageMagnify
                                             imageProps={{
-                                                src: diaper.image,
+                                                src: vitamin.image,
                                                 width: 150,
                                                 height: 200,
                                             }}
                                             magnifiedImageProps={{
-                                                src: diaper.image,
+                                                src: vitamin.image,
                                                 width: 600,
                                                 height: 800
                                             }}
@@ -166,7 +167,7 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                                             // When the user tabs
                                             whileFocus={{ scale: 1.2 }}
                                             as="a"
-                                            href={diaper.affiliateLink}
+                                            href={vitamin.affiliateLink}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                         >
@@ -185,13 +186,12 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                                             Rate
                                         </MotionButton>
                                     </HStack>
-
                                 }
                             </CardFooter>
                         </Card>
                         :
                         <MotionBox
-                            h="550px"
+                            h="300px"
                             alignItems="center"
                             justifyContent="center"
                             display="flex"
@@ -201,7 +201,7 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                         >
                             <VStack spacing="4" w="220px" justifyContent="start">
                                 <HStack w="220px" justifyContent="space-between">
-                                    <Text>{diaper.title}</Text>
+                                    <Text>{vitamin.title}</Text>
                                     <Tooltip label="Average">
                                         <HStack>
                                             <Text>{average}</Text>
@@ -279,21 +279,25 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                                 colorScheme='blue'
                             >
                                 <TagLabel>
-                                    {diaper.brand}
+                                    {vitamin.brand}
                                 </TagLabel>
                             </Tag>
                         </VStack>
                         <Divider />
-                        <VStack alignItems="start">
-                            <Text as="b" fontSize="13">Description</Text>
-                            <Tag
-                                borderRadius='full'
-                                variant='outline'
-                                colorScheme='orange'
-                            >
-                                <TagLabel>{diaper.description}</TagLabel>
-                            </Tag>
-                        </VStack>
+                        {vitamin.description &&
+                            <VStack alignItems="start">
+                                <Text as="b" fontSize="13">Description</Text>
+                                <Tag
+                                    borderRadius='md'
+                                    variant='outline'
+                                    colorScheme='orange'
+                                >
+                                    <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
+                                        {vitamin.title}
+                                    </Text>
+                                </Tag>
+                            </VStack>
+                        }
                         <Divider />
                         <VStack alignItems="start">
                             <Text as="b" fontSize="13">Price</Text>
@@ -302,18 +306,7 @@ export default function DiaperRow({ diaper, isDiapersLoading, tabIndex }) {
                                 variant='outline'
                                 colorScheme='gray'
                             >
-                                <TagLabel>{"$" + diaper.price?.toFixed(2)}</TagLabel>
-                            </Tag>
-                        </VStack>
-                        <Divider />
-                        <VStack alignItems="start">
-                            <Text as="b" fontSize="13">Size</Text>
-                            <Tag
-                                borderRadius='full'
-                                variant='solid'
-                                colorScheme='telegram'
-                            >
-                                <TagLabel>{diaper.size}</TagLabel>
+                                <TagLabel>{"$" + vitamin.price?.toFixed(2)}</TagLabel>
                             </Tag>
                         </VStack>
                         <Divider />

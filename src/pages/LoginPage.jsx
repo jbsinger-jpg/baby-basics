@@ -89,7 +89,6 @@ export default function LoginPage() {
             // add a template user to the database
             const usersRef = await firestore.collection("users");
             usersRef.where("email", "==", result.user.email).get().then(snapshot => {
-                console.log(snapshot.docs.length);
                 if (!snapshot.docs.length) {
                     usersRef.doc(result.user.uid).set({
                         email: result.user.email,
@@ -129,7 +128,6 @@ export default function LoginPage() {
                     // add a template user to the database
                     const usersRef = await firestore.collection("users");
                     usersRef.where("email", "==", userCredential.user.email).get().then(snapshot => {
-                        console.log(snapshot.docs.length);
                         if (!snapshot.docs.length) {
                             usersRef.doc(userCredential.user.uid).set({
                                 email: userCredential.user.email,

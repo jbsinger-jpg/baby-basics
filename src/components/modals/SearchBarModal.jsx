@@ -20,6 +20,7 @@ export default function SearchBarAlertDialog({
     setMonitorData,
     setSeatData,
     setStrollerData,
+    setVitaminData,
     tabIndex,
     setTabIndex
 }) {
@@ -371,11 +372,43 @@ export default function SearchBarAlertDialog({
             </VStack>
         );
     };
+
+    // vitamin data
+    const vitaminOptions = [
+        { value: "Nature Made", label: "Nature Made", key: 0 },
+        { value: "One A Day", label: "One A Day", key: 1 },
+    ];
+    const [vitaminBrand, setVitaminBrand] = useState(null);
+    const [vitaminPrice, setVitaminPrice] = useState(null);
+
+    const getVitaminSearchBarItems = () => {
+        return (
+            <VStack display="flex" alignItems={"start"}>
+                <Text>Brand</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={vitaminOptions}
+                        value={vitaminBrand}
+                        onChange={(event) => { setVitaminBrand(event.target.value); }}
+                    />
+                </HStack>
+                <Text>Price</Text>
+                <HStack width="100%">
+                    <Input
+                        placeholder="price no more than..."
+                        value={vitaminPrice}
+                        onChange={(event) => setVitaminPrice(event.target.value.replace(/[^0-9.-]/g, ""))}
+                    />
+                </HStack>
+            </VStack>
+        );
+    };
+
     const options = [
         { key: 0, value: "Clothing", label: "Clothing" },
         { key: 1, value: "Food", label: "Food" },
         { key: 2, value: "Diapers", label: "Diapers" },
-        { key: 3, value: "Baby Hygiene", label: "Baby Hygiene" },
+        { key: 3, value: "Vitamins", label: "Vitamins" },
         { key: 4, value: "Maternal", label: "Maternal" },
         { key: 5, value: "Formula", label: "Formula" },
         { key: 6, value: "Toys", label: "Toys" },
@@ -797,6 +830,47 @@ export default function SearchBarAlertDialog({
         }
     };
 
+    const handleVitaminSearch = async () => {
+        let vitaminOptions = [];
+        let vitaminData = [];
+
+        const formattedVitaminPrice = Number(vitaminPrice).toFixed(2);
+        let vitaminRef = await firestore.collection('vitamins');
+
+        if (vitaminBrand) {
+            vitaminOptions.push({ dbField: "brand", operator: "==", operand: vitaminBrand });
+        }
+
+        if (formattedVitaminPrice && formattedVitaminPrice > 0) {
+            vitaminOptions.push({ dbField: "price", operator: "<=", operand: Number(formattedVitaminPrice) });
+        }
+
+        for (let i = 0; i < vitaminOptions.length; i++) {
+            vitaminRef = await vitaminRef.where(vitaminOptions[i].dbField, vitaminOptions[i].operator, vitaminOptions[i].operand);
+        }
+
+        vitaminRef.get().then((querySnapshot => {
+            querySnapshot.docs.forEach(doc => {
+                vitaminData.push({ ...doc.data() });
+            });
+
+            setVitaminData(vitaminData);
+        }));
+
+        if (!vitaminBrand && !vitaminPrice) {
+            firestore.collection('vitamins')
+                .get()
+                .then(snapshot => {
+                    snapshot.docs.forEach(doc => {
+                        vitaminData.push({ ...doc.data() });
+                    });
+
+                    const uniqueArray = [...new Set(vitaminData.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+                    setVitaminData(uniqueArray);
+                });
+        }
+    };
+
     useEffect(() => {
         if (searchBarIsOpen) {
             setSearchTabIndex(tabIndex);
@@ -807,7 +881,6 @@ export default function SearchBarAlertDialog({
 
     const handleClearSearch = () => {
         if (searchTabIndex === 0) {
-            // clear clothing entry
             setClothingBrand("");
             setClothingGender("");
             setClothingPrice("");
@@ -821,13 +894,15 @@ export default function SearchBarAlertDialog({
             setStageOption("");
         }
         else if (searchTabIndex === 2) {
-            // clear diaper entry
             setDiaperBrand("");
             setDiaperPrice("");
             setDiaperSize("");
         }
+        else if (searchTabIndex === 3) {
+            setVitaminBrand("");
+            setVitaminPrice("");
+        }
         else if (searchTabIndex === 4) {
-            // clear maternal entry
             setMaternalBrand("");
             setMaternalPrice("");
         }
@@ -863,17 +938,14 @@ export default function SearchBarAlertDialog({
         else if (searchTabIndex === 2) {
             return handleDiaperSearch();
         }
+        else if (searchTabIndex === 3) {
+            return handleVitaminSearch();
+        }
         else if (searchTabIndex === 4) {
             return handleMaternalSearch();
         }
         else if (searchTabIndex === 5) {
             return handleFormulaSearch();
-        }
-        else if (searchTabIndex === 4) {
-            return handleToySearch();
-        }
-        else if (searchTabIndex === 5) {
-            return handleMonitorSearch();
         }
         else if (searchTabIndex === 6) {
             return handleToySearch();
@@ -918,7 +990,7 @@ export default function SearchBarAlertDialog({
                                 {getDiaperSearchBarItems()}
                             </TabPanel>
                             <TabPanel>
-                                Hygiene
+                                {getVitaminSearchBarItems()}
                             </TabPanel>
                             <TabPanel>
                                 {getMaternalSearchBarItems()}
