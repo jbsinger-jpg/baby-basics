@@ -84,7 +84,7 @@ export default function CustomPopOver() {
             <PopoverContent bg={_cardBackground}>
                 <PopoverArrow />
                 <PopoverCloseButton />
-                <PopoverHeader> Confirmation! </PopoverHeader>
+                <PopoverHeader> Confirmation of Event! </PopoverHeader>
                 <PopoverBody>
                     <FormLabel htmlFor='eventTitle'>Event Title</FormLabel>
                     <Input

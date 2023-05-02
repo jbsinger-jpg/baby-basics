@@ -128,6 +128,14 @@ function ForumMessagePage() {
                 user: auth?.currentUser?.email
             });
 
+        const group = localStorage.getItem("gid");
+        const groupDoc = await firestore.collection("groups").doc(group);
+        const groupData = (await groupDoc.get()).data();
+        const userExists = groupData.users.some(user => user.id === auth?.currentUser?.uid);
+
+        if (!userExists)
+            groupDoc.set({ ...groupData, "users": [...groupData.users, { name: auth.currentUser.displayName, id: auth.currentUser.uid }] });
+
         setText('');
     };
 

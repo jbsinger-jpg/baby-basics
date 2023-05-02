@@ -1,6 +1,6 @@
 // module imports
-import { ChatIcon, WarningIcon } from '@chakra-ui/icons';
-import { Avatar, AvatarBadge, AvatarGroup, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
+import { ChatIcon, CheckIcon, CloseIcon, WarningIcon } from '@chakra-ui/icons';
+import { Avatar, AvatarBadge, AvatarGroup, Badge, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionDataOnce } from 'react-firebase-hooks/firestore';
 import { useNavigate } from 'react-router-dom';
@@ -107,12 +107,36 @@ export default function HomePage() {
         setAlertDialogVisible(true);
     };
 
-    const handleForumButtonPress = (groupAlias) => {
+    const handleForumButtonPress = (groupAlias, groupId) => {
+        localStorage.setItem("gid", groupId);
+
         if (groupAlias)
             navigate(`/forum_${groupAlias}`);
         else {
             console.log("Could not redirect to the forum page wanted.");
         }
+    };
+
+    const handleGroupStatus = (groupUsers) => {
+        const userExists = groupUsers.some((user) => user.id === auth?.currentUser?.uid);
+
+        if (userExists) {
+            return (
+                <Tooltip label="In Group">
+                    <Badge colorScheme='green'>
+                        <CheckIcon />
+                    </Badge>
+                </Tooltip>
+            );
+        }
+
+        return (
+            <Tooltip label="Not In Group">
+                <Badge colorScheme='red'>
+                    <CloseIcon />
+                </Badge>
+            </Tooltip>
+        );
     };
 
     // initialize the page with the data from the data base
@@ -270,14 +294,15 @@ export default function HomePage() {
                                     <VStack w="100%" alignItems="start" spacing="12">
                                         {groups && groups.map(group => {
                                             return (
-                                                <Button variant="unstyled" onClick={() => handleForumButtonPress(group.alias)} key={group.name}>
+                                                <Button variant="unstyled" onClick={() => handleForumButtonPress(group.alias, group.id)} key={group.name}>
                                                     <Text>{group.name}</Text>
-                                                    <HStack>
+                                                    <HStack justifyContent="space-between" w="250px">
                                                         <AvatarGroup size='md' max={3}>
                                                             {group.users && group.users.map(user => {
                                                                 return (<Avatar key={user.id} name={user.full_name} />);
                                                             })}
                                                         </AvatarGroup>
+                                                        {handleGroupStatus(group.users)}
                                                     </HStack>
                                                 </Button>
                                             );
