@@ -2,7 +2,7 @@
 import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, HStack, Heading, IconButton, Input, Text, Textarea, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useState, useRef, useEffect, useContext } from 'react';
-import { useCollectionData } from 'react-firebase-hooks/firestore';
+import { useCollectionData, useCollectionDataOnce, useDocumentDataOnce } from 'react-firebase-hooks/firestore';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import { motion } from "framer-motion";
@@ -20,6 +20,8 @@ function ForumMessagePage() {
     const [text, setText] = useState();
     const [searchTerm, setSearchTerm] = useState("");
     const [searchButtonLoading, setSearchButtonLoading] = useState(false);
+    const [userExists, setUserExists] = useState(false);
+    const [groupData] = useDocumentDataOnce(firestore.collection('groups').doc(localStorage.getItem("gid")), { idField: 'id' });
 
     // Data passed from StarterForumPage to here to get the messages to not have to remake a bunch of pages
     const { data: pageData, setData: setPageData } = useContext(Context);
@@ -128,13 +130,11 @@ function ForumMessagePage() {
                 user: auth?.currentUser?.email
             });
 
-        const group = localStorage.getItem("gid");
-        const groupDoc = await firestore.collection("groups").doc(group);
-        const groupData = (await groupDoc.get()).data();
-        const userExists = groupData.users.some(user => user.id === auth?.currentUser?.uid);
-
-        if (!userExists)
-            groupDoc.set({ ...groupData, "users": [...groupData.users, { name: auth.currentUser.displayName, id: auth.currentUser.uid }] });
+        if (!userExists) {
+            const groupDoc = await firestore.collection('groups').doc(localStorage.getItem("gid"));
+            groupDoc.set({ ...groupData, "users": [...groupData?.users, { name: auth.currentUser.displayName, id: auth.currentUser.uid }] });
+            setUserExists(true);
+        }
 
         setText('');
     };
