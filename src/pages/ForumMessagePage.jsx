@@ -186,10 +186,10 @@ function ForumMessagePage() {
             <div style={{ height: `calc(100vh - 240px)`, overflowY: 'auto' }} ref={messageBoxRef}>
                 {(messages) &&
                     messages
-                        .map((msg) => {
+                        .map((msg, index) => {
                             return (
                                 <ChatMessage
-                                    key={msg.id}
+                                    key={index}
                                     message={msg}
                                     fontSize={fontSize}
                                 />
