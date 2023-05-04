@@ -13,13 +13,16 @@ export default function BabyHealthForumPage() {
     return (
         <VStack spacing="3" bg={_screenBackground} h="100vh">
             <Accordion allowToggle width="100%">
-                {allBabyHealthData && allBabyHealthData.map(babyData =>
-                    <GeneralAccordianItem
-                        question={babyData.question}
-                        description={babyData.description}
-                        context={babyData.context}
-                    />
-                )}
+                {allBabyHealthData && allBabyHealthData.map((babyData, index) => {
+                    return (
+                        <GeneralAccordianItem
+                            key={index}
+                            question={babyData.question}
+                            description={babyData.description}
+                            context={babyData.context}
+                        />
+                    );
+                })}
             </Accordion>
         </VStack>
     );

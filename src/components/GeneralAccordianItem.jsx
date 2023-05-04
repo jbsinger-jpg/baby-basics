@@ -1,14 +1,12 @@
 // module imports
 import { AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, HStack, Text } from '@chakra-ui/react';
-import React, { useContext } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // relative imports
-import Context from '../context/Context';
 
-export default function GeneralAccordianItem({ question, description, pageDataContext }) {
+export default function GeneralAccordianItem({ question, description, context }) {
     const navigate = useNavigate();
-    const { setData: setPageData } = useContext(Context);
 
     return (
         <AccordionItem>
@@ -26,8 +24,8 @@ export default function GeneralAccordianItem({ question, description, pageDataCo
                         {description}
                     </Text>
                     <Button onClick={
-                        () => {
-                            setPageData(pageDataContext);
+                        async () => {
+                            await localStorage.setItem("pageData", context);
                             navigate("/message-page");
                         }
                     }>

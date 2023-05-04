@@ -1,8 +1,8 @@
 // module imports
 import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, HStack, Heading, IconButton, Input, Text, Textarea, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
-import React, { useState, useRef, useEffect, useContext } from 'react';
-import { useCollectionData, useCollectionDataOnce, useDocumentDataOnce } from 'react-firebase-hooks/firestore';
+import React, { useState, useRef, useEffect } from 'react';
+import { useCollectionData, useDocumentDataOnce } from 'react-firebase-hooks/firestore';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import { motion } from "framer-motion";
@@ -11,7 +11,6 @@ import { motion } from "framer-motion";
 import ChatMessage from '../components/messaging/ChatMessage';
 import StyledSelect from '../components/StyledSelect';
 import { wordFilter } from '../components/messaging/wordFilter';
-import Context from '../context/Context';
 import { screenBackground } from '../defaultStyle';
 import { auth, firestore, serverTimestamp } from '../firebaseConfig';
 
@@ -21,19 +20,19 @@ function ForumMessagePage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [searchButtonLoading, setSearchButtonLoading] = useState(false);
     const [userExists, setUserExists] = useState(false);
+    const pageData = localStorage.getItem("pageData");
     const [groupData] = useDocumentDataOnce(firestore.collection('groups').doc(localStorage.getItem("gid")), { idField: 'id' });
 
     // Data passed from StarterForumPage to here to get the messages to not have to remake a bunch of pages
-    const { data: pageData, setData: setPageData } = useContext(Context);
     const [createdOrderMessages] = useCollectionData(
         firestore
-            .collection(pageData ? pageData : localStorage.getItem("pageData"))
+            .collection(pageData)
             .orderBy("createdAt"),
         { idField: 'id' }
     );
     const [voteOrderMessages] = useCollectionData(
         firestore
-            .collection(pageData ? pageData : localStorage.getItem("pageData"))
+            .collection(pageData)
             .orderBy("voteCount", "desc"),
         { idField: 'id' }
     );
@@ -62,19 +61,6 @@ function ForumMessagePage() {
     useEffect(() => {
         messageBoxRef.current.scrollTop = messageBoxRef.current.scrollHeight;
     }, [messages]);
-
-    useEffect(() => {
-        if (pageData) {
-            // when the user goes from the StarterForumPage to the ForumMessagePage
-            // set the localstorage token before the context is lost
-            localStorage.setItem("pageData", pageData);
-        }
-        else {
-            // on refetch of the page
-            setPageData(localStorage.getItem("pageData"));
-        }
-        // eslint-disable-next-line
-    }, [pageData]);
 
     const handleTextAreaChange = (e) => {
         setText(e.target.value);

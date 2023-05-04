@@ -19,7 +19,7 @@ export default function PrenatalForumPage() {
                             <GeneralAccordianItem
                                 question={prenatalData.question}
                                 description={prenatalData.description}
-                                pageDataContext={prenatalData.context}
+                                context={prenatalData.context}
                             />
                         );
                     })}

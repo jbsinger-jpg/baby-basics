@@ -29,7 +29,11 @@ export default function FormQuestion({ question, choices, onChange, isNumeric, a
                 ))}
                 {isNumeric ?
                     <NumberInput min={0}>
-                        <NumberInputField placeholder="Other" />
+                        <NumberInputField placeholder="Other"
+                            value={formAnswer}
+                            onChange={(event) => setFormAnswer(event.target.value)}
+                            onBlur={() => onChange(formAnswer)}
+                        />
                         <NumberInputStepper>
                             <NumberIncrementStepper />
                             <NumberDecrementStepper />
@@ -40,7 +44,10 @@ export default function FormQuestion({ question, choices, onChange, isNumeric, a
                         placeholder="Other"
                         value={formAnswer}
                         onChange={(event) => setFormAnswer(event.target.value)}
-                        onBlur={() => onChange(formAnswer)}
+                        onBlur={() => {
+                            onChange(formAnswer);
+                            setFormAnswer("");
+                        }}
                     />
                 }
             </VStack>

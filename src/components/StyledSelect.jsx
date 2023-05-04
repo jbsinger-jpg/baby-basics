@@ -5,7 +5,7 @@ import React from 'react';
 // relative imports
 // none
 
-export default function StyledSelect({ value, onChange, options, w, marginBottom, marginTop, paddingLeft }) {
+export default function StyledSelect({ value, onChange, options, w, marginBottom, marginTop, paddingLeft, isRequired }) {
     const _optionColor = useColorModeValue("#E6FFFA", "#1A202C");
 
     return (
@@ -16,6 +16,7 @@ export default function StyledSelect({ value, onChange, options, w, marginBottom
             marginBottom={marginBottom}
             marginTop={marginTop}
             paddingLeft={paddingLeft}
+            isRequired={isRequired}
         >
             <option
                 style={{ backgroundColor: _optionColor }}

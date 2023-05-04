@@ -46,47 +46,39 @@ export default function HomePage() {
     const [isClothingDataLoading, setIsClothingDataLoading] = useState(true);
 
     // food data for search bar
-    const [foodDataCollection] = useCollectionDataOnce(firestore.collection('food'), { idField: 'id' });
-    const [foodData, setFoodData] = useState(foodDataCollection);
+    const [foodData, setFoodData] = useState(null);
     const [isFoodDataLoading, setIsFoodDataLoading] = useState(true);
 
     // diaper data for search bar
-    const [diaperDataCollection] = useCollectionDataOnce(firestore.collection('diapers'), { idField: 'id' });
-    const [diaperData, setDiaperData] = useState(diaperDataCollection);
+
+    const [diaperData, setDiaperData] = useState(null);
     const [isDiapersLoading, setIsDiapersLoading] = useState(true);
 
     // maternial data
-    const [maternialDataCollection] = useCollectionDataOnce(firestore.collection('maternal_clothes'), { idField: 'id' });
-    const [maternialData, setMaternialData] = useState(maternialDataCollection);
+    const [maternialData, setMaternialData] = useState(null);
     const [maternialDataIsLoading, setMaternialDataIsLoading] = useState(true);
 
     // formula data
-    const [formulaDataCollection] = useCollectionDataOnce(firestore.collection('formula'), { idField: 'id' });
-    const [formulaData, setFormulaData] = useState(formulaDataCollection);
+    const [formulaData, setFormulaData] = useState(null);
     const [formulaDataIsLoading, setFormulaDataIsLoading] = useState(true);
 
     // toy data
-    const [toyDataCollection] = useCollectionDataOnce(firestore.collection('toys'), { idField: 'id' });
-    const [toyData, setToyData] = useState(toyDataCollection);
+    const [toyData, setToyData] = useState(null);
     const [toyDataIsLoading, setToyDataIsLoading] = useState(true);
 
     // monitor data
-    const [monitorDataCollection] = useCollectionDataOnce(firestore.collection('monitors'), { idField: 'id' });
-    const [monitorData, setMonitorData] = useState(monitorDataCollection);
+    const [monitorData, setMonitorData] = useState(null);
     const [monitorDataIsLoading, setMonitorDataIsLoading] = useState(true);
 
     // seat data
-    const [seatDataCollection] = useCollectionDataOnce(firestore.collection('car_seats'), { idField: 'id' });
-    const [seatData, setSeatData] = useState(seatDataCollection);
+    const [seatData, setSeatData] = useState(null);
     const [seatDataIsLoading, setSeatDataIsLoading] = useState(true);
 
     // stroller data
-    const [strollerDataCollection] = useCollectionDataOnce(firestore.collection('strollers'), { idField: 'id' });
-    const [strollerData, setStrollerData] = useState(strollerDataCollection);
+    const [strollerData, setStrollerData] = useState(null);
     const [strollerDataIsLoading, setStrollerDataIsLoading] = useState(true);
 
-    const [vitaminDataCollection] = useCollectionDataOnce(firestore.collection('vitamins'), { idField: 'id' });
-    const [vitaminData, setVitaminData] = useState(vitaminDataCollection);
+    const [vitaminData, setVitaminData] = useState(null);
     const [vitaminDataIsLoading, setVitaminDataIsLoading] = useState(true);
 
     const [screeningAlertDialogVisibile, setScreeningAlertDialogVisibile] = useState(false);
@@ -118,6 +110,7 @@ export default function HomePage() {
 
     const handleForumButtonPress = (groupAlias, groupId) => {
         localStorage.setItem("gid", groupId);
+        localStorage.setItem("pageData", groupAlias);
 
         if (groupAlias)
             navigate(`/forum_${groupAlias}`);
@@ -149,120 +142,120 @@ export default function HomePage() {
     };
 
     // // initialize the page with the data from the data base
-    // useEffect(() => {
-    //     let options = [];
+    useEffect(() => {
+        let options = [];
 
-    //     // set the data on the inital page load
-    //     firestore.collection('food').get()
-    //         .then(snapshot => {
-    //             snapshot.docs.forEach(doc => {
-    //                 options.push({ ...doc.data() });
-    //             });
+        // set the data on the inital page load
+        firestore.collection('food').get()
+            .then(snapshot => {
+                snapshot.docs.forEach(doc => {
+                    options.push({ ...doc.data() });
+                });
 
-    //             setFoodData(options);
-    //             setIsFoodDataLoading(false);
-    //             options = [];
-    //         });
+                setFoodData(options);
+                setIsFoodDataLoading(false);
+                options = [];
+            });
 
-    //     firestore.collection('diapers').get()
-    //         .then(snapshot => {
-    //             snapshot.docs.forEach(doc => {
-    //                 options.push({ ...doc.data() });
-    //             });
+        firestore.collection('diapers').get()
+            .then(snapshot => {
+                snapshot.docs.forEach(doc => {
+                    options.push({ ...doc.data() });
+                });
 
-    //             setDiaperData(options);
-    //             setIsDiapersLoading(false);
-    //             options = [];
-    //         });
+                setDiaperData(options);
+                setIsDiapersLoading(false);
+                options = [];
+            });
 
-    //     firestore.collection('clothing').get()
-    //         .then(snapshot => {
-    //             snapshot.docs.forEach(doc => {
-    //                 options.push({ ...doc.data() });
-    //             });
+        firestore.collection('clothing').get()
+            .then(snapshot => {
+                snapshot.docs.forEach(doc => {
+                    options.push({ ...doc.data() });
+                });
 
-    //             setClothingData(options);
-    //             setIsClothingDataLoading(false);
-    //             options = [];
-    //         });
+                setClothingData(options);
+                setIsClothingDataLoading(false);
+                options = [];
+            });
 
-    //     firestore.collection('maternal_clothes').get()
-    //         .then(snapshot => {
-    //             snapshot.docs.forEach(doc => {
-    //                 options.push({ ...doc.data() });
-    //             });
+        firestore.collection('maternal_clothes').get()
+            .then(snapshot => {
+                snapshot.docs.forEach(doc => {
+                    options.push({ ...doc.data() });
+                });
 
-    //             setMaternialData(options);
-    //             setMaternialDataIsLoading(false);
-    //             options = [];
-    //         });
+                setMaternialData(options);
+                setMaternialDataIsLoading(false);
+                options = [];
+            });
 
-    //     firestore.collection('formula').get()
-    //         .then(snapshot => {
-    //             snapshot.docs.forEach(doc => {
-    //                 options.push({ ...doc.data() });
-    //             });
+        firestore.collection('formula').get()
+            .then(snapshot => {
+                snapshot.docs.forEach(doc => {
+                    options.push({ ...doc.data() });
+                });
 
-    //             setFormulaData(options);
-    //             setFormulaDataIsLoading(false);
-    //             options = [];
-    //         });
+                setFormulaData(options);
+                setFormulaDataIsLoading(false);
+                options = [];
+            });
 
-    //     firestore.collection('toys').get()
-    //         .then(snapshot => {
-    //             snapshot.docs.forEach(doc => {
-    //                 options.push({ ...doc.data() });
-    //             });
+        firestore.collection('toys').get()
+            .then(snapshot => {
+                snapshot.docs.forEach(doc => {
+                    options.push({ ...doc.data() });
+                });
 
-    //             setToyData(options);
-    //             setToyDataIsLoading(false);
-    //             options = [];
-    //         });
+                setToyData(options);
+                setToyDataIsLoading(false);
+                options = [];
+            });
 
-    //     firestore.collection('monitors').get()
-    //         .then(snapshot => {
-    //             snapshot.docs.forEach(doc => {
-    //                 options.push({ ...doc.data() });
-    //             });
+        firestore.collection('monitors').get()
+            .then(snapshot => {
+                snapshot.docs.forEach(doc => {
+                    options.push({ ...doc.data() });
+                });
 
-    //             setMonitorData(options);
-    //             setMonitorDataIsLoading(false);
-    //             options = [];
-    //         });
+                setMonitorData(options);
+                setMonitorDataIsLoading(false);
+                options = [];
+            });
 
-    //     firestore.collection('car_seats').get()
-    //         .then(snapshot => {
-    //             snapshot.docs.forEach(doc => {
-    //                 options.push({ ...doc.data() });
-    //             });
+        firestore.collection('car_seats').get()
+            .then(snapshot => {
+                snapshot.docs.forEach(doc => {
+                    options.push({ ...doc.data() });
+                });
 
-    //             setSeatData(options);
-    //             setSeatDataIsLoading(false);
-    //             options = [];
-    //         });
+                setSeatData(options);
+                setSeatDataIsLoading(false);
+                options = [];
+            });
 
-    //     firestore.collection('strollers').get()
-    //         .then(snapshot => {
-    //             snapshot.docs.forEach(doc => {
-    //                 options.push({ ...doc.data() });
-    //             });
+        firestore.collection('strollers').get()
+            .then(snapshot => {
+                snapshot.docs.forEach(doc => {
+                    options.push({ ...doc.data() });
+                });
 
-    //             setStrollerData(options);
-    //             setStrollerDataIsLoading(false);
-    //             options = [];
-    //         });
+                setStrollerData(options);
+                setStrollerDataIsLoading(false);
+                options = [];
+            });
 
-    //     firestore.collection('vitamins').get()
-    //         .then(snapshot => {
-    //             snapshot.docs.forEach(doc => {
-    //                 options.push({ ...doc.data() });
-    //             });
+        firestore.collection('vitamins').get()
+            .then(snapshot => {
+                snapshot.docs.forEach(doc => {
+                    options.push({ ...doc.data() });
+                });
 
-    //             setVitaminData(options);
-    //             setVitaminDataIsLoading(false);
-    //             options = [];
-    //         });
-    // }, []);
+                setVitaminData(options);
+                setVitaminDataIsLoading(false);
+                options = [];
+            });
+    }, []);
 
     useEffect(() => {
         function handleResize() {

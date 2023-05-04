@@ -29,19 +29,30 @@ export default function GoogleMapsModal({ searchPlaces, setSearchPlaces }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
 
     const formatLocationEntry = () => {
-        if (city && state) {
-            return `${selectedLocation}+near+${city}+${state}`;
+        let formattedLocation = [];
+
+        if (city) {
+            formattedLocation.push(city);
         }
-        else if (city && !state) {
-            return `${selectedLocation}+near+${city}`;
+
+        if (state) {
+            formattedLocation.push(state);
         }
-        else if (!city && state) {
-            return `${selectedLocation}+near+${state}`;
+
+        if (zip) {
+            formattedLocation.push(zip);
         }
-        else {
-            // if options are not filled assume that they meant near them
-            return `${selectedLocation}+near+me`;
+
+        if (county) {
+            formattedLocation.push(county);
         }
+
+        formattedLocation = formattedLocation.join("+");
+        if (formattedLocation) {
+            return `${selectedLocation}+near+${formattedLocation}`;
+        }
+
+        return `${selectedLocation}+near+me`;
     };
 
     const redirectUser = (event) => {
@@ -65,6 +76,7 @@ export default function GoogleMapsModal({ searchPlaces, setSearchPlaces }) {
                                 value={selectedLocation}
                                 onChange={(event) => setSelectedLocation(event.target.value)}
                                 options={locations}
+                                isRequired
                             />
                         </VStack>
                         <HStack paddingTop={2} paddingBottom={2}>
