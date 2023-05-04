@@ -2,7 +2,7 @@
 import { SearchIcon } from '@chakra-ui/icons';
 import { Box, Button, HStack, Heading, IconButton, Input, Text, Textarea, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useState, useRef, useEffect } from 'react';
-import { useCollectionData, useDocumentDataOnce } from 'react-firebase-hooks/firestore';
+import { useCollectionData } from 'react-firebase-hooks/firestore';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import { motion } from "framer-motion";
@@ -19,9 +19,7 @@ function ForumMessagePage() {
     const [text, setText] = useState();
     const [searchTerm, setSearchTerm] = useState("");
     const [searchButtonLoading, setSearchButtonLoading] = useState(false);
-    const [userExists, setUserExists] = useState(false);
     const pageData = localStorage.getItem("pageData");
-    const [groupData] = useDocumentDataOnce(firestore.collection('groups').doc(localStorage.getItem("gid")), { idField: 'id' });
 
     // Data passed from StarterForumPage to here to get the messages to not have to remake a bunch of pages
     const [createdOrderMessages] = useCollectionData(
@@ -116,10 +114,14 @@ function ForumMessagePage() {
                 user: auth?.currentUser?.email
             });
 
+        const groupDoc = await firestore.collection('groups').doc(localStorage.getItem("gid"));
+        console.log(groupDoc);
+        const groupData = (await groupDoc.get()).data();
+        console.log(groupData);
+        const userExists = groupData.users.some(user => user.id === auth.currentUser.uid);
+
         if (!userExists) {
-            const groupDoc = await firestore.collection('groups').doc(localStorage.getItem("gid"));
             groupDoc.set({ ...groupData, "users": [...groupData?.users, { name: auth.currentUser.displayName, id: auth.currentUser.uid }] });
-            setUserExists(true);
         }
 
         setText('');
