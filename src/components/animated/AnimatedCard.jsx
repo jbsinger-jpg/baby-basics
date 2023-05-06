@@ -1,5 +1,5 @@
 // module imports
-import { Box, ButtonGroup, Card, CardBody, CardFooter, Checkbox, CheckboxGroup, HStack, Heading, Icon, Link, ListItem, Stack, Text, Tooltip, UnorderedList, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, Card, CardBody, CardFooter, Checkbox, CheckboxGroup, HStack, Heading, Icon, Link, ListItem, Stack, Text, Tooltip, UnorderedList, VStack, useColorModeValue } from '@chakra-ui/react';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
@@ -28,6 +28,7 @@ export default function AnimatedCard({
     const [selectedVideo, setSelectedVideo] = useState(null);
     const [_checkBoxValues] = useCollectionDataOnce(firestore.collection("users").doc(auth?.currentUser?.uid).collection(title));
     const [checkboxValues, setCheckboxValues] = useState(new Array(selectedCardData.length).fill(false));
+    const [confirmProgressButtonLoading, setConfirmProgressButtonLoading] = useState(false);
 
     useEffect(() => {
         if (_checkBoxValues && _checkBoxValues.length)
@@ -41,12 +42,16 @@ export default function AnimatedCard({
     };
 
     const handleProgressSubmission = async () => {
+        setConfirmProgressButtonLoading(true);
         const usersRef = await firestore.collection("users");
+
         // Make a reference to the given card title under the user profile
         const babyProgressRef = usersRef.doc(auth?.currentUser?.uid).collection(title);
         await babyProgressRef.doc(auth.currentUser.uid).set({
             answers: [...checkboxValues]
         });
+
+        setConfirmProgressButtonLoading(false);
     };
 
     const backgroundColor = useColorModeValue("#E2E8F0", "#4A5568");
@@ -177,17 +182,14 @@ export default function AnimatedCard({
                             </HStack>
                         </motion.button>
                         {(applyCheckbox && flippedCard) &&
-                            <motion.button
-                                style={{ backgroundColor: backgroundColor, padding: 10, borderRadius: "10%" }}
-                                whileTap={{ scale: 0.8 }}
-                                whileHover={{ scale: 1.2 }}
-                                whileFocus={{ scale: 1.2 }}
+                            <Button
+                                isLoading={confirmProgressButtonLoading}
                                 onClick={handleProgressSubmission}
                             >
                                 <Text as="b">
                                     Confirm Progress
                                 </Text>
-                            </motion.button>
+                            </Button>
                         }
                     </ButtonGroup>
                 </CardFooter>
