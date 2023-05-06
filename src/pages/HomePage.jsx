@@ -4,6 +4,7 @@ import { Avatar, AvatarBadge, AvatarGroup, Badge, Box, Button, Drawer, DrawerBod
 import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionDataOnce } from 'react-firebase-hooks/firestore';
 import { useNavigate } from 'react-router-dom';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 
 // relative imports
 import { auth, firestore } from '../firebaseConfig';
@@ -30,6 +31,10 @@ export default function HomePage() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { setData: setUser } = useContext(Context);
     const navigate = useNavigate();
+    const handleDocumentBabyProgress = () => {
+        navigate("/baby-progression");
+    };
+
     // firebase data
     const currentUser = auth.currentUser;
     const [userDataPendingFriends] = useCollectionDataOnce(firestore.collection('users').doc(currentUser?.uid).collection("pendingFriends"), { idField: 'id' });
@@ -381,6 +386,12 @@ export default function HomePage() {
                                 onClick={() => setScreeningAlertDialogVisibile(true)}
                             >
                                 About you
+                            </Button>
+                            <Button
+                                leftIcon={<FormatListBulletedIcon fontSize='small' />}
+                                onClick={handleDocumentBabyProgress}
+                            >
+                                Document Baby Progress
                             </Button>
                         </VStack>
                     </DrawerBody>

@@ -115,7 +115,7 @@ export default function MilestonePage() {
                     onClick={() => setCardRotated(!cardRotated)}
                     icon={<ChevronLeftIcon />}
                 />
-                {cardRotated ?
+                {!cardRotated ?
                     <>
                         <AnimatedCard
                             flippedCard={flippedMotorCard}

@@ -32,6 +32,7 @@ export default function AnimatedCard({
 
     useEffect(() => {
         if (_checkBoxValues && _checkBoxValues.length)
+            // set the checkbox values to the user that has confirmed answers
             setCheckboxValues(_checkBoxValues[0].answers);
     }, [_checkBoxValues]);
 
