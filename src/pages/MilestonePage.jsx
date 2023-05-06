@@ -12,6 +12,7 @@ import StyledSelect from '../components/StyledSelect';
 import FloatingActionButtonsBabyInfo from '../components/floatingActionButtons/FloatingActionButtonsBabyInfo';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { promptOptions } from '../components/staticPageData/baby-maternal-info';
+import { auth } from '../firebaseConfig';
 
 export default function MilestonePage() {
     const [selectedAge, setSelectedAge] = useState("0-3M");
@@ -124,6 +125,7 @@ export default function MilestonePage() {
                             setCardButtonPressed={setMotorButtonPressed}
                             selectedCardData={selectedMotorMilestones}
                             title={"Milestones"}
+                            applyCheckbox={auth?.currentUser?.uid ? true : false}
                         />
                         <AnimatedCard
                             flippedCard={flippedCommunicationCard}
@@ -133,6 +135,7 @@ export default function MilestonePage() {
                             setCardButtonPressed={setCommunicationButtonPressed}
                             selectedCardData={selectedCommunicationMilestones}
                             title={"Communication"}
+                            applyCheckbox={auth?.currentUser?.uid ? true : false}
                         />
                         <AnimatedCard
                             flippedCard={flippedFeedingCard}
@@ -142,6 +145,7 @@ export default function MilestonePage() {
                             setCardButtonPressed={setFeedingButtonPressed}
                             selectedCardData={selectedFeedingMilestones}
                             title={"Feeding"}
+                            applyCheckbox={auth?.currentUser?.uid ? true : false}
                         />
                     </>
                     :
@@ -154,6 +158,7 @@ export default function MilestonePage() {
                             setCardButtonPressed={setSensoryButtonPressed}
                             selectedCardData={selectedSensoryMilestones}
                             title={"Sensory"}
+                            applyCheckbox={auth?.currentUser?.uid ? true : false}
                         />
                         <AnimatedCard
                             flippedCard={flippedResourcesCard}

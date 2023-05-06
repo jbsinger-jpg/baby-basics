@@ -1,12 +1,14 @@
 // module imports
-import { Box, ButtonGroup, Card, CardBody, CardFooter, HStack, Heading, Icon, Link, ListItem, Stack, Text, Tooltip, UnorderedList, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, ButtonGroup, Card, CardBody, CardFooter, Checkbox, CheckboxGroup, HStack, Heading, Icon, Link, ListItem, Stack, Text, Tooltip, UnorderedList, VStack, useColorModeValue } from '@chakra-ui/react';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { motion } from 'framer-motion';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // relative imports
 import { cardBackground } from '../../defaultStyle';
 import StyledSelect from '../StyledSelect';
+import { auth, firestore } from '../../firebaseConfig';
+import { useCollectionDataOnce } from 'react-firebase-hooks/firestore';
 
 export default function AnimatedCard({
     flippedCard,
@@ -16,13 +18,38 @@ export default function AnimatedCard({
     setCardButtonPressed,
     selectedCardData,
     title,
-    videos
+    videos,
+    applyCheckbox,
 }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
     const linkColor = useColorModeValue("blue.500", "blue.200");
     const MotionIcon = motion(Icon);
     const MotionBox = motion(Box);
     const [selectedVideo, setSelectedVideo] = useState(null);
+    const [_checkBoxValues] = useCollectionDataOnce(firestore.collection("users").doc(auth?.currentUser?.uid).collection(title));
+    const [checkboxValues, setCheckboxValues] = useState(new Array(selectedCardData.length).fill(false));
+
+    useEffect(() => {
+        if (_checkBoxValues && _checkBoxValues.length)
+            setCheckboxValues(_checkBoxValues[0].answers);
+    }, [_checkBoxValues]);
+
+    const handleCheckboxValuesChange = (event, index) => {
+        const checkboxValuesCopy = [...checkboxValues];
+        checkboxValuesCopy[index] = event.target.checked;
+        setCheckboxValues(checkboxValuesCopy);
+    };
+
+    const handleProgressSubmission = async () => {
+        const usersRef = await firestore.collection("users");
+        // Make a reference to the given card title under the user profile
+        const babyProgressRef = usersRef.doc(auth?.currentUser?.uid).collection(title);
+        await babyProgressRef.doc(auth.currentUser.uid).set({
+            answers: [...checkboxValues]
+        });
+    };
+
+    const backgroundColor = useColorModeValue("#E2E8F0", "#4A5568");
 
     return (
         <VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
@@ -99,22 +126,41 @@ export default function AnimatedCard({
                                         initial={cardButtonPressed ? { scale: 0 } : { scale: 1 }}
                                         animate={{ scale: 1 }}
                                         onAnimationComplete={() => setCardButtonPressed(false)}
-                                        overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
-                                        <UnorderedList spacing="2" paddingLeft="2">
-                                            {selectedCardData && selectedCardData.map((milestone, index) => {
-                                                return (<ListItem key={index}>{milestone}</ListItem>);
-                                            })}
-                                        </UnorderedList>
+                                        overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex"
+                                    >
+                                        {applyCheckbox ?
+                                            <CheckboxGroup>
+                                                <Stack spacing={[1, 5]} direction={['column', 'column']}>
+                                                    {selectedCardData && selectedCardData.map((milestone, index) => {
+                                                        return (
+                                                            <Checkbox
+                                                                key={index}
+                                                                isChecked={checkboxValues[index]}
+                                                                onChange={(event) => handleCheckboxValuesChange(event, index)}
+                                                            >
+                                                                {milestone}
+                                                            </Checkbox>
+                                                        );
+                                                    })}
+                                                </Stack>
+                                            </CheckboxGroup>
+                                            :
+                                            <UnorderedList spacing="2" paddingLeft="2">
+                                                {selectedCardData && selectedCardData.map((milestone, index) => {
+                                                    return (<ListItem key={index}>{milestone}</ListItem>);
+                                                })}
+                                            </UnorderedList>
+                                        }
                                     </MotionBox>
                                 }
                             </>
                         }
                     </Stack>
                 </CardBody>
-                <CardFooter>
-                    <ButtonGroup spacing='2' justifyContent={"space-between"}>
+                <CardFooter w="100%">
+                    <ButtonGroup spacing='2' justifyContent={"space-between"} w="100%">
                         <motion.button
-                            style={{ backgroundColor: useColorModeValue("#E2E8F0", "#4A5568"), padding: 10, borderRadius: "10%" }}
+                            style={{ backgroundColor: backgroundColor, padding: 10, borderRadius: "10%" }}
                             whileTap={{ scale: 0.8 }}
                             whileHover={{ scale: 1.2 }}
                             whileFocus={{ scale: 1.2 }}
@@ -130,6 +176,19 @@ export default function AnimatedCard({
                                 </Text>
                             </HStack>
                         </motion.button>
+                        {(applyCheckbox && flippedCard) &&
+                            <motion.button
+                                style={{ backgroundColor: backgroundColor, padding: 10, borderRadius: "10%" }}
+                                whileTap={{ scale: 0.8 }}
+                                whileHover={{ scale: 1.2 }}
+                                whileFocus={{ scale: 1.2 }}
+                                onClick={handleProgressSubmission}
+                            >
+                                <Text as="b">
+                                    Confirm Progress
+                                </Text>
+                            </motion.button>
+                        }
                     </ButtonGroup>
                 </CardFooter>
             </Card>

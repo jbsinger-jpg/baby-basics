@@ -2,8 +2,8 @@
 import ReactImageMagnify from '@blacklab/react-image-magnify';
 import { CheckIcon, CloseIcon, StarIcon } from '@chakra-ui/icons';
 import { Box, Button, Card, CardBody, CardFooter, CardHeader, CircularProgress, Divider, HStack, Heading, Icon, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
-import { motion, useAnimation } from 'framer-motion';
-import React, { useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
 
 // relative imports
 import { cardBackground } from '../../defaultStyle';
@@ -93,49 +93,6 @@ export default function FormulaRow({ formula, formulaDataIsLoading, tabIndex }) 
         });
     });
 
-    const [isVisible, setIsVisible] = useState(true);
-    const controls = useAnimation();
-    const cardRef = useRef(null);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            const scrollY = window.scrollY;
-            const windowHeight = window.innerHeight;
-            const card = cardRef.current;
-
-            if (card && scrollY + windowHeight >= (card.offsetTop)) {
-                setIsVisible(true);
-            } else {
-                setIsVisible(false);
-            }
-        };
-
-        window.addEventListener("scroll", handleScroll);
-
-        return () => {
-            window.removeEventListener("scroll", handleScroll);
-        };
-    }, []);
-
-    useEffect(() => {
-        if (isVisible) {
-            controls.start({
-                opacity: 1,
-                y: 0,
-                transition: { duration: 1.0 },
-            });
-        } else {
-            controls.start({
-                opacity: 0,
-                y: 50,
-                transition: { duration: 0.2 },
-            }).then(() => {
-                controls.set({ opacity: 0, y: 50 });
-            });
-        }
-        // eslint-disable-next-line
-    }, [isVisible]);
-
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
 
     return (
@@ -148,151 +105,76 @@ export default function FormulaRow({ formula, formulaDataIsLoading, tabIndex }) 
             <SkeletonCircle size='10' isLoaded={!formulaDataIsLoading} />
             <SkeletonText isLoaded={!formulaDataIsLoading}>
                 <HStack spacing="4" w="400px">
-                    <motion.div
-                        animate={controls}
-                        ref={cardRef}
-                    >
-                        {!flippedCards ?
-                            <Card w="220px" bg={_cardBackground} justifyContent="center" alignItems="center">
-                                <CardHeader>
-                                    <Tag
-                                        borderRadius="md"
-                                        size="lg"
-                                        variant="outline"
-                                        color="wheat"
-                                    >
-                                        <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
-                                            {formula.title}
-                                        </Text>
-                                    </Tag>
-                                </CardHeader>
-                                <CardBody display="flex" justifyContent="center">
-                                    <motion.div
-                                        initial={buttonsPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
-                                        animate={{ rotate: 0, scale: 1 }}
-                                        onAnimationComplete={() => setButtonsPressed(false)}
-                                        transition={{
-                                            type: "spring",
-                                            stiffness: 260,
-                                            damping: 20
-                                        }}
-                                    >
-                                        {/* Prevent image from exploding in dimensions */}
-                                        {(tabIndex === 5 && !buttonsPressed) &&
-                                            <ReactImageMagnify
-                                                imageProps={{
-                                                    src: formula.image,
-                                                    width: 150,
-                                                    height: 200,
-                                                }}
-                                                magnifiedImageProps={{
-                                                    src: formula.image,
-                                                    width: 600,
-                                                    height: 800
-                                                }}
-                                                magnifyContainerProps={{
-                                                    height: 300,
-                                                    width: 400
-                                                }}
-                                            />
-                                        }
-                                    </motion.div>
-                                    {buttonsPressed &&
-                                        <CircularProgress isIndeterminate color={_cardBackground} />
-                                    }
-                                </CardBody>
-                                <CardFooter>
-                                    {!flippedCards &&
-                                        <HStack
-                                            w="220px"
-                                            justifyContent="space-between"
-                                            paddingRight="4"
-                                            paddingLeft="4"
-                                        >
-                                            <MotionButton
-                                                // When the user uses their mouse
-                                                whileHover={{ scale: 1.2 }}
-                                                // When the user tabs
-                                                whileFocus={{ scale: 1.2 }}
-                                                as="a"
-                                                href={formula.affiliateLink}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                            >
-                                                Buy
-                                            </MotionButton>
-                                            <MotionButton
-                                                // When the user uses their mouse
-                                                whileHover={{ scale: 1.2 }}
-                                                // When the user tabs
-                                                whileFocus={{ scale: 1.2 }}
-                                                onClick={() => {
-                                                    handleFlip();
-                                                    handleButtonsTrigger();
-                                                }}
-                                            >
-                                                Rate
-                                            </MotionButton>
-                                        </HStack>
-
-                                    }
-                                </CardFooter>
-                            </Card>
-                            :
-                            <MotionBox
-                                h="500px"
-                                alignItems="center"
-                                justifyContent="center"
-                                display="flex"
-                                initial={buttonsPressed ? { scale: 0 } : { scale: 1 }}
-                                animate={{ scale: 1 }}
-                                onAnimationComplete={() => setButtonsPressed(false)}
-                            >
-                                <VStack spacing="4" w="220px" justifyContent="start">
-                                    <HStack w="220px" justifyContent="space-between">
-                                        <Text>{formula.title}</Text>
-                                        <Tooltip label="Average">
-                                            <HStack>
-                                                <Text>{average}</Text>
-                                                <Icon as={StarIcon}></Icon>
-                                            </HStack>
-                                        </Tooltip>
-                                    </HStack>
-                                    <Box
-                                        h={220}
-                                        alignItems="center"
-                                        justifyContent="center"
-                                        display="flex"
-                                    >
-                                        <HStack>
-                                            <Rating />
-                                            <Tooltip label="Total">
-                                                <Heading size="xs">{total}</Heading>
-                                            </Tooltip>
-                                        </HStack>
-                                    </Box>
-                                    <HStack justifyContent="space-between" w="220px">
-                                        <MotionButton
-                                            whileTap={{
-                                                scale: 0.8,
-                                                borderRadius: "100%",
+                    {!flippedCards ?
+                        <Card w="220px" bg={_cardBackground} justifyContent="center" alignItems="center">
+                            <CardHeader>
+                                <Tag
+                                    borderRadius="md"
+                                    size="lg"
+                                    variant="outline"
+                                    color="wheat"
+                                >
+                                    <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
+                                        {formula.title}
+                                    </Text>
+                                </Tag>
+                            </CardHeader>
+                            <CardBody display="flex" justifyContent="center">
+                                <motion.div
+                                    initial={buttonsPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
+                                    animate={{ rotate: 0, scale: 1 }}
+                                    onAnimationComplete={() => setButtonsPressed(false)}
+                                    transition={{
+                                        type: "spring",
+                                        stiffness: 260,
+                                        damping: 20
+                                    }}
+                                >
+                                    {/* Prevent image from exploding in dimensions */}
+                                    {(tabIndex === 5 && !buttonsPressed) &&
+                                        <ReactImageMagnify
+                                            imageProps={{
+                                                src: formula.image,
+                                                width: 150,
+                                                height: 200,
                                             }}
+                                            magnifiedImageProps={{
+                                                src: formula.image,
+                                                width: 600,
+                                                height: 800
+                                            }}
+                                            magnifyContainerProps={{
+                                                height: 300,
+                                                width: 400
+                                            }}
+                                        />
+                                    }
+                                </motion.div>
+                                {buttonsPressed &&
+                                    <CircularProgress isIndeterminate color={_cardBackground} />
+                                }
+                            </CardBody>
+                            <CardFooter>
+                                {!flippedCards &&
+                                    <HStack
+                                        w="220px"
+                                        justifyContent="space-between"
+                                        paddingRight="4"
+                                        paddingLeft="4"
+                                    >
+                                        <MotionButton
                                             // When the user uses their mouse
                                             whileHover={{ scale: 1.2 }}
                                             // When the user tabs
                                             whileFocus={{ scale: 1.2 }}
-                                            onClick={() => {
-                                                handleFlip();
-                                                handleAddRating();
-                                            }}
+                                            as="a"
+                                            href={formula.affiliateLink}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
                                         >
-                                            <Icon as={CheckIcon} />
+                                            Buy
                                         </MotionButton>
                                         <MotionButton
-                                            whileTap={{
-                                                scale: 0.8,
-                                                borderRadius: "100%",
-                                            }}
                                             // When the user uses their mouse
                                             whileHover={{ scale: 1.2 }}
                                             // When the user tabs
@@ -302,14 +184,84 @@ export default function FormulaRow({ formula, formulaDataIsLoading, tabIndex }) 
                                                 handleButtonsTrigger();
                                             }}
                                         >
-                                            <Icon as={CloseIcon} />
+                                            Rate
                                         </MotionButton>
                                     </HStack>
-                                </VStack>
-                            </MotionBox>
 
-                        }
-                    </motion.div>
+                                }
+                            </CardFooter>
+                        </Card>
+                        :
+                        <MotionBox
+                            h="500px"
+                            alignItems="center"
+                            justifyContent="center"
+                            display="flex"
+                            initial={buttonsPressed ? { scale: 0 } : { scale: 1 }}
+                            animate={{ scale: 1 }}
+                            onAnimationComplete={() => setButtonsPressed(false)}
+                        >
+                            <VStack spacing="4" w="220px" justifyContent="start">
+                                <HStack w="220px" justifyContent="space-between">
+                                    <Text>{formula.title}</Text>
+                                    <Tooltip label="Average">
+                                        <HStack>
+                                            <Text>{average}</Text>
+                                            <Icon as={StarIcon}></Icon>
+                                        </HStack>
+                                    </Tooltip>
+                                </HStack>
+                                <Box
+                                    h={220}
+                                    alignItems="center"
+                                    justifyContent="center"
+                                    display="flex"
+                                >
+                                    <HStack>
+                                        <Rating />
+                                        <Tooltip label="Total">
+                                            <Heading size="xs">{total}</Heading>
+                                        </Tooltip>
+                                    </HStack>
+                                </Box>
+                                <HStack justifyContent="space-between" w="220px">
+                                    <MotionButton
+                                        whileTap={{
+                                            scale: 0.8,
+                                            borderRadius: "100%",
+                                        }}
+                                        // When the user uses their mouse
+                                        whileHover={{ scale: 1.2 }}
+                                        // When the user tabs
+                                        whileFocus={{ scale: 1.2 }}
+                                        onClick={() => {
+                                            handleFlip();
+                                            handleAddRating();
+                                        }}
+                                    >
+                                        <Icon as={CheckIcon} />
+                                    </MotionButton>
+                                    <MotionButton
+                                        whileTap={{
+                                            scale: 0.8,
+                                            borderRadius: "100%",
+                                        }}
+                                        // When the user uses their mouse
+                                        whileHover={{ scale: 1.2 }}
+                                        // When the user tabs
+                                        whileFocus={{ scale: 1.2 }}
+                                        onClick={() => {
+                                            handleFlip();
+                                            handleButtonsTrigger();
+                                        }}
+                                    >
+                                        <Icon as={CloseIcon} />
+                                    </MotionButton>
+                                </HStack>
+                            </VStack>
+                        </MotionBox>
+
+                    }
                     <VStack spacing="1" width={150} justifyContent="center" alignItems="start">
                         <Tag
                             borderRadius='full'
