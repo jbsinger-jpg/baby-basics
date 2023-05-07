@@ -25,7 +25,7 @@ export default function StyledSelect({ value, onChange, options, w, marginBottom
             >
                 N/A
             </option>
-            {options.length > 0 && options.map(option => {
+            {options?.length > 0 && options.map(option => {
                 return (
                     <option
                         style={{ backgroundColor: _optionColor }}

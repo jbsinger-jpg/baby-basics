@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import ColorModeToggleButton from '../ColorModeToggleButton';
 import FabTemplate from './StandardFab';
 
-export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialogOpen }) {
+export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialogOpen, setProgressModalVisible }) {
     const navigate = useNavigate();
 
     const handleMaternalResources = () => {
@@ -23,8 +23,7 @@ export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialog
     };
 
     const handleDocumentProgress = () => {
-        console.log("Button pressed");
-        navigate("/baby-progression");
+        setProgressModalVisible(true);
     };
 
     return (

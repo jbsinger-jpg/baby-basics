@@ -13,6 +13,7 @@ import FloatingActionButtonsBabyInfo from '../components/floatingActionButtons/F
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { promptOptions } from '../components/staticPageData/baby-maternal-info';
 import { auth } from '../firebaseConfig';
+import BabyProgressModal from '../components/modals/BabyProgressModal';
 
 export default function MilestonePage() {
     const [selectedAge, setSelectedAge] = useState("0-3M");
@@ -37,6 +38,7 @@ export default function MilestonePage() {
     const [flippedResourcesCard, setFlippedResourcesCard] = useState(false);
     const [resourceButtonPressed, setResourceButtonPressed] = useState(false);
     const [cardRotated, setCardRotated] = useState(false);
+    const [progressModalVisible, setProgressModalVisible] = useState(false);
 
     const handleAnswerChange = (event) => {
         if (flippedMotorCard)
@@ -88,6 +90,7 @@ export default function MilestonePage() {
         <Box bg={_screenBackground} paddingTop="2" h="100vh">
             <FloatingActionButtonsBabyInfo
                 handleSearchPlacesDialogOpen={handleSearchPlacesDialogOpen}
+                setProgressModalVisible={setProgressModalVisible}
             />
             <GoogleMapsModal
                 setSearchPlaces={setPlaces}
@@ -185,6 +188,10 @@ export default function MilestonePage() {
                     icon={<ChevronRightIcon />}
                 />
             </HStack>
+            <BabyProgressModal
+                progressModalVisible={progressModalVisible}
+                setProgressModalVisible={setProgressModalVisible}
+            />
         </Box>
     );
 }

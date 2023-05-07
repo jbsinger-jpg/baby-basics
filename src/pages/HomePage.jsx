@@ -25,6 +25,7 @@ import StrollersDataTabPanel from '../components/tabPanels/StrollersDataTabPanel
 import { screenBackground } from '../defaultStyle';
 import CustomPopOver from '../components/CustomPopover';
 import VitaminDataTabPanel from '../components/tabPanels/VitaminDataTabPanel';
+import BabyProgressModal from '../components/modals/BabyProgressModal';
 
 export default function HomePage() {
     // hooks
@@ -32,7 +33,7 @@ export default function HomePage() {
     const { setData: setUser } = useContext(Context);
     const navigate = useNavigate();
     const handleDocumentBabyProgress = () => {
-        navigate("/baby-progression");
+        setProgressModalVisible(true);
     };
 
     // firebase data
@@ -94,6 +95,8 @@ export default function HomePage() {
     const [screenHeight, setScreenHeight] = useState(window.innerHeight);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
+
+    const [progressModalVisible, setProgressModalVisible] = useState(false);
 
     const handleSearchPlacesDialogOpen = () => {
         setSearchPlaces(true);
@@ -537,6 +540,10 @@ export default function HomePage() {
                 setAlertDialogVisible={setAlertDialogVisible}
                 alertDialogUser={alertDialogUser}
                 currentUser={currentUser}
+            />
+            <BabyProgressModal
+                progressModalVisible={progressModalVisible}
+                setProgressModalVisible={setProgressModalVisible}
             />
         </Box>
     );
