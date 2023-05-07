@@ -82,85 +82,92 @@ export default function MaternalResourcesPage() {
       setResourceButtonPressed(true);
   };
 
+  const handleProgramButtonPress = () => {
+    handleSelectedTrimesterChange(null);
+    setFlippedResourcesCard(true);
+    setResourceButtonPressed(false);
+    setCardRotated(true);
+
+    setFlippedBabyDevelopmentCard(false);
+    setBabyDevelopmentButtonPressed(false);
+
+    setFlippedRecommendationCard(false);
+    setRecommendationsButtonPressed(false);
+
+    setFlippedSymptomsCard(false);
+    setSymptomsButtonPressed(false);
+  };
+
   return (
     <Box bg={_screenBackground} paddingTop="2" h="100vh">
       <HStack alignItems="start" w="100vw" paddingLeft="5" spacing="5" marginTop="5" paddingBottom="10">
         <AnimatedButton
           title={"Trimester 1"}
-          onClick={() => { handleSelectedTrimesterChange(1); }}
+          onClick={() => {
+            handleSelectedTrimesterChange(1);
+            setFlippedResourcesCard(false);
+          }}
         />
         <AnimatedButton
           title={"Trimester 2"}
-          onClick={() => { handleSelectedTrimesterChange(2); }}
+          onClick={() => {
+            handleSelectedTrimesterChange(2);
+            setFlippedResourcesCard(false);
+          }}
         />
         <AnimatedButton
           title={"Trimester 3"}
-          onClick={() => { handleSelectedTrimesterChange(3); }}
+          onClick={() => {
+            handleSelectedTrimesterChange(3);
+            setFlippedResourcesCard(false);
+          }}
         />
         <AnimatedButton
           title={"Programs"}
-          onClick={() => { handleSelectedTrimesterChange(null); }}
+          onClick={handleProgramButtonPress}
         />
       </HStack>
       <HStack
         w="100vw"
         flexWrap="wrap"
         spacing="4"
-        justifyContent="space-evenly"
+        justifyContent={stage ? "space-between" : "center"}
         alignItems="center"
       >
-        {stage ?
+        {stage &&
+          <IconButton
+            onClick={() => setCardRotated(!cardRotated)}
+            icon={<ChevronLeftIcon />}
+          />
+        }
+        {!cardRotated ?
           <>
-            <IconButton
-              onClick={() => setCardRotated(!cardRotated)}
-              icon={<ChevronLeftIcon />}
+            <AnimatedCard
+              flippedCard={flippedRecommendationCard}
+              setFlippedCard={setFlippedRecommendationCard}
+              cardIcon={Woman2Icon}
+              cardButtonPressed={recommendationsButtonPressed}
+              setCardButtonPressed={setRecommendationsButtonPressed}
+              selectedCardData={selectedRecommendations}
+              title={"Recommendations"}
             />
-            {cardRotated ?
-              <>
-                <AnimatedCard
-                  flippedCard={flippedRecommendationCard}
-                  setFlippedCard={setFlippedRecommendationCard}
-                  cardIcon={Woman2Icon}
-                  cardButtonPressed={recommendationsButtonPressed}
-                  setCardButtonPressed={setRecommendationsButtonPressed}
-                  selectedCardData={selectedRecommendations}
-                  title={"Recommendations"}
-                />
-                <AnimatedCard
-                  flippedCard={flippedSymptomsCard}
-                  setFlippedCard={setFlippedSymptomsCard}
-                  cardIcon={AutoAwesomeIcon}
-                  cardButtonPressed={symptomsButtonPressed}
-                  setCardButtonPressed={setSymptomsButtonPressed}
-                  selectedCardData={selectedPregnantSymptoms}
-                  title={"Pregnancy Symptoms"}
-                />
-              </>
-              :
-              <>
-                <AnimatedCard
-                  flippedCard={flippedBabyDevelopmentCard}
-                  setFlippedCard={setFlippedBabyDevelopmentCard}
-                  cardIcon={FavoriteBorderIcon}
-                  cardButtonPressed={babyDevelopmentButtonPressed}
-                  setCardButtonPressed={setBabyDevelopmentButtonPressed}
-                  selectedCardData={selectedBabyDevelopment}
-                  title={"Baby Development"}
-                />
-                <AnimatedCard
-                  flippedCard={flippedResourcesCard}
-                  setFlippedCard={setFlippedResourcesCard}
-                  cardButtonPressed={resourceButtonPressed}
-                  setCardButtonPressed={setResourceButtonPressed}
-                  selectedCardData={selectedHyperLinks}
-                  videos={videos}
-                  title={"Resources"}
-                />
-              </>
-            }
-            <IconButton
-              onClick={() => setCardRotated(!cardRotated)}
-              icon={<ChevronRightIcon />}
+            <AnimatedCard
+              flippedCard={flippedSymptomsCard}
+              setFlippedCard={setFlippedSymptomsCard}
+              cardIcon={AutoAwesomeIcon}
+              cardButtonPressed={symptomsButtonPressed}
+              setCardButtonPressed={setSymptomsButtonPressed}
+              selectedCardData={selectedPregnantSymptoms}
+              title={"Pregnancy Symptoms"}
+            />
+            <AnimatedCard
+              flippedCard={flippedBabyDevelopmentCard}
+              setFlippedCard={setFlippedBabyDevelopmentCard}
+              cardIcon={FavoriteBorderIcon}
+              cardButtonPressed={babyDevelopmentButtonPressed}
+              setCardButtonPressed={setBabyDevelopmentButtonPressed}
+              selectedCardData={selectedBabyDevelopment}
+              title={"Baby Development"}
             />
           </>
           :
@@ -175,7 +182,12 @@ export default function MaternalResourcesPage() {
               title={"Resources"}
             />
           </>
-
+        }
+        {stage &&
+          <IconButton
+            onClick={() => setCardRotated(!cardRotated)}
+            icon={<ChevronRightIcon />}
+          />
         }
       </HStack>
       <FloatingActionButtonsMaternalInfo
@@ -185,6 +197,6 @@ export default function MaternalResourcesPage() {
         searchPlaces={searchPlaces}
         setSearchPlaces={setSearchPlaces}
       />
-    </Box>
+    </Box >
   );
 }
