@@ -1,12 +1,13 @@
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, FormControl, FormHelperText, FormLabel, HStack, Input, Tag, TagCloseButton, TagLabel, Textarea, VStack, useColorModeValue } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, FormControl, FormHelperText, FormLabel, HStack, Input, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Tag, TagCloseButton, TagLabel, Textarea, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { cardBackground } from '../../defaultStyle';
+import { cardBackground, screenBackground } from '../../defaultStyle';
 import StyledSelect from '../StyledSelect';
 import { auth, firestore } from '../../firebaseConfig';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
-export default function BabyProgressModal({ progressModalVisible, setProgressModalVisible }) {
+export default function BabyProgressModal({ progressModalVisible, setProgressModalVisible, addCheckboxProgress }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
+    const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
     const [eventName, setEventName] = useState(null);
     const [tag, setTag] = useState(null);
     const [eventDescription, setEventDescription] = useState(null);
@@ -170,15 +171,30 @@ export default function BabyProgressModal({ progressModalVisible, setProgressMod
                             ml={3}
                             mr={3}
                         >
-                            Submit
+                            Update
                         </Button>
-                        <Button
-                            onClick={handleProgressDeletion}
-                            isLoading={progressButtonLoading}
-                            mr={3}
-                        >
-                            Delete
-                        </Button>
+                        <Popover>
+                            <PopoverTrigger>
+                                <Button
+                                    mr={3}
+                                >
+                                    Delete
+                                </Button>
+                            </PopoverTrigger>
+                            <PopoverContent bg={_screenBackground}>
+                                <PopoverArrow />
+                                <PopoverHeader>Are you sure you want to delete this entry?</PopoverHeader>
+                                <PopoverCloseButton />
+                                <PopoverBody w="100%" justifyContent="space-between" display="flex">
+                                    <Button
+                                        onClick={handleProgressDeletion}
+                                        isLoading={progressButtonLoading}
+                                    >
+                                        Delete
+                                    </Button>
+                                </PopoverBody>
+                            </PopoverContent>
+                        </Popover>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialogOverlay>
