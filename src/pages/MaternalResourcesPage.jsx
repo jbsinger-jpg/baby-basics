@@ -98,6 +98,17 @@ export default function MaternalResourcesPage() {
     setSymptomsButtonPressed(false);
   };
 
+  const handleJustifyContent = () => {
+    if (stage && !cardRotated) {
+      return "space-evenly";
+    }
+    else if (stage) {
+      return "space-between";
+    }
+
+    return "center";
+  };
+
   return (
     <Box bg={_screenBackground} paddingTop="2" h="100vh">
       <HStack alignItems="start" w="100vw" paddingLeft="5" spacing="5" marginTop="5" paddingBottom="10">
@@ -128,10 +139,9 @@ export default function MaternalResourcesPage() {
         />
       </HStack>
       <HStack
-        w="100vw"
         flexWrap="wrap"
         spacing="4"
-        justifyContent={stage ? "space-between" : "center"}
+        justifyContent={handleJustifyContent()}
         alignItems="center"
       >
         {stage &&
@@ -171,17 +181,15 @@ export default function MaternalResourcesPage() {
             />
           </>
           :
-          <>
-            <AnimatedCard
-              flippedCard={flippedResourcesCard}
-              setFlippedCard={setFlippedResourcesCard}
-              cardButtonPressed={resourceButtonPressed}
-              setCardButtonPressed={setResourceButtonPressed}
-              selectedCardData={selectedHyperLinks}
-              videos={videos}
-              title={"Resources"}
-            />
-          </>
+          <AnimatedCard
+            flippedCard={flippedResourcesCard}
+            setFlippedCard={setFlippedResourcesCard}
+            cardButtonPressed={resourceButtonPressed}
+            setCardButtonPressed={setResourceButtonPressed}
+            selectedCardData={selectedHyperLinks}
+            videos={videos}
+            title={"Resources"}
+          />
         }
         {stage &&
           <IconButton

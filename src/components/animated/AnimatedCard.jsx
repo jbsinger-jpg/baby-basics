@@ -78,6 +78,7 @@ export default function AnimatedCard({
                                             src={selectedVideo || require('../../devbackground.png')}
                                             title="YouTube video player"
                                             allowFullScreen
+                                            style={{ borderRadius: "5%" }}
                                         />
                                     </>
                                     :
