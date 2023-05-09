@@ -91,6 +91,7 @@ export default function MilestonePage() {
             <FloatingActionButtonsBabyInfo
                 handleSearchPlacesDialogOpen={handleSearchPlacesDialogOpen}
                 setProgressModalVisible={setProgressModalVisible}
+                selectedAgeRange={selectedAge}
             />
             <GoogleMapsModal
                 setSearchPlaces={setPlaces}
@@ -129,6 +130,7 @@ export default function MilestonePage() {
                             selectedCardData={selectedMotorMilestones}
                             title={"Milestones"}
                             applyCheckbox={auth?.currentUser?.uid ? true : false}
+                            selectedAge={selectedAge}
                         />
                         <AnimatedCard
                             flippedCard={flippedCommunicationCard}
@@ -139,6 +141,7 @@ export default function MilestonePage() {
                             selectedCardData={selectedCommunicationMilestones}
                             title={"Communication"}
                             applyCheckbox={auth?.currentUser?.uid ? true : false}
+                            selectedAge={selectedAge}
                         />
                         <AnimatedCard
                             flippedCard={flippedFeedingCard}
@@ -149,6 +152,7 @@ export default function MilestonePage() {
                             selectedCardData={selectedFeedingMilestones}
                             title={"Feeding"}
                             applyCheckbox={auth?.currentUser?.uid ? true : false}
+                            selectedAge={selectedAge}
                         />
                     </>
                     :
@@ -162,6 +166,7 @@ export default function MilestonePage() {
                             selectedCardData={selectedSensoryMilestones}
                             title={"Sensory"}
                             applyCheckbox={auth?.currentUser?.uid ? true : false}
+                            selectedAge={selectedAge}
                         />
                         <AnimatedCard
                             flippedCard={flippedResourcesCard}
@@ -171,6 +176,7 @@ export default function MilestonePage() {
                             selectedCardData={selectedHyperLinks}
                             videos={videos}
                             title={"Resources"}
+                            selectedAge={selectedAge}
                         />
                         <AnimatedCard
                             flippedCard={flippedActivitiesCard}
@@ -180,6 +186,7 @@ export default function MilestonePage() {
                             setCardButtonPressed={setActivitiesButtonPressed}
                             selectedCardData={selectedActivities}
                             title={"Potential Activities"}
+                            selectedAge={selectedAge}
                         />
                     </>
                 }
