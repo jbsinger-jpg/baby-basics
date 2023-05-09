@@ -8,7 +8,6 @@ import React, { useEffect, useState } from 'react';
 import { cardBackground } from '../../defaultStyle';
 import StyledSelect from '../StyledSelect';
 import { auth, firestore } from '../../firebaseConfig';
-import { useCollectionDataOnce } from 'react-firebase-hooks/firestore';
 
 export default function AnimatedCard({
     flippedCard,
@@ -20,26 +19,39 @@ export default function AnimatedCard({
     title,
     videos,
     applyCheckbox,
+    selectedAge
 }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
     const linkColor = useColorModeValue("blue.500", "blue.200");
     const MotionIcon = motion(Icon);
     const MotionBox = motion(Box);
     const [selectedVideo, setSelectedVideo] = useState(null);
-    const [_checkBoxValues] = useCollectionDataOnce(firestore.collection("users").doc(auth?.currentUser?.uid).collection(title));
     const [checkboxValues, setCheckboxValues] = useState(new Array(selectedCardData.length).fill(false));
     const [confirmProgressButtonLoading, setConfirmProgressButtonLoading] = useState(false);
 
     useEffect(() => {
-        if (_checkBoxValues && _checkBoxValues.length)
-            // set the checkbox values to the user that has confirmed answers
-            setCheckboxValues(_checkBoxValues[0].answers);
-    }, [_checkBoxValues]);
+        if (selectedAge && title)
+            firestore.collection("users").doc(auth?.currentUser?.uid).collection(title).doc(selectedAge)
+                .get().then((doc) => {
+                    if (doc.exists) {
+                        setCheckboxValues([...doc.data().answers]);
+                    }
+                    else {
+                        setCheckboxValues([]);
+                    }
+                }).catch((error) => {
+                    console.log(error);
+                });
+        else {
+            setCheckboxValues([]);
+        }
+        // eslint-disable-next-line
+    }, [selectedAge]);
 
     const handleCheckboxValuesChange = (event, index) => {
         const checkboxValuesCopy = [...checkboxValues];
         checkboxValuesCopy[index] = event.target.checked;
-        setCheckboxValues(checkboxValuesCopy);
+        setCheckboxValues([...checkboxValuesCopy]);
     };
 
     const handleProgressSubmission = async () => {
@@ -48,7 +60,13 @@ export default function AnimatedCard({
 
         // Make a reference to the given card title under the user profile
         const babyProgressRef = usersRef.doc(auth?.currentUser?.uid).collection(title);
-        await babyProgressRef.doc(auth.currentUser.uid).set({
+        for (let i = 0; i < checkboxValues.length; i++) {
+            if (!checkboxValues[i]) {
+                checkboxValues[i] = false;
+            }
+        }
+
+        await babyProgressRef.doc(selectedAge).set({
             answers: [...checkboxValues]
         });
 

@@ -4,9 +4,8 @@ import PregnantWomanOutlinedIcon from '@mui/icons-material/PregnantWomanOutlined
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import MapIcon from '@mui/icons-material/Map';
 import HomeIcon from '@mui/icons-material/Home';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 // relative imports
 import ColorModeToggleButton from '../ColorModeToggleButton';
@@ -14,10 +13,50 @@ import FabTemplate from './StandardFab';
 import { auth, firestore } from '../../firebaseConfig';
 
 export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialogOpen, setProgressModalVisible, selectedAgeRange }) {
-    const [milestoneCheckboxValues] = useCollectionData(firestore.collection("users").doc(auth?.currentUser?.uid).collection("Milestones"));
-    const [communicationCheckboxValues] = useCollectionData(firestore.collection("users").doc(auth?.currentUser?.uid).collection("Communication"));
-    const [feedingCheckboxValues] = useCollectionData(firestore.collection("users").doc(auth?.currentUser?.uid).collection("Feeding"));
-    const [sensoryCheckboxValues] = useCollectionData(firestore.collection("users").doc(auth?.currentUser?.uid).collection("Sensory"));
+    const [milestones, setMilestones] = useState([]);
+    const [communications, setCommunications] = useState([]);
+    const [sensory, setSensory] = useState([]);
+    const [feeding, setFeeding] = useState([]);
+
+    useEffect(() => {
+        if (selectedAgeRange) {
+            firestore.collection("users").doc(auth?.currentUser?.uid).collection("Milestones").doc(selectedAgeRange).get().then((doc => {
+                if (doc.exists) {
+                    setMilestones([...doc.data().answers]);
+                }
+                else {
+                    setMilestones([]);
+                }
+            }));
+
+            firestore.collection("users").doc(auth?.currentUser?.uid).collection("Communication").doc(selectedAgeRange).get().then((doc => {
+                if (doc.exists) {
+                    setCommunications([...doc.data().answers]);
+                }
+                else {
+                    setCommunications([]);
+                }
+            }));
+
+            firestore.collection("users").doc(auth?.currentUser?.uid).collection("Sensory").doc(selectedAgeRange).get().then((doc => {
+                if (doc.exists) {
+                    setSensory([...doc.data().answers]);
+                }
+                else {
+                    setSensory([]);
+                }
+            }));
+
+            firestore.collection("users").doc(auth?.currentUser?.uid).collection("Feeding").doc(selectedAgeRange).get().then((doc => {
+                if (doc.exists) {
+                    setFeeding([...doc.data().answers]);
+                }
+                else {
+                    setFeeding([]);
+                }
+            }));
+        }
+    }, [selectedAgeRange]);
 
     const navigate = useNavigate();
 
@@ -36,9 +75,9 @@ export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialog
     const determineMilestoneCount = () => {
         let count = 0;
 
-        if (milestoneCheckboxValues && milestoneCheckboxValues[0]?.answers) {
-            for (let i = 0; i < milestoneCheckboxValues[0]?.answers.length; i++) {
-                if (milestoneCheckboxValues[0]?.answers[i]) {
+        if (milestones.length) {
+            for (let i = 0; i < milestones.length; i++) {
+                if (milestones[i]) {
                     count++;
                 }
             }
@@ -61,9 +100,9 @@ export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialog
     const determineCommunicationCount = () => {
         let count = 0;
 
-        if (communicationCheckboxValues && communicationCheckboxValues[0]?.answers) {
-            for (let i = 0; i < communicationCheckboxValues[0]?.answers.length; i++) {
-                if (communicationCheckboxValues[0]?.answers[i] && communicationCheckboxValues[0].ageRange === selectedAgeRange) {
+        if (communications.length) {
+            for (let i = 0; i < communications.length; i++) {
+                if (communications[i]) {
                     count++;
                 }
             }
@@ -86,10 +125,10 @@ export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialog
     const determineFeedingCount = () => {
         let count = 0;
 
-        if (feedingCheckboxValues && feedingCheckboxValues[0]?.answers) {
-            console.log(feedingCheckboxValues);
-            for (let i = 0; i < feedingCheckboxValues[0]?.answers.length; i++) {
-                if (feedingCheckboxValues[0]?.answers[i]) {
+        if (feeding.length) {
+            console.log(feeding);
+            for (let i = 0; i < feeding.length; i++) {
+                if (feeding[i]) {
                     count++;
                 }
             }
@@ -112,9 +151,9 @@ export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialog
     const determineSensoryCount = () => {
         let count = 0;
 
-        if (sensoryCheckboxValues && sensoryCheckboxValues[0]?.answers) {
-            for (let i = 0; i < sensoryCheckboxValues[0]?.answers.length; i++) {
-                if (sensoryCheckboxValues[0]?.answers[i]) {
+        if (sensory.length) {
+            for (let i = 0; i < sensory.length; i++) {
+                if (sensory[i]) {
                     count++;
                 }
             }

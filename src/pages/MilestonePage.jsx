@@ -115,84 +115,69 @@ export default function MilestonePage() {
                 justifyContent="center"
                 alignItems="center"
             >
-                <IconButton
-                    onClick={() => setCardRotated(!cardRotated)}
-                    icon={<ChevronLeftIcon />}
+                <AnimatedCard
+                    flippedCard={flippedMotorCard}
+                    setFlippedCard={setFlippedMotorCard}
+                    cardIcon={AccessibilityNewIcon}
+                    cardButtonPressed={motorButtonPressed}
+                    setCardButtonPressed={setMotorButtonPressed}
+                    selectedCardData={selectedMotorMilestones}
+                    title={"Milestones"}
+                    applyCheckbox={auth?.currentUser?.uid ? true : false}
+                    selectedAge={selectedAge}
                 />
-                {!cardRotated ?
-                    <>
-                        <AnimatedCard
-                            flippedCard={flippedMotorCard}
-                            setFlippedCard={setFlippedMotorCard}
-                            cardIcon={AccessibilityNewIcon}
-                            cardButtonPressed={motorButtonPressed}
-                            setCardButtonPressed={setMotorButtonPressed}
-                            selectedCardData={selectedMotorMilestones}
-                            title={"Milestones"}
-                            applyCheckbox={auth?.currentUser?.uid ? true : false}
-                            selectedAge={selectedAge}
-                        />
-                        <AnimatedCard
-                            flippedCard={flippedCommunicationCard}
-                            setFlippedCard={setFlippedCommunicationCard}
-                            cardIcon={ChatIcon}
-                            cardButtonPressed={communicationButtonPressed}
-                            setCardButtonPressed={setCommunicationButtonPressed}
-                            selectedCardData={selectedCommunicationMilestones}
-                            title={"Communication"}
-                            applyCheckbox={auth?.currentUser?.uid ? true : false}
-                            selectedAge={selectedAge}
-                        />
-                        <AnimatedCard
-                            flippedCard={flippedFeedingCard}
-                            setFlippedCard={setFlippedFeedingCard}
-                            cardIcon={LocalCafeIcon}
-                            cardButtonPressed={feedingButtonPressed}
-                            setCardButtonPressed={setFeedingButtonPressed}
-                            selectedCardData={selectedFeedingMilestones}
-                            title={"Feeding"}
-                            applyCheckbox={auth?.currentUser?.uid ? true : false}
-                            selectedAge={selectedAge}
-                        />
-                    </>
-                    :
-                    <>
-                        <AnimatedCard
-                            flippedCard={flippedSensoryCard}
-                            setFlippedCard={setFlippedSensoryCard}
-                            cardIcon={HearingIcon}
-                            cardButtonPressed={sensoryButtonPressed}
-                            setCardButtonPressed={setSensoryButtonPressed}
-                            selectedCardData={selectedSensoryMilestones}
-                            title={"Sensory"}
-                            applyCheckbox={auth?.currentUser?.uid ? true : false}
-                            selectedAge={selectedAge}
-                        />
-                        <AnimatedCard
-                            flippedCard={flippedResourcesCard}
-                            setFlippedCard={setFlippedResourcesCard}
-                            cardButtonPressed={resourceButtonPressed}
-                            setCardButtonPressed={setResourceButtonPressed}
-                            selectedCardData={selectedHyperLinks}
-                            videos={videos}
-                            title={"Resources"}
-                            selectedAge={selectedAge}
-                        />
-                        <AnimatedCard
-                            flippedCard={flippedActivitiesCard}
-                            setFlippedCard={setFlippedActivitiesCard}
-                            cardIcon={AbcIcon}
-                            cardButtonPressed={activitiesButtonPressed}
-                            setCardButtonPressed={setActivitiesButtonPressed}
-                            selectedCardData={selectedActivities}
-                            title={"Potential Activities"}
-                            selectedAge={selectedAge}
-                        />
-                    </>
-                }
-                <IconButton
-                    onClick={() => setCardRotated(!cardRotated)}
-                    icon={<ChevronRightIcon />}
+                <AnimatedCard
+                    flippedCard={flippedCommunicationCard}
+                    setFlippedCard={setFlippedCommunicationCard}
+                    cardIcon={ChatIcon}
+                    cardButtonPressed={communicationButtonPressed}
+                    setCardButtonPressed={setCommunicationButtonPressed}
+                    selectedCardData={selectedCommunicationMilestones}
+                    title={"Communication"}
+                    applyCheckbox={auth?.currentUser?.uid ? true : false}
+                    selectedAge={selectedAge}
+                />
+                <AnimatedCard
+                    flippedCard={flippedFeedingCard}
+                    setFlippedCard={setFlippedFeedingCard}
+                    cardIcon={LocalCafeIcon}
+                    cardButtonPressed={feedingButtonPressed}
+                    setCardButtonPressed={setFeedingButtonPressed}
+                    selectedCardData={selectedFeedingMilestones}
+                    title={"Feeding"}
+                    applyCheckbox={auth?.currentUser?.uid ? true : false}
+                    selectedAge={selectedAge}
+                />
+                <AnimatedCard
+                    flippedCard={flippedSensoryCard}
+                    setFlippedCard={setFlippedSensoryCard}
+                    cardIcon={HearingIcon}
+                    cardButtonPressed={sensoryButtonPressed}
+                    setCardButtonPressed={setSensoryButtonPressed}
+                    selectedCardData={selectedSensoryMilestones}
+                    title={"Sensory"}
+                    applyCheckbox={auth?.currentUser?.uid ? true : false}
+                    selectedAge={selectedAge}
+                />
+                <AnimatedCard
+                    flippedCard={flippedResourcesCard}
+                    setFlippedCard={setFlippedResourcesCard}
+                    cardButtonPressed={resourceButtonPressed}
+                    setCardButtonPressed={setResourceButtonPressed}
+                    selectedCardData={selectedHyperLinks}
+                    videos={videos}
+                    title={"Resources"}
+                    selectedAge={selectedAge}
+                />
+                <AnimatedCard
+                    flippedCard={flippedActivitiesCard}
+                    setFlippedCard={setFlippedActivitiesCard}
+                    cardIcon={AbcIcon}
+                    cardButtonPressed={activitiesButtonPressed}
+                    setCardButtonPressed={setActivitiesButtonPressed}
+                    selectedCardData={selectedActivities}
+                    title={"Potential Activities"}
+                    selectedAge={selectedAge}
                 />
             </HStack>
             <BabyProgressModal
