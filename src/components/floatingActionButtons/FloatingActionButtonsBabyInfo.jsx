@@ -1,5 +1,5 @@
 // module imports
-import { HStack, Heading, Tag, TagLabel, VStack } from '@chakra-ui/react';
+import { Box, Button, HStack, Heading, IconButton, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Tag, TagLabel, VStack } from '@chakra-ui/react';
 import PregnantWomanOutlinedIcon from '@mui/icons-material/PregnantWomanOutlined';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import MapIcon from '@mui/icons-material/Map';
@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import ColorModeToggleButton from '../ColorModeToggleButton';
 import FabTemplate from './StandardFab';
 import { auth, firestore } from '../../firebaseConfig';
+import { InfoIcon } from '@chakra-ui/icons';
 
 export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialogOpen, setProgressModalVisible, selectedAgeRange }) {
     const [milestones, setMilestones] = useState([]);
@@ -87,7 +88,7 @@ export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialog
             return { tagName: "None", colorScheme: "orange" };
         }
         else if (count === 1) {
-            return { tagName: "Good", colorScheme: "white" };
+            return { tagName: "Good", colorScheme: "purple" };
         }
         else if (count === 2) {
             return { tagName: "Great", colorScheme: "green" };
@@ -112,7 +113,7 @@ export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialog
             return { tagName: "None", colorScheme: "orange" };
         }
         else if (count === 1) {
-            return { tagName: "Good", colorScheme: "white" };
+            return { tagName: "Good", colorScheme: "purple" };
         }
         else if (count === 2) {
             return { tagName: "Great", colorScheme: "green" };
@@ -138,7 +139,7 @@ export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialog
             return { tagName: "None", colorScheme: "orange" };
         }
         else if (count === 1) {
-            return { tagName: "Good", colorScheme: "white" };
+            return { tagName: "Good", colorScheme: "purple" };
         }
         else if (count === 2) {
             return { tagName: "Great", colorScheme: "green" };
@@ -163,7 +164,7 @@ export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialog
             return { tagName: "None", colorScheme: "orange" };
         }
         else if (count === 1) {
-            return { tagName: "Good", colorScheme: "white" };
+            return { tagName: "Good", colorScheme: "purple" };
         }
         else if (count === 2) {
             return { tagName: "Great", colorScheme: "green" };
@@ -210,74 +211,95 @@ export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialog
                     icon={<FormatListBulletedIcon fontSize="large" />}
                 />
             </VStack>
-            <VStack
+            <Box
                 bottom="14"
                 left="4"
                 position="fixed"
                 zIndex={999}
                 alignItems="start"
             >
-                <HStack
-                    w="190px"
-                    justifyContent="space-between"
+                <Popover
+                    placement="right"
                 >
-                    <Heading fontSize="m">Milestones: </Heading>
-                    <Tag
-                        borderRadius='full'
-                        variant='outline'
-                        colorScheme={determineMilestoneCount().colorScheme}
-                    >
-                        <TagLabel>
-                            {determineMilestoneCount().tagName}
-                        </TagLabel>
-                    </Tag>
-                </HStack>
-                <HStack
-                    w="190px"
-                    justifyContent="space-between"
-                >
-                    <Heading fontSize="m">Communication: </Heading>
-                    <Tag
-                        borderRadius='full'
-                        variant='outline'
-                        colorScheme={determineCommunicationCount().colorScheme}
-                    >
-                        <TagLabel>
-                            {determineCommunicationCount().tagName}
-                        </TagLabel>
-                    </Tag>
-                </HStack>
-                <HStack
-                    w="190px"
-                    justifyContent="space-between"
-                >
-                    <Heading fontSize="m">Feeding: </Heading>
-                    <Tag
-                        borderRadius='full'
-                        variant='outline'
-                        colorScheme={determineFeedingCount().colorScheme}
-                    >
-                        <TagLabel>
-                            {determineFeedingCount().tagName}
-                        </TagLabel>
-                    </Tag>
-                </HStack>
-                <HStack
-                    w="190px"
-                    justifyContent="space-between"
-                >
-                    <Heading fontSize="m">Sensory: </Heading>
-                    <Tag
-                        borderRadius='full'
-                        variant='outline'
-                        colorScheme={determineSensoryCount().colorScheme}
-                    >
-                        <TagLabel>
-                            {determineSensoryCount().tagName}
-                        </TagLabel>
-                    </Tag>
-                </HStack>
-            </VStack>
+                    <PopoverTrigger>
+                        <IconButton
+                            borderRadius="50%"
+                            width="56px"
+                            height="56px"
+                            icon={<InfoIcon w="25px" h="25px" />}
+                        />
+                    </PopoverTrigger>
+                    <PopoverContent>
+                        <PopoverArrow />
+                        <PopoverCloseButton />
+                        <PopoverHeader>Progress</PopoverHeader>
+                        <PopoverBody>
+                            <VStack>
+                                <HStack
+                                    w="190px"
+                                    justifyContent="space-between"
+                                >
+                                    <Heading fontSize="m">Milestones: </Heading>
+                                    <Tag
+                                        borderRadius='full'
+                                        variant='outline'
+                                        colorScheme={determineMilestoneCount().colorScheme}
+                                    >
+                                        <TagLabel>
+                                            {determineMilestoneCount().tagName}
+                                        </TagLabel>
+                                    </Tag>
+                                </HStack>
+                                <HStack
+                                    w="190px"
+                                    justifyContent="space-between"
+                                >
+                                    <Heading fontSize="m">Communication: </Heading>
+                                    <Tag
+                                        borderRadius='full'
+                                        variant='outline'
+                                        colorScheme={determineCommunicationCount().colorScheme}
+                                    >
+                                        <TagLabel>
+                                            {determineCommunicationCount().tagName}
+                                        </TagLabel>
+                                    </Tag>
+                                </HStack>
+                                <HStack
+                                    w="190px"
+                                    justifyContent="space-between"
+                                >
+                                    <Heading fontSize="m">Feeding: </Heading>
+                                    <Tag
+                                        borderRadius='full'
+                                        variant='outline'
+                                        colorScheme={determineFeedingCount().colorScheme}
+                                    >
+                                        <TagLabel>
+                                            {determineFeedingCount().tagName}
+                                        </TagLabel>
+                                    </Tag>
+                                </HStack>
+                                <HStack
+                                    w="190px"
+                                    justifyContent="space-between"
+                                >
+                                    <Heading fontSize="m">Sensory: </Heading>
+                                    <Tag
+                                        borderRadius='full'
+                                        variant='outline'
+                                        colorScheme={determineSensoryCount().colorScheme}
+                                    >
+                                        <TagLabel>
+                                            {determineSensoryCount().tagName}
+                                        </TagLabel>
+                                    </Tag>
+                                </HStack>
+                            </VStack>
+                        </PopoverBody>
+                    </PopoverContent>
+                </Popover>
+            </Box>
         </>
     );
 }

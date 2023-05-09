@@ -10,13 +10,12 @@ import { screenBackground } from '../defaultStyle';
 import AnimatedCard from '../components/animated/AnimatedCard';
 import StyledSelect from '../components/StyledSelect';
 import FloatingActionButtonsBabyInfo from '../components/floatingActionButtons/FloatingActionButtonsBabyInfo';
-import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { promptOptions } from '../components/staticPageData/baby-maternal-info';
 import { auth } from '../firebaseConfig';
 import BabyProgressModal from '../components/modals/BabyProgressModal';
 
 export default function MilestonePage() {
-    const [selectedAge, setSelectedAge] = useState("0-3M");
+    const [selectedAge, setSelectedAge] = useState("");
     const [selectedActivities, setSelectedActivities] = useState(promptOptions[0].activities);
     const [selectedMotorMilestones, setSelectedMotorMilestones] = useState(promptOptions[0].motorMilestones);
     const [selectedCommunicationMilestones, setSelectedCommunicationMilestones] = useState(promptOptions[0].communicationMilestones);
@@ -37,7 +36,6 @@ export default function MilestonePage() {
     const [flippedActivitiesCard, setFlippedActivitiesCard] = useState(false);
     const [flippedResourcesCard, setFlippedResourcesCard] = useState(false);
     const [resourceButtonPressed, setResourceButtonPressed] = useState(false);
-    const [cardRotated, setCardRotated] = useState(false);
     const [progressModalVisible, setProgressModalVisible] = useState(false);
 
     const handleAnswerChange = (event) => {

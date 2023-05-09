@@ -147,10 +147,7 @@ export default function AnimatedCard({
                                         </UnorderedList>
                                     </MotionBox>
                                     :
-                                    <MotionBox
-                                        initial={cardButtonPressed ? { scale: 0 } : { scale: 1 }}
-                                        animate={{ scale: 1 }}
-                                        onAnimationComplete={() => setCardButtonPressed(false)}
+                                    <Box
                                         overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex"
                                     >
                                         {applyCheckbox ?
@@ -176,7 +173,7 @@ export default function AnimatedCard({
                                                 })}
                                             </UnorderedList>
                                         }
-                                    </MotionBox>
+                                    </Box>
                                 }
                             </>
                         }
@@ -190,8 +187,10 @@ export default function AnimatedCard({
                             whileHover={{ scale: 1.2 }}
                             whileFocus={{ scale: 1.2 }}
                             onClick={() => {
-                                setFlippedCard(!flippedCard);
-                                setCardButtonPressed(true);
+                                if (selectedAge !== "" || flippedCard) {
+                                    setFlippedCard(!flippedCard);
+                                    setCardButtonPressed(true);
+                                }
                             }}
                         >
                             <HStack>
@@ -201,7 +200,7 @@ export default function AnimatedCard({
                                 </Text>
                             </HStack>
                         </motion.button>
-                        {(applyCheckbox && flippedCard) &&
+                        {(applyCheckbox && flippedCard && selectedAge !== "") &&
                             <Button
                                 isLoading={confirmProgressButtonLoading}
                                 onClick={handleProgressSubmission}
