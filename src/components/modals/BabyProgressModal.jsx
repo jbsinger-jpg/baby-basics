@@ -101,7 +101,7 @@ export default function BabyProgressModal({ progressModalVisible, setProgressMod
             <AlertDialogOverlay>
                 <AlertDialogContent bg={_cardBackground}>
                     <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                        Track Baby Progress
+                        Make Progress Note for Google Calendar Event
                     </AlertDialogHeader>
                     <AlertDialogBody>
                         <VStack spacing="2">

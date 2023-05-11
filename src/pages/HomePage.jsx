@@ -1,6 +1,6 @@
 // module imports
 import { ChatIcon, CheckIcon, CloseIcon, WarningIcon } from '@chakra-ui/icons';
-import { Avatar, AvatarBadge, AvatarGroup, Badge, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorModeValue, useDisclosure, VStack } from '@chakra-ui/react';
+import { Avatar, AvatarBadge, AvatarGroup, Badge, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorModeValue, useDisclosure, useMediaQuery, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionDataOnce } from 'react-firebase-hooks/firestore';
 import { useNavigate } from 'react-router-dom';
@@ -35,6 +35,8 @@ export default function HomePage() {
     const handleDocumentBabyProgress = () => {
         setProgressModalVisible(true);
     };
+    const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
+
 
     // firebase data
     const currentUser = auth.currentUser;
@@ -279,7 +281,12 @@ export default function HomePage() {
     }, [screenHeight, screenWidth]);
 
     return (
-        <Box bg={_screenBackground} h={screenHeight} w={screenWidth - "10px"}>
+        <Box
+            bg={_screenBackground}
+            h={screenHeight}
+            w={screenWidth}
+            overflowX="hidden"
+        >
             <Drawer
                 isOpen={isOpen}
                 placement='left'
@@ -400,40 +407,38 @@ export default function HomePage() {
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>
-            <Tabs align='start' variant='enclosed' index={tabIndex} onChange={handleTabsChange} bg={_screenBackground}>
-                <TabList display="flex" justifyContent="space-between">
-                    <HStack spacing="-1">
-                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                            Clothes
-                        </Tab>
-                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                            Food
-                        </Tab>
-                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                            Diapers
-                        </Tab>
-                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                            Vitamins
-                        </Tab>
-                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                            Maternal
-                        </Tab>
-                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                            Formula
-                        </Tab>
-                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                            Toys
-                        </Tab>
-                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                            Monitors
-                        </Tab>
-                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                            Seats
-                        </Tab>
-                        <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                            Strollers
-                        </Tab>
-                    </HStack>
+            <Tabs align='start' variant='enclosed' index={tabIndex} onChange={handleTabsChange} bg={_screenBackground} orientation={isLargerThan768 ? "horizontal" : "vertical"} isFitted={true}>
+                <TabList display="flex" justifyContent="space-between" overflowX="auto" overflowY="hidden" >
+                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                        Clothes
+                    </Tab>
+                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                        Food
+                    </Tab>
+                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                        Diapers
+                    </Tab>
+                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                        Vitamins
+                    </Tab>
+                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                        Maternal
+                    </Tab>
+                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                        Formula
+                    </Tab>
+                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                        Toys
+                    </Tab>
+                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                        Monitors
+                    </Tab>
+                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                        Seats
+                    </Tab>
+                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                        Strollers
+                    </Tab>
                 </TabList>
                 <TabPanels>
                     <TabPanel>
