@@ -1,18 +1,16 @@
 // module imports
 import { ArrowDownIcon, ArrowUpIcon } from "@chakra-ui/icons";
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Avatar, Box, Button, HStack, IconButton, Tag, Text, Tooltip, useToast, VStack } from "@chakra-ui/react";
-import { useContext, useState } from "react";
+import { useState } from "react";
 
 // relative imports
-import Context from "../../context/Context";
 import { auth, firestore } from "../../firebaseConfig";
 import { motion } from "framer-motion";
 
 export default function ChatMessage({ message, fontSize }) {
     const { text, photoURL, voteCount, id, sender, sender_full_name, uid } = message;
     const toast = useToast();
-    const { data: pageData } = useContext(Context);
-    const [messageVoteCount, setMessageVoteCount] = useState(voteCount);
+    const pageData = localStorage.getItem("pageData");
     const [upVoteButtonIsLoading, setUpVoteButtonIsLoading] = useState(false);
     const [downVoteButtonIsLoading, setDownVoteButtonIsLoading] = useState(false);
     const [alertDialogVisible, setAlertDialogVisible] = useState(false);
@@ -48,8 +46,6 @@ export default function ChatMessage({ message, fontSize }) {
                 voteCount: messageDoc.voteCount + 1
             });
 
-            // update frontend, if a match is found then we want to decrement the vote still
-            setMessageVoteCount(messageDoc.voteCount + 1);
             setUpVoteButtonIsLoading(false);
             return;
         }
@@ -61,8 +57,6 @@ export default function ChatMessage({ message, fontSize }) {
                 voteCount: messageDoc.voteCount + 1
             });
 
-            // update frontend, if a match is found then we want to decrement the vote still
-            setMessageVoteCount(messageDoc.voteCount + 1);
             setUpVoteButtonIsLoading(false);
             return;
         }
@@ -74,8 +68,6 @@ export default function ChatMessage({ message, fontSize }) {
                 voteCount: messageDoc.voteCount + 1
             });
 
-            // update frontend, if a match is found then we want to decrement the vote still
-            setMessageVoteCount(messageDoc.voteCount + 1);
             setUpVoteButtonIsLoading(false);
             return;
         }
@@ -109,8 +101,6 @@ export default function ChatMessage({ message, fontSize }) {
                 voteCount: messageDoc.voteCount - 1
             });
 
-            // update frontend, if a match is found then we want to decrement the vote still
-            setMessageVoteCount(messageDoc.voteCount - 1);
             setDownVoteButtonIsLoading(false);
             return;
         }
@@ -123,8 +113,6 @@ export default function ChatMessage({ message, fontSize }) {
                 voteCount: messageDoc.voteCount - 1
             });
 
-            // update frontend, if a match is found then we want to decrement the vote still
-            setMessageVoteCount(messageDoc.voteCount - 1);
             setDownVoteButtonIsLoading(false);
             return;
         }
@@ -136,8 +124,6 @@ export default function ChatMessage({ message, fontSize }) {
                 voteCount: messageDoc.voteCount - 1
             });
 
-            // update frontend, if a match is found then we want to decrement the vote still
-            setMessageVoteCount(messageDoc.voteCount - 1);
             setDownVoteButtonIsLoading(false);
             return;
         }
@@ -222,7 +208,7 @@ export default function ChatMessage({ message, fontSize }) {
                         onClick={handleUpVote}
                         isLoading={upVoteButtonIsLoading}
                     />
-                    <Text>{messageVoteCount}</Text>
+                    <Text>{voteCount}</Text>
                     <IconButton
                         size="xs"
                         icon={<ArrowDownIcon />}

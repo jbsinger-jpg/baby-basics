@@ -1,6 +1,6 @@
 // module imports
 import { SearchIcon } from '@chakra-ui/icons';
-import { Box, Button, HStack, Heading, IconButton, Input, Text, Textarea, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, HStack, Heading, IconButton, Input, Text, Textarea, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useState, useRef, useEffect } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import 'firebase/compat/auth';
@@ -21,40 +21,20 @@ function ForumMessagePage() {
     const [searchButtonLoading, setSearchButtonLoading] = useState(false);
     const pageData = localStorage.getItem("pageData");
 
-    // Data passed from StarterForumPage to here to get the messages to not have to remake a bunch of pages
-    const [createdOrderMessages] = useCollectionData(
-        firestore
-            .collection(pageData)
-            .orderBy("createdAt"),
-        { idField: 'id' }
-    );
     const [voteOrderMessages] = useCollectionData(
         firestore
-            .collection(pageData)
-            .orderBy("voteCount", "desc"),
+            .collection(pageData),
         { idField: 'id' }
     );
-    const [messages, setMessages] = useState(createdOrderMessages);
-    const [orderByVoteCount, setOrderByVoteCount] = useState(false);
+    const [messages, setMessages] = useState(voteOrderMessages);
+    const [sortedMessages, setSortedMessages] = useState(null);
     const messageBoxRef = useRef();
 
-    // when the order button pressed change the order of the messages and make sure that the messages useState acutally has text
-    // rendered from it.
-    // =========================================================================================================================
-    // =========================================================================================================================
     useEffect(() => {
-        if (createdOrderMessages && !orderByVoteCount) {
-            setMessages(createdOrderMessages);
-        }
-    }, [createdOrderMessages, orderByVoteCount]);
-
-    useEffect(() => {
-        if (voteOrderMessages && orderByVoteCount) {
+        if (voteOrderMessages) {
             setMessages(voteOrderMessages);
         }
-    }, [voteOrderMessages, orderByVoteCount]);
-    // =========================================================================================================================
-    // =========================================================================================================================
+    }, [voteOrderMessages]);
 
     useEffect(() => {
         messageBoxRef.current.scrollTop = messageBoxRef.current.scrollHeight;
@@ -115,9 +95,7 @@ function ForumMessagePage() {
             });
 
         const groupDoc = await firestore.collection('groups').doc(localStorage.getItem("gid"));
-        console.log(groupDoc);
         const groupData = (await groupDoc.get()).data();
-        console.log(groupData);
         const userExists = groupData.users.some(user => user.id === auth.currentUser.uid);
 
         if (!userExists) {
@@ -140,6 +118,13 @@ function ForumMessagePage() {
         { value: '6xl', label: "6XL", key: 8 },
     ];
 
+
+    useEffect(() => {
+        if (messages) {
+            setSortedMessages(messages.sort((msgA, msgB) => msgB.voteCount - msgA.voteCount));
+        }
+    }, [messages]);
+
     const handleFontSizeChange = (event) => {
         setFontSize(event.target.value);
     };
@@ -148,15 +133,6 @@ function ForumMessagePage() {
         <Box w="100vw" h="100vh" bg={_screenBackground}>
             <Box w="100vw" justifyContent="space-between" display="flex" padding="3">
                 <VStack spacing="4" w={"15vw"} alignItems={"start"}>
-                    {orderByVoteCount ?
-                        <Button onClick={() => setOrderByVoteCount(!orderByVoteCount)}>
-                            Order By Created
-                        </Button>
-                        :
-                        <Button onClick={() => setOrderByVoteCount(!orderByVoteCount)}>
-                            Order By Vote
-                        </Button>
-                    }
                     <Heading size="sm">Font Size</Heading>
                     <StyledSelect
                         value={fontSize}
@@ -172,8 +148,8 @@ function ForumMessagePage() {
                 </HStack>
             </Box>
             <div style={{ height: `calc(100vh - 240px)`, overflowY: 'auto' }} ref={messageBoxRef}>
-                {(messages) &&
-                    messages
+                {(messages && sortedMessages) &&
+                    sortedMessages
                         .map((msg, index) => {
                             return (
                                 <ChatMessage

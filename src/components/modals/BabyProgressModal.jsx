@@ -1,11 +1,11 @@
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, FormControl, FormHelperText, FormLabel, HStack, Input, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Tag, TagCloseButton, TagLabel, Textarea, VStack, useColorModeValue } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, FormControl, FormHelperText, FormLabel, HStack, Input, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Textarea, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { cardBackground, screenBackground } from '../../defaultStyle';
 import StyledSelect from '../StyledSelect';
 import { auth, firestore } from '../../firebaseConfig';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
-export default function BabyProgressModal({ progressModalVisible, setProgressModalVisible, addCheckboxProgress }) {
+export default function BabyProgressModal({ progressModalVisible, setProgressModalVisible }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
     const [eventName, setEventName] = useState(null);

@@ -1,5 +1,5 @@
 // module imports
-import { Box, Button, HStack, Heading, IconButton, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Tag, TagLabel, VStack } from '@chakra-ui/react';
+import { Box, HStack, Heading, IconButton, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Tag, TagLabel, VStack, useColorModeValue } from '@chakra-ui/react';
 import PregnantWomanOutlinedIcon from '@mui/icons-material/PregnantWomanOutlined';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import MapIcon from '@mui/icons-material/Map';
@@ -12,12 +12,14 @@ import ColorModeToggleButton from '../ColorModeToggleButton';
 import FabTemplate from './StandardFab';
 import { auth, firestore } from '../../firebaseConfig';
 import { InfoIcon } from '@chakra-ui/icons';
+import { cardBackground } from '../../defaultStyle';
 
 export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialogOpen, setProgressModalVisible, selectedAgeRange }) {
     const [milestones, setMilestones] = useState([]);
     const [communications, setCommunications] = useState([]);
     const [sensory, setSensory] = useState([]);
     const [feeding, setFeeding] = useState([]);
+    const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
 
     useEffect(() => {
         if (selectedAgeRange) {
@@ -229,7 +231,9 @@ export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialog
                             icon={<InfoIcon w="25px" h="25px" />}
                         />
                     </PopoverTrigger>
-                    <PopoverContent>
+                    <PopoverContent
+                        bg={_cardBackground}
+                    >
                         <PopoverArrow />
                         <PopoverCloseButton />
                         <PopoverHeader>Progress</PopoverHeader>
