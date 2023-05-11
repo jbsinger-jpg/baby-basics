@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { cardBackground } from '../../defaultStyle';
 import { firestore } from '../../firebaseConfig';
 
-export default function FormulaRow({ formula, formulaDataIsLoading, tabIndex }) {
+export default function FormulaRow({ formula, formulaDataIsLoading, tabIndex, ml }) {
     const MotionBox = motion(Box);
     const MotionButton = motion(Button);
 
@@ -101,6 +101,7 @@ export default function FormulaRow({ formula, formulaDataIsLoading, tabIndex }) 
             h="500px"
             spacing="3"
             paddingBottom="10"
+            ml={ml}
         >
             <SkeletonCircle size='10' isLoaded={!formulaDataIsLoading} />
             <SkeletonText isLoaded={!formulaDataIsLoading}>

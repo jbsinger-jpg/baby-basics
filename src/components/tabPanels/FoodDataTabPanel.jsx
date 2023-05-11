@@ -11,13 +11,14 @@ export default function FoodDataTabPanel({ foodData, isFoodDataLoading, tabIndex
 
     return (
         <HStack flexWrap={"wrap"} marginTop="20" spacing="12" bg={_screenBackground}>
-            {foodData && foodData.length > 0 && foodData.map(food => {
+            {foodData && foodData.length > 0 && foodData.map((food, index) => {
                 return (
                     <FoodRow
                         key={food.id}
                         food={food}
                         isFoodDataLoading={isFoodDataLoading}
                         tabIndex={tabIndex}
+                        ml={index === 0 && "12"}
                     />
                 );
             })}

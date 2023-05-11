@@ -18,6 +18,7 @@ export default function MaternalDataTabPanel({ maternialData, maternialDataLoadi
                         maternial={maternial}
                         maternialDataLoading={maternialDataLoading}
                         tabIndex={tabIndex}
+                        ml={index === 0 && "12"}
                     />
                 );
             })}

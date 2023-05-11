@@ -11,13 +11,14 @@ export default function ToysDataTabPanel({ toyData, toyDataIsLoading, tabIndex }
 
     return (
         <HStack flexWrap={"wrap"} marginTop="20" spacing="12" bg={_screenBackground}>
-            {toyData && toyData.length > 0 && toyData.map(toy => {
+            {toyData && toyData.length > 0 && toyData.map((toy, index) => {
                 return (
                     <ToyRow
                         key={toy.id}
                         toy={toy}
                         toyDataIsLoading={toyDataIsLoading}
                         tabIndex={tabIndex}
+                        ml={index === 0 && "12"}
                     />
                 );
             })}

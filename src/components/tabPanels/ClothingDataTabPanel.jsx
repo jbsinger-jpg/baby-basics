@@ -11,9 +11,10 @@ export default function ClothingDataTabPanel({ clothingData, clothingDataLoaded,
 
     return (
         <HStack flexWrap={"wrap"} marginTop="20" spacing="10" bg={_screenBackground}>
-            {clothingData && clothingData.map(clothing => {
+            {clothingData && clothingData.map((clothing, index) => {
                 return (
                     <ClothingRow
+                        ml={index === 0 && "10"}
                         key={clothing.id}
                         clothing={clothing}
                         clothingDataLoaded={clothingDataLoaded}

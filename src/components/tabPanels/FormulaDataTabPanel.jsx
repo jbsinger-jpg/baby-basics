@@ -11,13 +11,14 @@ export default function FormulaDataTabPanel({ formulaData, formulaDataIsLoading,
 
     return (
         <HStack flexWrap={"wrap"} marginTop="20" spacing="12" bg={_screenBackground}>
-            {formulaData && formulaData.length > 0 && formulaData.map(formula => {
+            {formulaData && formulaData.length > 0 && formulaData.map((formula, index) => {
                 return (
                     <FormulaRow
                         key={formula.id}
                         formula={formula}
                         formulaDataIsLoading={formulaDataIsLoading}
                         tabIndex={tabIndex}
+                        ml={index === 0 && "12"}
                     />
                 );
             })}

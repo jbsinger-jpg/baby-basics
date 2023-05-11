@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { firestore } from '../../firebaseConfig';
 import { cardBackground } from '../../defaultStyle';
 
-export default function VitaminRow({ vitamin, vitaminDataIsLoading, tabIndex }) {
+export default function VitaminRow({ vitamin, vitaminDataIsLoading, tabIndex, ml }) {
     const MotionBox = motion(Box);
     const MotionButton = motion(Button);
     const [flippedCards, setFlippedCards] = useState(false);
@@ -100,6 +100,7 @@ export default function VitaminRow({ vitamin, vitaminDataIsLoading, tabIndex }) 
             h="500px"
             spacing="3"
             paddingBottom="10"
+            ml={ml}
         >
             <SkeletonCircle size='10' isLoaded={!vitaminDataIsLoading} />
             <SkeletonText isLoaded={!vitaminDataIsLoading}>

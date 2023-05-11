@@ -18,6 +18,7 @@ export default function DiaperDataTabPanel({ diaperData, isDiapersLoading, tabIn
                         diaper={diaper}
                         isDiapersLoading={isDiapersLoading}
                         tabIndex={tabIndex}
+                        ml={index === 0 && "12"}
                     />
                 );
             })}

@@ -11,13 +11,14 @@ export default function StrollersDataTabPanel({ strollerData, strollerDataIsLoad
 
     return (
         <HStack flexWrap={"wrap"} marginTop="20" spacing="12" bg={_screenBackground}>
-            {strollerData && strollerData.length > 0 && strollerData.map(stroller => {
+            {strollerData && strollerData.length > 0 && strollerData.map((stroller, index) => {
                 return (
                     <StrollerRow
                         key={stroller.id}
                         stroller={stroller}
                         strollerDataIsLoading={strollerDataIsLoading}
                         tabIndex={tabIndex}
+                        ml={index === 0 && "12"}
                     />
                 );
             })}

@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { cardBackground } from '../../defaultStyle';
 import { firestore } from '../../firebaseConfig';
 
-export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex }) {
+export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex, ml }) {
     const MotionBox = motion(Box);
     const MotionButton = motion(Button);
     const [flippedCards, setFlippedCards] = useState(false);
@@ -100,6 +100,7 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex }) 
             h="500px"
             spacing="3"
             paddingBottom="10"
+            ml={ml}
         >
             <SkeletonCircle size='10' isLoaded={!clothingDataLoaded} />
             <SkeletonText isLoaded={!clothingDataLoaded}>

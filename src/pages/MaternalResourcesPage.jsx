@@ -3,7 +3,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Woman2Icon from '@mui/icons-material/Woman2';
-import { Box, HStack, IconButton, useColorModeValue } from '@chakra-ui/react';
+import { Box, HStack, IconButton, useColorModeValue, useMediaQuery } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
 // relative imports
@@ -46,6 +46,7 @@ export default function MaternalResourcesPage() {
   //lhs=light, rhs=dark
   const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
   const [cardRotated, setCardRotated] = useState(false);
+  const [isLargerThan1300] = useMediaQuery("(min-width: 1300px)");
 
   const handleSearchPlacesDialogOpen = () => {
     setSearchPlaces(true);
@@ -110,7 +111,7 @@ export default function MaternalResourcesPage() {
   };
 
   return (
-    <Box bg={_screenBackground} paddingTop="2" h="100vh">
+    <Box bg={_screenBackground} paddingTop="2" h={isLargerThan1300 || cardRotated ? "100vh" : "100%"}>
       <HStack alignItems="start" w="100vw" paddingLeft="5" spacing="5" marginTop="5" paddingBottom="10">
         <AnimatedButton
           title={"Trimester 1"}
@@ -138,11 +139,13 @@ export default function MaternalResourcesPage() {
           onClick={handleProgramButtonPress}
         />
       </HStack>
-      <HStack
+      <Box 
         flexWrap="wrap"
-        spacing="4"
         justifyContent={handleJustifyContent()}
         alignItems="center"
+        display="flex"
+        flexDirection={isLargerThan1300 || cardRotated ? "row" : "column"}
+        w="100%"
       >
         {stage &&
           <IconButton
@@ -197,7 +200,7 @@ export default function MaternalResourcesPage() {
             icon={<ChevronRightIcon />}
           />
         }
-      </HStack>
+      </Box>
       <FloatingActionButtonsMaternalInfo
         handleSearchPlacesDialogOpen={handleSearchPlacesDialogOpen}
       />

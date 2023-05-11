@@ -1,4 +1,4 @@
-import { Box, HStack, IconButton, useColorModeValue } from '@chakra-ui/react';
+import { Box, useColorModeValue, useMediaQuery } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import GoogleMapsModal from '../components/modals/GoogleMapsModal';
 import ChatIcon from '@mui/icons-material/Chat';
@@ -84,8 +84,10 @@ export default function MilestonePage() {
         { value: "19-24M", label: "19-24M", key: 5 },
     ];
 
+    const [isLargerThan1300] = useMediaQuery("(min-width: 1300px)");
+
     return (
-        <Box bg={_screenBackground} paddingTop="2" h="100vh">
+        <Box bg={_screenBackground} paddingTop="2" h={"100%"}>
             <FloatingActionButtonsBabyInfo
                 handleSearchPlacesDialogOpen={handleSearchPlacesDialogOpen}
                 setProgressModalVisible={setProgressModalVisible}
@@ -107,11 +109,13 @@ export default function MilestonePage() {
                     handleAnswerChange(event);
                 }}
             />
-            <HStack
+            <Box
                 flexWrap="wrap"
                 spacing="4"
                 justifyContent="center"
                 alignItems="center"
+                display="flex"
+                flexDirection={isLargerThan1300 ? "row" : "column"}
             >
                 <AnimatedCard
                     flippedCard={flippedMotorCard}
@@ -177,7 +181,7 @@ export default function MilestonePage() {
                     title={"Potential Activities"}
                     selectedAge={selectedAge}
                 />
-            </HStack>
+            </Box>
             <BabyProgressModal
                 progressModalVisible={progressModalVisible}
                 setProgressModalVisible={setProgressModalVisible}

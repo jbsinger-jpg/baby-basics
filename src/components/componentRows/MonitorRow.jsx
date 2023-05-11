@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { firestore } from '../../firebaseConfig';
 import { cardBackground } from '../../defaultStyle';
 
-export default function MonitorRow({ monitor, monitorDataIsLoading, tabIndex }) {
+export default function MonitorRow({ monitor, monitorDataIsLoading, tabIndex, ml }) {
     const MotionBox = motion(Box);
     const MotionButton = motion(Button);
 
@@ -101,6 +101,7 @@ export default function MonitorRow({ monitor, monitorDataIsLoading, tabIndex }) 
             h="500px"
             spacing="3"
             paddingBottom="10"
+            ml={ml}
         >
             <SkeletonCircle size='10' isLoaded={!monitorDataIsLoading} />
             <SkeletonText isLoaded={!monitorDataIsLoading}>

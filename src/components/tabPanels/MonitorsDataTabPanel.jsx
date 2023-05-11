@@ -11,13 +11,14 @@ export default function MonitorsDataTabPanel({ monitorData, monitorDataIsLoading
 
     return (
         <HStack flexWrap={"wrap"} marginTop="20" spacing="12" bg={_screenBackground}>
-            {monitorData && monitorData.length > 0 && monitorData.map(monitor => {
+            {monitorData && monitorData.length > 0 && monitorData.map((monitor, index) => {
                 return (
                     <MonitorRow
                         key={monitor.id}
                         monitor={monitor}
                         monitorDataIsLoading={monitorDataIsLoading}
                         tabIndex={tabIndex}
+                        ml={index === 0 && "12"}
                     />
                 );
             })}

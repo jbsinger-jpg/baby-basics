@@ -8,13 +8,14 @@ export default function VitaminDataTabPanel({ vitaminData, vitaminDataIsLoading,
 
     return (
         <HStack flexWrap={"wrap"} marginTop="20" spacing="12" bg={_screenBackground}>
-            {vitaminData && vitaminData.length > 0 && vitaminData.map(vitamin => {
+            {vitaminData && vitaminData.length > 0 && vitaminData.map((vitamin, index) => {
                 return (
                     <VitaminRow
                         key={vitamin.id}
                         vitamin={vitamin}
                         vitaminDataIsLoading={vitaminDataIsLoading}
                         tabIndex={tabIndex}
+                        ml={index === 0 && "12"}
                     />
                 );
             })}

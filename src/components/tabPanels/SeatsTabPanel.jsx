@@ -11,13 +11,14 @@ export default function SeatsTabPanel({ seatData, seatDataIsLoading, tabIndex })
 
     return (
         <HStack flexWrap={"wrap"} marginTop="20" spacing="12" bg={_screenBackground}>
-            {seatData && seatData.length > 0 && seatData.map(seat => {
+            {seatData && seatData.length > 0 && seatData.map((seat, index) => {
                 return (
                     <SeatRow
                         key={seat.id}
                         seat={seat}
                         seatDataIsLoading={seatDataIsLoading}
                         tabIndex={tabIndex}
+                        ml={index === 0 && "12"}
                     />
                 );
             })}
