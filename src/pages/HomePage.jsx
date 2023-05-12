@@ -26,6 +26,7 @@ import { screenBackground } from '../defaultStyle';
 import CustomPopOver from '../components/CustomPopover';
 import VitaminDataTabPanel from '../components/tabPanels/VitaminDataTabPanel';
 import BabyProgressModal from '../components/modals/BabyProgressModal';
+import BabyImagesModal from '../components/modals/BabyImagesModal';
 
 export default function HomePage() {
     // hooks
@@ -98,6 +99,8 @@ export default function HomePage() {
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
 
+    const [babyImagesModalIsOpen, setBabyImagesModalIsOpen] = useState(false);
+
     const [progressModalVisible, setProgressModalVisible] = useState(false);
 
     const handleSearchPlacesDialogOpen = () => {
@@ -149,6 +152,10 @@ export default function HomePage() {
                 </Badge>
             </Tooltip>
         );
+    };
+
+    const handleOpenPictureUploadDialog = () => {
+        setBabyImagesModalIsOpen(true);
     };
 
     // // initialize the page with the data from the data base
@@ -403,6 +410,11 @@ export default function HomePage() {
                             >
                                 Document Baby Progress
                             </Button>
+                            <Button
+                                onClick={handleOpenPictureUploadDialog}
+                            >
+                                Upload Baby Pictures!
+                            </Button>
                         </VStack>
                     </DrawerBody>
                 </DrawerContent>
@@ -549,6 +561,10 @@ export default function HomePage() {
             <BabyProgressModal
                 progressModalVisible={progressModalVisible}
                 setProgressModalVisible={setProgressModalVisible}
+            />
+            <BabyImagesModal
+                babyImagesModalIsOpen={babyImagesModalIsOpen}
+                setBabyImagesModalIsOpen={setBabyImagesModalIsOpen}
             />
         </Box>
     );
