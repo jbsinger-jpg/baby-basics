@@ -7,51 +7,68 @@ export default function BabyImagesModal({ babyImagesModalIsOpen, setBabyImagesMo
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
     const [files, setFiles] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
+    const currentUser = auth?.currentUser?.uid;
+
+    const getUpdatedURLList = () => {
+        if (currentUser) {
+            const userFilesRef = storage.ref(`files/${currentUser}/`);
+            userFilesRef.list().then(async (result) => {
+                const urlResults = result.items.map((item) => item.getDownloadURL());
+                const fileInformation = result.items.map((item) => item.name);
+                console.log("File name information: ", fileInformation);
+
+                Promise.all(urlResults)
+                    .then((urls) => {
+                        console.log('Download URLs:', urls);
+                        let options = [];
+
+                        // match a url with a name for better UX
+                        for (let i = 0; i < urls.length; i++) {
+                            options.push({ url: urls[i], name: fileInformation[i] });
+                        }
+                        setFiles(options);
+                    })
+                    .catch((error) => {
+                        console.error('Error getting download URLs:', error);
+                    });
+            });
+        }
+    };
 
     const handleSelectedFileChange = (event) => {
         setSelectedFile(event.target.files[0]);
     };
 
-    const handleSubmitPicture = () => {
+    const handleSubmitPicture = async () => {
         const currentUser = auth.currentUser.uid;
 
         if (currentUser && selectedFile) {
-            console.log("Current User: ", currentUser);
-            console.log("Selected File: ", selectedFile);
-
             const storageRef = storage.ref(`files/${currentUser}/${selectedFile.name}`);
-            const userFilesRef = storage.ref(`files/${currentUser}/`);
-            console.log("Storage Ref String: ", `files/${currentUser}/${selectedFile.name}`);
-            console.log("Users Ref String: ", `files/${currentUser}/`);
-            console.log("Storage Reference: ", storageRef);
-            console.log("User Files Ref: ", userFilesRef);
 
-            storageRef.put(selectedFile).then((snapshot) => {
-                let options = [];
-                console.log('File uploaded successfully!', snapshot);
-                userFilesRef.list().then((result) => {
-                    result.items.map((item) => item.getDownloadURL().then(url => options.push(url)));
-                    setFiles(options);
-                    console.log(options);
-                });
+            storageRef.put(selectedFile).then(() => {
+                console.log('File uploaded successfully!');
+                getUpdatedURLList();
+            });
+        }
+    };
+
+    const handleDeletePicture = () => {
+        const currentUser = auth?.currentUser?.uid;
+
+        if (currentUser && selectedFile) {
+            const storageRef = storage.ref(`files/${currentUser}/${selectedFile.name}`);
+
+            storageRef.delete(selectedFile).then(() => {
+                console.log('File deleted successfully!');
+                getUpdatedURLList();
             });
         }
     };
 
     useEffect(() => {
-        const currentUser = auth.currentUser.uid;
-
-        if (currentUser) {
-            const userFilesRef = storage.ref(`files/${currentUser}/`);
-            // userFilesRef.delete();
-            userFilesRef.list().then((result) => {
-                let options = [];
-                result.items.map((item) => item.getDownloadURL().then(url => options.push(url)));
-                setFiles(options);
-                console.log(options);
-            });
-        }
-    }, []);
+        getUpdatedURLList();
+        // eslint-disable-next-line
+    }, [auth?.currentUser?.uid]);
 
     return (
         <AlertDialog
@@ -72,13 +89,14 @@ export default function BabyImagesModal({ babyImagesModalIsOpen, setBabyImagesMo
                             <h1>Files</h1>
                             <ul>
                                 {files && files.map((file) => (
-                                    <li key={file}>{file}</li>
+                                    <li key={file.url}>{file.name}</li>
                                 ))}
                             </ul>
                         </div>
                     </AlertDialogBody>
-                    <AlertDialogFooter>
-                        <Button onClick={handleSubmitPicture}> Submit Picture </Button>
+                    <AlertDialogFooter display={"flex"} w="100%" justifyContent="space-between">
+                        <Button onClick={handleSubmitPicture}> Submit </Button>
+                        <Button onClick={handleDeletePicture}> Delete </Button>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialogOverlay>
