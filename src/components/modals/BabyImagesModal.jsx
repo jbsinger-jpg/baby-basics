@@ -8,8 +8,13 @@ export default function BabyImagesModal({ babyImagesModalIsOpen, setBabyImagesMo
     const [files, setFiles] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
     const currentUser = auth?.currentUser?.uid;
+    const [submitButtonIsLoading, setSubmitButtonIsLoading] = useState(false);
+    const [deleteButtonIsLoading, setDeleteButtonIsLoading] = useState(false);
 
     const getUpdatedURLList = () => {
+        setSubmitButtonIsLoading(true);
+        setDeleteButtonIsLoading(true);
+
         if (currentUser) {
             const userFilesRef = storage.ref(`files/${currentUser}/`);
             userFilesRef.list().then(async (result) => {
@@ -30,6 +35,10 @@ export default function BabyImagesModal({ babyImagesModalIsOpen, setBabyImagesMo
                     })
                     .catch((error) => {
                         console.error('Error getting download URLs:', error);
+                    })
+                    .finally(() => {
+                        setSubmitButtonIsLoading(false);
+                        setDeleteButtonIsLoading(false);
                     });
             });
         }
@@ -95,8 +104,18 @@ export default function BabyImagesModal({ babyImagesModalIsOpen, setBabyImagesMo
                         </div>
                     </AlertDialogBody>
                     <AlertDialogFooter display={"flex"} w="100%" justifyContent="space-between">
-                        <Button onClick={handleSubmitPicture}> Submit </Button>
-                        <Button onClick={handleDeletePicture}> Delete </Button>
+                        <Button
+                            onClick={handleSubmitPicture}
+                            isLoading={submitButtonIsLoading}
+                        >
+                            Submit
+                        </Button>
+                        <Button
+                            onClick={handleDeletePicture}
+                            isLoading={deleteButtonIsLoading}
+                        >
+                            Delete
+                        </Button>
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialogOverlay>
