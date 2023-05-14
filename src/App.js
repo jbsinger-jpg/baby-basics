@@ -15,6 +15,7 @@ import BabyHealthForumPage from "./pages/BabyHealthForumPage";
 import PrenatalForumPage from "./pages/PrenatalForumPage";
 import AppointmentForumPage from "./pages/AppointmentForumPage";
 import GoodsAndServicesForumPage from "./pages/GoodsAndServicesForumPage";
+import BabyPicturePage from "./pages/BabyPicturePage";
 
 function App() {
   const [state, setState] = useState(null);
@@ -23,6 +24,7 @@ function App() {
     <Context.Provider value={{ data: state, setData: setState }}>
       <Routes>
         <Route index element={<HomePage />} />
+        <Route path="pictures" element={<BabyPicturePage />} />
         <Route path="screening" element={<ScreeningPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="message" element={<DirectMessagePage />} />

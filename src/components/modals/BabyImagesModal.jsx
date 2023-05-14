@@ -1,17 +1,20 @@
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, Input, useColorModeValue } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Heading, Input, ListItem, UnorderedList, useColorModeValue } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import { cardBackground } from '../../defaultStyle';
+import { cardBackground, screenBackground } from '../../defaultStyle';
 import { auth, storage } from '../../firebaseConfig';
+import { useNavigate } from 'react-router-dom';
 
 export default function BabyImagesModal({ babyImagesModalIsOpen, setBabyImagesModalIsOpen }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
+    const navigate = useNavigate();
     const [files, setFiles] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
-    const currentUser = auth?.currentUser?.uid;
     const [submitButtonIsLoading, setSubmitButtonIsLoading] = useState(false);
     const [deleteButtonIsLoading, setDeleteButtonIsLoading] = useState(false);
 
     const getUpdatedURLList = () => {
+        const currentUser = auth?.currentUser?.uid;
+
         setSubmitButtonIsLoading(true);
         setDeleteButtonIsLoading(true);
 
@@ -20,7 +23,6 @@ export default function BabyImagesModal({ babyImagesModalIsOpen, setBabyImagesMo
             userFilesRef.list().then(async (result) => {
                 const urlResults = result.items.map((item) => item.getDownloadURL());
                 const fileInformation = result.items.map((item) => item.name);
-                console.log("File name information: ", fileInformation);
 
                 Promise.all(urlResults)
                     .then((urls) => {
@@ -49,7 +51,7 @@ export default function BabyImagesModal({ babyImagesModalIsOpen, setBabyImagesMo
     };
 
     const handleSubmitPicture = async () => {
-        const currentUser = auth.currentUser.uid;
+        const currentUser = auth?.currentUser?.uid;
 
         if (currentUser && selectedFile) {
             const storageRef = storage.ref(`files/${currentUser}/${selectedFile.name}`);
@@ -75,9 +77,13 @@ export default function BabyImagesModal({ babyImagesModalIsOpen, setBabyImagesMo
     };
 
     useEffect(() => {
-        getUpdatedURLList();
+        const currentUser = auth?.currentUser?.uid;
+
+        if (currentUser)
+            getUpdatedURLList();
+        console.log("current_user", auth.currentUser);
         // eslint-disable-next-line
-    }, [auth?.currentUser?.uid]);
+    }, [auth?.currentUser]);
 
     return (
         <AlertDialog
@@ -94,21 +100,35 @@ export default function BabyImagesModal({ babyImagesModalIsOpen, setBabyImagesMo
                             type="file"
                             onChange={handleSelectedFileChange}
                         />
-                        <div>
-                            <h1>Files</h1>
-                            <ul>
+                        <Box>
+                            <Heading>Files</Heading>
+                            <UnorderedList>
                                 {files && files.map((file) => (
-                                    <li key={file.url}>{file.name}</li>
+                                    <ListItem
+                                        key={file.url}
+                                        _hover={{
+                                            cursor: "pointer",
+                                            backgroundColor: screenBackground.dark
+                                        }}
+                                        onClick={() => setSelectedFile(file)}
+                                    >
+                                        {file.name}
+                                    </ListItem>
                                 ))}
-                            </ul>
-                        </div>
+                            </UnorderedList>
+                        </Box>
                     </AlertDialogBody>
-                    <AlertDialogFooter display={"flex"} w="100%" justifyContent="space-between">
+                    <AlertDialogFooter display={"flex"} w="100%" justifyContent="space-evenly">
                         <Button
                             onClick={handleSubmitPicture}
                             isLoading={submitButtonIsLoading}
                         >
                             Submit
+                        </Button>
+                        <Button
+                            onClick={() => navigate("/pictures")}
+                        >
+                            View Pictures
                         </Button>
                         <Button
                             onClick={handleDeletePicture}
