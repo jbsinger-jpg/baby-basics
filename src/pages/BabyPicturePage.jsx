@@ -1,12 +1,13 @@
 // Module Imports
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, HStack, Input, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, SkeletonText, Tag, Text, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, HStack, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, SkeletonText, Tag, Text, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import ReactImageMagnify from '@blacklab/react-image-magnify';
 
 // Relative Imports
 import { cardBackground, screenBackground } from '../defaultStyle';
 import { auth, storage } from '../firebaseConfig';
-import StyledSelect from '../components/StyledSelect';
+import BabyImagesModal from '../components/modals/BabyImagesModal';
+import FloatingActionButtonsBabyImages from '../components/floatingActionButtons/FloatingActionButtonsBabyImages';
 
 export default function BabyPicturePage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
@@ -14,16 +15,8 @@ export default function BabyPicturePage() {
     const [babyPictureData, setBabyPictureData] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
     const [dataIsLoading, setDataIsLoading] = useState(false);
+    const [babyImagesModalIsOpen, setBabyImagesModalIsOpen] = useState(false);
     const currentUser = auth?.currentUser?.uid;
-
-    const ageOptions = [
-        { value: "0-3M", label: "0-3M", key: 0 },
-        { value: "4-6M", label: "4-6M", key: 1 },
-        { value: "7-9M", label: "7-9M", key: 2 },
-        { value: "10-12M", label: "10-12M", key: 3 },
-        { value: "13-18M", label: "13-18M", key: 4 },
-        { value: "19-24M", label: "19-24M", key: 5 },
-    ];
 
     const getUpdatedURLList = () => {
         if (currentUser) {
@@ -66,17 +59,6 @@ export default function BabyPicturePage() {
         }
     };
 
-    const handleSubmitPicture = () => {
-        if (currentUser && selectedFile) {
-            const storageRef = storage.ref(`files/${currentUser}/${selectedFile.name}`);
-
-            storageRef.put(selectedFile).then(() => {
-                console.log('File uploaded successfully!');
-                getUpdatedURLList();
-            });
-        }
-    };
-
     const handleConfirmation = (picture) => {
         setSelectedFile(picture);
     };
@@ -97,11 +79,14 @@ export default function BabyPicturePage() {
 
     return (
         <Box mt="2">
-            <HStack alignItems="start" w="70%" ml="10">
-                <Button onClick={handleSubmitPicture}>Add</Button>
-                <Input type="file" onChange={(event) => setSelectedFile(event.target.files[0])} />
-                <StyledSelect options={ageOptions} />
-            </HStack>
+            <FloatingActionButtonsBabyImages
+                setBabyImagesModalIsOpen={setBabyImagesModalIsOpen}
+            />
+            <BabyImagesModal
+                babyImagesModalIsOpen={babyImagesModalIsOpen}
+                setBabyImagesModalIsOpen={setBabyImagesModalIsOpen}
+                onPage
+            />
             <HStack
                 flexWrap={"wrap"}
                 marginTop="20"
@@ -175,6 +160,6 @@ export default function BabyPicturePage() {
                     );
                 })}
             </HStack>
-        </Box>
+        </Box >
     );
 }
