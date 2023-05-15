@@ -5,6 +5,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionDataOnce } from 'react-firebase-hooks/firestore';
 import { useNavigate } from 'react-router-dom';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import PublishIcon from '@mui/icons-material/Publish';
 
 // relative imports
 import { auth, firestore } from '../firebaseConfig';
@@ -411,6 +412,7 @@ export default function HomePage() {
                                 Document Baby Progress
                             </Button>
                             <Button
+                                leftIcon={<PublishIcon fontSize="small" />}
                                 onClick={handleOpenPictureUploadDialog}
                             >
                                 Upload Baby Pictures!
