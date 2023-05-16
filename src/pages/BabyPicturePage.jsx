@@ -8,6 +8,7 @@ import { cardBackground, screenBackground } from '../defaultStyle';
 import { auth, storage } from '../firebaseConfig';
 import BabyImagesModal from '../components/modals/BabyImagesModal';
 import FloatingActionButtonsBabyImages from '../components/floatingActionButtons/FloatingActionButtonsBabyImages';
+import StyledSelect from '../components/StyledSelect';
 
 export default function BabyPicturePage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
@@ -16,13 +17,34 @@ export default function BabyPicturePage() {
     const [selectedFile, setSelectedFile] = useState(null);
     const [dataIsLoading, setDataIsLoading] = useState(false);
     const [babyImagesModalIsOpen, setBabyImagesModalIsOpen] = useState(false);
+    const [selectedTag, setSelectedTag] = useState(null);
+    const [selectedAge, setSelectedAge] = useState(null);
     const currentUser = auth?.currentUser?.uid;
 
-    const getUpdatedURLList = () => {
-        if (currentUser) {
-            const userFilesRef = storage.ref(`files/${currentUser}/`);
+    const ageOptions = [
+        { value: "0-3M", label: "0-3M", key: 0 },
+        { value: "4-6M", label: "4-6M", key: 1 },
+        { value: "7-9M", label: "7-9M", key: 2 },
+        { value: "10-12M", label: "10-12M", key: 3 },
+        { value: "13-18M", label: "13-18M", key: 4 },
+        { value: "19-24M", label: "19-24M", key: 5 },
+    ];
 
-            userFilesRef.list().then(async (result) => {
+    const tagOptions = [
+        { value: "Doctor's Visit", label: "Doctor's Visit", key: 0 },
+        { value: "Growth and Development", label: "Growth and Development", key: 1 },
+        { value: "Social Media", label: "Social Media", key: 2 },
+        { value: "Various", label: "Various", key: 3 },
+    ];
+
+    const getUpdatedURLList = () => {
+        if (currentUser && selectedTag && selectedAge) {
+            const storageRef = storage.ref(`files`);
+            const userRef = storageRef.child(currentUser);
+            const ageRef = userRef.child(selectedAge);
+            const fileTagRef = ageRef.child(selectedTag);
+
+            fileTagRef.list().then(async (result) => {
                 const urlResults = result.items.map((item) => item.getDownloadURL());
                 const fileInformation = result.items.map((item) => item.name);
 
@@ -78,7 +100,12 @@ export default function BabyPicturePage() {
     }, [auth.currentUser]);
 
     return (
-        <Box mt="2">
+        <Box pt="2" bg={_screenBackground} h="100vh">
+            <HStack w="80%">
+                <StyledSelect options={ageOptions} value={selectedAge} onChange={(event) => setSelectedAge(event.target.value)} />
+                <StyledSelect options={tagOptions} value={selectedTag} onChange={(event) => setSelectedTag(event.target.value)} />
+                <Button onClick={getUpdatedURLList}>Confirm</Button>
+            </HStack>
             <FloatingActionButtonsBabyImages
                 setBabyImagesModalIsOpen={setBabyImagesModalIsOpen}
             />

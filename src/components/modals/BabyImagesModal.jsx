@@ -72,9 +72,13 @@ export default function BabyImagesModal({ babyImagesModalIsOpen, setBabyImagesMo
         const currentUser = auth?.currentUser?.uid;
 
         if (currentUser && selectedFile) {
-            const storageRef = storage.ref(`files/${currentUser}/${selectedFile.name}`);
+            const storageRef = storage.ref(`files`);
+            const userRef = storageRef.child(currentUser);
+            const ageRef = userRef.child(selectedAgeOption);
+            const fileTagRef = ageRef.child(selectedTagOption);
+            const fileRef = fileTagRef.child(selectedFile.name);
 
-            storageRef.put(selectedFile).then(() => {
+            fileRef.put(selectedFile).then(() => {
                 console.log('File uploaded successfully!');
                 getUpdatedURLList();
             });
