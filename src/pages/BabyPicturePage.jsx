@@ -1,6 +1,8 @@
 // Module Imports
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, HStack, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, SkeletonText, Tag, Text, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, HStack, Icon, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, SkeletonText, Tag, Text, VStack, useColorModeValue } from '@chakra-ui/react';
+import { InfoOutlineIcon } from "@chakra-ui/icons";
 import React, { useEffect, useState } from 'react';
+import { motion } from "framer-motion";
 import ReactImageMagnify from '@blacklab/react-image-magnify';
 
 // Relative Imports
@@ -71,10 +73,14 @@ export default function BabyPicturePage() {
     };
 
     const handleDeleteBabyPicture = () => {
-        if (currentUser && selectedFile) {
-            const storageRef = storage.ref(`files/${currentUser}/${selectedFile.name}`);
+        if (currentUser && selectedAge && selectedTag && selectedFile) {
+            const storageRef = storage.ref(`files`);
+            const userRef = storageRef.child(currentUser);
+            const ageRef = userRef.child(selectedAge);
+            const fileTagRef = ageRef.child(selectedTag);
+            const fileRef = fileTagRef.child(selectedFile.name);
 
-            storageRef.delete(selectedFile).then(() => {
+            fileRef.delete(selectedFile).then(() => {
                 console.log('File deleted successfully!');
                 getUpdatedURLList();
             });
@@ -101,11 +107,21 @@ export default function BabyPicturePage() {
 
     return (
         <Box pt="2" bg={_screenBackground} h="100vh">
-            <HStack w="80%">
-                <StyledSelect options={ageOptions} value={selectedAge} onChange={(event) => setSelectedAge(event.target.value)} />
-                <StyledSelect options={tagOptions} value={selectedTag} onChange={(event) => setSelectedTag(event.target.value)} />
+            <VStack
+                w="80%"
+                alignItems="start"
+                pl="10"
+            >
+                <HStack w="300px" justifyContent='space-evenly'>
+                    <Text>Age</Text>
+                    <StyledSelect options={ageOptions} value={selectedAge} onChange={(event) => setSelectedAge(event.target.value)} />
+                </HStack>
+                <HStack w="300px" justifyContent='space-evenly'>
+                    <Text>Tag</Text>
+                    <StyledSelect options={tagOptions} value={selectedTag} onChange={(event) => setSelectedTag(event.target.value)} />
+                </HStack>
                 <Button onClick={getUpdatedURLList}>Confirm</Button>
-            </HStack>
+            </VStack>
             <FloatingActionButtonsBabyImages
                 setBabyImagesModalIsOpen={setBabyImagesModalIsOpen}
             />
@@ -120,7 +136,7 @@ export default function BabyPicturePage() {
                 spacing="10"
                 bg={_screenBackground}
             >
-                {babyPictureData && babyPictureData.map((picture, index) => {
+                {babyPictureData ? babyPictureData.map((picture, index) => {
                     return (
                         <SkeletonText isLoaded={dataIsLoading}
                             key={index}
@@ -185,7 +201,27 @@ export default function BabyPicturePage() {
                             </VStack>
                         </SkeletonText>
                     );
-                })}
+                })
+                    :
+                    <Box
+                        w="100%"
+                        h="100%"
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                    >
+                        <motion.div
+                            whileHover={{ scale: 1.2 }}
+                        >
+                            <HStack>
+                                <Icon as={InfoOutlineIcon} />
+                                <Text>
+                                    No Data Select Age and Tag
+                                </Text>
+                            </HStack>
+                        </motion.div>
+                    </Box>
+                }
             </HStack>
         </Box >
     );
