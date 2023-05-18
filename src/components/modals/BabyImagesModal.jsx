@@ -1,16 +1,14 @@
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, FormControl, FormHelperText, FormLabel, Heading, Input, ListItem, UnorderedList, VStack, useColorModeValue } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
-import { cardBackground, screenBackground } from '../../defaultStyle';
-import { auth, storage } from '../../firebaseConfig';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, FormControl, FormHelperText, FormLabel, Input, VStack, useColorModeValue } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { cardBackground } from '../../defaultStyle';
+import { auth, firestore, storage } from '../../firebaseConfig';
 import { useNavigate } from 'react-router-dom';
 import StyledSelect from '../StyledSelect';
 
-export default function BabyImagesModal({ babyImagesModalIsOpen, setBabyImagesModalIsOpen, onPage }) {
+export default function BabyImagesModal({ babyImagesModalIsOpen, setBabyImagesModalIsOpen, onPage, getUploadedImages }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
     const navigate = useNavigate();
-    const [files, setFiles] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
-    const [submitButtonIsLoading, setSubmitButtonIsLoading] = useState(false);
     const [selectedAgeOption, setSelectedAgeOption] = useState(null);
     const [selectedTagOption, setSelectedTagOption] = useState(null);
 
@@ -30,39 +28,6 @@ export default function BabyImagesModal({ babyImagesModalIsOpen, setBabyImagesMo
         { value: "Various", label: "Various", key: 3 },
     ];
 
-    const getUpdatedURLList = () => {
-        const currentUser = auth?.currentUser?.uid;
-
-        setSubmitButtonIsLoading(true);
-
-        if (currentUser) {
-            const userFilesRef = storage.ref(`files/${currentUser}/`);
-
-            userFilesRef.list().then(async (result) => {
-                const urlResults = result.items.map((item) => item.getDownloadURL());
-                const fileInformation = result.items.map((item) => item.name);
-
-                Promise.all(urlResults)
-                    .then((urls) => {
-                        console.log('Download URLs:', urls);
-                        let options = [];
-
-                        // match a url with a name for better UX
-                        for (let i = 0; i < urls.length; i++) {
-                            options.push({ url: urls[i], name: fileInformation[i] });
-                        }
-                        setFiles(options);
-                    })
-                    .catch((error) => {
-                        console.error('Error getting download URLs:', error);
-                    })
-                    .finally(() => {
-                        setSubmitButtonIsLoading(false);
-                    });
-            });
-        }
-    };
-
     const handleSelectedFileChange = (event) => {
         setSelectedFile(event.target.files[0]);
     };
@@ -74,13 +39,27 @@ export default function BabyImagesModal({ babyImagesModalIsOpen, setBabyImagesMo
         if (currentUser && selectedFile) {
             const storageRef = storage.ref(`files`);
             const userRef = storageRef.child(currentUser);
-            const ageRef = userRef.child(selectedAgeOption);
-            const fileTagRef = ageRef.child(selectedTagOption);
-            const fileRef = fileTagRef.child(selectedFile.name);
+            const fileRef = userRef.child(selectedFile.name);
 
             fileRef.put(selectedFile).then(() => {
-                console.log('File uploaded successfully!');
-                getUpdatedURLList();
+                userRef.list().then((result) => {
+                    result.items[0].getDownloadURL().then((url) => {
+                        firestore.collection("users")
+                            .doc(currentUser)
+                            .collection("uploaded-images")
+                            .doc(selectedFile.name)
+                            .set({
+                                name: selectedFile.name,
+                                url: url,
+                                tag: selectedTagOption,
+                                age: selectedAgeOption
+                            }).then(() => {
+                                if (getUploadedImages) {
+                                    getUploadedImages();
+                                }
+                            });
+                    });
+                });
             });
         }
     };
@@ -92,15 +71,6 @@ export default function BabyImagesModal({ babyImagesModalIsOpen, setBabyImagesMo
     const handleSelectedTagOption = (event) => {
         setSelectedTagOption(event.target.value);
     };
-
-    useEffect(() => {
-        const currentUser = auth?.currentUser?.uid;
-
-        if (currentUser)
-            getUpdatedURLList();
-        console.log("current_user", auth.currentUser);
-        // eslint-disable-next-line
-    }, [auth?.currentUser]);
 
     return (
         <AlertDialog
@@ -158,7 +128,6 @@ export default function BabyImagesModal({ babyImagesModalIsOpen, setBabyImagesMo
                         <AlertDialogFooter display={"flex"} w="100%" justifyContent="space-between">
                             <Button
                                 type="submit"
-                                isLoading={submitButtonIsLoading}
                             >
                                 Submit
                             </Button>

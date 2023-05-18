@@ -7,7 +7,7 @@ import ReactImageMagnify from '@blacklab/react-image-magnify';
 
 // Relative Imports
 import { cardBackground, screenBackground } from '../defaultStyle';
-import { auth, storage } from '../firebaseConfig';
+import { auth, firestore, storage } from '../firebaseConfig';
 import BabyImagesModal from '../components/modals/BabyImagesModal';
 import FloatingActionButtonsBabyImages from '../components/floatingActionButtons/FloatingActionButtonsBabyImages';
 import StyledSelect from '../components/StyledSelect';
@@ -17,7 +17,6 @@ export default function BabyPicturePage() {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
     const [babyPictureData, setBabyPictureData] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
-    const [dataIsLoading, setDataIsLoading] = useState(false);
     const [babyImagesModalIsOpen, setBabyImagesModalIsOpen] = useState(false);
     const [selectedTag, setSelectedTag] = useState(null);
     const [selectedAge, setSelectedAge] = useState(null);
@@ -39,50 +38,42 @@ export default function BabyPicturePage() {
         { value: "Various", label: "Various", key: 3 },
     ];
 
-    const getUpdatedURLList = () => {
-        if (currentUser && selectedTag && selectedAge) {
-            const storageRef = storage.ref(`files`);
-            const userRef = storageRef.child(currentUser);
-            const ageRef = userRef.child(selectedAge);
-            const fileTagRef = ageRef.child(selectedTag);
+    const getUploadedImages = async () => {
+        let uploadedImagesRef = firestore.collection("users").doc(currentUser).collection("uploaded-images");
+        let imageData = [];
 
-            fileTagRef.list().then(async (result) => {
-                const urlResults = result.items.map((item) => item.getDownloadURL());
-                const fileInformation = result.items.map((item) => item.name);
-
-                Promise.all(urlResults)
-                    .then((urls) => {
-                        console.log('Download URLs:', urls);
-                        let options = [];
-
-                        // match a url with a name for better UX
-                        for (let i = 0; i < urls.length; i++) {
-                            options.push({ url: urls[i], name: fileInformation[i] });
-                        }
-                        console.log("Options: ", options);
-                        setBabyPictureData(options);
-                    })
-                    .catch((error) => {
-                        console.error('Error getting download URLs:', error);
-                    })
-                    .finally(() => {
-                        setDataIsLoading(true);
-                    });
-            });
+        if (selectedAge) {
+            uploadedImagesRef = await uploadedImagesRef.where("age", "==", selectedAge);
         }
+
+        if (selectedTag) {
+            uploadedImagesRef = await uploadedImagesRef.where("tag", "==", selectedTag);
+        }
+
+        (await uploadedImagesRef.get()).docs.forEach(doc => {
+            imageData.push({ ...doc.data() });
+        });
+
+        console.log("image data: ", imageData);
+        setBabyPictureData(imageData);
     };
 
     const handleDeleteBabyPicture = () => {
-        if (currentUser && selectedAge && selectedTag && selectedFile) {
+        if (currentUser && selectedFile) {
             const storageRef = storage.ref(`files`);
             const userRef = storageRef.child(currentUser);
-            const ageRef = userRef.child(selectedAge);
-            const fileTagRef = ageRef.child(selectedTag);
-            const fileRef = fileTagRef.child(selectedFile.name);
+            const fileRef = userRef.child(selectedFile.name);
 
             fileRef.delete(selectedFile).then(() => {
                 console.log('File deleted successfully!');
-                getUpdatedURLList();
+                firestore.collection("users")
+                    .doc(currentUser)
+                    .collection("uploaded-images")
+                    .doc(selectedFile.name)
+                    .delete()
+                    .then(() => {
+                        getUploadedImages();
+                    });
             });
         }
     };
@@ -95,7 +86,7 @@ export default function BabyPicturePage() {
         const currentUser = auth?.currentUser?.uid;
         setTimeout(() => {
             if (currentUser) {
-                getUpdatedURLList();
+                getUploadedImages();
             }
             // force the page to re-render with the new data... need to 
             // find a better way to do this later.
@@ -120,7 +111,7 @@ export default function BabyPicturePage() {
                     <Text>Tag</Text>
                     <StyledSelect options={tagOptions} value={selectedTag} onChange={(event) => setSelectedTag(event.target.value)} />
                 </HStack>
-                <Button onClick={getUpdatedURLList}>Confirm</Button>
+                <Button onClick={getUploadedImages}>Confirm</Button>
             </VStack>
             <FloatingActionButtonsBabyImages
                 setBabyImagesModalIsOpen={setBabyImagesModalIsOpen}
@@ -128,6 +119,7 @@ export default function BabyPicturePage() {
             <BabyImagesModal
                 babyImagesModalIsOpen={babyImagesModalIsOpen}
                 setBabyImagesModalIsOpen={setBabyImagesModalIsOpen}
+                getUploadedImages={getUploadedImages}
                 onPage
             />
             <HStack
@@ -138,68 +130,64 @@ export default function BabyPicturePage() {
             >
                 {babyPictureData ? babyPictureData.map((picture, index) => {
                     return (
-                        <SkeletonText isLoaded={dataIsLoading}
-                            key={index}
+                        <VStack
+                            ml={index === 0 && 10}
                         >
-                            <VStack
-                                ml={index === 0 && 10}
-                            >
-                                <Card w="220px" bg={_cardBackground} justifyContent="center" alignItems="center">
-                                    <CardHeader>
-                                        <Tag
-                                            borderRadius="md"
-                                            size="lg"
-                                            variant="outline"
-                                            color="wheat"
-                                        >
-                                            <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
-                                                {picture.name}
-                                            </Text>
-                                        </Tag>
-                                    </CardHeader>
-                                    <CardBody display="flex" justifyContent="center">
-                                        <ReactImageMagnify
-                                            imageProps={{
-                                                src: picture.url,
-                                                width: 150,
-                                                height: 200,
-                                            }}
-                                            magnifiedImageProps={{
-                                                src: picture.url,
-                                                width: 600,
-                                                height: 800
-                                            }}
-                                            magnifyContainerProps={{
-                                                height: 300,
-                                                width: 400
-                                            }}
-                                        />
-                                    </CardBody>
-                                    <CardFooter display={"flex"} w="100%" justifyContent="space-between">
-                                        <Popover>
-                                            <PopoverTrigger>
-                                                <Button onClick={() => handleConfirmation(picture)}>
+                            <Card w="220px" bg={_cardBackground} justifyContent="center" alignItems="center">
+                                <CardHeader>
+                                    <Tag
+                                        borderRadius="md"
+                                        size="lg"
+                                        variant="outline"
+                                        color="wheat"
+                                    >
+                                        <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
+                                            {picture.name}
+                                        </Text>
+                                    </Tag>
+                                </CardHeader>
+                                <CardBody display="flex" justifyContent="center">
+                                    <ReactImageMagnify
+                                        imageProps={{
+                                            src: picture.url,
+                                            width: 150,
+                                            height: 200,
+                                        }}
+                                        magnifiedImageProps={{
+                                            src: picture.url,
+                                            width: 600,
+                                            height: 800
+                                        }}
+                                        magnifyContainerProps={{
+                                            height: 300,
+                                            width: 400
+                                        }}
+                                    />
+                                </CardBody>
+                                <CardFooter display={"flex"} w="100%" justifyContent="space-between">
+                                    <Popover>
+                                        <PopoverTrigger>
+                                            <Button onClick={() => handleConfirmation(picture)}>
+                                                Remove
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent>
+                                            <PopoverArrow />
+                                            <PopoverCloseButton />
+                                            <PopoverHeader>Confirmation!</PopoverHeader>
+                                            <PopoverBody>Are you sure you want to remove this picture?</PopoverBody>
+                                            <PopoverFooter>
+                                                <Button
+                                                    onClick={handleDeleteBabyPicture}
+                                                >
                                                     Remove
                                                 </Button>
-                                            </PopoverTrigger>
-                                            <PopoverContent>
-                                                <PopoverArrow />
-                                                <PopoverCloseButton />
-                                                <PopoverHeader>Confirmation!</PopoverHeader>
-                                                <PopoverBody>Are you sure you want to remove this picture?</PopoverBody>
-                                                <PopoverFooter>
-                                                    <Button
-                                                        onClick={handleDeleteBabyPicture}
-                                                    >
-                                                        Remove
-                                                    </Button>
-                                                </PopoverFooter>
-                                            </PopoverContent>
-                                        </Popover>
-                                    </CardFooter>
-                                </Card>
-                            </VStack>
-                        </SkeletonText>
+                                            </PopoverFooter>
+                                        </PopoverContent>
+                                    </Popover>
+                                </CardFooter>
+                            </Card>
+                        </VStack>
                     );
                 })
                     :
