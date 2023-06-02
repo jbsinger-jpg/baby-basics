@@ -37,6 +37,7 @@ export default function MilestonePage() {
     const [flippedResourcesCard, setFlippedResourcesCard] = useState(false);
     const [resourceButtonPressed, setResourceButtonPressed] = useState(false);
     const [progressModalVisible, setProgressModalVisible] = useState(false);
+    const [progressConfirmed, setProgressConfirmed] = useState(false);
 
     const handleAnswerChange = (event) => {
         if (flippedMotorCard)
@@ -92,6 +93,7 @@ export default function MilestonePage() {
                 handleSearchPlacesDialogOpen={handleSearchPlacesDialogOpen}
                 setProgressModalVisible={setProgressModalVisible}
                 selectedAgeRange={selectedAge}
+                progressConfirmed={progressConfirmed}
             />
             <GoogleMapsModal
                 setSearchPlaces={setPlaces}
@@ -127,6 +129,8 @@ export default function MilestonePage() {
                     title={"Milestones"}
                     applyCheckbox={auth?.currentUser?.uid ? true : false}
                     selectedAge={selectedAge}
+                    progressConfirmed={progressConfirmed}
+                    setProgressConfirmed={setProgressConfirmed}
                 />
                 <AnimatedCard
                     flippedCard={flippedCommunicationCard}
@@ -138,6 +142,8 @@ export default function MilestonePage() {
                     title={"Communication"}
                     applyCheckbox={auth?.currentUser?.uid ? true : false}
                     selectedAge={selectedAge}
+                    progressConfirmed={progressConfirmed}
+                    setProgressConfirmed={setProgressConfirmed}
                 />
                 <AnimatedCard
                     flippedCard={flippedFeedingCard}
@@ -149,6 +155,8 @@ export default function MilestonePage() {
                     title={"Feeding"}
                     applyCheckbox={auth?.currentUser?.uid ? true : false}
                     selectedAge={selectedAge}
+                    progressConfirmed={progressConfirmed}
+                    setProgressConfirmed={setProgressConfirmed}
                 />
                 <AnimatedCard
                     flippedCard={flippedSensoryCard}
@@ -160,6 +168,8 @@ export default function MilestonePage() {
                     title={"Sensory"}
                     applyCheckbox={auth?.currentUser?.uid ? true : false}
                     selectedAge={selectedAge}
+                    progressConfirmed={progressConfirmed}
+                    setProgressConfirmed={setProgressConfirmed}
                 />
                 <AnimatedCard
                     flippedCard={flippedResourcesCard}
@@ -170,6 +180,8 @@ export default function MilestonePage() {
                     videos={videos}
                     title={"Resources"}
                     selectedAge={selectedAge}
+                    progressConfirmed={progressConfirmed}
+                    setProgressConfirmed={setProgressConfirmed}
                 />
                 <AnimatedCard
                     flippedCard={flippedActivitiesCard}
@@ -180,6 +192,8 @@ export default function MilestonePage() {
                     selectedCardData={selectedActivities}
                     title={"Potential Activities"}
                     selectedAge={selectedAge}
+                    progressConfirmed={progressConfirmed}
+                    setProgressConfirmed={setProgressConfirmed}
                 />
             </Box>
             <BabyProgressModal

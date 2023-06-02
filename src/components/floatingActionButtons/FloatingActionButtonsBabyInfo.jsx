@@ -14,7 +14,7 @@ import { auth, firestore } from '../../firebaseConfig';
 import { InfoIcon } from '@chakra-ui/icons';
 import { cardBackground } from '../../defaultStyle';
 
-export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialogOpen, setProgressModalVisible, selectedAgeRange }) {
+export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialogOpen, setProgressModalVisible, selectedAgeRange, progressConfirmed }) {
     const [milestones, setMilestones] = useState([]);
     const [communications, setCommunications] = useState([]);
     const [sensory, setSensory] = useState([]);
@@ -59,7 +59,7 @@ export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialog
                 }
             }));
         }
-    }, [selectedAgeRange]);
+    }, [selectedAgeRange, progressConfirmed]);
 
     const navigate = useNavigate();
 

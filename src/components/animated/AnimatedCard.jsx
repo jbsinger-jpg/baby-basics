@@ -19,7 +19,9 @@ export default function AnimatedCard({
     title,
     videos,
     applyCheckbox,
-    selectedAge
+    selectedAge,
+    progressConfirmed,
+    setProgressConfirmed
 }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
     const linkColor = useColorModeValue("blue.500", "blue.200");
@@ -55,6 +57,7 @@ export default function AnimatedCard({
     };
 
     const handleProgressSubmission = async () => {
+        setProgressConfirmed(!progressConfirmed);
         setConfirmProgressButtonLoading(true);
         const usersRef = await firestore.collection("users");
 

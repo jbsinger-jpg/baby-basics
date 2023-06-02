@@ -171,7 +171,7 @@ export default function BabyPicturePage() {
                                                 Remove
                                             </Button>
                                         </PopoverTrigger>
-                                        <PopoverContent>
+                                        <PopoverContent bg={_cardBackground}>
                                             <PopoverArrow />
                                             <PopoverCloseButton />
                                             <PopoverHeader>Confirmation!</PopoverHeader>
