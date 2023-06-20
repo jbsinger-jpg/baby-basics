@@ -1,6 +1,6 @@
 // module imports
 import { ArrowDownIcon, ArrowUpIcon } from "@chakra-ui/icons";
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Avatar, Box, Button, HStack, IconButton, Tag, Text, Tooltip, useToast, VStack } from "@chakra-ui/react";
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Avatar, Box, Button, HStack, IconButton, Image, Link, Tag, Text, Tooltip, useToast, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 
 // relative imports
@@ -195,8 +195,54 @@ export default function ChatMessage({ message, fontSize }) {
             });
     };
 
+    const formAppropriateHTMLTags = () => {
+        const lines = text.split("\n");
+        const fileExtensions = [".jpg", ".jpeg", ".png", ".gif"];
+
+        return lines.map(line => {
+            line = line.trim();
+
+            if ((line.startsWith("https") || line.startsWith("www")) && fileExtensions.some(extension => line.includes(extension))) {
+                return (<Image src={line} alt="image" style={{ height: 200, width: 200 }} />);
+            }
+            else if ((line.startsWith("www") || line.startsWith("https"))) {
+                const fullPathLine = line.startsWith("https") ? line : 'https://' + line;
+                return (
+                    <Tag
+                        borderRadius="md"
+                        size="lg"
+                        variant="solid"
+                        colorScheme="teal"
+                    >
+                        <Link
+                            padding="4"
+                            href={fullPathLine}
+                            isExternal
+                        >
+                            {fullPathLine}
+                        </Link>
+                    </Tag>
+                );
+            }
+            return (
+                <Tag
+                    borderRadius="md"
+                    size="lg"
+                    variant="solid"
+                    colorScheme="teal"
+                >
+                    <Text
+                        padding="4"
+                        fontSize={fontSize}
+                    >
+                        {line}
+                    </Text>
+                </Tag>
+            );
+        });
+    };
+
     return (
-        // <div style={{ display: "flex", justifyContent: messageClass === 'sent' ? "flex-start" : 'flex-end', padding: "10px" }}>
         <div style={{ display: "flex", justifyContent: 'flex-start', padding: "10px" }}>
             <HStack alignItems="center" gap="10px">
                 <VStack>
@@ -235,20 +281,11 @@ export default function ChatMessage({ message, fontSize }) {
                 </motion.button>
                 <Box
                     whiteSpace="pre-wrap"
+                    flexDir="column"
+                    display="flex"
+                    gap="2"
                 >
-                    <Tag
-                        borderRadius="md"
-                        size="lg"
-                        variant="solid"
-                        colorScheme="teal"
-                    >
-                        <Text
-                            padding="4"
-                            fontSize={fontSize}
-                        >
-                            {text}
-                        </Text>
-                    </Tag>
+                    {formAppropriateHTMLTags()}
                 </Box>
             </HStack>
             <AlertDialog

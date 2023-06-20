@@ -54,7 +54,6 @@ export default function BabyProgressModal({ progressModalVisible, setProgressMod
         }
         else {
             // TODO: Display a message to the user saying that they cannot delete an event
-
         }
 
         setProgressButtonLoading(false);
