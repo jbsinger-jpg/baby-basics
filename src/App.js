@@ -16,6 +16,7 @@ import PrenatalForumPage from "./pages/PrenatalForumPage";
 import AppointmentForumPage from "./pages/AppointmentForumPage";
 import GoodsAndServicesForumPage from "./pages/GoodsAndServicesForumPage";
 import BabyPicturePage from "./pages/BabyPicturePage";
+import GraphPage from "./pages/GraphPage";
 
 function App() {
   const [state, setState] = useState(null);
@@ -35,6 +36,7 @@ function App() {
         <Route path="message-page" element={<ForumMessagePage />} />
         <Route path="milestone" element={<MilestonePage />} />
         <Route path="maternal" element={<MaternalResourcesPage />} />
+        <Route path="graph" element={<GraphPage />} />
       </Routes>
     </Context.Provider>
 

@@ -6,6 +6,7 @@ import { useCollectionDataOnce } from 'react-firebase-hooks/firestore';
 import { useNavigate } from 'react-router-dom';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import PublishIcon from '@mui/icons-material/Publish';
+import CalculateIcon from '@mui/icons-material/Calculate';
 
 // relative imports
 import { auth, firestore } from '../firebaseConfig';
@@ -157,6 +158,10 @@ export default function HomePage() {
 
     const handleOpenPictureUploadDialog = () => {
         setBabyImagesModalIsOpen(true);
+    };
+
+    const handleOpenGraphPage = () => {
+        navigate(`/graph`);
     };
 
     // // initialize the page with the data from the data base
@@ -416,6 +421,12 @@ export default function HomePage() {
                                 onClick={handleOpenPictureUploadDialog}
                             >
                                 Upload Baby Pictures!
+                            </Button>
+                            <Button
+                                leftIcon={<CalculateIcon fontSize="small" />}
+                                onClick={handleOpenGraphPage}
+                            >
+                                Calculate Baby Growth!
                             </Button>
                         </VStack>
                     </DrawerBody>
