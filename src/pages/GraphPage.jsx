@@ -1,4 +1,4 @@
-import { Box, Button, HStack, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, FormLabel, HStack, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, VStack, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
 import { VictoryLine, VictoryLabel, VictoryChart, VictoryTheme, VictoryAxis } from 'victory';
 import { screenBackground } from '../defaultStyle';
@@ -67,10 +67,9 @@ export default function GraphPage() {
     // Underweight: BMI < 5th percentile
     // =========================================================================================
     // =========================================================================================
-
-
-    // TODO: Make graphs dynamic.
+    // Length/Weight Graph
     // x = length, y = weight
+    // =========================================================================================
     // =========================================================================================
     const [weightLengthGraphPoints, setWeightLengthGraphPoints] = useState([]);
     const addWeightLengthPoint = () => {
@@ -81,6 +80,19 @@ export default function GraphPage() {
         setWeightLengthGraphPoints(newGraphPoints);
     };
     // =========================================================================================
+    // =========================================================================================
+    // Head Circumference/Weight Graph
+    // x = head circumference, y = weight
+    const [circumferenceWeightGraphPoints, setCircumferenceWeightGraphPoints] = useState([]);
+    const addCircumferenceWeightGraphPoint = () => {
+        let newGraphPoints = [
+            ...circumferenceWeightGraphPoints,
+            { x: Number(headCircumference), y: Number(selectedWeight) }
+        ];
+        setCircumferenceWeightGraphPoints(newGraphPoints);
+    };
+    // =========================================================================================
+    // =========================================================================================
 
     return (
         <Box
@@ -88,7 +100,7 @@ export default function GraphPage() {
             height="100vh"
         >
             <Box
-                width="100vw"
+                width="65vw"
             >
                 <HStack>
                     <VictoryChart
@@ -100,63 +112,12 @@ export default function GraphPage() {
                             dy={10}
                             text="Length"
                         />
-                        {/* <VictoryAxis
-                            width={400}
-                            height={400}
-                            theme={VictoryTheme.material}
-                            offsetY={200}
-                            standalone={false}
-                            label="Length"
-                            dependentAxis
-                            tickValues={[2, 4, 6, 8]}
-                            domain={[0, 20]}
-                        /> */}
-                        {/* <VictoryAxis
-                            width={400}
-                            height={400}
-                            theme={VictoryTheme.material}
-                            offsetX={200}
-                            standalone={false}
-                            label="Weight"
-                            tickValues={[2, 4, 6, 8]}
-                            domain={[0, 20]}
-                        /> */}
                         <VictoryLine
                             style={{
                                 data: { stroke: "#c43a31" },
                                 parent: { border: "1px solid #ccc" }
                             }}
                             data={weightLengthGraphPoints}
-                        >
-                        </VictoryLine>
-                        <VictoryLabel
-                            x={300}
-                            y={150}
-                            dy={10}
-                            text="Weight"
-                        />
-                    </VictoryChart>
-                    <VictoryChart
-                        theme={VictoryTheme.material}
-                    >
-                        <VictoryLabel
-                            x={5}
-                            y={5}
-                            dy={10}
-                            text="Age"
-                        />
-                        <VictoryLine
-                            style={{
-                                data: { stroke: "#c43a31" },
-                                parent: { border: "1px solid #ccc" }
-                            }}
-                            data={[
-                                { x: 1, y: 10 },
-                                { x: 2, y: 3 },
-                                { x: 3, y: 11 },
-                                { x: 2, y: 12 },
-                                { x: 5, y: 7 }
-                            ]}
                         >
                         </VictoryLine>
                         <VictoryLabel
@@ -180,13 +141,7 @@ export default function GraphPage() {
                                 data: { stroke: "#c43a31" },
                                 parent: { border: "1px solid #ccc" }
                             }}
-                            data={[
-                                { x: 1, y: 2 },
-                                { x: 2, y: 3 },
-                                { x: 3, y: 5 },
-                                { x: 4, y: 4 },
-                                { x: 5, y: 7 }
-                            ]}
+                            data={circumferenceWeightGraphPoints}
                         >
                         </VictoryLine>
                         <VictoryLabel
@@ -198,53 +153,74 @@ export default function GraphPage() {
                     </VictoryChart>
                 </HStack>
             </Box>
-            <NumberInput min={1} max={24}>
-                <NumberInputField placeholder="Age-months"
-                    value={selectedAgeOption}
-                    onChange={event => setSelectedAgeOption(event.target.value)}
-                />
-                <NumberInputStepper>
-                    <NumberIncrementStepper />
-                    <NumberDecrementStepper />
-                </NumberInputStepper>
-            </NumberInput>
-            <HStack>
-                <Input
-                    placeholder="length"
-                    value={selectedLength}
-                    onChange={event => setSelectedLength(event.target.value)}
-                />
-                <StyledSelect
-                    value={selectedLengthMeasurement}
-                    onChange={event => setSelectedLengthMeasurement(event.target.value)}
-                    options={measurementOptions}
-                />
-            </HStack>
-            <HStack>
-                <Input
-                    placeholder="weight"
-                    value={selectedWeight}
-                    onChange={event => setSelectedWeight(event.target.value)}
-                />
-                <StyledSelect
-                    value={selectedWeightMeasurement}
-                    onChange={event => setSelectedWeightMeasurement(event.target.value)}
-                    options={weightOptions}
-                />
-            </HStack>
-            <HStack>
-                <Input
-                    placeholder="head circumference"
-                    value={headCircumference}
-                    onChange={event => setHeadCircumference(event.target.value)}
-                />
-                <StyledSelect
-                    value={headCircumferenceMeasurement}
-                    onChange={event => setHeadCircumferenceMeasurement(event.target.value)}
-                    options={measurementOptions}
-                />
-            </HStack>
-            <Button onClick={addWeightLengthPoint}>Plot W/L Point</Button>
+            <VStack
+                justifyContent="space-between"
+                w="100vw"
+                alignItems="stretch"
+                spacing="-0.5"
+                pl="2"
+                pr="2"
+            >
+                <FormLabel htmlFor='age-months'>Age Months</FormLabel>
+                <NumberInput min={1} max={24}>
+                    <NumberInputField
+                        id="age-months"
+                        placeholder="Age-months"
+                        value={selectedAgeOption}
+                        onChange={event => setSelectedAgeOption(event.target.value)}
+                    />
+                    <NumberInputStepper>
+                        <NumberIncrementStepper />
+                        <NumberDecrementStepper />
+                    </NumberInputStepper>
+                </NumberInput>
+                <FormLabel htmlFor='length'>Length</FormLabel>
+                <HStack>
+                    <Input
+                        id="length"
+                        placeholder="length"
+                        value={selectedLength}
+                        onChange={event => setSelectedLength(event.target.value)}
+                    />
+                    <StyledSelect
+                        value={selectedLengthMeasurement}
+                        onChange={event => setSelectedLengthMeasurement(event.target.value)}
+                        options={measurementOptions}
+                    />
+                </HStack>
+                <FormLabel htmlFor='weight'>Weight</FormLabel>
+                <HStack>
+                    <Input
+                        id="weight"
+                        placeholder="weight"
+                        value={selectedWeight}
+                        onChange={event => setSelectedWeight(event.target.value)}
+                    />
+                    <StyledSelect
+                        value={selectedWeightMeasurement}
+                        onChange={event => setSelectedWeightMeasurement(event.target.value)}
+                        options={weightOptions}
+                    />
+                </HStack>
+                <FormLabel htmlFor='circumference'>Head Circumference</FormLabel>
+                <HStack>
+                    <Input
+                        id="circumference"
+                        placeholder="head circumference"
+                        value={headCircumference}
+                        onChange={event => setHeadCircumference(event.target.value)}
+                    />
+                    <StyledSelect
+                        value={headCircumferenceMeasurement}
+                        onChange={event => setHeadCircumferenceMeasurement(event.target.value)}
+                        options={measurementOptions}
+                    />
+                </HStack>
+                <HStack>
+                    <Button onClick={addWeightLengthPoint}>Plot W/L Point</Button>
+                    <Button onClick={addCircumferenceWeightGraphPoint}>Plot H/L Point</Button>
+                </HStack>
+            </VStack>
         </Box>
     );
 }
