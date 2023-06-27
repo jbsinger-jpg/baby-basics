@@ -78,6 +78,16 @@ export default function GraphPage() {
             ...weightLengthGraphPoints,
             { x: Number(selectedLength), y: Number(selectedWeight) }
         ];
+
+        // Update both the front and backend whenever the button is pressed
+        firestore
+            .collection("users")
+            .doc(auth.currentUser.uid)
+            .collection("weight-graph")
+            .doc(selectedAgeOption)
+            .set({
+                graph_points: [...newGraphPoints]
+            });
         setWeightLengthGraphPoints(newGraphPoints);
     };
     // =========================================================================================
@@ -90,6 +100,16 @@ export default function GraphPage() {
             ...circumferenceWeightGraphPoints,
             { x: Number(headCircumference), y: Number(selectedWeight) }
         ];
+
+        // Update both the front and backend whenever the button is pressed
+        firestore
+            .collection("users")
+            .doc(auth.currentUser.uid)
+            .collection("circumference-graph")
+            .doc(selectedAgeOption)
+            .set({
+                graph_points: [...newGraphPoints]
+            });
         setCircumferenceWeightGraphPoints(newGraphPoints);
     };
     // =========================================================================================
@@ -99,25 +119,31 @@ export default function GraphPage() {
         firestore
             .collection("users")
             .doc(auth.currentUser.uid)
-            .collection("circumference")
+            .collection("circumference-graph")
             .doc(selectedAgeOption)
             .get()
             .then(doc => {
-                // set front-end data object to array called graph points.
-                // TODO: need to implement data to be set still.
-                setCircumferenceWeightGraphPoints(doc.data().graph_points);
+                if (doc.exists) {
+                    setCircumferenceWeightGraphPoints(doc.data().graph_points);
+                }
+                else {
+                    setCircumferenceWeightGraphPoints([]);
+                }
             });
 
         firestore
             .collection("users")
             .doc(auth.currentUser.uid)
-            .collection("weight")
+            .collection("weight-graph")
             .doc(selectedAgeOption)
             .get()
             .then(doc => {
-                // set front-end data object to array called graph points.
-                // TODO: need to implement data to be set still.
-                setWeightLengthGraphPoints(doc.data().graph_points);
+                if (doc.exists) {
+                    setWeightLengthGraphPoints(doc.data().graph_points);
+                }
+                else {
+                    setWeightLengthGraphPoints([]);
+                }
             });
     };
 
@@ -190,12 +216,15 @@ export default function GraphPage() {
             >
                 <FormLabel htmlFor='age-months'>Age Months</FormLabel>
                 <HStack>
-                    <NumberInput min={1} max={24}>
+                    <NumberInput
+                        min={1}
+                        max={24}
+                        value={selectedAgeOption}
+                        onChange={valueString => setSelectedAgeOption(valueString)}
+                    >
                         <NumberInputField
                             id="age-months"
                             placeholder="Age-months"
-                            value={selectedAgeOption}
-                            onChange={event => setSelectedAgeOption(event.target.value)}
                         />
                         <NumberInputStepper>
                             <NumberIncrementStepper />
