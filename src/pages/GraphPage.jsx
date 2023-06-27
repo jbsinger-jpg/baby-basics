@@ -1,9 +1,10 @@
 import { Box, Button, FormLabel, HStack, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, VStack, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
-import { VictoryLine, VictoryLabel, VictoryChart, VictoryTheme, VictoryAxis } from 'victory';
+import { VictoryLine, VictoryLabel, VictoryChart, VictoryTheme } from 'victory';
 import { screenBackground } from '../defaultStyle';
 import StyledSelect from '../components/StyledSelect';
 import { useState } from 'react';
+import { auth, firestore } from '../firebaseConfig';
 
 export default function GraphPage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
@@ -94,6 +95,32 @@ export default function GraphPage() {
     // =========================================================================================
     // =========================================================================================
 
+    const queryDatabaseForBabyAge = () => {
+        firestore
+            .collection("users")
+            .doc(auth.currentUser.uid)
+            .collection("circumference")
+            .doc(selectedAgeOption)
+            .get()
+            .then(doc => {
+                // set front-end data object to array called graph points.
+                // TODO: need to implement data to be set still.
+                setCircumferenceWeightGraphPoints(doc.data().graph_points);
+            });
+
+        firestore
+            .collection("users")
+            .doc(auth.currentUser.uid)
+            .collection("weight")
+            .doc(selectedAgeOption)
+            .get()
+            .then(doc => {
+                // set front-end data object to array called graph points.
+                // TODO: need to implement data to be set still.
+                setWeightLengthGraphPoints(doc.data().graph_points);
+            });
+    };
+
     return (
         <Box
             bg={_screenBackground}
@@ -162,18 +189,23 @@ export default function GraphPage() {
                 pr="2"
             >
                 <FormLabel htmlFor='age-months'>Age Months</FormLabel>
-                <NumberInput min={1} max={24}>
-                    <NumberInputField
-                        id="age-months"
-                        placeholder="Age-months"
-                        value={selectedAgeOption}
-                        onChange={event => setSelectedAgeOption(event.target.value)}
-                    />
-                    <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                    </NumberInputStepper>
-                </NumberInput>
+                <HStack>
+                    <NumberInput min={1} max={24}>
+                        <NumberInputField
+                            id="age-months"
+                            placeholder="Age-months"
+                            value={selectedAgeOption}
+                            onChange={event => setSelectedAgeOption(event.target.value)}
+                        />
+                        <NumberInputStepper>
+                            <NumberIncrementStepper />
+                            <NumberDecrementStepper />
+                        </NumberInputStepper>
+                    </NumberInput>
+                    <Button onClick={queryDatabaseForBabyAge}>
+                        View Age
+                    </Button>
+                </HStack>
                 <FormLabel htmlFor='length'>Length</FormLabel>
                 <HStack>
                     <Input
