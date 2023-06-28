@@ -1,71 +1,26 @@
-import { Box, Button, FormLabel, HStack, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, VStack, useColorModeValue } from '@chakra-ui/react';
+// Module imports
+import { AlertDialog, AlertDialogContent, AlertDialogOverlay, Box, Button, Checkbox, FormLabel, HStack, Image, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, VStack, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
 import { VictoryLine, VictoryLabel, VictoryChart, VictoryTheme } from 'victory';
-import { screenBackground } from '../defaultStyle';
-import StyledSelect from '../components/StyledSelect';
 import { useState } from 'react';
+
+// Relative imports
+import { screenBackground } from '../defaultStyle';
 import { auth, firestore } from '../firebaseConfig';
 
 export default function GraphPage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
-    const measurementOptions = [
-        { value: "in", label: "in", key: 0 },
-        { value: "cm", label: "cm", key: 1 },
-    ];
-    const weightOptions = [
-        { value: "lb", label: "lb", key: 0 },
-        { value: "kg", label: "kg", key: 1 },
-    ];
-
-    const [selectedAgeOption, setSelectedAgeOption] = useState("");
+    const [selectedAgeOption, setSelectedAgeOption] = useState("1");
     const [selectedLength, setSelectedLength] = useState("");
-    const [selectedLengthMeasurement, setSelectedLengthMeasurement] = useState("");
     const [selectedWeight, setSelectedWeight] = useState("");
-    const [selectedWeightMeasurement, setSelectedWeightMeasurement] = useState("");
     const [headCircumference, setHeadCircumference] = useState("");
-    const [headCircumferenceMeasurement, setHeadCircumferenceMeasurement] = useState("");
+    const [graphDialogIsOpen, setGraphDialogIsOpen] = useState(false);
+    const [growthChartRelativePath, setGrowthChartRelativePath] = useState(require("../../src/components/staticPageData/growth-chart-for-girls.jpg"));
+    const [allGraphPointsIsVisible, setAllGraphPointsIsVisible] = useState(false);
 
-    // These functions will be used to make sure that the database only submits one universal number (for lbs and inches) and if the conversion needs to be made it will be done
-    // on the frontend to prevent multiple database calls.
-    // =============================================================================================
-    // =============================================================================================
-    // Conversion from cm to in => 1" = 2.54cm
-    // Conversion from lb to kg => 1kg = 2.23 lbs
-    // =============================================================================================
-    // =============================================================================================
-
-    // If user is making submission in cm then it has to be converted to inches for the database,
-    // If user is making submission in kg then it has to be converted to pounds for the database
-
-    // TODO: Get function to convert values upon database submission.
-    const getStandardValuesForDatabase = () => {
-        let convertedLengthMeasurement = "";
-        let convertedWeightMeasurement = "";
-        let convertedCircumferenceMeasurement = "";
-
-        if (selectedLengthMeasurement === "cm") {
-            convertedLengthMeasurement = selectedLength / 2.54;
-        }
-
-        if (selectedWeightMeasurement === "kg") {
-            convertedWeightMeasurement = selectedWeight * 2.23;
-        }
-
-        return {
-            length: convertedLengthMeasurement,
-            lengthMeasurement: "in",
-            weight: convertedWeightMeasurement,
-            weightMeasurement: "lb",
-            headCircumference: convertedCircumferenceMeasurement,
-            headCircumferenceMeasurement: "in"
-        };
-    };
-
-    // TODO: Get standardized measurements for baby health, base it off the graph Mulya gave you
-    // BMI=weight(kg)/height(m^2)
-    // Obesity: BMI > 95th percentile
-    // Overweight: 85th < BMI < 95th percentile
-    // Underweight: BMI < 5th percentile
+    const [graphButtonDataIsLoading, setGraphButtonDataIsLoading] = useState(false);
+    const [weightButtonIsLoading, setWeightButtonIsLoading] = useState(false);
+    const [circumferenceButtonIsLoading, setCircumferenceButtonIsLoading] = useState(false);
     // =========================================================================================
     // =========================================================================================
     // Length/Weight Graph
@@ -74,6 +29,7 @@ export default function GraphPage() {
     // =========================================================================================
     const [weightLengthGraphPoints, setWeightLengthGraphPoints] = useState([]);
     const addWeightLengthPoint = () => {
+        setWeightButtonIsLoading(true);
         let newGraphPoints = [
             ...weightLengthGraphPoints,
             { x: Number(selectedLength), y: Number(selectedWeight) }
@@ -87,6 +43,8 @@ export default function GraphPage() {
             .doc(selectedAgeOption)
             .set({
                 graph_points: [...newGraphPoints]
+            }).finally(() => {
+                setWeightButtonIsLoading(false);
             });
         setWeightLengthGraphPoints(newGraphPoints);
     };
@@ -96,6 +54,7 @@ export default function GraphPage() {
     // x = head circumference, y = weight
     const [circumferenceWeightGraphPoints, setCircumferenceWeightGraphPoints] = useState([]);
     const addCircumferenceWeightGraphPoint = () => {
+        setCircumferenceButtonIsLoading(true);
         let newGraphPoints = [
             ...circumferenceWeightGraphPoints,
             { x: Number(headCircumference), y: Number(selectedWeight) }
@@ -109,13 +68,15 @@ export default function GraphPage() {
             .doc(selectedAgeOption)
             .set({
                 graph_points: [...newGraphPoints]
+            }).finally(() => {
+                setCircumferenceButtonIsLoading(false);
             });
         setCircumferenceWeightGraphPoints(newGraphPoints);
     };
     // =========================================================================================
     // =========================================================================================
-
     const queryDatabaseForBabyAge = () => {
+        setGraphButtonDataIsLoading(true);
         firestore
             .collection("users")
             .doc(auth.currentUser.uid)
@@ -144,18 +105,63 @@ export default function GraphPage() {
                 else {
                     setWeightLengthGraphPoints([]);
                 }
+                setGraphButtonDataIsLoading(false);
             });
+    };
+
+    const showGrowthChartDialog = () => {
+        setGraphDialogIsOpen(true);
+    };
+
+    const handleChangeGrowthChart = () => {
+        if (growthChartRelativePath === require("../../src/components/staticPageData/growth-chart-for-boys.jpg")) {
+            setGrowthChartRelativePath(require("../../src/components/staticPageData/growth-chart-for-girls.jpg"));
+        }
+        else {
+            setGrowthChartRelativePath(require("../../src/components/staticPageData/growth-chart-for-boys.jpg"));
+        }
+    };
+
+    const handleShowAllGraphData = (event) => {
+        setAllGraphPointsIsVisible(event.target.checked);
+        if (event.target.checked) {
+            firestore
+                .collection("users")
+                .doc(auth.currentUser.uid)
+                .collection("circumference-graph")
+                .get()
+                .then(snapshot => {
+                    let newGraphPoints = [];
+                    snapshot.docs.forEach(doc => {
+                        newGraphPoints = newGraphPoints.concat(doc.data().graph_points);
+                    });
+                    setCircumferenceWeightGraphPoints(newGraphPoints);
+                });
+            firestore
+                .collection("users")
+                .doc(auth.currentUser.uid)
+                .collection("weight-graph")
+                .get()
+                .then(snapshot => {
+                    let newGraphPoints = [];
+                    snapshot.docs.forEach(doc => {
+                        newGraphPoints = newGraphPoints.concat(doc.data().graph_points);
+                    });
+                    setWeightLengthGraphPoints(newGraphPoints);
+                });
+        }
     };
 
     return (
         <Box
             bg={_screenBackground}
             height="100vh"
+            width="100vw"
         >
             <Box
-                width="65vw"
+                width="55vw"
             >
-                <HStack>
+                <HStack spacing={10}>
                     <VictoryChart
                         theme={VictoryTheme.material}
                     >
@@ -163,7 +169,7 @@ export default function GraphPage() {
                             x={5}
                             y={5}
                             dy={10}
-                            text="Length"
+                            text="Length (cm)"
                         />
                         <VictoryLine
                             style={{
@@ -174,10 +180,10 @@ export default function GraphPage() {
                         >
                         </VictoryLine>
                         <VictoryLabel
-                            x={300}
-                            y={150}
+                            x={150}
+                            y={325}
                             dy={10}
-                            text="Weight"
+                            text="Weight (kg)"
                         />
                     </VictoryChart>
                     <VictoryChart
@@ -187,7 +193,7 @@ export default function GraphPage() {
                             x={5}
                             y={5}
                             dy={10}
-                            text="Head Circumference"
+                            text="Head Circumference (cm)"
                         />
                         <VictoryLine
                             style={{
@@ -198,10 +204,10 @@ export default function GraphPage() {
                         >
                         </VictoryLine>
                         <VictoryLabel
-                            x={300}
-                            y={150}
+                            x={150}
+                            y={325}
                             dy={10}
-                            text="Weight"
+                            text="Weight (kg)"
                         />
                     </VictoryChart>
                 </HStack>
@@ -215,73 +221,80 @@ export default function GraphPage() {
                 pr="2"
             >
                 <FormLabel htmlFor='age-months'>Age Months</FormLabel>
-                <HStack>
-                    <NumberInput
-                        min={1}
-                        max={24}
-                        value={selectedAgeOption}
-                        onChange={valueString => setSelectedAgeOption(valueString)}
+                <VStack alignItems="start">
+                    <HStack>
+                        <NumberInput
+                            min={1}
+                            max={24}
+                            value={selectedAgeOption}
+                            onChange={valueString => setSelectedAgeOption(valueString)}
+                            isDisabled={allGraphPointsIsVisible}
+                        >
+                            <NumberInputField
+                                id="age-months"
+                                placeholder="Age-months"
+                            />
+                            <NumberInputStepper>
+                                <NumberIncrementStepper />
+                                <NumberDecrementStepper />
+                            </NumberInputStepper>
+                        </NumberInput>
+                        <Button onClick={queryDatabaseForBabyAge} isLoading={graphButtonDataIsLoading} isDisabled={allGraphPointsIsVisible}>
+                            View Graph
+                        </Button>
+                    </HStack>
+                    <Checkbox
+                        isChecked={allGraphPointsIsVisible}
+                        onChange={handleShowAllGraphData}
                     >
-                        <NumberInputField
-                            id="age-months"
-                            placeholder="Age-months"
-                        />
-                        <NumberInputStepper>
-                            <NumberIncrementStepper />
-                            <NumberDecrementStepper />
-                        </NumberInputStepper>
-                    </NumberInput>
-                    <Button onClick={queryDatabaseForBabyAge}>
-                        View Age
-                    </Button>
-                </HStack>
+                        Show All Graph Points
+                    </Checkbox>
+                </VStack>
                 <FormLabel htmlFor='length'>Length</FormLabel>
-                <HStack>
-                    <Input
-                        id="length"
-                        placeholder="length"
-                        value={selectedLength}
-                        onChange={event => setSelectedLength(event.target.value)}
-                    />
-                    <StyledSelect
-                        value={selectedLengthMeasurement}
-                        onChange={event => setSelectedLengthMeasurement(event.target.value)}
-                        options={measurementOptions}
-                    />
-                </HStack>
+                <Input
+                    id="length"
+                    placeholder="length"
+                    value={selectedLength}
+                    onChange={event => setSelectedLength(event.target.value)}
+                />
                 <FormLabel htmlFor='weight'>Weight</FormLabel>
-                <HStack>
-                    <Input
-                        id="weight"
-                        placeholder="weight"
-                        value={selectedWeight}
-                        onChange={event => setSelectedWeight(event.target.value)}
-                    />
-                    <StyledSelect
-                        value={selectedWeightMeasurement}
-                        onChange={event => setSelectedWeightMeasurement(event.target.value)}
-                        options={weightOptions}
-                    />
-                </HStack>
+                <Input
+                    id="weight"
+                    placeholder="weight"
+                    value={selectedWeight}
+                    onChange={event => setSelectedWeight(event.target.value)}
+                />
                 <FormLabel htmlFor='circumference'>Head Circumference</FormLabel>
+                <Input
+                    id="circumference"
+                    placeholder="head circumference"
+                    value={headCircumference}
+                    onChange={event => setHeadCircumference(event.target.value)}
+                />
                 <HStack>
-                    <Input
-                        id="circumference"
-                        placeholder="head circumference"
-                        value={headCircumference}
-                        onChange={event => setHeadCircumference(event.target.value)}
-                    />
-                    <StyledSelect
-                        value={headCircumferenceMeasurement}
-                        onChange={event => setHeadCircumferenceMeasurement(event.target.value)}
-                        options={measurementOptions}
-                    />
-                </HStack>
-                <HStack>
-                    <Button onClick={addWeightLengthPoint}>Plot W/L Point</Button>
-                    <Button onClick={addCircumferenceWeightGraphPoint}>Plot H/L Point</Button>
+                    <Button onClick={addWeightLengthPoint} isLoading={weightButtonIsLoading}>Plot W/L Point</Button>
+                    <Button onClick={addCircumferenceWeightGraphPoint} isLoading={circumferenceButtonIsLoading}>Plot H/L Point</Button>
+                    <Button onClick={showGrowthChartDialog}>View Growth Chart</Button>
                 </HStack>
             </VStack>
+            {/* Alert Dialog triggered for showing user growth charts */}
+            <AlertDialog
+                isOpen={graphDialogIsOpen}
+                onClose={() => setGraphDialogIsOpen(false)}
+            >
+                <AlertDialogOverlay>
+                    <AlertDialogContent>
+                        <Box
+                            w="40vw"
+                            display="flex"
+                            flexDir="column"
+                        >
+                            <Image src={growthChartRelativePath} />
+                            <Button onClick={handleChangeGrowthChart}>Switch Chart</Button>
+                        </Box>
+                    </AlertDialogContent>
+                </AlertDialogOverlay>
+            </AlertDialog>
         </Box>
     );
 }
