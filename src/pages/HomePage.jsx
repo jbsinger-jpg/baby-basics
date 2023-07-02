@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import PublishIcon from '@mui/icons-material/Publish';
 import CalculateIcon from '@mui/icons-material/Calculate';
+import Bedtime from '@mui/icons-material/Bedtime';
 
 // relative imports
 import { auth, firestore } from '../firebaseConfig';
@@ -162,6 +163,10 @@ export default function HomePage() {
 
     const handleOpenGraphPage = () => {
         navigate(`/graph`);
+    };
+
+    const handleOpenBabySleepPage = () => {
+        navigate(`/sleep`);
     };
 
     // // initialize the page with the data from the data base
@@ -426,7 +431,28 @@ export default function HomePage() {
                                 leftIcon={<CalculateIcon fontSize="small" />}
                                 onClick={handleOpenGraphPage}
                             >
-                                Calculate Baby Growth!
+                                Track Baby Growth!
+                            </Button>
+                            <Button
+                                leftIcon={<Bedtime fontSize="small" />}
+                                onClick={handleOpenBabySleepPage}
+                            >
+                                Track Baby Sleep!
+                            </Button>
+                            <Button
+                                onClick={() => navigate("/diaper-tracking")}
+                            >
+                                Track Baby Diapers!
+                            </Button>
+                            <Button
+                                onClick={() => navigate("/feed-tracking")}
+                            >
+                                Track Baby Feeding!
+                            </Button>
+                            <Button
+                                onClick={() => navigate("/pump-tracking")}
+                            >
+                                Track Pumping!
                             </Button>
                         </VStack>
                     </DrawerBody>
