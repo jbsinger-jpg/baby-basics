@@ -449,11 +449,6 @@ export default function HomePage() {
                             >
                                 Track Baby Feeding!
                             </Button>
-                            <Button
-                                onClick={() => navigate("/pump-tracking")}
-                            >
-                                Track Pumping!
-                            </Button>
                         </VStack>
                     </DrawerBody>
                 </DrawerContent>
