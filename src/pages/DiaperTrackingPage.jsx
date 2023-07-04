@@ -244,13 +244,17 @@ export default function DiaperTrackingPage() {
                                     pr="2"
                                 >
                                     <Button onClick={showColorationDialog}>Color and/or Consistency</Button>
-                                    {pooTabData && pooTabData.length && pooTabData.map(pooRow => {
+                                    {pooTabData && pooTabData.length && pooTabData.map((pooRow, index) => {
                                         return (
                                             <PooTabPanel
-                                                notes={pooRow.notes}
+                                                alias={pooRow.alias}
                                                 color={pooRow.color}
                                                 consistency={pooRow.consistency}
+                                                notes={pooRow.notes}
                                                 timeStamp={pooRow.timeStamp}
+                                                tempData={pooTabData}
+                                                setTempData={setPooTabData}
+                                                index={index}
                                             />
                                         );
                                     })}

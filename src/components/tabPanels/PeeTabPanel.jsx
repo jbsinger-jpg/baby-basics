@@ -1,5 +1,5 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
-import { Box, Button, Card, CardBody, CardHeader, Collapse, FormLabel, HStack, Heading, IconButton, Text, Textarea } from '@chakra-ui/react';
+import { Box, Card, CardBody, CardHeader, Collapse, FormLabel, HStack, Heading, IconButton, Text, Textarea } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
 export default function PeeTabPanel({ notes, timeStamp, alias }) {
