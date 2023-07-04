@@ -1,4 +1,4 @@
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, FormControl, FormLabel, HStack, Icon, IconButton, Input, Radio, RadioGroup, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Textarea, VStack, useColorModeValue } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, FormControl, FormLabel, HStack, Icon, IconButton, Input, Radio, RadioGroup, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Textarea, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
 import { screenBackground } from '../defaultStyle';
@@ -9,25 +9,7 @@ import VolcanoIcon from '@mui/icons-material/Volcano';
 import PeeTabPanel from '../components/tabPanels/PeeTabPanel';
 import PooTabPanel from '../components/tabPanels/PooTabPanel';
 import DryTabPanel from '../components/tabPanels/DryTabPanel';
-
-const babyPoopColorData = [
-    { color: "yellow", description: "Usual coloration for babies that are breast-fed, during the meconium stage." },
-    { color: "brown", description: "Coloration usually found within formula fed babies." },
-    { color: "black", description: "Coloration can be considered normal for babies in the meconium stage. Should consider contacting doctor." },
-    { color: "red", description: "Coloration can be caused from sudden change in diet. Red streaks could be blood should consider contacting doctor." },
-    { color: "green", description: "Coloration can be caused from either bacterial infection or sudden change in diet. Should consider contacting doctor." },
-    { color: "orange", description: "Coloration can be caused by certain medications that the baby was given, and/or diet related." },
-];
-
-const babyPoopConsistencyData = [
-    { consistency: "sticky", description: "Baby's first bowel movements are considered to be sticky/tar-like" },
-    { consistency: "mushy", description: "Is the consistency of baby's first bowel movements and is a good indication that they are breast-fed." },
-    { consistency: "well-formed", description: "This is normal once babies start to eat solid foods." },
-    { consistency: "watery", description: "Good indication that the baby has diarrhea." },
-    { consistency: "hard", description: "Good indication that the baby is constipated." },
-    { consistency: "chalky", description: "Could be an indicator for potential liver problems. Should consider contacting a doctor." },
-    { consistency: "soft", description: "Formula-fed babies usually have poop that is soft, with a similar texture to peanut butter." },
-];
+import { babyPoopColorData, babyPoopConsistencyData } from '../components/staticPageData/baby-color-consistency-info';
 
 export default function DiaperTrackingPage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
@@ -35,6 +17,7 @@ export default function DiaperTrackingPage() {
     const [tabIndex, setTabIndex] = useState(0);
     const [colorValue, setColorValue] = useState('none');
     const [consistencyValue, setConsistencyValue] = useState('none');
+    const toast = useToast();
 
     const [peeTabNotes, setPeeTabNotes] = useState("");
     const [pooTabNotes, setPooTabNotes] = useState("");
@@ -192,7 +175,13 @@ export default function DiaperTrackingPage() {
                     }]
                 );
             else {
-                console.log("Entry has a duplicate alias!");
+                toast({
+                    title: 'Unable to add new entry!',
+                    description: "Entry has a duplicate alias!",
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
             }
         }
         else if (tabIndex === 1) {
@@ -202,12 +191,19 @@ export default function DiaperTrackingPage() {
                     color: colorValue,
                     consistency: consistencyValue,
                     notes: pooTabNotes,
-                    timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`
+                    timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
+                    description: getDescriptionForColorAndConsistency()
                 };
                 setPooTabData([...pooTabData, newEntry]);
             }
             else {
-                console.log("Entry has a duplicate alias!");
+                toast({
+                    title: 'Unable to add new entry!',
+                    description: "Entry has a duplicate alias!",
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
             }
         }
         else if (tabIndex === 2) {
@@ -221,7 +217,13 @@ export default function DiaperTrackingPage() {
                 );
             }
             else {
-                console.log("Entry has a duplicate alias!");
+                toast({
+                    title: 'Unable to add new entry!',
+                    description: "Entry has a duplicate alias!",
+                    status: 'error',
+                    duration: 3000,
+                    isClosable: true,
+                });
             }
         }
     };
@@ -293,6 +295,7 @@ export default function DiaperTrackingPage() {
                                                 alias={pooRow.alias}
                                                 color={pooRow.color}
                                                 consistency={pooRow.consistency}
+                                                description={pooRow.description}
                                                 notes={pooRow.notes}
                                                 timeStamp={pooRow.timeStamp}
                                                 tempData={pooTabData}
@@ -364,7 +367,7 @@ export default function DiaperTrackingPage() {
                                     Selected Options
                                 </FormLabel>
                                 <Input
-                                    disabled
+                                    readOnly
                                     value={formatColorConsistencyValue()}
                                     id='selected-options'
                                 />
@@ -372,7 +375,7 @@ export default function DiaperTrackingPage() {
                                     Description
                                 </FormLabel>
                                 <Textarea
-                                    disabled
+                                    readOnly
                                     value={getDescriptionForColorAndConsistency()}
                                     id='description'
                                 />
