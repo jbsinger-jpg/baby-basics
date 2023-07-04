@@ -2,6 +2,12 @@ import { ChevronDownIcon, ChevronUpIcon, CloseIcon } from '@chakra-ui/icons';
 import { Box, Card, CardBody, CardHeader, Collapse, FormLabel, HStack, Heading, IconButton, Text, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
+const ColorCircle = ({ color }) => {
+    return (
+        <Box h="30px" w="30px" bg={color} borderColor="black" border="1px" borderRadius={"50%"}></Box>
+    );
+};
+
 export default function PooTabPanel({ setTempData, tempData, index, notes, color, consistency, timeStamp, alias }) {
     const [showAllNotes, setShowAllNotes] = useState(false);
     const handleToggle = () => {
@@ -46,9 +52,7 @@ export default function PooTabPanel({ setTempData, tempData, index, notes, color
                     >
                         <Box>
                             <FormLabel>Color</FormLabel>
-                            <Text>
-                                {color}
-                            </Text>
+                            {color !== "none" ? <ColorCircle color={color} /> : color}
                         </Box>
                         <Box>
                             <FormLabel>Consistency</FormLabel>

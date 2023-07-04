@@ -1,4 +1,4 @@
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, FormLabel, HStack, Icon, IconButton, Input, Radio, RadioGroup, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Textarea, VStack, useColorModeValue } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, FormControl, FormLabel, HStack, Icon, IconButton, Input, Radio, RadioGroup, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Textarea, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
 import { screenBackground } from '../defaultStyle';
@@ -166,29 +166,72 @@ export default function DiaperTrackingPage() {
         }
     };
 
-    const addRowEntry = () => {
+    const peeTabAliasDuplicateFound = () => {
+        return peeTabData.some(tab => tab.alias === peeTabAlias);
+    };
+
+    const pooTabAliasDuplicateFound = () => {
+        return pooTabData.some(tab => tab.alias === pooTabAlias);
+    };
+
+    const dryTabAliasDuplicateFound = () => {
+        return dryTabData.some(tab => tab.alias === dryTabAlias);
+
+    };
+
+    const addRowEntry = (event) => {
+        event.preventDefault();
+
         if (tabIndex === 0) {
-            setPeeTabData([...peeTabData, { alias: peeTabAlias, notes: peeTabNotes, timeStamp: new Date().toLocaleTimeString() }]);
+            if (!peeTabAliasDuplicateFound())
+                setPeeTabData(
+                    [...peeTabData, {
+                        alias: peeTabAlias,
+                        notes: peeTabNotes,
+                        timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`
+                    }]
+                );
+            else {
+                console.log("Entry has a duplicate alias!");
+            }
         }
         else if (tabIndex === 1) {
-            let newEntry = {
-                alias: pooTabAlias,
-                color: colorValue,
-                consistency: consistencyValue,
-                notes: pooTabNotes,
-                timeStamp: new Date().toLocaleTimeString()
-            };
-            setPooTabData([...pooTabData, newEntry]);
+            if (!pooTabAliasDuplicateFound()) {
+                let newEntry = {
+                    alias: pooTabAlias,
+                    color: colorValue,
+                    consistency: consistencyValue,
+                    notes: pooTabNotes,
+                    timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`
+                };
+                setPooTabData([...pooTabData, newEntry]);
+            }
+            else {
+                console.log("Entry has a duplicate alias!");
+            }
         }
         else if (tabIndex === 2) {
-            setDryTabData([...dryTabData, { alias: dryTabAlias, notes: dryTabNotes, timeStamp: new Date().toLocaleTimeString() }]);
+            if (!dryTabAliasDuplicateFound()) {
+                setDryTabData(
+                    [...dryTabData, {
+                        alias: dryTabAlias,
+                        notes: dryTabNotes,
+                        timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`
+                    }]
+                );
+            }
+            else {
+                console.log("Entry has a duplicate alias!");
+            }
         }
     };
 
     return (
-        <>
+        <Box
+            bg={_screenBackground}
+            h="100vh"
+        >
             <Box
-                bg={_screenBackground}
                 height={`calc(100vh - 240px)`}
                 width="100vw"
                 overflowX="hidden"
@@ -343,24 +386,27 @@ export default function DiaperTrackingPage() {
                     </AlertDialogOverlay>
                 </AlertDialog>
             </Box>
-            <VStack
-                pl="2"
-                pr="2"
-                position="fixed"
-                bottom="0"
-                w="100vw"
-                alignItems="start"
-                bg={_screenBackground}
-            >
-                <FormLabel htmlFor='alias'>Alias</FormLabel>
-                <Input value={getTabAlias()} onChange={handleTabAliasChange} />
-                <FormLabel htmlFor='notes'>Notes</FormLabel>
-                <Textarea id='notes' placeholder='Notes' value={getTabNotes()} onChange={handleTabNotesChange} />
-                <HStack>
-                    <Button onClick={addRowEntry}>Save</Button>
-                    <Button onClick={handleClearNotes}>Clear</Button>
-                </HStack>
-            </VStack>
-        </>
+            <form onSubmit={addRowEntry}>
+                <VStack
+                    pl="2"
+                    pr="2"
+                    position="fixed"
+                    bottom="0"
+                    w="100vw"
+                    alignItems="start"
+                >
+                    <FormControl isRequired>
+                        <FormLabel htmlFor='alias'>Alias</FormLabel>
+                        <Input value={getTabAlias()} onChange={handleTabAliasChange} />
+                    </FormControl>
+                    <FormLabel htmlFor='notes'>Notes</FormLabel>
+                    <Textarea id='notes' placeholder='Notes' value={getTabNotes()} onChange={handleTabNotesChange} />
+                    <HStack>
+                        <Button type='submit'>Save</Button>
+                        <Button onClick={handleClearNotes}>Clear</Button>
+                    </HStack>
+                </VStack>
+            </form>
+        </Box>
     );
 }

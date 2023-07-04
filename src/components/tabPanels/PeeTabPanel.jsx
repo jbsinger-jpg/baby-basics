@@ -36,7 +36,7 @@ export default function PeeTabPanel({ notes, timeStamp, alias }) {
                             <IconButton onClick={handleToggle} icon={getIconFromToggle()} variant="unstyled" />
                         </HStack>
                         <Box>
-                            <FormLabel>Time Stamp</FormLabel>
+                            <FormLabel>Submitted</FormLabel>
                             <Text>
                                 {timeStamp}
                             </Text>
