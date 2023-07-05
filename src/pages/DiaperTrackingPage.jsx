@@ -1,7 +1,7 @@
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, FormControl, FormLabel, HStack, Icon, IconButton, Input, Radio, RadioGroup, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Textarea, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, Icon, IconButton, Input, Radio, RadioGroup, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Textarea, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
-import { screenBackground } from '../defaultStyle';
+import { cardBackground, screenBackground } from '../defaultStyle';
 import FloatingActionButtonsDiaperTracking from '../components/floatingActionButtons/FloatingActionButtonsDiaperTracking';
 import WaterDropIcon from '@mui/icons-material/Water';
 import DoDisturbAltIcon from '@mui/icons-material/DoDisturbAlt';
@@ -10,9 +10,13 @@ import PeeTabPanel from '../components/tabPanels/PeeTabPanel';
 import PooTabPanel from '../components/tabPanels/PooTabPanel';
 import DryTabPanel from '../components/tabPanels/DryTabPanel';
 import { babyPoopColorData, babyPoopConsistencyData } from '../components/staticPageData/baby-color-consistency-info';
+import { auth, firestore } from '../firebaseConfig';
+import { useEffect } from 'react';
 
 export default function DiaperTrackingPage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
+    const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
+
     const [colorationDialogIsVisible, setColorationDialogIsVisible] = useState(false);
     const [tabIndex, setTabIndex] = useState(0);
     const [colorValue, setColorValue] = useState('none');
@@ -30,6 +34,8 @@ export default function DiaperTrackingPage() {
     const [peeTabData, setPeeTabData] = useState([]);
     const [pooTabData, setPooTabData] = useState([]);
     const [dryTabData, setDryTabData] = useState([]);
+
+    const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
 
     const handleTabsChange = (index) => {
         setTabIndex(index);
@@ -149,24 +155,53 @@ export default function DiaperTrackingPage() {
         }
     };
 
-    const peeTabAliasDuplicateFound = () => {
-        return peeTabData.some(tab => tab.alias === peeTabAlias);
+    const peeTabAliasDuplicateFound = async () => {
+        return await firestore.collection("users")
+            .doc(auth?.currentUser?.uid)
+            .collection("pee-tracking")
+            .where("alias", "==", String(peeTabAlias).trim())
+            .get()
+            .then((snapshot) => {
+                return snapshot.docs.length;
+            });
     };
 
-    const pooTabAliasDuplicateFound = () => {
-        return pooTabData.some(tab => tab.alias === pooTabAlias);
+    const pooTabAliasDuplicateFound = async () => {
+        return await firestore.collection("users")
+            .doc(auth?.currentUser?.uid)
+            .collection("poo-tracking")
+            .where("alias", "==", String(pooTabAlias).trim())
+            .get()
+            .then((snapshot) => {
+                return snapshot.docs.length;
+            });
     };
 
-    const dryTabAliasDuplicateFound = () => {
-        return dryTabData.some(tab => tab.alias === dryTabAlias);
-
+    const dryTabAliasDuplicateFound = async () => {
+        return await firestore.collection("users")
+            .doc(auth?.currentUser?.uid)
+            .collection("dry-tracking")
+            .where("alias", "==", String(dryTabAlias).trim())
+            .get()
+            .then((snapshot) => {
+                return snapshot.docs.length;
+            });
     };
 
-    const addRowEntry = (event) => {
+    const addRowEntry = async (event) => {
         event.preventDefault();
+        const peeDuplicate = await peeTabAliasDuplicateFound();
+        const pooDuplicate = await pooTabAliasDuplicateFound();
+        const dryDuplicate = await dryTabAliasDuplicateFound();
 
         if (tabIndex === 0) {
-            if (!peeTabAliasDuplicateFound())
+            if (!peeDuplicate) {
+                firestore.collection("users").doc(auth.currentUser.uid).collection("pee-tracking").add({
+                    alias: String(peeTabAlias).trim(),
+                    notes: peeTabNotes,
+                    timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`
+                });
+
                 setPeeTabData(
                     [...peeTabData, {
                         alias: peeTabAlias,
@@ -174,6 +209,7 @@ export default function DiaperTrackingPage() {
                         timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`
                     }]
                 );
+            }
             else {
                 toast({
                     title: 'Unable to add new entry!',
@@ -185,15 +221,20 @@ export default function DiaperTrackingPage() {
             }
         }
         else if (tabIndex === 1) {
-            if (!pooTabAliasDuplicateFound()) {
-                let newEntry = {
-                    alias: pooTabAlias,
-                    color: colorValue,
-                    consistency: consistencyValue,
-                    notes: pooTabNotes,
-                    timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
-                    description: getDescriptionForColorAndConsistency()
-                };
+            let newEntry = {
+                alias: String(pooTabAlias).trim(),
+                color: colorValue,
+                consistency: consistencyValue,
+                notes: pooTabNotes,
+                timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
+                description: getDescriptionForColorAndConsistency()
+            };
+
+            if (!pooDuplicate) {
+                firestore.collection("users").doc(auth.currentUser.uid).collection("poo-tracking").add({
+                    ...newEntry
+                });
+
                 setPooTabData([...pooTabData, newEntry]);
             }
             else {
@@ -207,7 +248,13 @@ export default function DiaperTrackingPage() {
             }
         }
         else if (tabIndex === 2) {
-            if (!dryTabAliasDuplicateFound()) {
+            if (!dryDuplicate) {
+                firestore.collection("users").doc(auth.currentUser.uid).collection("dry-tracking").add({
+                    alias: String(dryTabAlias).trim(),
+                    notes: dryTabNotes,
+                    timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`
+                });
+
                 setDryTabData(
                     [...dryTabData, {
                         alias: dryTabAlias,
@@ -228,6 +275,32 @@ export default function DiaperTrackingPage() {
         }
     };
 
+    useEffect(() => {
+        firestore.collection("users").doc(auth?.currentUser?.uid).collection("pee-tracking").get().then((snapshot) => {
+            let initialData = [];
+            snapshot.docs.forEach(doc => {
+                initialData.push(doc.data());
+            });
+            setPeeTabData(initialData);
+        });
+
+        firestore.collection("users").doc(auth?.currentUser?.uid).collection("poo-tracking").get().then((snapshot) => {
+            let initialData = [];
+            snapshot.docs.forEach(doc => {
+                initialData.push(doc.data());
+            });
+            setPooTabData(initialData);
+        });
+
+        firestore.collection("users").doc(auth?.currentUser?.uid).collection("dry-tracking").get().then((snapshot) => {
+            let initialData = [];
+            snapshot.docs.forEach(doc => {
+                initialData.push(doc.data());
+            });
+            setDryTabData(initialData);
+        });
+    });
+
     return (
         <Box
             bg={_screenBackground}
@@ -238,7 +311,9 @@ export default function DiaperTrackingPage() {
                 width="100vw"
                 overflowX="hidden"
             >
-                <FloatingActionButtonsDiaperTracking />
+                <FloatingActionButtonsDiaperTracking
+                    setSearchBarIsOpen={setSearchBarIsOpen}
+                />
                 <HStack
                     alignItems='start'
                 >
@@ -410,6 +485,35 @@ export default function DiaperTrackingPage() {
                     </HStack>
                 </VStack>
             </form>
+            <Drawer
+                onClose={() => setSearchBarIsOpen(false)}
+                bg={_cardBackground}
+                w="250px"
+                isOpen={searchBarIsOpen}
+                placement='right'
+            >
+                <DrawerOverlay />
+                <DrawerContent
+                    bg={_screenBackground}
+                >
+                    <DrawerHeader>Filter Items</DrawerHeader>
+                    <DrawerBody>
+                        <Tabs>
+                            <TabPanels>
+                                <TabPanel>
+                                    Pee tab
+                                </TabPanel>
+                                <TabPanel>
+                                    Poo tab
+                                </TabPanel>
+                                <TabPanel>
+                                    Dry tab
+                                </TabPanel>
+                            </TabPanels>
+                        </Tabs>
+                    </DrawerBody>
+                </DrawerContent>
+            </Drawer>
         </Box>
     );
 }

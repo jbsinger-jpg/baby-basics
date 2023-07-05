@@ -969,7 +969,6 @@ export default function SearchBarAlertDialog({
             isOpen={searchBarIsOpen}
             placement='right'
         >
-            <DrawerOverlay />
             <DrawerContent bg={_screenBackground}>
                 <DrawerHeader>Filter Items</DrawerHeader>
                 <DrawerBody>
