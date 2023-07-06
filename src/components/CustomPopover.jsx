@@ -70,8 +70,12 @@ export default function CustomPopOver() {
     };
 
     const formatDescription = () => {
-        const selectedProgressArray = selectedProgressNoteOption.split(" ");
-        return selectedProgressArray.join("+");
+        if (selectedProgressNoteOption) {
+            const selectedProgressArray = selectedProgressNoteOption.split(" ");
+            return selectedProgressArray.join("+");
+        }
+
+        return "";
     };
 
     const options = [
