@@ -1,6 +1,7 @@
 import { ChevronDownIcon, ChevronUpIcon, CloseIcon } from '@chakra-ui/icons';
 import { Box, Card, CardBody, CardHeader, Collapse, FormLabel, HStack, Heading, IconButton, Text, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import { auth, firestore } from '../../firebaseConfig';
 
 const ColorCircle = ({ color }) => {
     return (
@@ -8,7 +9,7 @@ const ColorCircle = ({ color }) => {
     );
 };
 
-export default function PooTabPanel({ setTempData, tempData, index, notes, color, consistency, timeStamp, alias, description }) {
+export default function PooTabPanel({ setData, data, index, notes, color, consistency, timeStamp, alias, description }) {
     const [showAllNotes, setShowAllNotes] = useState(false);
     const [showDescription, setShowDescription] = useState(false);
 
@@ -39,10 +40,10 @@ export default function PooTabPanel({ setTempData, tempData, index, notes, color
     };
 
     const handleDeleteRow = (index) => {
-        // TODO: change to handle backend implementation, pass in id of document wanting to be deleted instead
-        const updatedArray = [...tempData];
+        firestore.collection("users").doc(auth?.currentUser?.uid).collection("poo-tracking").doc(alias).delete();
+        const updatedArray = [...data];
         updatedArray.splice(index, 1);
-        setTempData(updatedArray);
+        setData(updatedArray);
     };
 
     return (

@@ -6,9 +6,8 @@ import FloatingActionButtonsDiaperTracking from '../components/floatingActionBut
 import WaterDropIcon from '@mui/icons-material/Water';
 import DoDisturbAltIcon from '@mui/icons-material/DoDisturbAlt';
 import VolcanoIcon from '@mui/icons-material/Volcano';
-import PeeTabPanel from '../components/tabPanels/PeeTabPanel';
+import GenericDiaperTrackingTabPanel from '../components/tabPanels/GenericDiaperTrackingTabPanel';
 import PooTabPanel from '../components/tabPanels/PooTabPanel';
-import DryTabPanel from '../components/tabPanels/DryTabPanel';
 import { babyPoopColorData, babyPoopConsistencyData } from '../components/staticPageData/baby-color-consistency-info';
 import { auth, firestore } from '../firebaseConfig';
 import { useEffect } from 'react';
@@ -196,7 +195,7 @@ export default function DiaperTrackingPage() {
 
         if (tabIndex === 0) {
             if (!peeDuplicate) {
-                firestore.collection("users").doc(auth.currentUser.uid).collection("pee-tracking").add({
+                firestore.collection("users").doc(auth.currentUser.uid).collection("pee-tracking").doc(String(peeTabAlias).trim()).set({
                     alias: String(peeTabAlias).trim(),
                     notes: peeTabNotes,
                     timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`
@@ -204,7 +203,7 @@ export default function DiaperTrackingPage() {
 
                 setPeeTabData(
                     [...peeTabData, {
-                        alias: peeTabAlias,
+                        alias: String(peeTabAlias).trim(),
                         notes: peeTabNotes,
                         timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`
                     }]
@@ -231,7 +230,7 @@ export default function DiaperTrackingPage() {
             };
 
             if (!pooDuplicate) {
-                firestore.collection("users").doc(auth.currentUser.uid).collection("poo-tracking").add({
+                firestore.collection("users").doc(auth.currentUser.uid).collection("poo-tracking").doc(String(pooTabAlias).trim()).set({
                     ...newEntry
                 });
 
@@ -249,7 +248,7 @@ export default function DiaperTrackingPage() {
         }
         else if (tabIndex === 2) {
             if (!dryDuplicate) {
-                firestore.collection("users").doc(auth.currentUser.uid).collection("dry-tracking").add({
+                firestore.collection("users").doc(auth.currentUser.uid).collection("dry-tracking").doc(String(dryTabAlias).trim()).set({
                     alias: String(dryTabAlias).trim(),
                     notes: dryTabNotes,
                     timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`
@@ -301,6 +300,44 @@ export default function DiaperTrackingPage() {
         });
     });
 
+    const handleDeletePeeRow = (index) => {
+        firestore.collection("users").doc(auth?.currentUser?.uid).collection("pee-tracking").doc(String(peeTabAlias).trim()).delete();
+        const updatedArray = [...peeTabData];
+        updatedArray.splice(index, 1);
+        setPeeTabData(updatedArray);
+    };
+
+    const handleDeleteDryRow = (index) => {
+        firestore.collection("users").doc(auth?.currentUser?.uid).collection("dry-tracking").doc(String(dryTabAlias).trim()).delete();
+        const updatedArray = [...dryTabData];
+        updatedArray.splice(index, 1);
+        setDryTabData(updatedArray);
+    };
+
+    const getPeeTabSearchItems = () => {
+        return (
+            <Text>
+                TODO: Add Pee tab items here...
+            </Text>
+        );
+    };
+
+    const getPooTabSearchItems = () => {
+        return (
+            <Text>
+                TODO: Add Poo tab items here...
+            </Text>
+        );
+    };
+
+    const getDryTabSearchItems = () => {
+        return (
+            <Text>
+                TODO: Add Dry tab items here...
+            </Text>
+        );
+    };
+
     return (
         <Box
             bg={_screenBackground}
@@ -346,12 +383,14 @@ export default function DiaperTrackingPage() {
                                     pr="2"
                                     overflowY="auto"
                                 >
-                                    {peeTabData && peeTabData.length && peeTabData.map(peeRow => {
+                                    {peeTabData && peeTabData.length && peeTabData.map((peeRow, index) => {
                                         return (
-                                            <PeeTabPanel
+                                            <GenericDiaperTrackingTabPanel
                                                 alias={peeRow.alias}
                                                 notes={peeRow.notes}
                                                 timeStamp={peeRow.timeStamp}
+                                                handleDeleteRow={handleDeletePeeRow}
+                                                index={index}
                                             />
                                         );
                                     })}
@@ -373,8 +412,8 @@ export default function DiaperTrackingPage() {
                                                 description={pooRow.description}
                                                 notes={pooRow.notes}
                                                 timeStamp={pooRow.timeStamp}
-                                                tempData={pooTabData}
-                                                setTempData={setPooTabData}
+                                                data={pooTabData}
+                                                setData={setPooTabData}
                                                 index={index}
                                             />
                                         );
@@ -387,11 +426,14 @@ export default function DiaperTrackingPage() {
                                     pl="2"
                                     pr="2"
                                 >
-                                    {dryTabData && dryTabData.length && dryTabData.map(dryRow => {
+                                    {dryTabData && dryTabData.length && dryTabData.map((dryRow, index) => {
                                         return (
-                                            <DryTabPanel
+                                            <GenericDiaperTrackingTabPanel
+                                                alias={dryRow.alias}
                                                 notes={dryRow.notes}
                                                 timeStamp={dryRow.timeStamp}
+                                                handleDeleteRow={handleDeleteDryRow}
+                                                index={index}
                                             />
                                         );
                                     })}
@@ -498,16 +540,16 @@ export default function DiaperTrackingPage() {
                 >
                     <DrawerHeader>Filter Items</DrawerHeader>
                     <DrawerBody>
-                        <Tabs>
+                        <Tabs index={tabIndex}>
                             <TabPanels>
                                 <TabPanel>
-                                    Pee tab
+                                    {getPeeTabSearchItems()}
                                 </TabPanel>
                                 <TabPanel>
-                                    Poo tab
+                                    {getPooTabSearchItems()}
                                 </TabPanel>
                                 <TabPanel>
-                                    Dry tab
+                                    {getDryTabSearchItems()}
                                 </TabPanel>
                             </TabPanels>
                         </Tabs>

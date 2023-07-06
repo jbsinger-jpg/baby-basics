@@ -1,8 +1,8 @@
-import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, ChevronUpIcon, CloseIcon } from '@chakra-ui/icons';
 import { Box, Card, CardBody, CardHeader, Collapse, FormLabel, HStack, Heading, IconButton, Text } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
-export default function PeeTabPanel({ notes, timeStamp, alias }) {
+export default function GenericDiaperTrackingTabPanel({ notes, timeStamp, alias, index, handleDeleteRow }) {
     const [showAllNotes, setShowAllNotes] = useState(false);
     const handleToggle = () => {
         setShowAllNotes(!showAllNotes);
@@ -21,9 +21,16 @@ export default function PeeTabPanel({ notes, timeStamp, alias }) {
         <Box>
             <Card>
                 <CardHeader>
-                    <Box alignSelf="start" justifyContent="flex-start">
-                        <Heading size='md'>{alias}</Heading>
-                    </Box>
+                    <HStack
+                        bg="white"
+                        w="90vw"
+                        justifyContent="space-between"
+                    >
+                        <Box alignSelf="start" justifyContent="flex-start">
+                            <Heading size='md'>{alias}</Heading>
+                        </Box>
+                        <IconButton variant="unstyled" icon={<CloseIcon />} onClick={() => handleDeleteRow(index)} />
+                    </HStack>
                 </CardHeader>
                 <CardBody>
                     <HStack
