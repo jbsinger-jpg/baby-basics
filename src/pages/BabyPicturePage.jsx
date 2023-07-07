@@ -1,5 +1,5 @@
 // Module Imports
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, HStack, Icon, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, SkeletonText, Tag, Text, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, HStack, Icon, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Tag, Text, VStack, useColorModeValue } from '@chakra-ui/react';
 import { InfoOutlineIcon } from "@chakra-ui/icons";
 import React, { useEffect, useState } from 'react';
 import { motion } from "framer-motion";

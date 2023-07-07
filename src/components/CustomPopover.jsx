@@ -9,6 +9,13 @@ import StyledSelect from './StyledSelect';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { auth, firestore } from '../firebaseConfig';
 
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+import TimePicker from 'react-time-picker';
+import 'react-time-picker/dist/TimePicker.css';
+import 'react-clock/dist/Clock.css';
+
 export default function CustomPopOver() {
     const [selectedFrequency, setSelectedFrequency] = useState("");
     const [emailHost, setEmailHost] = useState("");
@@ -20,13 +27,51 @@ export default function CustomPopOver() {
     const [selectedAgeOption, setSelectedAgeOption] = useState(null);
     const [userTagData] = useCollectionData(firestore.collection("users").doc(auth?.currentUser?.uid).collection("baby_progress").where("age", "==", selectedAgeOption), { idField: "id" });
     const [selectedProgressNoteOption, setSelectedProgressNoteOption] = useState(null);
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+    const [selectedStartTime, setSelectedStartTime] = useState("");
+    const [selectedEndTime, setSelectedEndTime] = useState("");
+
+    const handleStartTimeChange = (time) => {
+        setSelectedStartTime(time);
+        const formattedTime = time.split(":");
+        startDate.setHours(Number(formattedTime[0]), Number(formattedTime[1]));
+    };
+
+    const handleEndTimeChange = (time) => {
+        setSelectedEndTime(time);
+        const formattedTime = time.split(":");
+        endDate.setHours(Number(formattedTime[0]), Number(formattedTime[1]));
+    };
+
+    const handleEndDateChange = (date) => {
+        if (selectedEndTime) {
+            const formattedTime = selectedEndTime.split(":");
+            date.setHours(Number(formattedTime[0]), Number(formattedTime[1]));
+        }
+        setEndDate(date);
+    };
+
+    const handleStartDateChange = (date) => {
+        if (selectedStartTime) {
+            const formattedTime = selectedStartTime.split(":");
+            date.setHours(Number(formattedTime[0]), Number(formattedTime[1]));
+        }
+        setStartDate(date);
+    };
 
     const formatDateTime = () => {
-        const startTime = new Date();
-        const endTime = new Date();
+        let dates = "";
+        if (startDate && endDate) {
+            dates = startDate.toISOString().replace(/-|:|\.\d+/g, '') + '/' + endDate.toISOString().replace(/-|:|\.\d+/g, '');
+        }
+        else if (startDate) {
+            dates = startDate.toISOString().replace(/-|:|\.\d+/g, '');
+        }
+        else if (endDate) {
+            endDate.toISOString().replace(/-|:|\.\d+/g, '');
+        }
 
-        endTime.setDate(endTime.getDate() + 1);
-        const dates = startTime.toISOString().replace(/-|:|\.\d+/g, '') + '/' + endTime.toISOString().replace(/-|:|\.\d+/g, '');
         return dates;
     };
 
@@ -144,6 +189,43 @@ export default function CustomPopOver() {
                             />
                         </VStack>
                     </HStack>
+                    <HStack>
+                        <VStack alignItems="start" spacing="-0.5">
+                            <FormLabel>Start Date</FormLabel>
+                            <VStack alignItems="start" spacing="1.5">
+                                <DatePicker
+                                    customInput={<Input />}
+                                    selected={startDate}
+                                    onChange={handleStartDateChange}
+                                />
+                                {(startDate && endDate) &&
+                                    <TimePicker
+                                        onChange={handleStartTimeChange}
+                                        value={selectedStartTime}
+                                        disableClock
+                                    />
+                                }
+                            </VStack>
+                        </VStack>
+                        <VStack alignItems="start" spacing="-0.5">
+                            <FormLabel>End Date</FormLabel>
+                            <VStack alignItems="start" spacing="1.5">
+                                <DatePicker
+                                    label="End Date"
+                                    customInput={<Input />}
+                                    selected={endDate}
+                                    onChange={handleEndDateChange}
+                                />
+                                {(startDate && endDate) &&
+                                    <TimePicker
+                                        onChange={handleEndTimeChange}
+                                        value={selectedEndTime}
+                                        disableClock
+                                    />
+                                }
+                            </VStack>
+                        </VStack>
+                    </HStack>
                     <FormLabel htmlFor='email'>Guests</FormLabel>
                     <VStack alignItems="start" spacing="5" paddingBottom="3">
                         <InputGroup>
@@ -179,6 +261,7 @@ export default function CustomPopOver() {
                 </PopoverBody>
                 <PopoverFooter w="100%" justifyContent="space-between" display="flex">
                     <Button
+                        type="submit"
                         onClick={() => window.open(`https://www.google.com/calendar/render?action=TEMPLATE&dates=${formatDateTime()}&recur=${formatFrequency()}&add=${formatAddPeople()}&text=${formatEventTitle()}&location=${formatEventLocation()}&details=${formatDescription()}`)}
                     >
                         Create Event

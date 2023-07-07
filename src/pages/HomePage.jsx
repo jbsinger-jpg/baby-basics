@@ -1,5 +1,5 @@
 // module imports
-import { ChatIcon, CheckIcon, CloseIcon, WarningIcon } from '@chakra-ui/icons';
+import { ChatIcon, CheckIcon, CloseIcon, ViewIcon, WarningIcon } from '@chakra-ui/icons';
 import { Avatar, AvatarBadge, AvatarGroup, Badge, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorModeValue, useDisclosure, useMediaQuery, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionDataOnce } from 'react-firebase-hooks/firestore';
@@ -409,6 +409,12 @@ export default function HomePage() {
                                 Chat with Peeps
                             </Button>
                             <CustomPopOver />
+                            <Button
+                                leftIcon={<ViewIcon />}
+                                onClick={() => navigate("/calendar")}
+                            >
+                                View Calendar Events
+                            </Button>
                             <Button
                                 leftIcon={<WarningIcon />}
                                 onClick={() => setScreeningAlertDialogVisibile(true)}

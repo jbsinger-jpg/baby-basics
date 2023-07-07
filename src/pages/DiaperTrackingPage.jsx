@@ -1,4 +1,4 @@
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, Icon, IconButton, Input, Radio, RadioGroup, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Textarea, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, Icon, Input, Radio, RadioGroup, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Textarea, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
 import { cardBackground, screenBackground } from '../defaultStyle';
@@ -298,7 +298,7 @@ export default function DiaperTrackingPage() {
             });
             setDryTabData(initialData);
         });
-    });
+    }, []);
 
     const handleDeletePeeRow = (index) => {
         firestore.collection("users").doc(auth?.currentUser?.uid).collection("pee-tracking").doc(String(peeTabAlias).trim()).delete();
@@ -316,25 +316,66 @@ export default function DiaperTrackingPage() {
 
     const getPeeTabSearchItems = () => {
         return (
-            <Text>
-                TODO: Add Pee tab items here...
-            </Text>
+            <VStack>
+                <VStack alignItems="start">
+                    <FormLabel htmlFor="date">Date</FormLabel>
+                    <Input id="date" />
+                </VStack>
+                <VStack alignItems="start">
+                    <FormLabel htmlFor="time">Time</FormLabel>
+                    <Input id="time" />
+                </VStack>
+                <VStack alignItems="start">
+                    <FormLabel htmlFor="alias">Alias</FormLabel>
+                    <Input id="alias" />
+                </VStack>
+            </VStack>
         );
     };
 
     const getPooTabSearchItems = () => {
         return (
-            <Text>
-                TODO: Add Poo tab items here...
-            </Text>
+            <VStack>
+                <VStack alignItems="start">
+                    <FormLabel htmlFor="date">Date</FormLabel>
+                    <Input id="date" />
+                </VStack>
+                <VStack alignItems="start">
+                    <FormLabel htmlFor="time">Time</FormLabel>
+                    <Input id="time" />
+                </VStack>
+                <VStack alignItems="start">
+                    <FormLabel htmlFor="alias">Alias</FormLabel>
+                    <Input id="alias" />
+                </VStack>
+                <VStack alignItems="start">
+                    <FormLabel htmlFor="consistency">Consistency</FormLabel>
+                    <Input id="consistency" />
+                </VStack>
+                <VStack alignItems="start">
+                    <FormLabel htmlFor="color">Color</FormLabel>
+                    <Input id="color" />
+                </VStack>
+            </VStack>
         );
     };
 
     const getDryTabSearchItems = () => {
         return (
-            <Text>
-                TODO: Add Dry tab items here...
-            </Text>
+            <VStack>
+                <VStack alignItems="start">
+                    <FormLabel htmlFor="date">Date</FormLabel>
+                    <Input id="date" />
+                </VStack>
+                <VStack alignItems="start">
+                    <FormLabel htmlFor="time">Time</FormLabel>
+                    <Input id="time" />
+                </VStack>
+                <VStack alignItems="start">
+                    <FormLabel htmlFor="alias">Alias</FormLabel>
+                    <Input id="alias" />
+                </VStack>
+            </VStack>
         );
     };
 

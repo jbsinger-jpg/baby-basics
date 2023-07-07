@@ -20,8 +20,8 @@ export default function FloatingActionButtonsDiaperTracking({ setSearchBarIsOpen
             <ColorModeToggleButton />
             <FabTemplate
                 icon={<HomeIcon fontSize="large" />}
-                onClick={() => navigate("/history")}
-                label={"View Tracked Progress"}
+                onClick={() => navigate("/")}
+                label={"Home"}
             />
             <FabTemplate
                 icon={<SearchIcon height="30px" width="30px" />}
