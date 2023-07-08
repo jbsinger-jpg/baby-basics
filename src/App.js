@@ -44,7 +44,6 @@ function App() {
         <Route path="sleep" element={<BabySleepPage />} />
         <Route path="diaper-tracking" element={<DiaperTrackingPage />} />
         <Route path="feed-tracking" element={<BabyFeedTrackingPage />} />
-        <Route path="calendar" element={<CalendarPage />} />
       </Routes>
     </Context.Provider>
   );

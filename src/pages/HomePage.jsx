@@ -410,12 +410,6 @@ export default function HomePage() {
                             </Button>
                             <CustomPopOver />
                             <Button
-                                leftIcon={<ViewIcon />}
-                                onClick={() => navigate("/calendar")}
-                            >
-                                View Calendar Events
-                            </Button>
-                            <Button
                                 leftIcon={<WarningIcon />}
                                 onClick={() => setScreeningAlertDialogVisibile(true)}
                             >

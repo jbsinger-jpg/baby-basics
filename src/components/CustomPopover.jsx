@@ -200,6 +200,7 @@ export default function CustomPopOver() {
                                 />
                                 {(startDate && endDate) &&
                                     <TimePicker
+                                        isClearable
                                         onChange={handleStartTimeChange}
                                         value={selectedStartTime}
                                         disableClock
@@ -211,6 +212,7 @@ export default function CustomPopOver() {
                             <FormLabel>End Date</FormLabel>
                             <VStack alignItems="start" spacing="1.5">
                                 <DatePicker
+                                    isClearable
                                     label="End Date"
                                     customInput={<Input />}
                                     selected={endDate}
