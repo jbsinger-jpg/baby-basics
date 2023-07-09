@@ -1,18 +1,39 @@
-import { Box, Button, HStack, Heading, Input, VStack } from '@chakra-ui/react';
+import { Box, Button, FormControl, FormLabel, HStack, Input, VStack } from '@chakra-ui/react';
 import React from 'react';
 import Timer from './Timer';
 import { useState } from 'react';
 
-export default function BabyFeedTrackingTemplate({ componentData, setComponentData, ComponentTabPanel }) {
+export default function BabyFeedTrackingTemplate({ componentData, setComponentData, ComponentTabPanel, additionalFooterChildren, additionalComponentData, isTimerUsed }) {
     const [leftTeetTimerValue, setLeftTeetTimerValue] = useState(0);
     const [rightTeetTimerValue, setRightTeetTimerValue] = useState(0);
     const [submittingTimerValues, setSubmittingTimerValues] = useState(false);
     const [alias, setAlias] = useState("");
 
-    const generateBreastFeedingRow = async () => {
-        await setSubmittingTimerValues(true);
+    const getBabyFeedingTrackingFooter = () => {
+        return (
+            <form onSubmit={generateBreastFeedingRow}>
+                <HStack alignItems="end" justifyContent="center">
+                    <VStack alignItems="start">
+                        <FormControl isRequired>
+                            <FormLabel>
+                                Alias
+                            </FormLabel>
+                            <Input value={alias} onChange={(event) => setAlias(event.target.value)} />
+                        </FormControl>
+                    </VStack>
+                    {additionalFooterChildren}
+                    <Button type="submit">Submit</Button>
+                </HStack>
+            </form>
+        );
+    };
 
+    const generateBreastFeedingRow = (event) => {
+        event.preventDefault();
+
+        setSubmittingTimerValues(true);
         setComponentData([...componentData, {
+            ...additionalComponentData,
             leftBreastTime: leftTeetTimerValue,
             rightBreastTime: rightTeetTimerValue,
             timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
@@ -21,7 +42,7 @@ export default function BabyFeedTrackingTemplate({ componentData, setComponentDa
     };
 
     return (
-        <Box>
+        <Box overflowX="hidden">
             <HStack
                 alignItems="start"
                 justifyContent="space-evenly"
@@ -41,6 +62,7 @@ export default function BabyFeedTrackingTemplate({ componentData, setComponentDa
                         setData={setComponentData}
                         timeStamp={componentRow.timeStamp}
                         alias={componentRow.alias}
+                        fluidOunces={componentRow.fluidOunces}
                     />
                 );
             })}
@@ -52,11 +74,7 @@ export default function BabyFeedTrackingTemplate({ componentData, setComponentDa
                 bottom="0"
                 w="100vw"
             >
-                <VStack alignItems="start">
-                    <Heading>Alias</Heading>
-                    <Input value={alias} onChange={(event) => setAlias(event.target.value)} />
-                </VStack>
-                <Button onClick={generateBreastFeedingRow}>Submit</Button>
+                {getBabyFeedingTrackingFooter()}
             </VStack>
         </Box>
     );

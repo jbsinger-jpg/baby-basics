@@ -2,7 +2,7 @@ import { CloseIcon } from '@chakra-ui/icons';
 import { Box, Card, CardBody, CardHeader, FormLabel, HStack, Heading, IconButton, Text } from '@chakra-ui/react';
 import React from 'react';
 
-export default function PumpRowTabPanel({ alias, index, timeStamp, leftBreastTime, rightBreastTime, data, setData, fluidOunces }) {
+export default function BottleTabPanel({ data, setData, index, alias, timeStamp, fluidOunces }) {
     const handleDeleteRow = () => {
         const updatedArray = [...data];
         updatedArray.splice(index, 1);
@@ -15,7 +15,7 @@ export default function PumpRowTabPanel({ alias, index, timeStamp, leftBreastTim
                 <CardHeader>
                     <HStack
                         bg="white"
-                        w="90vw"
+                        w="80vw"
                         justifyContent="space-between"
                     >
                         <Box alignSelf="start" justifyContent="flex-start">
@@ -34,18 +34,6 @@ export default function PumpRowTabPanel({ alias, index, timeStamp, leftBreastTim
                             <FormLabel>Submitted</FormLabel>
                             <Text>
                                 {timeStamp}
-                            </Text>
-                        </Box>
-                        <Box>
-                            <FormLabel>Left Breast Time</FormLabel>
-                            <Text>
-                                {leftBreastTime}
-                            </Text>
-                        </Box>
-                        <Box>
-                            <FormLabel>Right Breast Time</FormLabel>
-                            <Text>
-                                {rightBreastTime}
                             </Text>
                         </Box>
                         <Box>
