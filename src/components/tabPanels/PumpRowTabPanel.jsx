@@ -2,7 +2,7 @@ import { CloseIcon } from '@chakra-ui/icons';
 import { Box, Card, CardBody, CardHeader, FormLabel, HStack, Heading, IconButton, Text } from '@chakra-ui/react';
 import React from 'react';
 
-export default function BreastRowTabPanel({ leftBreastTime, rightBreastTime, alias, index, timeStamp, data, setData }) {
+export default function PumpRowTabPanel({ alias, index, timeStamp, leftBreastTime, rightBreastTime, data, setData }) {
     const handleDeleteRow = () => {
         const updatedArray = [...data];
         updatedArray.splice(index, 1);

@@ -1,18 +1,12 @@
-import { Box, Button, HStack, Heading, IconButton, VStack } from '@chakra-ui/react';
+import { Box, HStack, Heading, IconButton, VStack } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
 import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
-export default function Timer({ title, setValue, pauseTimer }) {
+export default function Timer({ title, setValue }) {
     const [seconds, setSeconds] = useState(0);
     const [isActive, setIsActive] = useState(false);
-
-    useEffect(() => {
-        if (pauseTimer) {
-            handlePause();
-        }
-    }, [pauseTimer]);
 
     useEffect(() => {
         let interval = null;
@@ -29,6 +23,8 @@ export default function Timer({ title, setValue, pauseTimer }) {
         }
 
         return () => clearInterval(interval);
+
+        // eslint-disable-next-line
     }, [isActive, seconds]);
 
     const handleStart = () => {
@@ -57,11 +53,12 @@ export default function Timer({ title, setValue, pauseTimer }) {
             </Heading>
             <VStack>
                 <Heading>{formatTime(seconds)}</Heading>
-                {!seconds ? <IconButton
-                    onClick={handleStart}
-                    borderRadius={"50%"}
-                    icon={<PlayCircleOutlineIcon />}
-                />
+                {!isActive ?
+                    <IconButton
+                        onClick={handleStart}
+                        borderRadius={"50%"}
+                        icon={<PlayCircleOutlineIcon />}
+                    />
                     :
                     <HStack>
                         <IconButton
