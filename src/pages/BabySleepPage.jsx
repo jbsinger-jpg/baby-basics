@@ -26,7 +26,7 @@ export default function BabySleepPage() {
         let sum = 0;
         let count = 0;
 
-        if (allGraphPointsIsVisible) {
+        if (allGraphPointsIsVisible && sleepGraphPoints && sleepGraphPoints.length) {
             sleepGraphPoints.map((point) => {
                 return (
                     count += 1,
@@ -35,7 +35,7 @@ export default function BabySleepPage() {
 
             });
         }
-        else {
+        else if (sleepGraphPoints && sleepGraphPoints.length) {
             const filteredSleepPoints = sleepGraphPoints.filter(point => Number(dialogAgeOption) === Number(point.x));
 
             filteredSleepPoints.map((point) => {
@@ -76,7 +76,7 @@ export default function BabySleepPage() {
                             data: { stroke: "#c43a31" },
                             parent: { border: "1px solid #ccc" }
                         }}
-                        data={sleepGraphPoints}
+                        data={[...sleepGraphPoints]}
                         // Place the month/day of the point as the label
                         labels={({ datum }) => showLabel ? `${datum.date.toISOString().substring(5, 7)}/${datum.date.toISOString().substring(8, 10)}` : null}
                     >
@@ -127,6 +127,16 @@ export default function BabySleepPage() {
                     <Button onClick={addAgeSleepPoint} isLoading={ageSleepButtonIsLoading}>Add Sleep</Button>
                     <Button onClick={() => setShowLabel(!showLabel)}>Show Labels</Button>
                     <Button onClick={() => setShowStatistics(!showStatistics)}>Show Average</Button>
+                    <Button onClick={() => {
+                        if (sleepGraphPoints && sleepGraphPoints.length) {
+                            const newGraphPoints = [...sleepGraphPoints];
+                            newGraphPoints.pop();
+                            setSleepGraphPoints(newGraphPoints);
+                        }
+                    }}
+                    >
+                        Delete Prev Point
+                    </Button>
                 </HStack>
             </VStack>
             <AlertDialog

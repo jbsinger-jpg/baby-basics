@@ -129,7 +129,6 @@ export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialog
         let count = 0;
 
         if (feeding.length) {
-            console.log(feeding);
             for (let i = 0; i < feeding.length; i++) {
                 if (feeding[i]) {
                     count++;

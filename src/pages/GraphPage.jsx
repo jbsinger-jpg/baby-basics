@@ -152,6 +152,18 @@ export default function GraphPage() {
         }
     };
 
+    const handleDeleteHWPoint = () => {
+        const newHeightLengthPoints = [...circumferenceWeightGraphPoints];
+        newHeightLengthPoints.pop();
+        setCircumferenceWeightGraphPoints(newHeightLengthPoints);
+    };
+
+    const handleDeleteWLPoint = () => {
+        const newWeightLengthPoints = [...weightLengthGraphPoints];
+        newWeightLengthPoints.pop();
+        setWeightLengthGraphPoints(newWeightLengthPoints);
+    };
+
     return (
         <Box
             bg={_screenBackground}
@@ -216,7 +228,7 @@ export default function GraphPage() {
                 justifyContent="space-between"
                 w="100vw"
                 alignItems="stretch"
-                spacing="-0.5"
+                spacing="1.5"
                 pl="2"
                 pr="2"
             >
@@ -273,8 +285,12 @@ export default function GraphPage() {
                 />
                 <HStack>
                     <Button onClick={addWeightLengthPoint} isLoading={weightButtonIsLoading}>Plot W/L Point</Button>
-                    <Button onClick={addCircumferenceWeightGraphPoint} isLoading={circumferenceButtonIsLoading}>Plot H/L Point</Button>
+                    <Button onClick={addCircumferenceWeightGraphPoint} isLoading={circumferenceButtonIsLoading}>Plot W/H Point</Button>
                     <Button onClick={showGrowthChartDialog}>View Growth Chart</Button>
+                </HStack>
+                <HStack>
+                    <Button onClick={handleDeleteWLPoint}>Delete W/L Point</Button>
+                    <Button onClick={handleDeleteHWPoint}>Delete W/H Point</Button>
                 </HStack>
             </VStack>
             {/* Alert Dialog triggered for showing user growth charts */}
