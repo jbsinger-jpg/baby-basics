@@ -1,5 +1,5 @@
 // Module imports
-import { AlertDialog, AlertDialogContent, AlertDialogOverlay, Box, Button, Checkbox, FormLabel, HStack, Image, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, VStack, useColorModeValue } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Checkbox, FormLabel, HStack, Heading, Image, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, VStack, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
 import { VictoryLine, VictoryLabel, VictoryChart, VictoryTheme } from 'victory';
 import { useState } from 'react';
@@ -21,6 +21,11 @@ export default function GraphPage() {
     const [graphButtonDataIsLoading, setGraphButtonDataIsLoading] = useState(false);
     const [weightButtonIsLoading, setWeightButtonIsLoading] = useState(false);
     const [circumferenceButtonIsLoading, setCircumferenceButtonIsLoading] = useState(false);
+
+    const [showConversionDialog, setShowConversionDialog] = useState(false);
+    const [lbValue, setLbValue] = useState(0);
+    const [inValue, setInValue] = useState(0);
+
     // =========================================================================================
     // =========================================================================================
     // Length/Weight Graph
@@ -169,59 +174,79 @@ export default function GraphPage() {
             bg={_screenBackground}
             height="100vh"
             width="100vw"
+            overflowX="hidden"
         >
             <Box
-                width="55vw"
+                width="100vw"
+                height="55vh"
+                justifyContent="center"
+                display="flex"
             >
                 <HStack spacing={10}>
-                    <VictoryChart
-                        theme={VictoryTheme.material}
+                    <VStack
+                        h={500}
                     >
-                        <VictoryLabel
-                            x={5}
-                            y={5}
-                            dy={10}
-                            text="Length (cm)"
-                        />
-                        <VictoryLine
-                            style={{
-                                data: { stroke: "#c43a31" },
-                                parent: { border: "1px solid #ccc" }
-                            }}
-                            data={weightLengthGraphPoints}
+                        <VictoryChart
+                            theme={VictoryTheme.material}
                         >
-                        </VictoryLine>
-                        <VictoryLabel
-                            x={150}
-                            y={325}
-                            dy={10}
-                            text="Weight (kg)"
-                        />
-                    </VictoryChart>
-                    <VictoryChart
-                        theme={VictoryTheme.material}
+                            <VictoryLabel
+                                x={5}
+                                y={5}
+                                dy={10}
+                                text="Length (cm)"
+                            />
+                            <VictoryLine
+                                style={{
+                                    data: { stroke: "#c43a31" },
+                                    parent: { border: "1px solid #ccc" }
+                                }}
+                                data={weightLengthGraphPoints}
+                            >
+                            </VictoryLine>
+                            <VictoryLabel
+                                x={150}
+                                y={325}
+                                dy={10}
+                                text="Weight (kg)"
+                            />
+                        </VictoryChart>
+                        <HStack>
+                            <Button onClick={addCircumferenceWeightGraphPoint} isLoading={circumferenceButtonIsLoading}>Plot W/H Point</Button>
+                            <Button onClick={handleDeleteHWPoint}>Delete W/H Point</Button>
+                        </HStack>
+                    </VStack>
+                    <VStack
+                        h={500}
                     >
-                        <VictoryLabel
-                            x={5}
-                            y={5}
-                            dy={10}
-                            text="Head Circumference (cm)"
-                        />
-                        <VictoryLine
-                            style={{
-                                data: { stroke: "#c43a31" },
-                                parent: { border: "1px solid #ccc" }
-                            }}
-                            data={circumferenceWeightGraphPoints}
+                        <VictoryChart
+                            theme={VictoryTheme.material}
                         >
-                        </VictoryLine>
-                        <VictoryLabel
-                            x={150}
-                            y={325}
-                            dy={10}
-                            text="Weight (kg)"
-                        />
-                    </VictoryChart>
+                            <VictoryLabel
+                                x={5}
+                                y={5}
+                                dy={10}
+                                text="Head Circumference (cm)"
+                            />
+                            <VictoryLine
+                                style={{
+                                    data: { stroke: "#c43a31" },
+                                    parent: { border: "1px solid #ccc" }
+                                }}
+                                data={circumferenceWeightGraphPoints}
+                            >
+                            </VictoryLine>
+                            <VictoryLabel
+                                x={150}
+                                y={325}
+                                dy={10}
+                                text="Weight (kg)"
+                            />
+                        </VictoryChart>
+                        <HStack>
+                            <Button onClick={addWeightLengthPoint} isLoading={weightButtonIsLoading}>Plot W/L Point</Button>
+                            <Button onClick={handleDeleteWLPoint}>Delete W/L Point</Button>
+                        </HStack>
+                    </VStack>
                 </HStack>
             </Box>
             <VStack
@@ -234,26 +259,28 @@ export default function GraphPage() {
             >
                 <FormLabel htmlFor='age-months'>Age Months</FormLabel>
                 <VStack alignItems="start">
-                    <HStack>
-                        <NumberInput
-                            min={1}
-                            max={24}
-                            value={selectedAgeOption}
-                            onChange={valueString => setSelectedAgeOption(valueString)}
-                            isDisabled={allGraphPointsIsVisible}
-                        >
-                            <NumberInputField
-                                id="age-months"
-                                placeholder="Age-months"
-                            />
-                            <NumberInputStepper>
-                                <NumberIncrementStepper />
-                                <NumberDecrementStepper />
-                            </NumberInputStepper>
-                        </NumberInput>
-                        <Button onClick={queryDatabaseForBabyAge} isLoading={graphButtonDataIsLoading} isDisabled={allGraphPointsIsVisible}>
-                            View Graph
-                        </Button>
+                    <HStack w="100vw" justifyContent="space-between">
+                        <HStack>
+                            <NumberInput
+                                min={1}
+                                max={24}
+                                value={selectedAgeOption}
+                                onChange={valueString => setSelectedAgeOption(valueString)}
+                                isDisabled={allGraphPointsIsVisible}
+                            >
+                                <NumberInputField
+                                    id="age-months"
+                                    placeholder="Age-months"
+                                />
+                                <NumberInputStepper>
+                                    <NumberIncrementStepper />
+                                    <NumberDecrementStepper />
+                                </NumberInputStepper>
+                            </NumberInput>
+                            <Button onClick={queryDatabaseForBabyAge} isLoading={graphButtonDataIsLoading} isDisabled={allGraphPointsIsVisible}>
+                                View Graph
+                            </Button>
+                        </HStack>
                     </HStack>
                     <Checkbox
                         isChecked={allGraphPointsIsVisible}
@@ -284,13 +311,8 @@ export default function GraphPage() {
                     onChange={event => setHeadCircumference(event.target.value)}
                 />
                 <HStack>
-                    <Button onClick={addWeightLengthPoint} isLoading={weightButtonIsLoading}>Plot W/L Point</Button>
-                    <Button onClick={addCircumferenceWeightGraphPoint} isLoading={circumferenceButtonIsLoading}>Plot W/H Point</Button>
                     <Button onClick={showGrowthChartDialog}>View Growth Chart</Button>
-                </HStack>
-                <HStack>
-                    <Button onClick={handleDeleteWLPoint}>Delete W/L Point</Button>
-                    <Button onClick={handleDeleteHWPoint}>Delete W/H Point</Button>
+                    <Button onClick={() => setShowConversionDialog(true)}>Make Conversions</Button>
                 </HStack>
             </VStack>
             {/* Alert Dialog triggered for showing user growth charts */}
@@ -311,6 +333,83 @@ export default function GraphPage() {
                     </AlertDialogContent>
                 </AlertDialogOverlay>
             </AlertDialog>
-        </Box>
+            {/* Alert Dialog triggered for showing conversion chart */}
+            <AlertDialog
+                isOpen={showConversionDialog}
+                onClose={() => setShowConversionDialog(false)}
+            >
+                <AlertDialogOverlay>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <Heading size="lg">
+                                Conversion
+                            </Heading>
+                        </AlertDialogHeader>
+                        <AlertDialogCloseButton />
+                        <AlertDialogBody>
+                            <VStack pr="7" alignItems="start">
+                                <VStack w="100%" alignItems='start'>
+                                    <FormLabel>
+                                        kg to lb
+                                    </FormLabel>
+                                    <FormLabel>lb</FormLabel>
+                                    <NumberInput
+                                        min={0}
+                                        value={lbValue}
+                                        onChange={valueString => setLbValue(valueString)}
+                                    >
+                                        <NumberInputField
+                                            placeholder="lbs"
+                                        />
+                                        <NumberInputStepper>
+                                            <NumberIncrementStepper />
+                                            <NumberDecrementStepper />
+                                        </NumberInputStepper>
+                                    </NumberInput>
+                                </VStack>
+                                <VStack w="100%" alignItems='start'>
+                                    <FormLabel>kg</FormLabel>
+                                    <Input readOnly value={lbValue * 2.23} />
+                                </VStack>
+                                <FormLabel>
+                                    inches to cm
+                                </FormLabel>
+                                <VStack w="100%" alignItems='start'>
+                                    <FormLabel>in.</FormLabel>
+                                    <NumberInput
+                                        min={0}
+                                        value={inValue}
+                                        onChange={valueString => setInValue(valueString)}
+                                    >
+                                        <NumberInputField
+                                            placeholder="in."
+                                        />
+                                        <NumberInputStepper>
+                                            <NumberIncrementStepper />
+                                            <NumberDecrementStepper />
+                                        </NumberInputStepper>
+                                    </NumberInput>
+                                </VStack>
+                                <VStack w="100%" alignItems='start'>
+                                    <FormLabel>cm.</FormLabel>
+                                    <Input readOnly value={inValue * 2.54} />
+                                </VStack>
+                            </VStack>
+                        </AlertDialogBody>
+                        <AlertDialogFooter>
+                            <HStack>
+                                <Button onClick={() => {
+                                    setInValue(0);
+                                    setLbValue(0);
+                                }}>
+                                    Clear
+                                </Button>
+                                <Button onClick={() => setShowConversionDialog(false)}>Close</Button>
+                            </HStack>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialogOverlay>
+            </AlertDialog>
+        </Box >
     );
 }
