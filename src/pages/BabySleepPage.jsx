@@ -122,22 +122,22 @@ export default function BabySleepPage() {
                             <Input id='sleep' value={sleepValue} onChange={(event) => setSleepValue(event.target.value)} />
                         </VStack>
                     </HStack>
+                    <HStack>
+                        <Button onClick={addAgeSleepPoint} isLoading={ageSleepButtonIsLoading}>Add Sleep</Button>
+                        <Button onClick={() => setShowLabel(!showLabel)}>Show Labels</Button>
+                        <Button onClick={() => setShowStatistics(!showStatistics)}>Show Average</Button>
+                        <Button onClick={() => {
+                            if (sleepGraphPoints && sleepGraphPoints.length) {
+                                const newGraphPoints = [...sleepGraphPoints];
+                                newGraphPoints.pop();
+                                setSleepGraphPoints(newGraphPoints);
+                            }
+                        }}
+                        >
+                            Delete Prev Point
+                        </Button>
+                    </HStack>
                 </VStack>
-                <HStack>
-                    <Button onClick={addAgeSleepPoint} isLoading={ageSleepButtonIsLoading}>Add Sleep</Button>
-                    <Button onClick={() => setShowLabel(!showLabel)}>Show Labels</Button>
-                    <Button onClick={() => setShowStatistics(!showStatistics)}>Show Average</Button>
-                    <Button onClick={() => {
-                        if (sleepGraphPoints && sleepGraphPoints.length) {
-                            const newGraphPoints = [...sleepGraphPoints];
-                            newGraphPoints.pop();
-                            setSleepGraphPoints(newGraphPoints);
-                        }
-                    }}
-                    >
-                        Delete Prev Point
-                    </Button>
-                </HStack>
             </VStack>
             <AlertDialog
                 isOpen={showStatistics}

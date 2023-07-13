@@ -1,6 +1,6 @@
 // module imports
-import { ChatIcon, CheckIcon, CloseIcon, ViewIcon, WarningIcon } from '@chakra-ui/icons';
-import { Avatar, AvatarBadge, AvatarGroup, Badge, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorModeValue, useDisclosure, useMediaQuery, VStack } from '@chakra-ui/react';
+import { ChatIcon, CheckIcon, CloseIcon, WarningIcon } from '@chakra-ui/icons';
+import { Avatar, AvatarBadge, AvatarGroup, Badge, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, Icon, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorModeValue, useDisclosure, useMediaQuery, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionDataOnce } from 'react-firebase-hooks/firestore';
 import { useNavigate } from 'react-router-dom';
@@ -30,6 +30,8 @@ import CustomPopOver from '../components/CustomPopover';
 import VitaminDataTabPanel from '../components/tabPanels/VitaminDataTabPanel';
 import BabyProgressModal from '../components/modals/BabyProgressModal';
 import BabyImagesModal from '../components/modals/BabyImagesModal';
+import BottleIcon from '../components/staticPageData/BottleIcon';
+import DiaperIcon from '../components/staticPageData/DiaperIcon';
 
 export default function HomePage() {
     // hooks
@@ -416,35 +418,39 @@ export default function HomePage() {
                                 About you
                             </Button>
                             <Button
-                                leftIcon={<FormatListBulletedIcon fontSize='small' />}
+                                rightIcon={<FormatListBulletedIcon fontSize='small' />}
                                 onClick={handleDocumentBabyProgress}
                             >
                                 Document Baby Progress
                             </Button>
                             <Button
-                                leftIcon={<PublishIcon fontSize="small" />}
+                                rightIcon={<PublishIcon fontSize="small" />}
                                 onClick={handleOpenPictureUploadDialog}
                             >
                                 Upload Baby Pictures!
                             </Button>
                             <Button
-                                leftIcon={<CalculateIcon fontSize="small" />}
+                                rightIcon={<CalculateIcon fontSize="small" />}
                                 onClick={handleOpenGraphPage}
                             >
                                 Track Baby Growth!
                             </Button>
                             <Button
-                                leftIcon={<Bedtime fontSize="small" />}
+                                rightIcon={<Bedtime fontSize="small" />}
                                 onClick={handleOpenBabySleepPage}
                             >
                                 Track Baby Sleep!
                             </Button>
                             <Button
+                                rightIcon={<DiaperIcon />}
                                 onClick={() => navigate("/diaper-tracking")}
                             >
                                 Track Baby Diapers!
                             </Button>
                             <Button
+                                rightIcon={
+                                    <BottleIcon />
+                                }
                                 onClick={() => navigate("/feed-tracking")}
                             >
                                 Track Baby Feeding!

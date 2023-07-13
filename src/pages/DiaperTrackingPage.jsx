@@ -1,11 +1,8 @@
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, Icon, Input, Radio, RadioGroup, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Textarea, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Drawer, DrawerBody, DrawerContent, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, Input, Radio, RadioGroup, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Textarea, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
 import { cardBackground, screenBackground } from '../defaultStyle';
 import FloatingActionButtonsDiaperTracking from '../components/floatingActionButtons/FloatingActionButtonsDiaperTracking';
-import WaterDropIcon from '@mui/icons-material/Water';
-import DoDisturbAltIcon from '@mui/icons-material/DoDisturbAlt';
-import VolcanoIcon from '@mui/icons-material/Volcano';
 import GenericDiaperTrackingTabPanel from '../components/tabPanels/GenericDiaperTrackingTabPanel';
 import PooTabPanel from '../components/tabPanels/PooTabPanel';
 import { babyPoopColorData, babyPoopConsistencyData } from '../components/staticPageData/baby-color-consistency-info';
@@ -398,22 +395,13 @@ export default function DiaperTrackingPage() {
                     <Tabs variant='enclosed' index={tabIndex} onChange={handleTabsChange} width="100vw">
                         <TabList>
                             <Tab>
-                                <VStack spacing="-1">
-                                    <Icon as={WaterDropIcon} />
-                                    <Text>Pee</Text>
-                                </VStack>
+                                <Text>Pee</Text>
                             </Tab>
                             <Tab>
-                                <VStack spacing="-1">
-                                    <Icon as={VolcanoIcon} />
-                                    <Text>Poo</Text>
-                                </VStack>
+                                <Text>Poo</Text>
                             </Tab>
                             <Tab>
-                                <VStack spacing="-1">
-                                    <Icon as={DoDisturbAltIcon} />
-                                    <Text>Dry</Text>
-                                </VStack>
+                                <Text>Dry</Text>
                             </Tab>
                         </TabList>
                         <TabPanels>
