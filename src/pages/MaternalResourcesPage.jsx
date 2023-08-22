@@ -139,7 +139,7 @@ export default function MaternalResourcesPage() {
           onClick={handleProgramButtonPress}
         />
       </HStack>
-      <Box 
+      <Box
         flexWrap="wrap"
         justifyContent={handleJustifyContent()}
         alignItems="center"

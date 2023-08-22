@@ -2,7 +2,7 @@ import { ChevronDownIcon, ChevronUpIcon, CloseIcon } from '@chakra-ui/icons';
 import { Box, Card, CardBody, CardHeader, Collapse, FormLabel, HStack, Heading, IconButton, Text } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
-export default function GenericDiaperTrackingTabPanel({ notes, timeStamp, alias, index, handleDeleteRow }) {
+export default function GenericDiaperTrackingTabPanel({ notes, timeStampDate, alias, index, handleDeleteRow }) {
     const [showAllNotes, setShowAllNotes] = useState(false);
     const handleToggle = () => {
         setShowAllNotes(!showAllNotes);
@@ -22,19 +22,17 @@ export default function GenericDiaperTrackingTabPanel({ notes, timeStamp, alias,
             <Card>
                 <CardHeader>
                     <HStack
-                        bg="white"
                         w="90vw"
                         justifyContent="space-between"
                     >
                         <Box alignSelf="start" justifyContent="flex-start">
                             <Heading size='md'>{alias}</Heading>
                         </Box>
-                        <IconButton variant="unstyled" icon={<CloseIcon />} onClick={() => handleDeleteRow(index)} />
+                        <IconButton variant="unstyled" icon={<CloseIcon />} onClick={() => handleDeleteRow(index, alias)} />
                     </HStack>
                 </CardHeader>
                 <CardBody>
                     <HStack
-                        bg="white"
                         w="90vw"
                         justifyContent="space-between"
                     >
@@ -45,7 +43,7 @@ export default function GenericDiaperTrackingTabPanel({ notes, timeStamp, alias,
                         <Box>
                             <FormLabel>Submitted</FormLabel>
                             <Text>
-                                {timeStamp}
+                                {timeStampDate}
                             </Text>
                         </Box>
                     </HStack>
@@ -54,6 +52,9 @@ export default function GenericDiaperTrackingTabPanel({ notes, timeStamp, alias,
                             <Box
                                 w="90vw"
                                 whiteSpace="pre-wrap"
+                                bg="blackAlpha.200"
+                                p="5"
+                                borderRadius="1%"
                             >
                                 {notes}
                             </Box>

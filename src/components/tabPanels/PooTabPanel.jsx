@@ -9,7 +9,7 @@ const ColorCircle = ({ color }) => {
     );
 };
 
-export default function PooTabPanel({ setData, data, index, notes, color, consistency, timeStamp, alias, description }) {
+export default function PooTabPanel({ setData, data, index, notes, color, consistency, timeStampDate, alias, description, colorStatus, consistencyStatus }) {
     const [showAllNotes, setShowAllNotes] = useState(false);
     const [showDescription, setShowDescription] = useState(false);
 
@@ -46,24 +46,29 @@ export default function PooTabPanel({ setData, data, index, notes, color, consis
         setData(updatedArray);
     };
 
+    console.log(colorStatus, consistencyStatus);
+
     return (
         <Card>
             <CardHeader>
                 <HStack
-                    bg="white"
                     w="90vw"
                     justifyContent="space-between"
                 >
-                    <Box alignSelf="start" justifyContent="flex-start">
-                        <Heading size='md'>{alias}</Heading>
-                    </Box>
+                    <VStack>
+                        <Box alignSelf="start" justifyContent="flex-start">
+                            <Heading size='md'>{alias}</Heading>
+                        </Box>
+                        <Text>
+                            Status: {colorStatus} {consistencyStatus}
+                        </Text>
+                    </VStack>
                     <IconButton variant="unstyled" icon={<CloseIcon />} onClick={() => handleDeleteRow(index)} />
                 </HStack>
             </CardHeader>
             <CardBody>
                 <VStack>
                     <HStack
-                        bg="white"
                         w="90vw"
                     >
                         <HStack alignItems="flex-start" spacing="5">
@@ -80,7 +85,7 @@ export default function PooTabPanel({ setData, data, index, notes, color, consis
                             <Box alignItems="center" display="flex" flexDir="column">
                                 <FormLabel>Time Stamp</FormLabel>
                                 <Text>
-                                    {timeStamp}
+                                    {timeStampDate}
                                 </Text>
                             </Box>
                             <Box alignItems="start" display="flex" flexDir="column" justifyContent="center">
@@ -105,7 +110,6 @@ export default function PooTabPanel({ setData, data, index, notes, color, consis
                         </HStack>
                     </HStack>
                     <HStack
-                        bg="white"
                         w="90vw"
                         justifyContent="space-between"
                     >

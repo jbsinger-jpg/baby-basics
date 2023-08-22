@@ -1,11 +1,11 @@
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, ButtonGroup, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, Input, Radio, RadioGroup, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Textarea, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, ButtonGroup, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, Input, InputGroup, InputRightAddon, Radio, RadioGroup, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Textarea, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
 import { cardBackground, screenBackground } from '../defaultStyle';
 import FloatingActionButtonsDiaperTracking from '../components/floatingActionButtons/FloatingActionButtonsDiaperTracking';
 import GenericDiaperTrackingTabPanel from '../components/tabPanels/GenericDiaperTrackingTabPanel';
 import PooTabPanel from '../components/tabPanels/PooTabPanel';
-import { babyPoopColorData, babyPoopConsistencyData } from '../components/staticPageData/baby-color-consistency-info';
+import { STATUS, babyPoopColorData, babyPoopConsistencyData } from '../components/staticPageData/baby-color-consistency-info';
 import { auth, firestore } from '../firebaseConfig';
 import { useEffect } from 'react';
 import WaterDropIcon from '../components/staticPageData/WaterDropIcon';
@@ -37,19 +37,25 @@ export default function DiaperTrackingPage() {
     const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
 
     // Search bar useStates
-    const [peeSearchDate, setPeeSearchDate] = useState("");
-    const [peeSearchAlias, setPeeSearchAlias] = useState("");
-    const [peeSearchTime, setPeeSearchTime] = useState("");
+    const [peeSearchDateMonth, setPeeSearchDateMonth] = useState("");
+    const [peeSearchDateDay, setPeeSearchDateDay] = useState("");
+    const [peeSearchDateYear, setPeeSearchDateYear] = useState("");
 
-    const [pooSearchDate, setPooSearchDate] = useState("");
-    const [pooSearchTime, setPooSearchTime] = useState("");
+    const [peeSearchAlias, setPeeSearchAlias] = useState("");
+
+    const [pooSearchDateMonth, setPooSearchDateMonth] = useState("");
+    const [pooSearchDateDay, setPooSearchDateDay] = useState("");
+    const [pooSearchDateYear, setPooSearchDateYear] = useState("");
+
     const [pooSearchAlias, setPooSearchAlias] = useState("");
     const [pooSearchConsistency, setPooSearchConsistency] = useState("");
     const [pooSearchColor, setPooSearchColor] = useState("");
 
-    const [drySearchDate, setDrySearchDate] = useState("");
+
+    const [drySearchDateMonth, setDrySearchDateMonth] = useState("");
+    const [drySearchDateDay, setDrySearchDateDay] = useState("");
+    const [drySearchDateYear, setDrySearchDateYear] = useState("");
     const [drySearchAlias, setDrySearchAlias] = useState("");
-    const [drySearchTime, setDrySearchTime] = useState("");
 
     const handleTabsChange = (index) => {
         setTabIndex(index);
@@ -93,6 +99,27 @@ export default function DiaperTrackingPage() {
         }
 
         return formattedDescription;
+    };
+
+    const getStatusForColor = () => {
+        for (let i = 0; i < babyPoopColorData.length; i++) {
+            if (babyPoopColorData[i].color === colorValue) {
+                return babyPoopColorData[i].status;
+            }
+        }
+
+        return STATUS.NONE;
+    };
+
+    const getStatusForConsistency = () => {
+        for (let i = 0; i < babyPoopConsistencyData.length; i++) {
+            if (babyPoopConsistencyData[i].consistency === consistencyValue) {
+                console.log("Match! ", babyPoopConsistencyData[i].status);
+                return babyPoopConsistencyData[i].status;
+            }
+        }
+
+        return STATUS.NONE;
     };
 
     const handleClearDialogEntries = () => {
@@ -213,14 +240,14 @@ export default function DiaperTrackingPage() {
                 firestore.collection("users").doc(auth.currentUser.uid).collection("pee-tracking").doc(String(peeTabAlias).trim()).set({
                     alias: String(peeTabAlias).trim(),
                     notes: peeTabNotes,
-                    timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`
+                    timeStampDate: new Date().toLocaleDateString(),
                 });
 
                 setPeeTabData(
                     [...peeTabData, {
                         alias: String(peeTabAlias).trim(),
                         notes: peeTabNotes,
-                        timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`
+                        timeStampDate: new Date().toLocaleDateString(),
                     }]
                 );
             }
@@ -240,8 +267,10 @@ export default function DiaperTrackingPage() {
                 color: colorValue,
                 consistency: consistencyValue,
                 notes: pooTabNotes,
-                timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
-                description: getDescriptionForColorAndConsistency()
+                timeStampDate: new Date().toLocaleDateString(),
+                description: getDescriptionForColorAndConsistency(),
+                colorStatus: getStatusForColor(),
+                consistencyStatus: getStatusForConsistency(),
             };
 
             if (!pooDuplicate) {
@@ -266,14 +295,14 @@ export default function DiaperTrackingPage() {
                 firestore.collection("users").doc(auth.currentUser.uid).collection("dry-tracking").doc(String(dryTabAlias).trim()).set({
                     alias: String(dryTabAlias).trim(),
                     notes: dryTabNotes,
-                    timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`
+                    timeStampDate: new Date().toLocaleDateString(),
                 });
 
                 setDryTabData(
                     [...dryTabData, {
                         alias: dryTabAlias,
                         notes: dryTabNotes,
-                        timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`
+                        timeStampDate: new Date().toLocaleDateString(),
                     }]
                 );
             }
@@ -290,40 +319,47 @@ export default function DiaperTrackingPage() {
     };
 
     useEffect(() => {
-        firestore.collection("users").doc(auth?.currentUser?.uid).collection("pee-tracking").get().then((snapshot) => {
-            let initialData = [];
-            snapshot.docs.forEach(doc => {
-                initialData.push(doc.data());
+        firestore.collection("users").doc(auth?.currentUser?.uid).collection("pee-tracking")
+            .get()
+            .then((snapshot) => {
+                let initialData = [];
+                snapshot.docs.forEach(doc => {
+                    initialData.push(doc.data());
+                });
+                setPeeTabData(initialData);
             });
-            setPeeTabData(initialData);
-        });
 
-        firestore.collection("users").doc(auth?.currentUser?.uid).collection("poo-tracking").get().then((snapshot) => {
-            let initialData = [];
-            snapshot.docs.forEach(doc => {
-                initialData.push(doc.data());
+        firestore.collection("users").doc(auth?.currentUser?.uid).collection("poo-tracking")
+            .get()
+            .then((snapshot) => {
+                let initialData = [];
+                snapshot.docs.forEach(doc => {
+                    initialData.push(doc.data());
+                });
+                setPooTabData(initialData);
             });
-            setPooTabData(initialData);
-        });
 
-        firestore.collection("users").doc(auth?.currentUser?.uid).collection("dry-tracking").get().then((snapshot) => {
-            let initialData = [];
-            snapshot.docs.forEach(doc => {
-                initialData.push(doc.data());
+        firestore.collection("users").doc(auth?.currentUser?.uid).collection("dry-tracking")
+            .get()
+            .then((snapshot) => {
+                let initialData = [];
+                snapshot.docs.forEach(doc => {
+                    initialData.push(doc.data());
+                });
+                setDryTabData(initialData);
             });
-            setDryTabData(initialData);
-        });
-    }, []);
+        //eslint-disable-next-line
+    }, [auth?.currentUser?.uid]);
 
-    const handleDeletePeeRow = (index) => {
-        firestore.collection("users").doc(auth?.currentUser?.uid).collection("pee-tracking").doc(String(peeTabAlias).trim()).delete();
+    const handleDeletePeeRow = (index, alias) => {
+        firestore.collection("users").doc(auth?.currentUser?.uid).collection("pee-tracking").doc(alias).delete();
         const updatedArray = [...peeTabData];
         updatedArray.splice(index, 1);
         setPeeTabData(updatedArray);
     };
 
-    const handleDeleteDryRow = (index) => {
-        firestore.collection("users").doc(auth?.currentUser?.uid).collection("dry-tracking").doc(String(dryTabAlias).trim()).delete();
+    const handleDeleteDryRow = (index, alias) => {
+        firestore.collection("users").doc(auth?.currentUser?.uid).collection("dry-tracking").doc(alias).delete();
         const updatedArray = [...dryTabData];
         updatedArray.splice(index, 1);
         setDryTabData(updatedArray);
@@ -331,14 +367,16 @@ export default function DiaperTrackingPage() {
 
     const getPeeTabSearchItems = () => {
         return (
-            <VStack>
+            <VStack w="100%" alignItems="start">
                 <VStack alignItems="start">
                     <FormLabel htmlFor="date">Date</FormLabel>
-                    <Input id="date" value={peeSearchDate} onChange={(event) => setPeeSearchDate(event.target.value)} />
-                </VStack>
-                <VStack alignItems="start">
-                    <FormLabel htmlFor="time">Time</FormLabel>
-                    <Input id="time" value={peeSearchTime} onChange={(event) => setPeeSearchTime(event.target.value)} />
+                    <InputGroup>
+                        <Input id="date" value={peeSearchDateMonth} onChange={(event) => setPeeSearchDateMonth(event.target.value)} />
+                        <InputRightAddon>/</InputRightAddon>
+                        <Input value={peeSearchDateDay} onChange={(event) => setPeeSearchDateDay(event.target.value)} />
+                        <InputRightAddon>/</InputRightAddon>
+                        <Input value={peeSearchDateYear} onChange={(event) => setPeeSearchDateYear(event.target.value)} />
+                    </InputGroup>
                 </VStack>
                 <VStack alignItems="start">
                     <FormLabel htmlFor="alias">Alias</FormLabel>
@@ -350,14 +388,16 @@ export default function DiaperTrackingPage() {
 
     const getPooTabSearchItems = () => {
         return (
-            <VStack>
+            <VStack w="100%" alignItems="start">
                 <VStack alignItems="start">
                     <FormLabel htmlFor="date">Date</FormLabel>
-                    <Input id="date" value={pooSearchAlias} onChange={(event) => setPooSearchAlias(event.target.value)} />
-                </VStack>
-                <VStack alignItems="start">
-                    <FormLabel htmlFor="time">Time</FormLabel>
-                    <Input id="time" value={pooSearchTime} onChange={(event) => setPooSearchTime(event.target.value)} />
+                    <InputGroup>
+                        <Input id="date" value={pooSearchDateMonth} onChange={(event) => setPooSearchDateMonth(event.target.value)} />
+                        <InputRightAddon>/</InputRightAddon>
+                        <Input value={pooSearchDateDay} onChange={(event) => setPooSearchDateDay(event.target.value)} />
+                        <InputRightAddon>/</InputRightAddon>
+                        <Input value={pooSearchDateYear} onChange={(event) => setPooSearchDateYear(event.target.value)} />
+                    </InputGroup>
                 </VStack>
                 <VStack alignItems="start">
                     <FormLabel htmlFor="alias">Alias</FormLabel>
@@ -377,14 +417,16 @@ export default function DiaperTrackingPage() {
 
     const getDryTabSearchItems = () => {
         return (
-            <VStack>
+            <VStack w="100%" alignItems="start">
                 <VStack alignItems="start">
                     <FormLabel htmlFor="date">Date</FormLabel>
-                    <Input id="date" value={drySearchDate} onChange={(event) => setDrySearchDate(event.target.value)} />
-                </VStack>
-                <VStack alignItems="start">
-                    <FormLabel htmlFor="time">Time</FormLabel>
-                    <Input id="time" value={drySearchTime} onChange={(event) => setDrySearchTime(event.target.value)} />
+                    <InputGroup>
+                        <Input id="date" value={drySearchDateMonth} onChange={(event) => setDrySearchDateMonth(event.target.value)} />
+                        <InputRightAddon>/</InputRightAddon>
+                        <Input value={drySearchDateDay} onChange={(event) => setDrySearchDateDay(event.target.value)} />
+                        <InputRightAddon>/</InputRightAddon>
+                        <Input value={drySearchDateYear} onChange={(event) => setDrySearchDateYear(event.target.value)} />
+                    </InputGroup>
                 </VStack>
                 <VStack alignItems="start">
                     <FormLabel htmlFor="alias">Alias</FormLabel>
@@ -413,18 +455,13 @@ export default function DiaperTrackingPage() {
             let peeQueryFilters = [];
             let peeData = [];
 
-            if (peeSearchDate) {
-                peeQueryFilters.push({ dbField: "date", operator: "==", operand: peeSearchDate });
+            if (peeSearchDateDay && peeSearchDateMonth && peeSearchDateYear) {
+                peeQueryFilters.push({ dbField: "timeStampDate", operator: "==", operand: peeSearchDateMonth + "/" + peeSearchDateDay + "/" + peeSearchDateYear });
             }
 
             if (peeSearchAlias) {
                 peeQueryFilters.push({ dbField: "alias", operator: "==", operand: peeSearchAlias });
             }
-
-            if (peeSearchTime) {
-                peeQueryFilters.push({ dbField: "time", operator: "==", operand: peeSearchTime });
-            }
-
 
             for (let i = 0; i < peeQueryFilters.length; i++) {
                 peeRef = await peeRef.where(peeQueryFilters[i].dbField, peeQueryFilters[i].operator, peeQueryFilters[i].operand);
@@ -443,16 +480,12 @@ export default function DiaperTrackingPage() {
             let pooQueryFilters = [];
             let pooData = [];
 
-            if (pooSearchDate) {
-                pooQueryFilters.push({ dbField: "date", operator: "==", operand: pooSearchDate });
+            if (pooSearchDateDay && pooSearchDateMonth && pooSearchDateYear) {
+                pooQueryFilters.push({ dbField: "timeStampDate", operator: "==", operand: pooSearchDateMonth + "/" + pooSearchDateDay + "/" + pooSearchDateYear });
             }
 
             if (pooSearchAlias) {
                 pooQueryFilters.push({ dbField: "alias", operator: "==", operand: pooSearchAlias });
-            }
-
-            if (pooSearchTime) {
-                pooQueryFilters.push({ dbField: "time", operator: "==", operand: pooSearchTime });
             }
 
             if (pooSearchColor) {
@@ -481,18 +514,13 @@ export default function DiaperTrackingPage() {
             let dryQueryFilters = [];
             let dryData = [];
 
-            if (peeSearchDate) {
-                dryQueryFilters.push({ dbField: "date", operator: "==", operand: drySearchDate });
+            if (drySearchDateDay && drySearchDateMonth && drySearchDateYear) {
+                dryQueryFilters.push({ dbField: "timeStampDate", operator: "==", operand: drySearchDateMonth + "/" + drySearchDateDay + "/" + drySearchDateYear });
             }
 
-            if (peeSearchAlias) {
+            if (drySearchAlias) {
                 dryQueryFilters.push({ dbField: "alias", operator: "==", operand: drySearchAlias });
             }
-
-            if (peeSearchTime) {
-                dryQueryFilters.push({ dbField: "time", operator: "==", operand: drySearchTime });
-            }
-
 
             for (let i = 0; i < dryQueryFilters.length; i++) {
                 dryRef = await dryRef.where(dryQueryFilters[i].dbField, dryQueryFilters[i].operator, dryQueryFilters[i].operand);
@@ -509,7 +537,26 @@ export default function DiaperTrackingPage() {
     };
 
     const clearSearch = () => {
-
+        if (tabIndex === 0) {
+            setPeeSearchDateDay("");
+            setPeeSearchDateMonth("");
+            setPeeSearchDateYear("");
+            setPeeSearchAlias("");
+        }
+        else if (tabIndex === 1) {
+            setPooSearchDateDay("");
+            setPooSearchDateMonth("");
+            setPooSearchDateYear("");
+            setPooSearchColor("");
+            setPooSearchConsistency("");
+            setPooSearchAlias("");
+        }
+        else if (tabIndex === 2) {
+            setDrySearchDateDay("");
+            setDrySearchDateMonth("");
+            setDrySearchDateYear("");
+            setDrySearchAlias("");
+        }
     };
 
     return (
@@ -565,7 +612,7 @@ export default function DiaperTrackingPage() {
                                             <GenericDiaperTrackingTabPanel
                                                 alias={peeRow.alias}
                                                 notes={peeRow.notes}
-                                                timeStamp={peeRow.timeStamp}
+                                                timeStampDate={peeRow.timeStampDate}
                                                 handleDeleteRow={handleDeletePeeRow}
                                                 index={index}
                                             />
@@ -588,10 +635,13 @@ export default function DiaperTrackingPage() {
                                                 consistency={pooRow.consistency}
                                                 description={pooRow.description}
                                                 notes={pooRow.notes}
-                                                timeStamp={pooRow.timeStamp}
+                                                status={pooRow.status}
+                                                timeStampDate={pooRow.timeStampDate}
                                                 data={pooTabData}
                                                 setData={setPooTabData}
                                                 index={index}
+                                                colorStatus={pooRow.colorStatus}
+                                                consistencyStatus={pooRow.consistencyStatus}
                                             />
                                         );
                                     })}
@@ -608,7 +658,7 @@ export default function DiaperTrackingPage() {
                                             <GenericDiaperTrackingTabPanel
                                                 alias={dryRow.alias}
                                                 notes={dryRow.notes}
-                                                timeStamp={dryRow.timeStamp}
+                                                timeStampDate={dryRow.timeStampDate}
                                                 handleDeleteRow={handleDeleteDryRow}
                                                 index={index}
                                             />
@@ -707,9 +757,9 @@ export default function DiaperTrackingPage() {
             <Drawer
                 onClose={() => setSearchBarIsOpen(false)}
                 bg={_cardBackground}
-                w="250px"
                 isOpen={searchBarIsOpen}
                 placement='right'
+                size="sm"
             >
                 <DrawerOverlay />
                 <DrawerContent
@@ -717,7 +767,29 @@ export default function DiaperTrackingPage() {
                 >
                     <DrawerHeader>Filter Items</DrawerHeader>
                     <DrawerBody>
-                        <Tabs index={tabIndex}>
+                        <Tabs variant='enclosed' index={tabIndex} onChange={handleTabsChange} overflowX="hidden" align="start">
+                            <TabList>
+                                <Tab>
+                                    <HStack>
+                                        <Text>Pee</Text>
+                                        <WaterDropIcon />
+                                    </HStack>
+                                </Tab>
+                                <Tab>
+                                    <HStack>
+                                        <Text>Poo</Text>
+                                        <PoopIcon />
+                                    </HStack>
+                                </Tab>
+                                <Tab>
+                                    <HStack>
+                                        <Text>Dry</Text>
+                                        <Icon as={CloseIcon} viewBox="0 0 512 512" boxSize="35" color="white" fill="white" scale={0.5} opacity={0}>
+                                            {/* Icon deliberately empty to make text consistent */}
+                                        </Icon>
+                                    </HStack>
+                                </Tab>
+                            </TabList>
                             <TabPanels>
                                 <TabPanel>
                                     {getPeeTabSearchItems()}
