@@ -1,7 +1,8 @@
-import { ChevronDownIcon, ChevronUpIcon, CloseIcon } from '@chakra-ui/icons';
-import { Box, Card, CardBody, CardHeader, Collapse, FormLabel, HStack, Heading, IconButton, Text, VStack } from '@chakra-ui/react';
+import { CheckCircleIcon, ChevronDownIcon, ChevronUpIcon, CloseIcon, InfoOutlineIcon, NotAllowedIcon } from '@chakra-ui/icons';
+import { Box, Card, CardBody, CardHeader, Collapse, FormLabel, HStack, Heading, IconButton, Text, Tooltip, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { auth, firestore } from '../../firebaseConfig';
+import { STATUS } from '../staticPageData/baby-color-consistency-info';
 
 const ColorCircle = ({ color }) => {
     return (
@@ -9,9 +10,8 @@ const ColorCircle = ({ color }) => {
     );
 };
 
-export default function PooTabPanel({ setData, data, index, notes, color, consistency, timeStampDate, alias, description, colorStatus, consistencyStatus }) {
+export default function PooTabPanel({ setData, data, index, notes, color, consistency, timeStampDate, alias, colorStatus, consistencyStatus }) {
     const [showAllNotes, setShowAllNotes] = useState(false);
-    const [showDescription, setShowDescription] = useState(false);
 
     const handleToggle = () => {
         setShowAllNotes(!showAllNotes);
@@ -26,18 +26,6 @@ export default function PooTabPanel({ setData, data, index, notes, color, consis
         }
     };
 
-    const handleDescriptionToggle = () => {
-        setShowDescription(!showDescription);
-    };
-
-    const getDescriptionIconFromToggle = () => {
-        if (!showDescription) {
-            return <ChevronDownIcon />;
-        }
-        else {
-            return <ChevronUpIcon />;
-        }
-    };
 
     const handleDeleteRow = (index) => {
         firestore.collection("users").doc(auth?.currentUser?.uid).collection("poo-tracking").doc(alias).delete();
@@ -45,8 +33,6 @@ export default function PooTabPanel({ setData, data, index, notes, color, consis
         updatedArray.splice(index, 1);
         setData(updatedArray);
     };
-
-    console.log(colorStatus, consistencyStatus);
 
     return (
         <Card>
@@ -59,9 +45,6 @@ export default function PooTabPanel({ setData, data, index, notes, color, consis
                         <Box alignSelf="start" justifyContent="flex-start">
                             <Heading size='md'>{alias}</Heading>
                         </Box>
-                        <Text>
-                            Status: {colorStatus} {consistencyStatus}
-                        </Text>
                     </VStack>
                     <IconButton variant="unstyled" icon={<CloseIcon />} onClick={() => handleDeleteRow(index)} />
                 </HStack>
@@ -73,39 +56,55 @@ export default function PooTabPanel({ setData, data, index, notes, color, consis
                     >
                         <HStack alignItems="flex-start" spacing="5">
                             <Box>
-                                <FormLabel>Color</FormLabel>
+                                <HStack spacing={"-0.5"} alignItems={"center"}>
+                                    <FormLabel>Color</FormLabel>
+                                    {colorStatus.status === STATUS.GOOD &&
+                                        <Tooltip label={colorStatus.description}>
+                                            <CheckCircleIcon />
+                                        </Tooltip>
+                                    }
+                                    {/* If either are considered to be questionable */}
+                                    {colorStatus.status === STATUS.OKAY &&
+                                        <Tooltip label={colorStatus.description}>
+                                            <InfoOutlineIcon />
+                                        </Tooltip>
+                                    }
+                                    {colorStatus.status === STATUS.BAD &&
+                                        <Tooltip label={colorStatus.description}>
+                                            <NotAllowedIcon />
+                                        </Tooltip>
+                                    }
+                                </HStack>
                                 {color !== "none" ? <ColorCircle color={color} /> : color}
                             </Box>
-                            <Box alignItems="center" display="flex" flexDir="column">
-                                <FormLabel>Consistency</FormLabel>
+                            <Box alignItems="start" display="flex" flexDir="column">
+                                <HStack spacing={"-0.5"} alignItems={"center"}>
+                                    <FormLabel>Consistency</FormLabel>
+                                    {consistencyStatus.status === STATUS.OKAY &&
+                                        <Tooltip label={consistencyStatus.description}>
+                                            <InfoOutlineIcon />
+                                        </Tooltip>
+                                    }
+                                    {consistencyStatus.status === STATUS.BAD &&
+                                        <Tooltip label={consistencyStatus.description}>
+                                            <NotAllowedIcon />
+                                        </Tooltip>
+                                    }
+                                    {consistencyStatus.status === STATUS.GOOD &&
+                                        <Tooltip label={consistencyStatus.description}>
+                                            <CheckCircleIcon />
+                                        </Tooltip>
+                                    }
+                                </HStack>
                                 <Text>
                                     {consistency}
                                 </Text>
                             </Box>
-                            <Box alignItems="center" display="flex" flexDir="column">
+                            <Box alignItems="start" display="flex" flexDir="column">
                                 <FormLabel>Time Stamp</FormLabel>
                                 <Text>
                                     {timeStampDate}
                                 </Text>
-                            </Box>
-                            <Box alignItems="start" display="flex" flexDir="column" justifyContent="center">
-                                <HStack spacing="-1" justifyContent="center" alignItems="start">
-                                    <FormLabel>Description</FormLabel>
-                                    <IconButton onClick={handleDescriptionToggle} icon={getDescriptionIconFromToggle()} variant="unstyled" h="10px" />
-                                </HStack>
-                                <HStack>
-                                    <Collapse in={showDescription} animateOpacity>
-                                        <Box
-                                            whiteSpace="pre-wrap"
-                                            bg="blackAlpha.200"
-                                            p="5"
-                                            borderRadius={"1%"}
-                                            w="30vw"
-                                        >
-                                            {description}
-                                        </Box>
-                                    </Collapse>
-                                </HStack>
                             </Box>
                         </HStack>
                     </HStack>

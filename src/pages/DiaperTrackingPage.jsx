@@ -80,46 +80,25 @@ export default function DiaperTrackingPage() {
         }
     };
 
-    const getDescriptionForColorAndConsistency = () => {
-        let formattedDescription = "";
-
-        for (let i = 0; i < babyPoopColorData.length; i++) {
-            if (babyPoopColorData[i].color === colorValue) {
-                formattedDescription += babyPoopColorData[i].description;
-            }
-        }
-
-        if (formattedDescription)
-            formattedDescription += "\n\n";
-
-        for (let i = 0; i < babyPoopConsistencyData.length; i++) {
-            if (babyPoopConsistencyData[i].consistency === consistencyValue) {
-                formattedDescription += babyPoopConsistencyData[i].description;
-            }
-        }
-
-        return formattedDescription;
-    };
-
     const getStatusForColor = () => {
         for (let i = 0; i < babyPoopColorData.length; i++) {
             if (babyPoopColorData[i].color === colorValue) {
-                return babyPoopColorData[i].status;
+                return { description: babyPoopColorData[i].description, status: babyPoopColorData[i].status };
             }
         }
 
-        return STATUS.NONE;
+        return { description: STATUS.NONE, status: STATUS.NONE };
     };
 
     const getStatusForConsistency = () => {
         for (let i = 0; i < babyPoopConsistencyData.length; i++) {
             if (babyPoopConsistencyData[i].consistency === consistencyValue) {
                 console.log("Match! ", babyPoopConsistencyData[i].status);
-                return babyPoopConsistencyData[i].status;
+                return { description: babyPoopConsistencyData[i].description, status: babyPoopConsistencyData[i].status, };
             }
         }
 
-        return STATUS.NONE;
+        return { description: STATUS.NONE, status: STATUS.NONE };
     };
 
     const handleClearDialogEntries = () => {
@@ -268,7 +247,6 @@ export default function DiaperTrackingPage() {
                 consistency: consistencyValue,
                 notes: pooTabNotes,
                 timeStampDate: new Date().toLocaleDateString(),
-                description: getDescriptionForColorAndConsistency(),
                 colorStatus: getStatusForColor(),
                 consistencyStatus: getStatusForConsistency(),
             };
@@ -714,14 +692,6 @@ export default function DiaperTrackingPage() {
                                     readOnly
                                     value={formatColorConsistencyValue()}
                                     id='selected-options'
-                                />
-                                <FormLabel htmlFor='description'>
-                                    Description
-                                </FormLabel>
-                                <Textarea
-                                    readOnly
-                                    value={getDescriptionForColorAndConsistency()}
-                                    id='description'
                                 />
                             </AlertDialogBody>
                             <AlertDialogFooter>
