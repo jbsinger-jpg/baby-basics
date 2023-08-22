@@ -75,7 +75,7 @@ export default function PooTabPanel({ setData, data, index, notes, color, consis
                                         </Tooltip>
                                     }
                                 </HStack>
-                                {color !== "none" ? <ColorCircle color={color} /> : color}
+                                {color && <ColorCircle color={color} />}
                             </Box>
                             <Box alignItems="start" display="flex" flexDir="column">
                                 <HStack spacing={"-0.5"} alignItems={"center"}>

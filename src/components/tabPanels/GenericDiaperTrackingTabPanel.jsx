@@ -1,8 +1,8 @@
 import { ChevronDownIcon, ChevronUpIcon, CloseIcon } from '@chakra-ui/icons';
-import { Box, Card, CardBody, CardHeader, Collapse, FormLabel, HStack, Heading, IconButton, Text } from '@chakra-ui/react';
+import { Box, Card, CardBody, CardHeader, Collapse, FormLabel, HStack, Heading, IconButton, Text, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
 
-export default function GenericDiaperTrackingTabPanel({ notes, timeStampDate, alias, index, handleDeleteRow }) {
+export default function GenericDiaperTrackingTabPanel({ notes, timeStampDate, alias, index, handleDeleteRow, colorStatus, color }) {
     const [showAllNotes, setShowAllNotes] = useState(false);
     const handleToggle = () => {
         setShowAllNotes(!showAllNotes);
@@ -15,6 +15,12 @@ export default function GenericDiaperTrackingTabPanel({ notes, timeStampDate, al
         else {
             return <ChevronUpIcon />;
         }
+    };
+
+    const ColorCircle = ({ color }) => {
+        return (
+            <Box h="30px" w="30px" bg={color} borderColor="black" border="1px" borderRadius={"50%"}></Box>
+        );
     };
 
     return (
@@ -32,21 +38,27 @@ export default function GenericDiaperTrackingTabPanel({ notes, timeStampDate, al
                     </HStack>
                 </CardHeader>
                 <CardBody>
-                    <HStack
-                        w="90vw"
-                        justifyContent="space-between"
-                    >
-                        <HStack spacing="-1" justifyContent="center" alignItems="end">
-                            <FormLabel>Notes</FormLabel>
-                            <IconButton onClick={handleToggle} icon={getIconFromToggle()} variant="unstyled" />
+                    <VStack alignItems="start">
+                        <HStack>
+                            <FormLabel>Color</FormLabel>
+                            {color && <ColorCircle color={color} />}
                         </HStack>
-                        <Box>
-                            <FormLabel>Submitted</FormLabel>
-                            <Text>
-                                {timeStampDate}
-                            </Text>
-                        </Box>
-                    </HStack>
+                        <HStack
+                            w="90vw"
+                            justifyContent="space-between"
+                        >
+                            <HStack spacing="-1" justifyContent="center" alignItems="end">
+                                <FormLabel>Notes</FormLabel>
+                                <IconButton onClick={handleToggle} icon={getIconFromToggle()} variant="unstyled" />
+                            </HStack>
+                            <Box>
+                                <FormLabel>Submitted</FormLabel>
+                                <Text>
+                                    {timeStampDate}
+                                </Text>
+                            </Box>
+                        </HStack>
+                    </VStack>
                     <Box>
                         <Collapse in={showAllNotes} animateOpacity>
                             <Box

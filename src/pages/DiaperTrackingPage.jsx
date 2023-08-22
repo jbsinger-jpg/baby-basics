@@ -590,6 +590,8 @@ export default function DiaperTrackingPage() {
                                             <GenericDiaperTrackingTabPanel
                                                 alias={peeRow.alias}
                                                 notes={peeRow.notes}
+                                                color={peeRow.color}
+                                                colorStatus={peeRow.colorStatus}
                                                 timeStampDate={peeRow.timeStampDate}
                                                 handleDeleteRow={handleDeletePeeRow}
                                                 index={index}
@@ -636,6 +638,8 @@ export default function DiaperTrackingPage() {
                                             <GenericDiaperTrackingTabPanel
                                                 alias={dryRow.alias}
                                                 notes={dryRow.notes}
+                                                color={dryRow.color}
+                                                colorStatus={dryRow.colorStatus}
                                                 timeStampDate={dryRow.timeStampDate}
                                                 handleDeleteRow={handleDeleteDryRow}
                                                 index={index}
