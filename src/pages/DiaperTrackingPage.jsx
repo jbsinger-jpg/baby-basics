@@ -18,8 +18,8 @@ export default function DiaperTrackingPage() {
 
     const [colorationDialogIsVisible, setColorationDialogIsVisible] = useState(false);
     const [tabIndex, setTabIndex] = useState(0);
-    const [colorValue, setColorValue] = useState('none');
-    const [consistencyValue, setConsistencyValue] = useState('none');
+    const [colorValue, setColorValue] = useState("");
+    const [consistencyValue, setConsistencyValue] = useState("");
     const toast = useToast();
 
     const [peeTabNotes, setPeeTabNotes] = useState("");
@@ -585,6 +585,7 @@ export default function DiaperTrackingPage() {
                                     pr="2"
                                     overflowY="auto"
                                 >
+                                    <Button onClick={showColorationDialog}>Color</Button>
                                     {peeTabData && peeTabData.length && peeTabData.map((peeRow, index) => {
                                         return (
                                             <GenericDiaperTrackingTabPanel
@@ -661,42 +662,48 @@ export default function DiaperTrackingPage() {
                                 Document Coloration
                             </AlertDialogHeader>
                             <AlertDialogBody>
-                                <FormLabel htmlFor='color'>Color</FormLabel>
-                                <RadioGroup id='color' value={colorValue} onChange={setColorValue}>
-                                    <Stack direction='row'>
-                                        <Radio value='yellow'>yellow</Radio>
-                                        <Radio value='brown'>brown</Radio>
-                                        <Radio value='black'>black</Radio>
-                                    </Stack>
-                                    <Stack direction='row'>
-                                        <Radio value='green'>green</Radio>
-                                        <Radio value='orange'>orange</Radio>
-                                        <Radio value='red'>red</Radio>
-                                        <Radio value='white'>white</Radio>
-                                    </Stack>
-                                </RadioGroup>
-                                <FormLabel htmlFor='consistency'>Consistency</FormLabel>
-                                <RadioGroup id='consistency' value={consistencyValue} onChange={setConsistencyValue}>
-                                    <Stack direction='row'>
-                                        <Radio value='sticky'>sticky</Radio>
-                                        <Radio value='mushy'>mushy</Radio>
-                                        <Radio value='well-formed'>well-formed</Radio>
-                                    </Stack>
-                                    <Stack direction='row'>
-                                        <Radio value='watery'>watery</Radio>
-                                        <Radio value='hard'>hard</Radio>
-                                        <Radio value='chalky'>chalky</Radio>
-                                        <Radio value='soft'>soft</Radio>
-                                    </Stack>
-                                </RadioGroup>
-                                <FormLabel htmlFor='selected-options'>
-                                    Selected Options
-                                </FormLabel>
-                                <Input
-                                    readOnly
-                                    value={formatColorConsistencyValue()}
-                                    id='selected-options'
-                                />
+                                <VStack alignItems="start">
+                                    <FormLabel htmlFor='color'>Color</FormLabel>
+                                    <RadioGroup id='color' value={colorValue} onChange={setColorValue}>
+                                        <Stack direction='row'>
+                                            <Radio value='yellow'>yellow</Radio>
+                                            <Radio value='brown'>brown</Radio>
+                                            <Radio value='black'>black</Radio>
+                                        </Stack>
+                                        <Stack direction='row'>
+                                            <Radio value='green'>green</Radio>
+                                            <Radio value='orange'>orange</Radio>
+                                            <Radio value='red'>red</Radio>
+                                            <Radio value='white'>white</Radio>
+                                        </Stack>
+                                    </RadioGroup>
+                                    {tabIndex !== 0 &&
+                                        <>
+                                            <FormLabel htmlFor='consistency'>Consistency</FormLabel>
+                                            <RadioGroup id='consistency' value={consistencyValue} onChange={setConsistencyValue}>
+                                                <Stack direction='row'>
+                                                    <Radio value='sticky'>sticky</Radio>
+                                                    <Radio value='mushy'>mushy</Radio>
+                                                    <Radio value='well-formed'>well-formed</Radio>
+                                                </Stack>
+                                                <Stack direction='row'>
+                                                    <Radio value='watery'>watery</Radio>
+                                                    <Radio value='hard'>hard</Radio>
+                                                    <Radio value='chalky'>chalky</Radio>
+                                                    <Radio value='soft'>soft</Radio>
+                                                </Stack>
+                                            </RadioGroup>
+                                        </>
+                                    }
+                                    <FormLabel htmlFor='selected-options'>
+                                        Selected Options
+                                    </FormLabel>
+                                    <Input
+                                        readOnly
+                                        value={formatColorConsistencyValue()}
+                                        id='selected-options'
+                                    />
+                                </VStack>
                             </AlertDialogBody>
                             <AlertDialogFooter>
                                 <Button onClick={handleClearDialogEntries}>
