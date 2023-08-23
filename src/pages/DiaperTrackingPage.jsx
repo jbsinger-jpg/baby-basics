@@ -5,7 +5,7 @@ import { cardBackground, screenBackground } from '../defaultStyle';
 import FloatingActionButtonsDiaperTracking from '../components/floatingActionButtons/FloatingActionButtonsDiaperTracking';
 import GenericDiaperTrackingTabPanel from '../components/tabPanels/GenericDiaperTrackingTabPanel';
 import PooTabPanel from '../components/tabPanels/PooTabPanel';
-import { STATUS, babyPoopColorData, babyPoopConsistencyData } from '../components/staticPageData/baby-color-consistency-info';
+import { STATUS, babyPeeColorData, babyPoopColorData, babyPoopConsistencyData } from '../components/staticPageData/baby-color-consistency-info';
 import { auth, firestore } from '../firebaseConfig';
 import { useEffect } from 'react';
 import WaterDropIcon from '../components/staticPageData/WaterDropIcon';
@@ -84,6 +84,16 @@ export default function DiaperTrackingPage() {
         for (let i = 0; i < babyPoopColorData.length; i++) {
             if (babyPoopColorData[i].color === colorValue) {
                 return { description: babyPoopColorData[i].description, status: babyPoopColorData[i].status };
+            }
+        }
+
+        return { description: STATUS.NONE, status: STATUS.NONE };
+    };
+
+    const getPeeStatusForColor = () => {
+        for (let i = 0; i < babyPeeColorData.length; i++) {
+            if (babyPeeColorData[i].color === colorValue) {
+                return { description: babyPeeColorData[i].description, status: babyPeeColorData[i].status };
             }
         }
 
@@ -227,6 +237,8 @@ export default function DiaperTrackingPage() {
                         alias: String(peeTabAlias).trim(),
                         notes: peeTabNotes,
                         timeStampDate: new Date().toLocaleDateString(),
+                        color: colorValue,
+                        colorStatus: getPeeStatusForColor(),
                     }]
                 );
             }

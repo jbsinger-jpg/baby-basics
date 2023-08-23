@@ -81,6 +81,44 @@ const babyPoopConsistencyData = [
     },
 ];
 
+const babyPeeColorData = [
+    {
+        color: "yellow",
+        description: "Usual coloration for babies that are breast-fed, during the meconium stage.",
+        status: STATUS.GOOD
+    },
+    {
+        color: "brown",
+        description: "Coloration usually found within formula fed babies.",
+        status: STATUS.GOOD
+    },
+    {
+        color: "black",
+        description: "Coloration can be considered normal for babies in the meconium stage. Should consider contacting doctor otherwise.",
+        status: STATUS.OKAY
+    },
+    {
+        color: "red",
+        description: "Coloration can be caused from sudden change in diet. Red streaks could be blood.",
+        status: STATUS.BAD
+    },
+    {
+        color: "green",
+        description: "Coloration can be caused from either bacterial infection or sudden change in diet.",
+        status: STATUS.BAD
+    },
+    {
+        color: "orange",
+        description: "Coloration can be caused by certain medications that the baby was given, and/or diet related.",
+        status: STATUS.OKAY
+    },
+    {
+        color: "white",
+        description: "Coloration could be an indication that your baby has biliary atresia.",
+        status: STATUS.BAD
+    },
+];
+
 export {
-    babyPoopColorData, babyPoopConsistencyData, STATUS
+    babyPoopColorData, babyPoopConsistencyData, babyPeeColorData, STATUS
 };

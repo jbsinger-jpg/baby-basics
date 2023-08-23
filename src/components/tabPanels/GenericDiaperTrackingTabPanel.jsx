@@ -1,6 +1,7 @@
-import { ChevronDownIcon, ChevronUpIcon, CloseIcon } from '@chakra-ui/icons';
-import { Box, Card, CardBody, CardHeader, Collapse, FormLabel, HStack, Heading, IconButton, Text, VStack } from '@chakra-ui/react';
+import { CheckCircleIcon, ChevronDownIcon, ChevronUpIcon, CloseIcon, InfoOutlineIcon, NotAllowedIcon } from '@chakra-ui/icons';
+import { Box, Card, CardBody, CardHeader, Collapse, FormLabel, HStack, Heading, IconButton, Text, Tooltip, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import { STATUS } from '../staticPageData/baby-color-consistency-info';
 
 export default function GenericDiaperTrackingTabPanel({ notes, timeStampDate, alias, index, handleDeleteRow, colorStatus, color }) {
     const [showAllNotes, setShowAllNotes] = useState(false);
@@ -40,8 +41,27 @@ export default function GenericDiaperTrackingTabPanel({ notes, timeStampDate, al
                 <CardBody>
                     <VStack alignItems="start">
                         <HStack>
-                            <FormLabel>Color</FormLabel>
-                            {color && <ColorCircle color={color} />}
+                            <Box>
+                                <HStack spacing={"-0.5"} alignItems={"center"}>
+                                    <FormLabel>Color</FormLabel>
+                                    {colorStatus.status === STATUS.GOOD &&
+                                        <Tooltip label={colorStatus.description}>
+                                            <CheckCircleIcon />
+                                        </Tooltip>
+                                    }
+                                    {colorStatus.status === STATUS.OKAY &&
+                                        <Tooltip label={colorStatus.description}>
+                                            <InfoOutlineIcon />
+                                        </Tooltip>
+                                    }
+                                    {colorStatus.status === STATUS.BAD &&
+                                        <Tooltip label={colorStatus.description}>
+                                            <NotAllowedIcon />
+                                        </Tooltip>
+                                    }
+                                </HStack>
+                                {color && <ColorCircle color={color} />}
+                            </Box>
                         </HStack>
                         <HStack
                             w="90vw"
