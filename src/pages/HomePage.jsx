@@ -43,7 +43,6 @@ export default function HomePage() {
     };
     const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
 
-
     // firebase data
     const currentUser = auth.currentUser;
     const [userDataPendingFriends] = useCollectionDataOnce(firestore.collection('users').doc(currentUser?.uid).collection("pendingFriends"), { idField: 'id' });
