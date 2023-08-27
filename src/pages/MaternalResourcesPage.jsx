@@ -13,6 +13,7 @@ import FloatingActionButtonsMaternalInfo from '../components/floatingActionButto
 import GoogleMapsModal from '../components/modals/GoogleMapsModal';
 import { trimesterPhaseInformation } from '../components/staticPageData/baby-maternal-info';
 import { screenBackground } from '../defaultStyle';
+import { auth } from '../firebaseConfig';
 
 export default function MaternalResourcesPage() {
   const [stage, setStage] = useState(trimesterPhaseInformation[0].stage);
@@ -47,6 +48,9 @@ export default function MaternalResourcesPage() {
   const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
   const [cardRotated, setCardRotated] = useState(false);
   const [isLargerThan1300] = useMediaQuery("(min-width: 1300px)");
+
+  const [progressConfirmed, setProgressConfirmed] = useState(false);
+  const [recommendationData, setRecommendationData] = useState([]);
 
   const handleSearchPlacesDialogOpen = () => {
     setSearchPlaces(true);
@@ -162,7 +166,11 @@ export default function MaternalResourcesPage() {
               cardButtonPressed={recommendationsButtonPressed}
               setCardButtonPressed={setRecommendationsButtonPressed}
               selectedCardData={selectedRecommendations}
+              applyCheckbox={auth?.currentUser?.uid ? true : false}
+              progressConfirmed={progressConfirmed}
+              setProgressConfirmed={setProgressConfirmed}
               title={"Recommendations"}
+              selectedTrimester={initialStage}
             />
             <AnimatedCard
               flippedCard={flippedSymptomsCard}
@@ -171,7 +179,11 @@ export default function MaternalResourcesPage() {
               cardButtonPressed={symptomsButtonPressed}
               setCardButtonPressed={setSymptomsButtonPressed}
               selectedCardData={selectedPregnantSymptoms}
+              applyCheckbox={auth?.currentUser?.uid ? true : false}
+              progressConfirmed={progressConfirmed}
+              setProgressConfirmed={setProgressConfirmed}
               title={"Pregnancy Symptoms"}
+              selectedTrimester={initialStage}
             />
             <AnimatedCard
               flippedCard={flippedBabyDevelopmentCard}

@@ -21,7 +21,8 @@ export default function AnimatedCard({
     applyCheckbox,
     selectedAge,
     progressConfirmed,
-    setProgressConfirmed
+    setProgressConfirmed,
+    selectedTrimester
 }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
     const linkColor = useColorModeValue("blue.500", "blue.200");
@@ -48,7 +49,27 @@ export default function AnimatedCard({
             setCheckboxValues([]);
         }
         // eslint-disable-next-line
-    }, [selectedAge]);
+    }, [auth?.currentUser?.uid, selectedAge]);
+
+    useEffect(() => {
+        if (title && selectedTrimester)
+            firestore.collection("users").doc(auth?.currentUser?.uid).collection(title).doc(String(selectedTrimester))
+                .get()
+                .then((doc) => {
+                    if (doc.data() && doc.data().answers) {
+                        setCheckboxValues([...doc.data().answers]);
+                    }
+                    else {
+                        setCheckboxValues([]);
+                    }
+                }).catch((error) => {
+                    console.log(error);
+                });
+        else {
+            setCheckboxValues([]);
+        }
+        // eslint-disable-next-line
+    }, [auth?.currentUser?.uid, selectedTrimester]);
 
     const handleCheckboxValuesChange = (event, index) => {
         const checkboxValuesCopy = [...checkboxValues];
@@ -69,13 +90,19 @@ export default function AnimatedCard({
             }
         }
 
-        await babyProgressRef.doc(selectedAge).set({
-            answers: [...checkboxValues]
-        });
+        if (selectedAge) {
+            await babyProgressRef.doc(selectedAge).set({
+                answers: [...checkboxValues]
+            });
+        }
+        else {
+            await babyProgressRef.doc(String(selectedTrimester)).set({
+                answers: [...checkboxValues]
+            });
+        }
 
         setConfirmProgressButtonLoading(false);
     };
-
     const backgroundColor = useColorModeValue("#E2E8F0", "#4A5568");
 
     return (

@@ -17,7 +17,7 @@ export default function LandingPage() {
 
     const informationPanelOptions = [
         { page: "maternal", name: "maternal" },
-        { page: "milestone", name: "milestone" }
+        { page: "milestone", name: "baby milestones" }
     ];
     const informationCardHeight = `${(100 / informationPanelOptions.length) - 5}vh`;
     const userPanelOptions = [
@@ -87,7 +87,7 @@ export default function LandingPage() {
                                     <LandingPageCard
                                         key={index}
                                         onClick={() => navigate("/" + panelOption.page)}
-                                        height={informationCardHeight}
+                                        height={userCardHeight}
                                         name={panelOption.name}
                                     />
                                 );
