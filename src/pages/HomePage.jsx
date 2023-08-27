@@ -32,6 +32,7 @@ import BabyProgressModal from '../components/modals/BabyProgressModal';
 import BabyImagesModal from '../components/modals/BabyImagesModal';
 import BottleIcon from '../components/staticPageData/BottleIcon';
 import DiaperIcon from '../components/staticPageData/DiaperIcon';
+import StyledSelect from '../components/StyledSelect';
 
 export default function HomePage() {
     // hooks
@@ -104,15 +105,27 @@ export default function HomePage() {
     const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
 
     const [babyImagesModalIsOpen, setBabyImagesModalIsOpen] = useState(false);
-
     const [progressModalVisible, setProgressModalVisible] = useState(false);
+
+    const storeOptions = [
+        { key: 0, value: 0, label: "Clothing" },
+        { key: 1, value: 1, label: "Food" },
+        { key: 2, value: 2, label: "Diapers" },
+        { key: 3, value: 3, label: "Vitamins" },
+        { key: 4, value: 4, label: "Maternal" },
+        { key: 5, value: 5, label: "Formula" },
+        { key: 6, value: 6, label: "Toys" },
+        { key: 7, value: 7, label: "Monitors" },
+        { key: 8, value: 8, label: "Seats" },
+        { key: 9, value: 9, label: "Strollers" },
+    ];
 
     const handleSearchPlacesDialogOpen = () => {
         setSearchPlaces(true);
     };
 
-    const handleTabsChange = (index) => {
-        setTabIndex(index);
+    const handleTabsChange = (event) => {
+        setTabIndex(Number(event.target.value));
     };
 
     const handleDMPress = (user) => {
@@ -458,39 +471,19 @@ export default function HomePage() {
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>
-            <Tabs align='start' variant='enclosed' index={tabIndex} onChange={handleTabsChange} bg={_screenBackground} orientation={isLargerThan768 ? "horizontal" : "vertical"} isFitted={true}>
-                <TabList display="flex" justifyContent="space-between" overflowX="auto" overflowY="hidden" >
-                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                        Clothes
-                    </Tab>
-                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                        Food
-                    </Tab>
-                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                        Diapers
-                    </Tab>
-                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                        Vitamins
-                    </Tab>
-                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                        Maternal
-                    </Tab>
-                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                        Formula
-                    </Tab>
-                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                        Toys
-                    </Tab>
-                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                        Monitors
-                    </Tab>
-                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                        Seats
-                    </Tab>
-                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                        Strollers
-                    </Tab>
-                </TabList>
+            <Tabs
+                align='start'
+                variant='enclosed'
+                index={tabIndex}
+                bg={_screenBackground}
+                orientation={isLargerThan768 ? "horizontal" : "vertical"}
+                isFitted={true}
+                w="95vw"
+            >
+                <StyledSelect
+                    onChange={handleTabsChange}
+                    options={storeOptions}
+                />
                 <TabPanels>
                     <TabPanel>
                         <ClothingDataTabPanel

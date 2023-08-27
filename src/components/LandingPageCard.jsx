@@ -2,7 +2,7 @@ import { Box } from '@chakra-ui/layout';
 import React from 'react';
 import { useState } from 'react';
 
-export default function LandingPageCard({ onClick, height }) {
+export default function LandingPageCard({ onClick, height, name }) {
     const [isHovered, setIsHovered] = useState(false);
 
     const handleMouseEnter = () => {
@@ -24,7 +24,7 @@ export default function LandingPageCard({ onClick, height }) {
             onMouseLeave={handleMouseLeave}
             onClick={onClick}
         >
-            LandingPageCard
+            {name}
         </Box>
     );
 }

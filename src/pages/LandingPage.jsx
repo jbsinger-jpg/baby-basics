@@ -15,10 +15,15 @@ export default function LandingPage() {
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const navigate = useNavigate();
 
-    const informationPanelOptions = ["maternal", "milestone"];
+    const informationPanelOptions = [
+        { page: "maternal", name: "maternal" },
+        { page: "milestone", name: "milestone" }
+    ];
     const informationCardHeight = `${(100 / informationPanelOptions.length) - 5}vh`;
-
-    const userPanelOptions = ["events", "babyProgress"];
+    const userPanelOptions = [
+        { page: "events", name: "events" },
+        { page: "baby-progress", name: "baby progress" }
+    ];
     const userCardHeight = `${(100 / userPanelOptions.length) - 5}vh`;
 
     useEffect(() => {
@@ -50,6 +55,9 @@ export default function LandingPage() {
                         User
                     </Tab>
                     <Tab>
+                        Social
+                    </Tab>
+                    <Tab>
                         Store
                     </Tab>
                 </TabList>
@@ -58,12 +66,13 @@ export default function LandingPage() {
                         <VStack
                             alignItems="start"
                         >
-                            {informationPanelOptions && informationPanelOptions.map((page, index) => {
+                            {informationPanelOptions && informationPanelOptions.map((panelOption, index) => {
                                 return (
                                     <LandingPageCard
                                         key={index}
-                                        onClick={() => navigate("/" + page)}
+                                        onClick={() => navigate("/" + panelOption.page)}
                                         height={informationCardHeight}
+                                        name={panelOption.name}
                                     />
                                 );
                             })}
@@ -73,16 +82,20 @@ export default function LandingPage() {
                         <VStack
                             alignItems="start"
                         >
-                            {userPanelOptions && userPanelOptions.map((page, index) => {
+                            {userPanelOptions && userPanelOptions.map((panelOption, index) => {
                                 return (
                                     <LandingPageCard
                                         key={index}
-                                        onClick={() => navigate("/" + page)}
+                                        onClick={() => navigate("/" + panelOption.page)}
                                         height={informationCardHeight}
+                                        name={panelOption.name}
                                     />
                                 );
                             })}
                         </VStack>
+                    </TabPanel>
+                    <TabPanel>
+                        Social
                     </TabPanel>
                     <TabPanel>
                         <HomePage />
