@@ -1,6 +1,6 @@
 // module imports
 import { ChatIcon, CheckIcon, CloseIcon, WarningIcon } from '@chakra-ui/icons';
-import { Avatar, AvatarBadge, AvatarGroup, Badge, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, Icon, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorModeValue, useDisclosure, useMediaQuery, VStack } from '@chakra-ui/react';
+import { Avatar, AvatarBadge, AvatarGroup, Badge, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorModeValue, useDisclosure, useMediaQuery, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionDataOnce } from 'react-firebase-hooks/firestore';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +16,6 @@ import ClothingDataTabPanel from '../components/tabPanels/ClothingDataTabPanel';
 import FoodDataTabPanel from '../components/tabPanels/FoodDataTabPanel';
 import DiaperDataTabPanel from '../components/tabPanels/DiaperDataTabPanel';
 import MaternalDataTabPanel from '../components/tabPanels/MaternalDataTabPanel';
-import GoogleMapsModal from '../components/modals/GoogleMapsModal';
 import FloatingActionButtons from '../components/floatingActionButtons/FloatingActionButtons';
 import DisclaimerModal from '../components/modals/DisclaimerModal';
 import FriendRequestModal from '../components/modals/FriendRequestModal';
@@ -26,7 +25,6 @@ import MonitorsDataTabPanel from '../components/tabPanels/MonitorsDataTabPanel';
 import SeatsTabPanel from '../components/tabPanels/SeatsTabPanel';
 import StrollersDataTabPanel from '../components/tabPanels/StrollersDataTabPanel';
 import { screenBackground } from '../defaultStyle';
-import CustomPopOver from '../components/CustomPopover';
 import VitaminDataTabPanel from '../components/tabPanels/VitaminDataTabPanel';
 import BabyProgressModal from '../components/modals/BabyProgressModal';
 import BabyImagesModal from '../components/modals/BabyImagesModal';
@@ -97,7 +95,6 @@ export default function HomePage() {
 
     const [screeningAlertDialogVisibile, setScreeningAlertDialogVisibile] = useState(false);
     const [settingsIsOpen, setSettingsIsOpen] = useState(false);
-    const [searchPlaces, setSearchPlaces] = useState(false);
 
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
     const [screenHeight, setScreenHeight] = useState(window.innerHeight);
@@ -119,10 +116,6 @@ export default function HomePage() {
         { key: 8, value: 8, label: "Seats" },
         { key: 9, value: 9, label: "Strollers" },
     ];
-
-    const handleSearchPlacesDialogOpen = () => {
-        setSearchPlaces(true);
-    };
 
     const handleTabsChange = (event) => {
         setTabIndex(Number(event.target.value));
@@ -422,7 +415,6 @@ export default function HomePage() {
                             <Button leftIcon={<ChatIcon />} onClick={onOpen}>
                                 Chat with Peeps
                             </Button>
-                            <CustomPopOver />
                             <Button
                                 leftIcon={<WarningIcon />}
                                 onClick={() => setScreeningAlertDialogVisibile(true)}
@@ -558,7 +550,6 @@ export default function HomePage() {
                 </TabPanels>
             </Tabs>
             <FloatingActionButtons
-                handleSearchPlacesDialogOpen={handleSearchPlacesDialogOpen}
                 setSettingsIsOpen={setSettingsIsOpen}
                 currentUser={currentUser}
                 setSearchBarIsOpen={setSearchBarIsOpen}
@@ -575,10 +566,6 @@ export default function HomePage() {
                 setVitaminData={setVitaminData}
                 tabIndex={tabIndex}
                 setTabIndex={setTabIndex}
-            />
-            <GoogleMapsModal
-                searchPlaces={searchPlaces}
-                setSearchPlaces={setSearchPlaces}
             />
             <DisclaimerModal
                 screeningAlertDialogVisibile={screeningAlertDialogVisibile}

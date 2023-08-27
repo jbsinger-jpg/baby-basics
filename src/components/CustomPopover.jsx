@@ -15,8 +15,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import TimePicker from 'react-time-picker';
 import 'react-time-picker/dist/TimePicker.css';
 import 'react-clock/dist/Clock.css';
+import FabTemplate from './floatingActionButtons/StandardFab';
 
-export default function CustomPopOver() {
+export default function CustomPopOver({ cardHeight }) {
     const [selectedFrequency, setSelectedFrequency] = useState("");
     const [emailHost, setEmailHost] = useState("");
     const [emailBody, setEmailBody] = useState("");
@@ -160,11 +161,11 @@ export default function CustomPopOver() {
     return (
         <Popover>
             <PopoverTrigger>
-                <Button
-                    leftIcon={<CalendarIcon />}
-                >
-                    Set Google Calendar Event
-                </Button>
+                <FabTemplate
+                    height={cardHeight}
+                    icon={<CalendarIcon h="30px" w="30px" />}
+                    label={"Set Google Calendar Event"}
+                />
             </PopoverTrigger>
             <PopoverContent bg={_cardBackground}>
                 <PopoverArrow />

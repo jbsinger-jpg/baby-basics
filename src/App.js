@@ -4,7 +4,8 @@ import { useState } from "react";
 
 // relative imports
 import LoginPage from './pages/LoginPage';
-import HomePage from './pages/HomePage';
+// TODO: Uncomment when UI/UX overhaul finished
+// import HomePage from './pages/HomePage';
 import ForumMessagePage from "./pages/ForumMessagePage";
 import DirectMessagePage from "./pages/DirectMessagePage";
 import Context from './context/Context';
@@ -20,8 +21,9 @@ import GraphPage from "./pages/GraphPage";
 import BabySleepPage from "./pages/BabySleepPage";
 import DiaperTrackingPage from "./pages/DiaperTrackingPage";
 import BabyFeedTrackingPage from "./pages/BabyFeedTrackingPage";
-import CalendarPage from "./pages/CalendarPage";
 import LandingPage from "./pages/LandingPage";
+import ProgressPage from "./pages/ProgressPage";
+import EventsPage from "./pages/EventsPage";
 
 function App() {
   const [state, setState] = useState(null);
@@ -46,6 +48,8 @@ function App() {
         <Route path="sleep" element={<BabySleepPage />} />
         <Route path="diaper-tracking" element={<DiaperTrackingPage />} />
         <Route path="feed-tracking" element={<BabyFeedTrackingPage />} />
+        <Route path="progress" element={<ProgressPage />} />
+        <Route path="events" element={<EventsPage />} />
       </Routes>
     </Context.Provider>
   );

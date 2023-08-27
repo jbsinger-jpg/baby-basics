@@ -5,7 +5,7 @@ import React from 'react';
 // relative imports
 // none
 
-export default function FabTemplate({ onClick, icon, label }) {
+export default function FabTemplate({ onClick, icon, label, height }) {
     return (
         <Tooltip
             label={label}
@@ -14,12 +14,14 @@ export default function FabTemplate({ onClick, icon, label }) {
             <IconButton
                 onClick={onClick}
                 icon={icon}
-                width="56px"
-                height="56px"
-                borderRadius="50%"
                 boxShadow="md"
                 _hover={{ boxShadow: "lg" }}
-                zIndex={999}
+                // if height given style component to fill page
+                width={height ? "95vw" : "56px"}
+                height={height ? height : "56px"}
+                borderRadius={height ? "0%" : "50%"}
+                zIndex={!height && 999}
+                // end if
             />
         </Tooltip>
     );

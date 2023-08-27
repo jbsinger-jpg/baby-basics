@@ -1,13 +1,18 @@
-import { useColorModeValue } from '@chakra-ui/color-mode';
-import React from 'react';
-import { useEffect } from 'react';
-import { screenBackground } from '../defaultStyle';
-import { useState } from 'react';
-import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/tabs';
-import { Box, VStack } from '@chakra-ui/layout';
-import LandingPageCard from '../components/LandingPageCard';
+// Module Imports
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import { useColorModeValue } from '@chakra-ui/color-mode';
+import { Box, VStack } from '@chakra-ui/layout';
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/tabs';
+import PregnantWomanOutlinedIcon from '@mui/icons-material/PregnantWomanOutlined';
+import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
+import EventIcon from '@mui/icons-material/Event';
+import PendingIcon from '@mui/icons-material/Pending';
+
+// Relative Imports
 import HomePage from './HomePage';
+import FabTemplate from '../components/floatingActionButtons/StandardFab';
+import { screenBackground } from '../defaultStyle';
 
 export default function LandingPage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
@@ -16,13 +21,29 @@ export default function LandingPage() {
     const navigate = useNavigate();
 
     const informationPanelOptions = [
-        { page: "maternal", name: "maternal" },
-        { page: "milestone", name: "baby milestones" }
+        {
+            handleClick: () => navigate("/maternal"),
+            label: "Go to Maternal Page",
+            icon: <PregnantWomanOutlinedIcon fontSize="large" />
+        },
+        {
+            handleClick: () => navigate("/milestone"),
+            label: "Go to Milestone Page",
+            icon: <BabyChangingStationIcon fontSize="large" />
+        }
     ];
     const informationCardHeight = `${(100 / informationPanelOptions.length) - 5}vh`;
     const userPanelOptions = [
-        { page: "events", name: "events" },
-        { page: "baby-progress", name: "baby progress" }
+        {
+            handleClick: () => navigate("/events"),
+            label: "Go to Event Page",
+            icon: <EventIcon fontSize="large" />
+        },
+        {
+            handleClick: () => navigate("/progress"),
+            label: "Go to Progress Page",
+            icon: <PendingIcon fontSize="large" />
+        }
     ];
     const userCardHeight = `${(100 / userPanelOptions.length) - 5}vh`;
 
@@ -68,11 +89,12 @@ export default function LandingPage() {
                         >
                             {informationPanelOptions && informationPanelOptions.map((panelOption, index) => {
                                 return (
-                                    <LandingPageCard
+                                    <FabTemplate
                                         key={index}
-                                        onClick={() => navigate("/" + panelOption.page)}
                                         height={informationCardHeight}
-                                        name={panelOption.name}
+                                        icon={panelOption.icon}
+                                        onClick={panelOption.handleClick}
+                                        label={panelOption.label}
                                     />
                                 );
                             })}
@@ -84,11 +106,12 @@ export default function LandingPage() {
                         >
                             {userPanelOptions && userPanelOptions.map((panelOption, index) => {
                                 return (
-                                    <LandingPageCard
+                                    <FabTemplate
                                         key={index}
-                                        onClick={() => navigate("/" + panelOption.page)}
                                         height={userCardHeight}
-                                        name={panelOption.name}
+                                        icon={panelOption.icon}
+                                        onClick={panelOption.handleClick}
+                                        label={panelOption.label}
                                     />
                                 );
                             })}
