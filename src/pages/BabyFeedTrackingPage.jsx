@@ -194,7 +194,7 @@ export default function BabyFeedTrackingPage() {
     };
 
     return (
-        <Tabs variant='enclosed' index={tabIndex} onChange={handleTabsChange} bg={_screenBackground} h="100vh">
+        <Tabs index={tabIndex} onChange={handleTabsChange} bg={_screenBackground} orientation='vertical' isFitted h="80vh">
             <TabList>
                 <Tab>
                     <VStack spacing="-1">

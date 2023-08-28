@@ -577,10 +577,6 @@ export default function HomePage() {
                 alertDialogUser={alertDialogUser}
                 currentUser={currentUser}
             />
-            <BabyProgressModal
-                progressModalVisible={progressModalVisible}
-                setProgressModalVisible={setProgressModalVisible}
-            />
             <BabyImagesModal
                 babyImagesModalIsOpen={babyImagesModalIsOpen}
                 setBabyImagesModalIsOpen={setBabyImagesModalIsOpen}

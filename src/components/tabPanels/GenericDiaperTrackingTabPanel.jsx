@@ -44,17 +44,17 @@ export default function GenericDiaperTrackingTabPanel({ notes, timeStampDate, al
                             <Box>
                                 <HStack spacing={"-0.5"} alignItems={"center"}>
                                     <FormLabel>Color</FormLabel>
-                                    {colorStatus.status === STATUS.GOOD &&
+                                    {colorStatus?.status === STATUS.GOOD &&
                                         <Tooltip label={colorStatus.description}>
                                             <CheckCircleIcon />
                                         </Tooltip>
                                     }
-                                    {colorStatus.status === STATUS.OKAY &&
+                                    {colorStatus?.status === STATUS.OKAY &&
                                         <Tooltip label={colorStatus.description}>
                                             <InfoOutlineIcon />
                                         </Tooltip>
                                     }
-                                    {colorStatus.status === STATUS.BAD &&
+                                    {colorStatus?.status === STATUS.BAD &&
                                         <Tooltip label={colorStatus.description}>
                                             <NotAllowedIcon />
                                         </Tooltip>

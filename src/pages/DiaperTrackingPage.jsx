@@ -103,7 +103,6 @@ export default function DiaperTrackingPage() {
     const getStatusForConsistency = () => {
         for (let i = 0; i < babyPoopConsistencyData.length; i++) {
             if (babyPoopConsistencyData[i].consistency === consistencyValue) {
-                console.log("Match! ", babyPoopConsistencyData[i].status);
                 return { description: babyPoopConsistencyData[i].description, status: babyPoopConsistencyData[i].status, };
             }
         }
