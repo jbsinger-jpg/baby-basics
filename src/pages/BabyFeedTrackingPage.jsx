@@ -243,8 +243,8 @@ export default function BabyFeedTrackingPage() {
                             w="100vw"
                         >
                             <form onSubmit={generateBottleRow}>
-                                <HStack alignItems="end">
-                                    <HStack alignItems="end" justifyContent="center">
+                                <HStack alignItems="end" w="100vw">
+                                    <HStack alignItems="end" justifyContent="center" w="100vw">
                                         <FormControl isRequired>
                                             <FormLabel>
                                                 Alias

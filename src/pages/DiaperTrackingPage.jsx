@@ -551,7 +551,7 @@ export default function DiaperTrackingPage() {
     return (
         <Box
             bg={_screenBackground}
-            h="100vh"
+            h="80vh"
         >
             <Box
                 height={`calc(100vh - 240px)`}
@@ -565,7 +565,14 @@ export default function DiaperTrackingPage() {
                 <HStack
                     alignItems='start'
                 >
-                    <Tabs variant='enclosed' index={tabIndex} onChange={handleTabsChange} width="100vw">
+                    <Tabs
+                        index={tabIndex}
+                        onChange={handleTabsChange}
+                        width="100vw"
+                        orientation="vertical"
+                        isFitted
+                        h="60vh"
+                    >
                         <TabList>
                             <Tab>
                                 <HStack>
@@ -731,7 +738,7 @@ export default function DiaperTrackingPage() {
                     pr="2"
                     position="fixed"
                     bottom="0"
-                    w="100vw"
+                    w="90vw"
                     alignItems="start"
                 >
                     <FormControl isRequired>
