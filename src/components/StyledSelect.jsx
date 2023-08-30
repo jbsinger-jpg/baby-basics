@@ -5,7 +5,7 @@ import React from 'react';
 // relative imports
 // none
 
-export default function StyledSelect({ value, onChange, options, w, marginBottom, marginTop, paddingLeft, isRequired }) {
+export default function StyledSelect({ value, onChange, options, w, marginBottom, marginTop, paddingLeft, isRequired, removeNullOption }) {
     const _optionColor = useColorModeValue("#E6FFFA", "#1A202C");
 
     return (
@@ -18,13 +18,15 @@ export default function StyledSelect({ value, onChange, options, w, marginBottom
             paddingLeft={paddingLeft}
             isRequired={isRequired}
         >
-            <option
-                style={{ backgroundColor: _optionColor }}
-                value={''}
-                key="-1"
-            >
-                N/A
-            </option>
+            {!removeNullOption &&
+                <option
+                    style={{ backgroundColor: _optionColor }}
+                    value={''}
+                    key="-1"
+                >
+                    N/A
+                </option>
+            }
             {options?.length > 0 && options.map(option => {
                 return (
                     <option

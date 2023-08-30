@@ -4,7 +4,6 @@ import { Avatar, AvatarBadge, AvatarGroup, Badge, Box, Button, Drawer, DrawerBod
 import React, { useContext, useEffect, useState } from 'react';
 import { useCollectionDataOnce } from 'react-firebase-hooks/firestore';
 import { useNavigate } from 'react-router-dom';
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import PublishIcon from '@mui/icons-material/Publish';
 import CalculateIcon from '@mui/icons-material/Calculate';
 import Bedtime from '@mui/icons-material/Bedtime';
@@ -464,6 +463,7 @@ export default function HomePage() {
                 <StyledSelect
                     onChange={handleTabsChange}
                     options={storeOptions}
+                    removeNullOption
                 />
                 <TabPanels>
                     <TabPanel>

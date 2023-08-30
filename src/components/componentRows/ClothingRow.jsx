@@ -14,6 +14,7 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex, ml
     const MotionButton = motion(Button);
     const [flippedCards, setFlippedCards] = useState(false);
     const [buttonsPressed, setButtonsPressed] = useState(false);
+    const [imageLoaded, setImageLoaded] = useState(false);
     const [rating, setRating] = useState(0);
     const [total, setTotal] = useState(0);
     const [average, setAverage] = useState(0);
@@ -76,6 +77,13 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex, ml
     }, [tabIndex]);
 
     useEffect(() => {
+        if (!imageLoaded) {
+            setImageLoaded(true);
+        }
+        // eslint-disable-next-line
+    }, [imageLoaded]);
+
+    useEffect(() => {
         let ratingSum = 0;
 
         (firestore.collection("clothing").doc(clothing.id).collection("ratings").get()).then(snapshot => {
@@ -131,7 +139,7 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex, ml
                                     }}
                                 >
                                     {/* Prevent image from exploding in dimensions */}
-                                    {(tabIndex === 0 && !buttonsPressed) &&
+                                    {(tabIndex === 0 && !buttonsPressed && imageLoaded) &&
                                         <ReactImageMagnify
                                             imageProps={{
                                                 src: clothing.image,
@@ -150,7 +158,7 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex, ml
                                         />
                                     }
                                 </motion.div>
-                                {buttonsPressed &&
+                                {(buttonsPressed || !imageLoaded) &&
                                     <CircularProgress isIndeterminate color={_cardBackground} />
                                 }
                             </CardBody>
