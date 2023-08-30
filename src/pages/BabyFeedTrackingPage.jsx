@@ -1,5 +1,4 @@
 import { Box, Button, FormControl, FormLabel, HStack, Input, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
-import React from 'react';
 import { useState } from 'react';
 import BreastRowTabPanel from '../components/tabPanels/BreastRowTabPanel';
 import BabyFeedTrackingTemplate from '../components/BabyFeedTrackingTemplate';
@@ -7,8 +6,9 @@ import PumpRowTabPanel from '../components/tabPanels/PumpRowTabPanel';
 import BottleTabPanel from '../components/tabPanels/BottleTabPanel';
 import { screenBackground } from '../defaultStyle';
 import { auth, firestore } from '../firebaseConfig';
+import FloatingActionButtonsDiaperTracking from '../components/floatingActionButtons/FloatingActionButtonsDiaperTracking';
 
-export default function BabyFeedTrackingPage() {
+export default function BabyFeedTrackingPage({ searchBarIsOpen, setSearchBarIsOpen }) {
     const [tabIndex, setTabIndex] = useState(0);
     const [breastFeedingRows, setBreastFeedingRows] = useState([]);
     const [pumpFeedingRows, setPumpFeedingRows] = useState([]);
@@ -194,86 +194,91 @@ export default function BabyFeedTrackingPage() {
     };
 
     return (
-        <Tabs index={tabIndex} onChange={handleTabsChange} bg={_screenBackground} orientation='vertical' isFitted h="80vh">
-            <TabList>
-                <Tab>
-                    <VStack spacing="-1">
-                        <Text>BreastFeed</Text>
-                    </VStack>
-                </Tab>
-                <Tab>
-                    <VStack spacing="-1">
-                        <Text>Bottle</Text>
-                    </VStack>
-                </Tab>
-                <Tab>
-                    <VStack spacing="-1">
-                        <Text>Pump</Text>
-                    </VStack>
-                </Tab>
-            </TabList>
-            <TabPanels>
-                <TabPanel>
-                    <BabyFeedTrackingTemplate
-                        ComponentTabPanel={BreastRowTabPanel}
-                        componentData={breastFeedingRows}
-                        setComponentData={setBreastFeedingRows}
-                    />
-                </TabPanel>
-                <TabPanel>
-                    <Box overflowX="hidden">
-                        {bottleFeedingRows && bottleFeedingRows.map((bottleRow, index) => {
-                            return (
-                                <BottleTabPanel
-                                    data={bottleFeedingRows}
-                                    setData={setBottleFeedingRows}
-                                    index={index}
-                                    alias={bottleRow.alias}
-                                    timeStamp={bottleRow.timeStamp}
-                                    fluidOunces={bottleRow.fluidOunces}
-                                />
-                            );
-                        })}
-                        <VStack
-                            alignItems="start"
-                            pl="2"
-                            pr="2"
-                            position="fixed"
-                            bottom="0"
-                            w="100vw"
-                        >
-                            <form onSubmit={generateBottleRow}>
-                                <HStack alignItems="end" w="100vw">
-                                    <HStack alignItems="end" justifyContent="center" w="100vw">
-                                        <FormControl isRequired>
-                                            <FormLabel>
-                                                Alias
-                                            </FormLabel>
-                                            <Input value={getTabAlias()} onChange={handleTabAliasChange} />
-                                        </FormControl>
-                                        <FormControl isRequired>
-                                            <FormLabel>
-                                                Fluid Ounces
-                                            </FormLabel>
-                                            <Input value={getTabFluidOunces()} onChange={handleFluidOunceChange} />
-                                        </FormControl>
-                                    </HStack>
-                                    <Button type="submit">Submit</Button>
-                                </HStack>
-                            </form>
+        <>
+            <FloatingActionButtonsDiaperTracking
+                setSearchBarIsOpen={setSearchBarIsOpen}
+            />
+            <Tabs index={tabIndex} onChange={handleTabsChange} bg={_screenBackground} orientation='vertical' isFitted h="80vh">
+                <TabList>
+                    <Tab>
+                        <VStack spacing="-1">
+                            <Text>BreastFeed</Text>
                         </VStack>
-                    </Box>
-                </TabPanel>
-                <TabPanel>
-                    <BabyFeedTrackingTemplate
-                        ComponentTabPanel={PumpRowTabPanel}
-                        componentData={pumpFeedingRows}
-                        setComponentData={setPumpFeedingRows}
-                        additionalFooterChildren={getAdditionalPumpChildren()}
-                        additionalComponentData={{ fluidOunces: pumpFluidOunces }}
-                    />
-                </TabPanel>
-            </TabPanels>
-        </Tabs>
+                    </Tab>
+                    <Tab>
+                        <VStack spacing="-1">
+                            <Text>Bottle</Text>
+                        </VStack>
+                    </Tab>
+                    <Tab>
+                        <VStack spacing="-1">
+                            <Text>Pump</Text>
+                        </VStack>
+                    </Tab>
+                </TabList>
+                <TabPanels>
+                    <TabPanel>
+                        <BabyFeedTrackingTemplate
+                            ComponentTabPanel={BreastRowTabPanel}
+                            componentData={breastFeedingRows}
+                            setComponentData={setBreastFeedingRows}
+                        />
+                    </TabPanel>
+                    <TabPanel>
+                        <Box overflowX="hidden">
+                            {bottleFeedingRows && bottleFeedingRows.map((bottleRow, index) => {
+                                return (
+                                    <BottleTabPanel
+                                        data={bottleFeedingRows}
+                                        setData={setBottleFeedingRows}
+                                        index={index}
+                                        alias={bottleRow.alias}
+                                        timeStamp={bottleRow.timeStamp}
+                                        fluidOunces={bottleRow.fluidOunces}
+                                    />
+                                );
+                            })}
+                            <VStack
+                                alignItems="start"
+                                pl="2"
+                                pr="2"
+                                position="fixed"
+                                bottom="0"
+                                w="100vw"
+                            >
+                                <form onSubmit={generateBottleRow}>
+                                    <HStack alignItems="end" w="100vw">
+                                        <HStack alignItems="end" justifyContent="center" w="100vw">
+                                            <FormControl isRequired>
+                                                <FormLabel>
+                                                    Alias
+                                                </FormLabel>
+                                                <Input value={getTabAlias()} onChange={handleTabAliasChange} />
+                                            </FormControl>
+                                            <FormControl isRequired>
+                                                <FormLabel>
+                                                    Fluid Ounces
+                                                </FormLabel>
+                                                <Input value={getTabFluidOunces()} onChange={handleFluidOunceChange} />
+                                            </FormControl>
+                                        </HStack>
+                                        <Button type="submit">Submit</Button>
+                                    </HStack>
+                                </form>
+                            </VStack>
+                        </Box>
+                    </TabPanel>
+                    <TabPanel>
+                        <BabyFeedTrackingTemplate
+                            ComponentTabPanel={PumpRowTabPanel}
+                            componentData={pumpFeedingRows}
+                            setComponentData={setPumpFeedingRows}
+                            additionalFooterChildren={getAdditionalPumpChildren()}
+                            additionalComponentData={{ fluidOunces: pumpFluidOunces }}
+                        />
+                    </TabPanel>
+                </TabPanels>
+            </Tabs>
+        </>
     );
 }

@@ -12,7 +12,7 @@ import WaterDropIcon from '../components/staticPageData/WaterDropIcon';
 import PoopIcon from '../components/staticPageData/PoopIcon';
 import { CloseIcon, Icon } from '@chakra-ui/icons';
 
-export default function DiaperTrackingPage() {
+export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen }) {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
 
@@ -34,8 +34,6 @@ export default function DiaperTrackingPage() {
     const [pooTabData, setPooTabData] = useState([]);
     const [dryTabData, setDryTabData] = useState([]);
 
-    const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
-
     // Search bar useStates
     const [peeSearchDateMonth, setPeeSearchDateMonth] = useState("");
     const [peeSearchDateDay, setPeeSearchDateDay] = useState("");
@@ -56,6 +54,7 @@ export default function DiaperTrackingPage() {
     const [drySearchDateDay, setDrySearchDateDay] = useState("");
     const [drySearchDateYear, setDrySearchDateYear] = useState("");
     const [drySearchAlias, setDrySearchAlias] = useState("");
+
 
     const handleTabsChange = (index) => {
         setTabIndex(index);
@@ -560,7 +559,6 @@ export default function DiaperTrackingPage() {
             >
                 <FloatingActionButtonsDiaperTracking
                     setSearchBarIsOpen={setSearchBarIsOpen}
-                    tabPanelData={getTabPanelData()}
                 />
                 <HStack
                     alignItems='start'

@@ -26,7 +26,6 @@ import SeatsTabPanel from '../components/tabPanels/SeatsTabPanel';
 import StrollersDataTabPanel from '../components/tabPanels/StrollersDataTabPanel';
 import { screenBackground } from '../defaultStyle';
 import VitaminDataTabPanel from '../components/tabPanels/VitaminDataTabPanel';
-import BabyProgressModal from '../components/modals/BabyProgressModal';
 import BabyImagesModal from '../components/modals/BabyImagesModal';
 import BottleIcon from '../components/staticPageData/BottleIcon';
 import DiaperIcon from '../components/staticPageData/DiaperIcon';
@@ -37,9 +36,6 @@ export default function HomePage() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { setData: setUser } = useContext(Context);
     const navigate = useNavigate();
-    const handleDocumentBabyProgress = () => {
-        setProgressModalVisible(true);
-    };
     const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
 
     // firebase data
@@ -102,7 +98,6 @@ export default function HomePage() {
     const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
 
     const [babyImagesModalIsOpen, setBabyImagesModalIsOpen] = useState(false);
-    const [progressModalVisible, setProgressModalVisible] = useState(false);
 
     const storeOptions = [
         { key: 0, value: 0, label: "Clothing" },
@@ -420,12 +415,6 @@ export default function HomePage() {
                                 onClick={() => setScreeningAlertDialogVisibile(true)}
                             >
                                 About you
-                            </Button>
-                            <Button
-                                rightIcon={<FormatListBulletedIcon fontSize='small' />}
-                                onClick={handleDocumentBabyProgress}
-                            >
-                                Document Baby Progress
                             </Button>
                             <Button
                                 rightIcon={<PublishIcon fontSize="small" />}
