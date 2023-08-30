@@ -73,6 +73,7 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex, ml
 
     useEffect(() => {
         setButtonsPressed(false);
+        setImageLoaded(false);
         // eslint-disable-next-line
     }, [tabIndex]);
 

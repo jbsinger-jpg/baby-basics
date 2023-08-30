@@ -41,18 +41,6 @@ export default function FloatingActionButtons({
         setSettingsIsOpen(true);
     };
 
-    // const handleLogin = () => {
-    //     navigate("/login");
-    // };
-
-    const handleMilestones = () => {
-        navigate("/milestone");
-    };
-
-    const handleMaternalResources = () => {
-        navigate("/maternal");
-    };
-
     const handleSignInGoogle = () => {
         const provider = new GoogleAuthProvider();
 
@@ -152,16 +140,6 @@ export default function FloatingActionButtons({
                     icon={<SearchIcon height="30px" width="30px" />}
                     onClick={() => setSearchBarIsOpen(true)}
                     label={"Search"}
-                />
-                <FabTemplate
-                    icon={<BabyChangingStationIcon fontSize="large" />}
-                    onClick={handleMilestones}
-                    label={"Baby Milestones"}
-                />
-                <FabTemplate
-                    icon={<PregnantWomanOutlinedIcon fontSize="large" />}
-                    onClick={handleMaternalResources}
-                    label={"Maternity"}
                 />
                 <FabTemplate
                     icon={<UnlockIcon height="30px" width="30px" />}
