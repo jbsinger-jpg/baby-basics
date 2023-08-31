@@ -1,16 +1,13 @@
 // module imports
-import { HamburgerIcon, SearchIcon, UnlockIcon } from '@chakra-ui/icons';
-import { HStack, VStack, useToast } from '@chakra-ui/react';
+import { HamburgerIcon, SearchIcon } from '@chakra-ui/icons';
+import { HStack, VStack } from '@chakra-ui/react';
 import MapIcon from '@mui/icons-material/Map';
 import React from 'react';
-import { GoogleAuthProvider } from 'firebase/auth';
-import LogoutIcon from '@mui/icons-material/Logout';
 
 // relative imports
 import ColorModeToggleButton from '../ColorModeToggleButton';
 import SearchBarAlertDialog from '../modals/SearchBarModal';
 import FabTemplate from './StandardFab';
-import { auth, firestore } from '../../firebaseConfig';
 
 export default function FloatingActionButtons({
     setSettingsIsOpen,
@@ -31,65 +28,9 @@ export default function FloatingActionButtons({
     tabIndex,
     setTabIndex
 }) {
-    const toast = useToast();
 
     const handleSettingsPress = () => {
         setSettingsIsOpen(true);
-    };
-
-    const handleSignInGoogle = () => {
-        const provider = new GoogleAuthProvider();
-
-        auth.signInWithPopup(provider).then(async (result) => {
-            // add a template user to the database
-            const usersRef = await firestore.collection("users");
-            usersRef.where("email", "==", result.user.email).get().then(snapshot => {
-                if (!snapshot.docs.length) {
-                    usersRef.doc(result.user.uid).set({
-                        email: result.user.email,
-                        full_name: result.user.displayName,
-                        id: result.user.uid
-                    });
-                }
-            });
-
-            const token = result.credential.accessToken;
-
-            toast({
-                title: 'Successful Sign In',
-                description: "We were able to sign in to the account token \n" + token,
-                status: 'success',
-                duration: 9000,
-                isClosable: true,
-            });
-
-        }).catch((error) => {
-            toast({
-                title: 'Unable to sign in',
-                description: "We were unable sign in to the account provided error code " + JSON.stringify(error),
-                status: 'error',
-                duration: 9000,
-                isClosable: true,
-            });
-        });
-    };
-
-    const handleSignOut = () => {
-        auth.signOut()
-            .then(() => {
-                // Handle successful sign-out
-                toast({
-                    title: 'Signed Out',
-                    status: 'success',
-                    duration: 9000,
-                    isClosable: true,
-                });
-                console.log("Signed out!");
-            })
-            .catch((error) => {
-                // Handle sign-out error
-                console.error(error);
-            });
     };
 
     return (
@@ -136,16 +77,6 @@ export default function FloatingActionButtons({
                     icon={<SearchIcon height="30px" width="30px" />}
                     onClick={() => setSearchBarIsOpen(true)}
                     label={"Search"}
-                />
-                <FabTemplate
-                    icon={<UnlockIcon height="30px" width="30px" />}
-                    onClick={handleSignInGoogle}
-                    label={"Log In"}
-                />
-                <FabTemplate
-                    icon={<LogoutIcon fontSize='medium' />}
-                    onClick={handleSignOut}
-                    label={"Log Out"}
                 />
             </VStack>
         </HStack>

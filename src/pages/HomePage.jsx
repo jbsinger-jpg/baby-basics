@@ -1,8 +1,7 @@
 // module imports
-import { ChatIcon, CheckIcon, CloseIcon, WarningIcon } from '@chakra-ui/icons';
-import { Avatar, AvatarBadge, AvatarGroup, Badge, Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Tooltip, useColorModeValue, useDisclosure, useMediaQuery, VStack } from '@chakra-ui/react';
-import React, { useContext, useEffect, useState } from 'react';
-import { useCollectionDataOnce } from 'react-firebase-hooks/firestore';
+import { ChatIcon, WarningIcon } from '@chakra-ui/icons';
+import { Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, TabPanel, TabPanels, Tabs, useColorModeValue, useDisclosure, useMediaQuery, VStack } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PublishIcon from '@mui/icons-material/Publish';
 import CalculateIcon from '@mui/icons-material/Calculate';
@@ -10,7 +9,6 @@ import Bedtime from '@mui/icons-material/Bedtime';
 
 // relative imports
 import { auth, firestore } from '../firebaseConfig';
-import Context from '../context/Context';
 import ClothingDataTabPanel from '../components/tabPanels/ClothingDataTabPanel';
 import FoodDataTabPanel from '../components/tabPanels/FoodDataTabPanel';
 import DiaperDataTabPanel from '../components/tabPanels/DiaperDataTabPanel';
@@ -32,19 +30,15 @@ import StyledSelect from '../components/StyledSelect';
 
 export default function HomePage() {
     // hooks
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const { setData: setUser } = useContext(Context);
+    const { onOpen } = useDisclosure();
     const navigate = useNavigate();
     const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
 
     // firebase data
     const currentUser = auth.currentUser;
-    const [userDataPendingFriends] = useCollectionDataOnce(firestore.collection('users').doc(currentUser?.uid).collection("pendingFriends"), { idField: 'id' });
-    const [userDataConfirmedFriends] = useCollectionDataOnce(firestore.collection('users').doc(currentUser?.uid).collection("confirmedFriends"), { idField: 'id' });
-    const [groups] = useCollectionDataOnce(firestore.collection('groups'), { idField: 'id' });
 
     // useState variables
-    const [alertDialogUser, setAlertDialogUser] = useState(null);
+    const [alertDialogUser] = useState(null);
     const [alertDialogVisible, setAlertDialogVisible] = useState(false);
     const [tabIndex, setTabIndex] = useState(0);
 
@@ -113,49 +107,6 @@ export default function HomePage() {
 
     const handleTabsChange = (event) => {
         setTabIndex(Number(event.target.value));
-    };
-
-    const handleDMPress = (user) => {
-        setUser(user.email);
-        navigate("/message");
-    };
-
-    const handleFriendConfirmation = (user) => {
-        setAlertDialogUser(user);
-        setAlertDialogVisible(true);
-    };
-
-    const handleForumButtonPress = (groupAlias, groupId) => {
-        localStorage.setItem("gid", groupId);
-        localStorage.setItem("pageData", groupAlias);
-
-        if (groupAlias)
-            navigate(`/forum_${groupAlias}`);
-        else {
-            console.log("Could not redirect to the forum page wanted.");
-        }
-    };
-
-    const handleGroupStatus = (groupUsers) => {
-        const userExists = groupUsers.some((user) => user.id === auth?.currentUser?.uid);
-
-        if (userExists) {
-            return (
-                <Tooltip label="In Group">
-                    <Badge colorScheme='green'>
-                        <CheckIcon />
-                    </Badge>
-                </Tooltip>
-            );
-        }
-
-        return (
-            <Tooltip label="Not In Group">
-                <Badge colorScheme='red'>
-                    <CloseIcon />
-                </Badge>
-            </Tooltip>
-        );
     };
 
     const handleOpenPictureUploadDialog = () => {
@@ -306,95 +257,6 @@ export default function HomePage() {
             w={screenWidth}
             overflowX="hidden"
         >
-            <Drawer
-                isOpen={isOpen}
-                placement='left'
-                onClose={onClose}
-            >
-                <DrawerOverlay />
-                <DrawerContent bg={_screenBackground}>
-                    <DrawerCloseButton />
-                    <DrawerHeader>Message Other Parents!</DrawerHeader>
-                    <DrawerBody>
-                        <Tabs align='start' variant='enclosed' w="100%" h="100%" isFitted>
-                            <TabList>
-                                <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                                    Forums
-                                </Tab>
-                                <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                                    DM
-                                </Tab>
-                            </TabList>
-                            <TabPanels>
-                                <TabPanel>
-                                    <VStack w="100%" alignItems="start" spacing="12">
-                                        {groups && groups.map(group => {
-                                            return (
-                                                <Button variant="unstyled" onClick={() => handleForumButtonPress(group.alias, group.id)} key={group.name}>
-                                                    <Text>{group.name}</Text>
-                                                    <HStack justifyContent="space-between" w="250px">
-                                                        <AvatarGroup size='md' max={3}>
-                                                            {group.users && group.users.map(user => {
-                                                                return (<Avatar key={user.id} name={user.full_name} />);
-                                                            })}
-                                                        </AvatarGroup>
-                                                        {handleGroupStatus(group.users)}
-                                                    </HStack>
-                                                </Button>
-                                            );
-                                        })}
-                                    </VStack>
-                                </TabPanel>
-                                <TabPanel>
-                                    <VStack w="100%" alignItems="start" spacing="5">
-                                        <Heading size="small">Pending Friends</Heading>
-                                        {userDataPendingFriends && userDataPendingFriends.map(user => {
-                                            return (
-                                                <Button variant="unstyled" onClick={() => handleFriendConfirmation(user)} key={user.id}>
-                                                    <HStack>
-                                                        <Avatar name={user.full_name} bg="orange">
-                                                            <AvatarBadge boxSize='1.25em' bg='green.500' />
-                                                        </Avatar>
-                                                        <VStack spacing="-0.5" alignItems="start">
-                                                            <Text>{user.full_name}</Text>
-                                                            <Text>Online</Text>
-                                                        </VStack>
-                                                    </HStack>
-                                                </Button>
-
-                                            );
-                                        })}
-                                        <Heading size="small">Confirmed Friends</Heading>
-                                        {userDataConfirmedFriends && userDataConfirmedFriends.map(user => {
-                                            return (
-                                                <Button variant="unstyled" onClick={() => handleDMPress(user)} key={user.id}>
-                                                    <HStack>
-                                                        <Avatar name={user.full_name} bg="orange">
-                                                            <AvatarBadge boxSize='1.25em' bg='green.500' />
-                                                        </Avatar>
-                                                        <VStack spacing="-0.5" alignItems="start">
-                                                            <Text>{user.full_name}</Text>
-                                                            <Text>Online</Text>
-                                                        </VStack>
-                                                    </HStack>
-                                                </Button>
-                                            );
-                                        })}
-                                    </VStack>
-                                </TabPanel>
-                            </TabPanels>
-                        </Tabs>
-                    </DrawerBody>
-                    <DrawerFooter>
-                        <Button variant='outline' mr={3} onClick={onClose}>
-                            Cancel
-                        </Button>
-                        <Button>
-                            Message
-                        </Button>
-                    </DrawerFooter>
-                </DrawerContent>
-            </Drawer>
             <Drawer
                 isOpen={settingsIsOpen}
                 placement='right'

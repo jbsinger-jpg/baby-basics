@@ -97,7 +97,7 @@ export default function BabyPicturePage() {
     }, [auth.currentUser]);
 
     return (
-        <Box pt="2" bg={_screenBackground} h="100vh">
+        <Box pt="2" bg={_screenBackground} h="80vh">
             <VStack
                 w="80%"
                 alignItems="start"
@@ -128,7 +128,7 @@ export default function BabyPicturePage() {
                 spacing="10"
                 bg={_screenBackground}
             >
-                {babyPictureData ? babyPictureData.map((picture, index) => {
+                {(babyPictureData && babyPictureData.length) ? babyPictureData.map((picture, index) => {
                     return (
                         <VStack
                             ml={index === 0 && 10}
