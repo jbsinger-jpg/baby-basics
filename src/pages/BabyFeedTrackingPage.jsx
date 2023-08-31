@@ -1,12 +1,12 @@
 import { Box, Button, FormControl, FormLabel, HStack, Input, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
 import { useState } from 'react';
 import BreastRowTabPanel from '../components/tabPanels/BreastRowTabPanel';
-import BabyFeedTrackingTemplate from '../components/BabyFeedTrackingTemplate';
 import PumpRowTabPanel from '../components/tabPanels/PumpRowTabPanel';
 import BottleTabPanel from '../components/tabPanels/BottleTabPanel';
 import { screenBackground } from '../defaultStyle';
 import { auth, firestore } from '../firebaseConfig';
 import FloatingActionButtonsDiaperTracking from '../components/floatingActionButtons/FloatingActionButtonsDiaperTracking';
+import Timer from '../components/Timer';
 
 export default function BabyFeedTrackingPage({ searchBarIsOpen, setSearchBarIsOpen }) {
     const [tabIndex, setTabIndex] = useState(0);
@@ -21,23 +21,18 @@ export default function BabyFeedTrackingPage({ searchBarIsOpen, setSearchBarIsOp
 
     const [pumpRowAlias, setPumpRowAlias] = useState("");
     const [pumpFluidOunces, setPumpFluidOunces] = useState(0);
+    const [leftTeetTimerValue, setLeftTeetTimerValue] = useState(0);
+    const [rightTeetTimerValue, setRightTeetTimerValue] = useState(0);
+
+    const [submittingTimerValues] = useState(false);
 
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
     const toast = useToast();
 
     const handleTabsChange = (index) => {
         setTabIndex(index);
-    };
-
-    const getAdditionalPumpChildren = () => {
-        return (
-            <VStack alignItems="start">
-                <FormControl isRequired>
-                    <FormLabel>Fluid Ounces</FormLabel>
-                </FormControl>
-                <Input value={pumpFluidOunces} onChange={(event) => setPumpFluidOunces(event.target.value)} />
-            </VStack>
-        );
+        setLeftTeetTimerValue(0);
+        setRightTeetTimerValue(0);
     };
 
     const breastAliasDuplicateFound = async () => {
@@ -89,6 +84,8 @@ export default function BabyFeedTrackingPage({ searchBarIsOpen, setSearchBarIsOp
                 setBreastFeedingRows([...breastFeedingRows, {
                     timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
                     alias: String(breastRowAlias).trim(),
+                    leftBreastTime: leftTeetTimerValue,
+                    rightBreastTime: rightTeetTimerValue,
                 }]);
             }
             else {
@@ -136,7 +133,9 @@ export default function BabyFeedTrackingPage({ searchBarIsOpen, setSearchBarIsOp
                 setPumpFeedingRows([...pumpFeedingRows, {
                     timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
                     alias: String(pumpRowAlias).trim(),
-                    fluidOunces: Number(pumpFluidOunces)
+                    fluidOunces: Number(pumpFluidOunces),
+                    leftBreastTime: leftTeetTimerValue,
+                    rightBreastTime: rightTeetTimerValue,
                 }]);
             }
             else {
@@ -218,11 +217,57 @@ export default function BabyFeedTrackingPage({ searchBarIsOpen, setSearchBarIsOp
                 </TabList>
                 <TabPanels>
                     <TabPanel>
-                        <BabyFeedTrackingTemplate
-                            ComponentTabPanel={BreastRowTabPanel}
-                            componentData={breastFeedingRows}
-                            setComponentData={setBreastFeedingRows}
-                        />
+                        <HStack
+                            alignItems="start"
+                            justifyContent="space-evenly"
+                            pl="2"
+                            pr="2"
+                            w="100vw"
+                        >
+                            <Timer title="L" setValue={setLeftTeetTimerValue} pauseTimer={submittingTimerValues} tabIndex={tabIndex} />
+                            <Timer title="R" setValue={setRightTeetTimerValue} pauseTimer={submittingTimerValues} tabIndex={tabIndex} />
+                        </HStack>
+                        {breastFeedingRows && breastFeedingRows.map((breastRow, index) => {
+                            return (
+                                <BreastRowTabPanel
+                                    leftBreastTime={leftTeetTimerValue}
+                                    rightBreastTime={rightTeetTimerValue}
+                                    alias={breastRow.alias}
+                                    index={index}
+                                    timeStamp={breastRow.alias}
+                                    data={breastFeedingRows}
+                                    setData={setBreastFeedingRows}
+                                />
+                            );
+                        })}
+                        <VStack
+                            alignItems="start"
+                            pl="2"
+                            pr="2"
+                            position="fixed"
+                            bottom="0"
+                            w="100vw"
+                        >
+                            <form onSubmit={generateBottleRow}>
+                                <HStack alignItems="end" w="100vw">
+                                    <HStack alignItems="end" justifyContent="center" w="80vw">
+                                        <FormControl isRequired>
+                                            <FormLabel>
+                                                Alias
+                                            </FormLabel>
+                                            <Input value={getTabAlias()} onChange={handleTabAliasChange} />
+                                        </FormControl>
+                                        <FormControl isRequired>
+                                            <FormLabel>
+                                                Fluid Ounces
+                                            </FormLabel>
+                                            <Input value={getTabFluidOunces()} onChange={handleFluidOunceChange} />
+                                        </FormControl>
+                                    </HStack>
+                                    <Button type="submit">Submit</Button>
+                                </HStack>
+                            </form>
+                        </VStack>
                     </TabPanel>
                     <TabPanel>
                         <Box overflowX="hidden">
@@ -248,7 +293,7 @@ export default function BabyFeedTrackingPage({ searchBarIsOpen, setSearchBarIsOp
                             >
                                 <form onSubmit={generateBottleRow}>
                                     <HStack alignItems="end" w="100vw">
-                                        <HStack alignItems="end" justifyContent="center" w="100vw">
+                                        <HStack alignItems="end" justifyContent="center" w="80vw">
                                             <FormControl isRequired>
                                                 <FormLabel>
                                                     Alias
@@ -269,13 +314,56 @@ export default function BabyFeedTrackingPage({ searchBarIsOpen, setSearchBarIsOp
                         </Box>
                     </TabPanel>
                     <TabPanel>
-                        <BabyFeedTrackingTemplate
-                            ComponentTabPanel={PumpRowTabPanel}
-                            componentData={pumpFeedingRows}
-                            setComponentData={setPumpFeedingRows}
-                            additionalFooterChildren={getAdditionalPumpChildren()}
-                            additionalComponentData={{ fluidOunces: pumpFluidOunces }}
-                        />
+                        <HStack
+                            alignItems="start"
+                            justifyContent="space-evenly"
+                            pl="2"
+                            pr="2"
+                            w="100vw"
+                        >
+                            <Timer title="L" setValue={setLeftTeetTimerValue} pauseTimer={submittingTimerValues} tabIndex={tabIndex} />
+                            <Timer title="R" setValue={setRightTeetTimerValue} pauseTimer={submittingTimerValues} tabIndex={tabIndex} />
+                        </HStack>
+                        {pumpFeedingRows && pumpFeedingRows.map((pumpRow, index) => {
+                            return (
+                                <PumpRowTabPanel
+                                    alias={pumpRow.alias}
+                                    index={index}
+                                    timeStamp={pumpRow.timeStamp}
+                                    leftBreastTime={pumpRow.leftBreastTime}
+                                    rightBreastTime={pumpRow.rightBreastTime}
+                                    data={pumpFeedingRows}
+                                    setData={setPumpFeedingRows}
+                                    fluidOunces={pumpRow.fluidOunces}
+                                />
+                            );
+                        })}
+                        <VStack
+                            alignItems="start"
+                            pl="2"
+                            pr="2"
+                            position="fixed"
+                            bottom="0"
+                            w="100vw"
+                        >
+                            <HStack alignItems="end" w="100vw">
+                                <HStack alignItems="end" justifyContent="center" w="80vw">
+                                    <FormControl isRequired>
+                                        <FormLabel>
+                                            Alias
+                                        </FormLabel>
+                                        <Input value={getTabAlias()} onChange={handleTabAliasChange} />
+                                    </FormControl>
+                                    <FormControl isRequired>
+                                        <FormLabel>
+                                            Fluid Ounces
+                                        </FormLabel>
+                                        <Input value={getTabFluidOunces()} onChange={handleFluidOunceChange} />
+                                    </FormControl>
+                                </HStack>
+                                <Button type="submit">Submit</Button>
+                            </HStack>
+                        </VStack>
                     </TabPanel>
                 </TabPanels>
             </Tabs>

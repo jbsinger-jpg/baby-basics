@@ -7,6 +7,7 @@ import StyledSelect from '../components/StyledSelect';
 import BabyFeedTrackingPage from './BabyFeedTrackingPage';
 import DiaperTrackingPage from './DiaperTrackingPage';
 import FloatingActionButtonsGrowthAndSleep from '../components/floatingActionButtons/FloatingActionButtonsGrowthAndSleep';
+import GraphPage from './GraphPage';
 
 export default function ProgressPage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
@@ -79,6 +80,7 @@ export default function ProgressPage() {
                         </VStack>
                     </TabPanel>
                     <TabPanel>
+                        <GraphPage />
                         <FloatingActionButtonsGrowthAndSleep setSearchBarIsOpen={setSearchBarIsOpen} />
                     </TabPanel>
                 </TabPanels>

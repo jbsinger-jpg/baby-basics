@@ -12,17 +12,17 @@ export default function BabyFeedTrackingTemplate({ componentData, setComponentDa
     const getBabyFeedingTrackingFooter = () => {
         return (
             <form onSubmit={generateBreastFeedingRow}>
-                <HStack alignItems="end" justifyContent="center">
-                    <VStack alignItems="start">
+                <HStack alignItems="center" w="100vw" justifyContent="start" h="10vh">
+                    <HStack alignItems="end" justifyContent="center" w="80vw">
                         <FormControl isRequired>
                             <FormLabel>
                                 Alias
                             </FormLabel>
                             <Input value={alias} onChange={(event) => setAlias(event.target.value)} />
                         </FormControl>
-                    </VStack>
-                    {additionalFooterChildren}
-                    <Button type="submit">Submit</Button>
+                        {additionalFooterChildren}
+                        <Button type="submit">Submit</Button>
+                    </HStack>
                 </HStack>
             </form>
         );

@@ -172,13 +172,13 @@ export default function GraphPage() {
     return (
         <Box
             bg={_screenBackground}
-            height="100vh"
+            height="90vh"
             width="100vw"
             overflowX="hidden"
         >
             <Box
                 width="100vw"
-                height="55vh"
+                height="45vh"
                 justifyContent="center"
                 display="flex"
             >
@@ -251,7 +251,7 @@ export default function GraphPage() {
             </Box>
             <VStack
                 justifyContent="space-between"
-                w="100vw"
+                w="90vw"
                 alignItems="stretch"
                 spacing="1.5"
                 pl="2"
@@ -259,7 +259,7 @@ export default function GraphPage() {
             >
                 <FormLabel htmlFor='age-months'>Age Months</FormLabel>
                 <VStack alignItems="start">
-                    <HStack w="100vw" justifyContent="space-between">
+                    <HStack justifyContent="space-between">
                         <HStack>
                             <NumberInput
                                 min={1}

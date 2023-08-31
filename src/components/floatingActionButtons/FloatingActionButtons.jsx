@@ -1,11 +1,8 @@
 // module imports
 import { HamburgerIcon, SearchIcon, UnlockIcon } from '@chakra-ui/icons';
 import { HStack, VStack, useToast } from '@chakra-ui/react';
-import PregnantWomanOutlinedIcon from '@mui/icons-material/PregnantWomanOutlined';
-import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
 import MapIcon from '@mui/icons-material/Map';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { GoogleAuthProvider } from 'firebase/auth';
 import LogoutIcon from '@mui/icons-material/Logout';
 
@@ -34,7 +31,6 @@ export default function FloatingActionButtons({
     tabIndex,
     setTabIndex
 }) {
-    const navigate = useNavigate();
     const toast = useToast();
 
     const handleSettingsPress = () => {

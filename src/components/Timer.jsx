@@ -4,7 +4,7 @@ import PlayCircleOutlineIcon from '@mui/icons-material/PlayCircleOutline';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import RefreshIcon from '@mui/icons-material/Refresh';
 
-export default function Timer({ title, setValue }) {
+export default function Timer({ title, setValue, tabIndex }) {
     const [seconds, setSeconds] = useState(0);
     const [isActive, setIsActive] = useState(false);
 
@@ -26,6 +26,14 @@ export default function Timer({ title, setValue }) {
 
         // eslint-disable-next-line
     }, [isActive, seconds]);
+
+    useEffect(() => {
+        if (tabIndex) {
+            setValue(0);
+            setSeconds(0);
+        }
+        // eslint-disable-next-line
+    }, [tabIndex]);
 
     const handleStart = () => {
         setIsActive(true);
