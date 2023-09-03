@@ -14,7 +14,6 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex, ml
     const MotionButton = motion(Button);
     const [flippedCards, setFlippedCards] = useState(false);
     const [buttonsPressed, setButtonsPressed] = useState(false);
-    const [imageLoaded, setImageLoaded] = useState(false);
     const [rating, setRating] = useState(0);
     const [total, setTotal] = useState(0);
     const [average, setAverage] = useState(0);
@@ -72,19 +71,6 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex, ml
     };
 
     useEffect(() => {
-        setButtonsPressed(false);
-        setImageLoaded(false);
-        // eslint-disable-next-line
-    }, [tabIndex]);
-
-    useEffect(() => {
-        if (!imageLoaded) {
-            setImageLoaded(true);
-        }
-        // eslint-disable-next-line
-    }, [imageLoaded]);
-
-    useEffect(() => {
         let ratingSum = 0;
 
         (firestore.collection("clothing").doc(clothing.id).collection("ratings").get()).then(snapshot => {
@@ -114,7 +100,7 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex, ml
             <SkeletonCircle size='10' isLoaded={!clothingDataLoaded} />
             <SkeletonText isLoaded={!clothingDataLoaded}>
                 <HStack spacing="4" w="400px" alignItems="center" justifyContent="center">
-                    {!flippedCards ?
+                    {(!flippedCards) ?
                         <Card w="220px" bg={_cardBackground} justifyContent="center" alignItems="center">
                             <CardHeader>
                                 <Tag
@@ -140,26 +126,25 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex, ml
                                     }}
                                 >
                                     {/* Prevent image from exploding in dimensions */}
-                                    {(tabIndex === 0 && !buttonsPressed && imageLoaded) &&
-                                        <ReactImageMagnify
-                                            imageProps={{
-                                                src: clothing.image,
-                                                width: 150,
-                                                height: 200,
-                                            }}
-                                            magnifiedImageProps={{
-                                                src: clothing.image,
-                                                width: 600,
-                                                height: 800
-                                            }}
-                                            magnifyContainerProps={{
-                                                height: 300,
-                                                width: 400
-                                            }}
-                                        />
+                                    {(!clothingDataLoaded && tabIndex === 0 && !buttonsPressed) &&
+                                        <div style={{ width: '150px', height: '200px' }}>
+                                            <ReactImageMagnify
+                                                imageProps={{
+                                                    src: clothing.image,
+                                                    style: { maxWidth: '100%', maxHeight: '100%' },
+                                                }}
+                                                magnifiedImageProps={{
+                                                    src: clothing.image,
+                                                    style: { maxWidth: '100%', maxHeight: '100%' },
+                                                }}
+                                                magnifyContainerProps={{
+                                                    style: { width: '450px', height: '350px' },
+                                                }}
+                                            />
+                                        </div>
                                     }
                                 </motion.div>
-                                {(buttonsPressed || !imageLoaded) &&
+                                {(buttonsPressed && clothingDataLoaded) &&
                                     <CircularProgress isIndeterminate color={_cardBackground} />
                                 }
                             </CardBody>

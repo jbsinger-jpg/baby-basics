@@ -54,7 +54,6 @@ export default function BabyPicturePage() {
             imageData.push({ ...doc.data() });
         });
 
-        console.log("image data: ", imageData);
         setBabyPictureData(imageData);
     };
 
@@ -98,21 +97,32 @@ export default function BabyPicturePage() {
 
     return (
         <Box pt="2" bg={_screenBackground} h="80vh">
-            <VStack
-                w="80%"
+            <HStack
+                w="100vw"
                 alignItems="start"
-                pl="10"
+                pb="5"
+                justifyContent="stretch"
+                bottom="0"
+                position="fixed"
             >
-                <HStack w="300px" justifyContent='space-evenly'>
+                <VStack
+                    alignItems="start"
+                    justifyContent='space-evenly'
+                >
                     <Text>Age</Text>
                     <StyledSelect options={ageOptions} value={selectedAge} onChange={(event) => setSelectedAge(event.target.value)} />
+                </VStack>
+                <HStack alignItems="end">
+                    <VStack
+                        alignItems="start"
+                        justifyContent='space-evenly'
+                    >
+                        <Text>Tag</Text>
+                        <StyledSelect options={tagOptions} value={selectedTag} onChange={(event) => setSelectedTag(event.target.value)} />
+                    </VStack>
+                    <Button onClick={getUploadedImages}>Confirm</Button>
                 </HStack>
-                <HStack w="300px" justifyContent='space-evenly'>
-                    <Text>Tag</Text>
-                    <StyledSelect options={tagOptions} value={selectedTag} onChange={(event) => setSelectedTag(event.target.value)} />
-                </HStack>
-                <Button onClick={getUploadedImages}>Confirm</Button>
-            </VStack>
+            </HStack>
             <FloatingActionButtonsBabyImages
                 setBabyImagesModalIsOpen={setBabyImagesModalIsOpen}
             />

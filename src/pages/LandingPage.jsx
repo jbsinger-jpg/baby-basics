@@ -1,9 +1,11 @@
 // Module Imports
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router';
 import { useColorModeValue } from '@chakra-ui/color-mode';
 import { Box, VStack } from '@chakra-ui/layout';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/tabs';
+import { Avatar, AvatarBadge, AvatarGroup, Badge, Button, Heading, HStack, Text, Tooltip } from '@chakra-ui/react';
+import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import PregnantWomanOutlinedIcon from '@mui/icons-material/PregnantWomanOutlined';
 import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
 import EventIcon from '@mui/icons-material/Event';
@@ -16,12 +18,9 @@ import { screenBackground } from '../defaultStyle';
 import FloatingActionButtonsUser from '../components/floatingActionButtons/FloatingActionButtonsUser';
 import BabyPicturePage from './BabyPicturePage';
 import StyledSelect from '../components/StyledSelect';
-import { Avatar, AvatarBadge, AvatarGroup, Badge, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Heading, HStack, Text, Tooltip, useDisclosure } from '@chakra-ui/react';
 import { auth, firestore } from '../firebaseConfig';
 import { useCollectionDataOnce } from 'react-firebase-hooks/firestore';
-import { useContext } from 'react';
 import Context from '../context/Context';
-import { ChatIcon, CheckIcon, CloseIcon } from '@chakra-ui/icons';
 
 export default function LandingPage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
@@ -37,8 +36,6 @@ export default function LandingPage() {
     const [socialPageOption, setSocialPageOption] = useState("pictures");
     const [, setAlertDialogUser] = useState(null);
     const [, setAlertDialogVisible] = useState(false);
-
-    const { isOpen, onOpen, onClose } = useDisclosure();
 
     const currentUser = auth.currentUser;
     const [userDataPendingFriends] = useCollectionDataOnce(firestore.collection('users').doc(currentUser?.uid).collection("pendingFriends"), { idField: 'id' });
@@ -204,101 +201,117 @@ export default function LandingPage() {
                             <BabyPicturePage />
                         }
                         {socialPageOption === "chatWithPeeps" &&
-                            <>
+                            <Tabs
+                                align='start'
+                                variant='enclosed'
+                                h="85vh"
+                                isFitted
+                                orientation='vertical'
+                            >
+                                <TabList>
+                                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                                        Forums
+                                    </Tab>
+                                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
+                                        DM
+                                    </Tab>
+                                </TabList>
+                                <TabPanels>
+                                    <TabPanel>
+                                        <VStack
+                                            h="60vh"
+                                            alignItems="start"
+                                            justifyContent="space-between"
+                                        >
+                                            <HStack
+                                                justifyContent="space-between"
+                                                w="80vw"
+                                            >
+                                                {groups && groups.slice(0, 2).map(group => {
+                                                    return (
+                                                        <Button variant="unstyled" onClick={() => handleForumButtonPress(group.alias, group.id)} key={group.name}>
+                                                            <Text>{group.name}</Text>
+                                                            <HStack justifyContent="space-between" w="250px">
+                                                                <AvatarGroup size='md' max={3}>
+                                                                    {group.users && group.users.map(user => {
+                                                                        return (<Avatar key={user.id} name={user.full_name} />);
+                                                                    })}
+                                                                </AvatarGroup>
+                                                                {handleGroupStatus(group.users)}
+                                                            </HStack>
+                                                        </Button>
+                                                    );
+                                                })}
+                                            </HStack>
+                                            <HStack
+                                                justifyContent="space-between"
+                                                w="80vw"
+                                            >
+                                                {groups && groups.slice(-2).map(group => {
+                                                    return (
+                                                        <Button variant="unstyled" onClick={() => handleForumButtonPress(group.alias, group.id)} key={group.name}>
+                                                            <Text>{group.name}</Text>
+                                                            <HStack justifyContent="space-between" w="250px">
+                                                                <AvatarGroup size='md' max={3}>
+                                                                    {group.users && group.users.map(user => {
+                                                                        return (<Avatar key={user.id} name={user.full_name} />);
+                                                                    })}
+                                                                </AvatarGroup>
+                                                                {handleGroupStatus(group.users)}
+                                                            </HStack>
+                                                        </Button>
+                                                    );
+                                                })}
+                                            </HStack>
+                                        </VStack>
+                                    </TabPanel>
+                                    <TabPanel>
+                                        <HStack
+                                            h="80vh"
+                                            alignItems="start"
+                                            justifyContent="space-evenly"
+                                        >
+                                            <VStack>
+                                                <Heading size="small">Pending Friends</Heading>
+                                                {userDataPendingFriends && userDataPendingFriends.map(user => {
+                                                    return (
+                                                        <Button variant="unstyled" onClick={() => handleFriendConfirmation(user)} key={user.id}>
+                                                            <HStack>
+                                                                <Avatar name={user.full_name} bg="orange">
+                                                                    <AvatarBadge boxSize='1.25em' bg='green.500' />
+                                                                </Avatar>
+                                                                <VStack spacing="-0.5" alignItems="start">
+                                                                    <Text>{user.full_name}</Text>
+                                                                    <Text>Online</Text>
+                                                                </VStack>
+                                                            </HStack>
+                                                        </Button>
 
-                                <Button leftIcon={<ChatIcon />} onClick={onOpen}>
-                                    Chat with Peeps
-                                </Button>
-                                <Drawer
-                                    isOpen={isOpen}
-                                    placement='left'
-                                    onClose={onClose}
-                                >
-                                    <DrawerOverlay />
-                                    <DrawerContent bg={_screenBackground}>
-                                        <DrawerCloseButton />
-                                        <DrawerHeader>Message Other Parents!</DrawerHeader>
-                                        <DrawerBody>
-                                            <Tabs align='start' variant='enclosed' w="100%" h="100%" isFitted>
-                                                <TabList>
-                                                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                                                        Forums
-                                                    </Tab>
-                                                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                                                        DM
-                                                    </Tab>
-                                                </TabList>
-                                                <TabPanels>
-                                                    <TabPanel>
-                                                        <VStack w="100%" alignItems="start" spacing="12">
-                                                            {groups && groups.map(group => {
-                                                                return (
-                                                                    <Button variant="unstyled" onClick={() => handleForumButtonPress(group.alias, group.id)} key={group.name}>
-                                                                        <Text>{group.name}</Text>
-                                                                        <HStack justifyContent="space-between" w="250px">
-                                                                            <AvatarGroup size='md' max={3}>
-                                                                                {group.users && group.users.map(user => {
-                                                                                    return (<Avatar key={user.id} name={user.full_name} />);
-                                                                                })}
-                                                                            </AvatarGroup>
-                                                                            {handleGroupStatus(group.users)}
-                                                                        </HStack>
-                                                                    </Button>
-                                                                );
-                                                            })}
-                                                        </VStack>
-                                                    </TabPanel>
-                                                    <TabPanel>
-                                                        <VStack w="100%" alignItems="start" spacing="5">
-                                                            <Heading size="small">Pending Friends</Heading>
-                                                            {userDataPendingFriends && userDataPendingFriends.map(user => {
-                                                                return (
-                                                                    <Button variant="unstyled" onClick={() => handleFriendConfirmation(user)} key={user.id}>
-                                                                        <HStack>
-                                                                            <Avatar name={user.full_name} bg="orange">
-                                                                                <AvatarBadge boxSize='1.25em' bg='green.500' />
-                                                                            </Avatar>
-                                                                            <VStack spacing="-0.5" alignItems="start">
-                                                                                <Text>{user.full_name}</Text>
-                                                                                <Text>Online</Text>
-                                                                            </VStack>
-                                                                        </HStack>
-                                                                    </Button>
-
-                                                                );
-                                                            })}
-                                                            <Heading size="small">Confirmed Friends</Heading>
-                                                            {userDataConfirmedFriends && userDataConfirmedFriends.map(user => {
-                                                                return (
-                                                                    <Button variant="unstyled" onClick={() => handleDMPress(user)} key={user.id}>
-                                                                        <HStack>
-                                                                            <Avatar name={user.full_name} bg="orange">
-                                                                                <AvatarBadge boxSize='1.25em' bg='green.500' />
-                                                                            </Avatar>
-                                                                            <VStack spacing="-0.5" alignItems="start">
-                                                                                <Text>{user.full_name}</Text>
-                                                                                <Text>Online</Text>
-                                                                            </VStack>
-                                                                        </HStack>
-                                                                    </Button>
-                                                                );
-                                                            })}
-                                                        </VStack>
-                                                    </TabPanel>
-                                                </TabPanels>
-                                            </Tabs>
-                                        </DrawerBody>
-                                        <DrawerFooter>
-                                            <Button variant='outline' mr={3} onClick={onClose}>
-                                                Cancel
-                                            </Button>
-                                            <Button>
-                                                Message
-                                            </Button>
-                                        </DrawerFooter>
-                                    </DrawerContent>
-                                </Drawer>
-                            </>
+                                                    );
+                                                })}
+                                            </VStack>
+                                            <VStack>
+                                                <Heading size="small">Confirmed Friends</Heading>
+                                                {userDataConfirmedFriends && userDataConfirmedFriends.map(user => {
+                                                    return (
+                                                        <Button variant="unstyled" onClick={() => handleDMPress(user)} key={user.id}>
+                                                            <HStack>
+                                                                <Avatar name={user.full_name} bg="orange">
+                                                                    <AvatarBadge boxSize='1.25em' bg='green.500' />
+                                                                </Avatar>
+                                                                <VStack spacing="-0.5" alignItems="start">
+                                                                    <Text>{user.full_name}</Text>
+                                                                    <Text>Online</Text>
+                                                                </VStack>
+                                                            </HStack>
+                                                        </Button>
+                                                    );
+                                                })}
+                                            </VStack>
+                                        </HStack>
+                                    </TabPanel>
+                                </TabPanels>
+                            </Tabs>
                         }
                     </TabPanel>
                     <TabPanel>

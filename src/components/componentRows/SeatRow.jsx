@@ -135,22 +135,21 @@ export default function SeatRow({ seat, seatDataIsLoading, tabIndex, ml }) {
                                 >
                                     {/* Prevent image from exploding in dimensions */}
                                     {(tabIndex === 8 && !buttonsPressed) &&
-                                        <ReactImageMagnify
-                                            imageProps={{
-                                                src: seat.image,
-                                                width: 150,
-                                                height: 200,
-                                            }}
-                                            magnifiedImageProps={{
-                                                src: seat.image,
-                                                width: 600,
-                                                height: 800
-                                            }}
-                                            magnifyContainerProps={{
-                                                height: 300,
-                                                width: 400
-                                            }}
-                                        />
+                                        <div style={{ width: '150px', height: '200px' }}>
+                                            <ReactImageMagnify
+                                                imageProps={{
+                                                    src: seat.image,
+                                                    style: { maxWidth: '100%', maxHeight: '100%' },
+                                                }}
+                                                magnifiedImageProps={{
+                                                    src: seat.image,
+                                                    style: { maxWidth: '100%', maxHeight: '100%' },
+                                                }}
+                                                magnifyContainerProps={{
+                                                    style: { width: '450px', height: '350px' },
+                                                }}
+                                            />
+                                        </div>
                                     }
                                 </motion.div>
                                 {buttonsPressed &&

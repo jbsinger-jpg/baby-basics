@@ -91,7 +91,6 @@ export default function HomePage() {
     const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
 
     const [babyImagesModalIsOpen, setBabyImagesModalIsOpen] = useState(false);
-
     const storeOptions = [
         { key: 0, value: 0, label: "Clothing" },
         { key: 1, value: 1, label: "Food" },
@@ -326,6 +325,7 @@ export default function HomePage() {
                     onChange={handleTabsChange}
                     options={storeOptions}
                     removeNullOption
+                    value={tabIndex}
                 />
                 <TabPanels>
                     <TabPanel>

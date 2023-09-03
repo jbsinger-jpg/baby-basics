@@ -135,22 +135,21 @@ export default function StrollerRow({ stroller, strollerDataIsLoading, tabIndex,
                                 >
                                     {/* Prevent image from exploding in dimensions */}
                                     {(tabIndex === 9 && !buttonsPressed) &&
-                                        <ReactImageMagnify
-                                            imageProps={{
-                                                src: stroller.image,
-                                                width: 150,
-                                                height: 200,
-                                            }}
-                                            magnifiedImageProps={{
-                                                src: stroller.image,
-                                                width: 600,
-                                                height: 800
-                                            }}
-                                            magnifyContainerProps={{
-                                                height: 300,
-                                                width: 400
-                                            }}
-                                        />
+                                        <div style={{ width: '150px', height: '200px' }}>
+                                            <ReactImageMagnify
+                                                imageProps={{
+                                                    src: stroller.image,
+                                                    style: { maxWidth: '100%', maxHeight: '100%' },
+                                                }}
+                                                magnifiedImageProps={{
+                                                    src: stroller.image,
+                                                    style: { maxWidth: '100%', maxHeight: '100%' },
+                                                }}
+                                                magnifyContainerProps={{
+                                                    style: { width: '450px', height: '350px' },
+                                                }}
+                                            />
+                                        </div>
                                     }
                                 </motion.div>
                                 {buttonsPressed &&

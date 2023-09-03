@@ -133,22 +133,21 @@ export default function FormulaRow({ formula, formulaDataIsLoading, tabIndex, ml
                                 >
                                     {/* Prevent image from exploding in dimensions */}
                                     {(tabIndex === 5 && !buttonsPressed) &&
-                                        <ReactImageMagnify
-                                            imageProps={{
-                                                src: formula.image,
-                                                width: 150,
-                                                height: 200,
-                                            }}
-                                            magnifiedImageProps={{
-                                                src: formula.image,
-                                                width: 600,
-                                                height: 800
-                                            }}
-                                            magnifyContainerProps={{
-                                                height: 300,
-                                                width: 400
-                                            }}
-                                        />
+                                        <div style={{ width: '150px', height: '200px' }}>
+                                            <ReactImageMagnify
+                                                imageProps={{
+                                                    src: formula.image,
+                                                    style: { maxWidth: '100%', maxHeight: '100%' },
+                                                }}
+                                                magnifiedImageProps={{
+                                                    src: formula.image,
+                                                    style: { maxWidth: '100%', maxHeight: '100%' },
+                                                }}
+                                                magnifyContainerProps={{
+                                                    style: { width: '450px', height: '350px' },
+                                                }}
+                                            />
+                                        </div>
                                     }
                                 </motion.div>
                                 {buttonsPressed &&

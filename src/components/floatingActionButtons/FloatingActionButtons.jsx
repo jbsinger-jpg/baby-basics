@@ -1,8 +1,6 @@
 // module imports
-import { HamburgerIcon, SearchIcon } from '@chakra-ui/icons';
+import { SearchIcon } from '@chakra-ui/icons';
 import { HStack, VStack } from '@chakra-ui/react';
-import MapIcon from '@mui/icons-material/Map';
-import React from 'react';
 
 // relative imports
 import ColorModeToggleButton from '../ColorModeToggleButton';
@@ -10,9 +8,6 @@ import SearchBarAlertDialog from '../modals/SearchBarModal';
 import FabTemplate from './StandardFab';
 
 export default function FloatingActionButtons({
-    setSettingsIsOpen,
-    handleSearchPlacesDialogOpen,
-    currentUser,
     setSearchBarIsOpen,
     searchBarIsOpen,
     setFoodData,
@@ -29,9 +24,6 @@ export default function FloatingActionButtons({
     setTabIndex
 }) {
 
-    const handleSettingsPress = () => {
-        setSettingsIsOpen(true);
-    };
 
     return (
         <HStack
@@ -59,20 +51,6 @@ export default function FloatingActionButtons({
             />
             <VStack>
                 <ColorModeToggleButton />
-                <FabTemplate
-                    icon={<MapIcon fontSize="large" />}
-                    onClick={handleSearchPlacesDialogOpen}
-                    label={"Look up a Location"}
-                />
-                {currentUser ?
-                    <FabTemplate
-                        icon={<HamburgerIcon height="30px" width="30px" />}
-                        onClick={handleSettingsPress}
-                        label={"User Account"}
-                    />
-                    :
-                    null
-                }
                 <FabTemplate
                     icon={<SearchIcon height="30px" width="30px" />}
                     onClick={() => setSearchBarIsOpen(true)}
