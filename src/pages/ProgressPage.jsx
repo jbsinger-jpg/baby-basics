@@ -66,6 +66,7 @@ export default function ProgressPage() {
                                 options={feedingDiaperOptions}
                                 value={feedingDiaperOption}
                                 onChange={handleFeedingDiaperOptionChange}
+                                removeNullOption
                             />
                             {feedingDiaperOption === "feeding" ?
                                 <BabyFeedTrackingPage

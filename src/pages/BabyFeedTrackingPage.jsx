@@ -259,8 +259,6 @@ export default function BabyFeedTrackingPage({ searchBarIsOpen, setSearchBarIsOp
                             <HStack
                                 alignItems="start"
                                 justifyContent="space-evenly"
-                                pl="2"
-                                pr="2"
                                 w="100vw"
                             >
                                 <Timer title="L" setValue={setLeftTeetTimerValue} pauseTimer={submittingTimerValues} tabIndex={tabIndex} />
@@ -286,9 +284,6 @@ export default function BabyFeedTrackingPage({ searchBarIsOpen, setSearchBarIsOp
                             </VStack>
                         </VStack>
                         <VStack
-                            alignItems="start"
-                            pl="2"
-                            pr="2"
                             position="fixed"
                             bottom="0"
                             w="100vw"
@@ -316,8 +311,9 @@ export default function BabyFeedTrackingPage({ searchBarIsOpen, setSearchBarIsOp
                     </TabPanel>
                     <TabPanel>
                         <VStack
-                            overflowX="hidden"
-                            h="80vh"
+                            alignItems="start"
+                            overflowY="auto"
+                            h="60vh"
                         >
                             {bottleFeedingRows && bottleFeedingRows.map((bottleRow, index) => {
                                 return (
@@ -333,8 +329,6 @@ export default function BabyFeedTrackingPage({ searchBarIsOpen, setSearchBarIsOp
                             })}
                             <VStack
                                 alignItems="start"
-                                pl="2"
-                                pr="2"
                                 position="fixed"
                                 bottom="0"
                                 w="100vw"
@@ -368,8 +362,6 @@ export default function BabyFeedTrackingPage({ searchBarIsOpen, setSearchBarIsOp
                             <HStack
                                 alignItems="start"
                                 justifyContent="space-evenly"
-                                pl="2"
-                                pr="2"
                                 w="100vw"
                             >
                                 <Timer title="L" setValue={setLeftTeetTimerValue} pauseTimer={submittingTimerValues} tabIndex={tabIndex} />
@@ -397,8 +389,6 @@ export default function BabyFeedTrackingPage({ searchBarIsOpen, setSearchBarIsOp
                         </VStack>
                         <VStack
                             alignItems="start"
-                            pl="2"
-                            pr="2"
                             position="fixed"
                             bottom="0"
                             w="100vw"

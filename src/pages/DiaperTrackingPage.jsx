@@ -424,18 +424,6 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
         );
     };
 
-    const getTabPanelData = () => {
-        if (tabIndex === 0) {
-            return peeTabData;
-        }
-        else if (tabIndex === 1) {
-            return pooTabData;
-        }
-        else if (tabIndex === 2) {
-            return dryTabData;
-        }
-    };
-
     const generateSearch = async () => {
         // TODO: Double check the dbFields that are being passed in for database search. Not sure if these line up with what is supposed to be seen in firebase.
         if (tabIndex === 0) {
@@ -569,7 +557,7 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                         width="100vw"
                         orientation="vertical"
                         isFitted
-                        h="60vh"
+                        h="73vh"
                     >
                         <TabList>
                             <Tab>
@@ -736,16 +724,23 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                     pr="2"
                     position="fixed"
                     bottom="0"
-                    w="90vw"
-                    alignItems="start"
+                    w="100vw"
+                    alignItems="center"
                 >
-                    <FormControl isRequired>
-                        <FormLabel htmlFor='alias'>Alias</FormLabel>
-                        <Input value={getTabAlias()} onChange={handleTabAliasChange} />
-                    </FormControl>
-                    <FormLabel htmlFor='notes'>Notes</FormLabel>
-                    <Textarea id='notes' placeholder='Notes' value={getTabNotes()} onChange={handleTabNotesChange} />
-                    <HStack>
+                    <HStack
+                        alignItems="end"
+                        w="90vw"
+                    >
+                        <FormControl isRequired>
+                            <FormLabel htmlFor='alias'>Alias</FormLabel>
+                            <Input value={getTabAlias()} onChange={handleTabAliasChange} />
+                        </FormControl>
+                        <FormControl>
+                            <FormLabel htmlFor='notes'>Notes</FormLabel>
+                            <Textarea id='notes' placeholder='Notes' value={getTabNotes()} onChange={handleTabNotesChange} />
+                        </FormControl>
+                    </HStack>
+                    <HStack alignItems="start" w="90vw" justifyContent="space-between">
                         <Button type='submit'>Save</Button>
                         <Button onClick={handleClearNotes}>Clear</Button>
                     </HStack>
