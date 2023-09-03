@@ -11,7 +11,7 @@ export default function FormQuestion({ question, choices, onChange, isNumeric, a
 
     return (
         <RadioGroup>
-            <VStack alignItems="start" w="500px">
+            <VStack alignItems="start" w="80vw" h="80vh">
                 <Heading size="md" alignSelf="center">{question}</Heading>
                 {choices.map((choice, index) => (
                     <motion.div

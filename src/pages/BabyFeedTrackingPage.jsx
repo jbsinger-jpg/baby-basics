@@ -346,23 +346,25 @@ export default function BabyFeedTrackingPage({ searchBarIsOpen, setSearchBarIsOp
                             bottom="0"
                             w="100vw"
                         >
-                            <HStack alignItems="end" w="100vw">
-                                <HStack alignItems="end" justifyContent="center" w="80vw">
-                                    <FormControl isRequired>
-                                        <FormLabel>
-                                            Alias
-                                        </FormLabel>
-                                        <Input value={getTabAlias()} onChange={handleTabAliasChange} />
-                                    </FormControl>
-                                    <FormControl isRequired>
-                                        <FormLabel>
-                                            Fluid Ounces
-                                        </FormLabel>
-                                        <Input value={getTabFluidOunces()} onChange={handleFluidOunceChange} />
-                                    </FormControl>
+                            <form onSubmit={generateBottleRow}>
+                                <HStack alignItems="end" w="100vw">
+                                    <HStack alignItems="end" justifyContent="center" w="80vw">
+                                        <FormControl isRequired>
+                                            <FormLabel>
+                                                Alias
+                                            </FormLabel>
+                                            <Input value={getTabAlias()} onChange={handleTabAliasChange} />
+                                        </FormControl>
+                                        <FormControl isRequired>
+                                            <FormLabel>
+                                                Fluid Ounces
+                                            </FormLabel>
+                                            <Input value={getTabFluidOunces()} onChange={handleFluidOunceChange} />
+                                        </FormControl>
+                                    </HStack>
+                                    <Button type="submit">Submit</Button>
                                 </HStack>
-                                <Button type="submit">Submit</Button>
-                            </HStack>
+                            </form>
                         </VStack>
                     </TabPanel>
                 </TabPanels>

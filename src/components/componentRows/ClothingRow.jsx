@@ -126,7 +126,7 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex, ml
                                     }}
                                 >
                                     {/* Prevent image from exploding in dimensions */}
-                                    {(!clothingDataLoaded && tabIndex === 0 && !buttonsPressed) &&
+                                    {(tabIndex === 0 && !buttonsPressed) &&
                                         <div style={{ width: '150px', height: '200px' }}>
                                             <ReactImageMagnify
                                                 imageProps={{
@@ -144,7 +144,7 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex, ml
                                         </div>
                                     }
                                 </motion.div>
-                                {(buttonsPressed && clothingDataLoaded) &&
+                                {(buttonsPressed) &&
                                     <CircularProgress isIndeterminate color={_cardBackground} />
                                 }
                             </CardBody>

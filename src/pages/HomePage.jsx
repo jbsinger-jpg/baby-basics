@@ -14,7 +14,6 @@ import FoodDataTabPanel from '../components/tabPanels/FoodDataTabPanel';
 import DiaperDataTabPanel from '../components/tabPanels/DiaperDataTabPanel';
 import MaternalDataTabPanel from '../components/tabPanels/MaternalDataTabPanel';
 import FloatingActionButtons from '../components/floatingActionButtons/FloatingActionButtons';
-import DisclaimerModal from '../components/modals/DisclaimerModal';
 import FriendRequestModal from '../components/modals/FriendRequestModal';
 import FormulaDataTabPanel from '../components/tabPanels/FormulaDataTabPanel';
 import ToysDataTabPanel from '../components/tabPanels/ToysDataTabPanel';
@@ -82,7 +81,6 @@ export default function HomePage() {
     const [vitaminData, setVitaminData] = useState(null);
     const [vitaminDataIsLoading, setVitaminDataIsLoading] = useState(true);
 
-    const [screeningAlertDialogVisibile, setScreeningAlertDialogVisibile] = useState(false);
     const [settingsIsOpen, setSettingsIsOpen] = useState(false);
 
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
@@ -256,62 +254,6 @@ export default function HomePage() {
             w={screenWidth}
             overflowX="hidden"
         >
-            <Drawer
-                isOpen={settingsIsOpen}
-                placement='right'
-                onClose={() => setSettingsIsOpen(false)}
-            >
-                <DrawerOverlay />
-                <DrawerContent bg={_screenBackground}>
-                    <DrawerCloseButton />
-                    <DrawerHeader>Stuff for You!</DrawerHeader>
-                    <DrawerBody>
-                        <VStack alignItems="start" spacing="5">
-                            <Button leftIcon={<ChatIcon />} onClick={onOpen}>
-                                Chat with Peeps
-                            </Button>
-                            <Button
-                                leftIcon={<WarningIcon />}
-                                onClick={() => setScreeningAlertDialogVisibile(true)}
-                            >
-                                About you
-                            </Button>
-                            <Button
-                                rightIcon={<PublishIcon fontSize="small" />}
-                                onClick={handleOpenPictureUploadDialog}
-                            >
-                                Upload Baby Pictures!
-                            </Button>
-                            <Button
-                                rightIcon={<CalculateIcon fontSize="small" />}
-                                onClick={handleOpenGraphPage}
-                            >
-                                Track Baby Growth!
-                            </Button>
-                            <Button
-                                rightIcon={<Bedtime fontSize="small" />}
-                                onClick={handleOpenBabySleepPage}
-                            >
-                                Track Baby Sleep!
-                            </Button>
-                            <Button
-                                rightIcon={<DiaperIcon />}
-                                onClick={() => navigate("/diaper-tracking")}
-                            >
-                                Track Baby Diapers!
-                            </Button>
-                            <Button
-                                rightIcon={
-                                    <BottleIcon />
-                                }
-                                onClick={() => navigate("/feed-tracking")}
-                            >
-                                Track Baby Feeding!
-                            </Button>
-                        </VStack>
-                    </DrawerBody>
-                </DrawerContent>
-            </Drawer>
             <Tabs
                 align='start'
                 variant='enclosed'
@@ -417,10 +359,6 @@ export default function HomePage() {
                 setVitaminData={setVitaminData}
                 tabIndex={tabIndex}
                 setTabIndex={setTabIndex}
-            />
-            <DisclaimerModal
-                screeningAlertDialogVisibile={screeningAlertDialogVisibile}
-                setScreeningAlertDialogVisibile={setScreeningAlertDialogVisibile}
             />
             <FriendRequestModal
                 alertDialogVisible={alertDialogVisible}

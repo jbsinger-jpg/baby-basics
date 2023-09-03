@@ -117,28 +117,10 @@ export default function ScreeningPage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
 
     return (
-        <Box w="100vw" h="100vh" bg={_screenBackground} overflow="hidden">
-            <VStack
-                top="14"
-                right="4"
-                position="fixed"
-                zIndex={999}
-            >
-                <ColorModeToggleButton />
-            </VStack>
+        <Box w="100vw" h="80vh" bg={_screenBackground} overflow="hidden">
             <ProgressBar progress={progress} />
-            <HStack
-                justifyContent={'center'}
-                alignItems={'end'}
-                paddingRight="10px"
-                paddingLeft="10px"
-            >
-                {questions[currentQuestion] &&
-                    <Button onClick={handleBackButtonPress}>
-                        Back
-                    </Button>
-                }
-                <Box padding="5" h="500px">
+            <HStack>
+                <VStack padding="5" h="500px">
                     {questions[currentQuestion] &&
                         <FormQuestion
                             question={questions[currentQuestion].question}
@@ -161,20 +143,45 @@ export default function ScreeningPage() {
                                     </Box>
                                 ))}
                             </VStack>
-                            <HStack alignItems="start">
+                            <HStack
+                                justifyContent={'space-between'}
+                                alignItems={'end'}
+                                paddingRight="10px"
+                                paddingLeft="10px"
+                                bottom="0"
+                                position="fixed"
+                                w="90vw"
+                            >
                                 <Button onClick={handleBackButtonPress}>
                                     Back
                                 </Button>
-                                <Button onClick={() => setScreeningAlertDialogVisibile(true)}>
-                                    Confirm Answers
-                                </Button>
-                                <Tooltip label="Clear Answers">
-                                    <IconButton icon={<DeleteIcon />} onClick={handleReset} />
-                                </Tooltip>
+                                <HStack>
+                                    <Button onClick={() => setScreeningAlertDialogVisibile(true)}>
+                                        Confirm Answers
+                                    </Button>
+                                    <Tooltip label="Clear Answers">
+                                        <IconButton icon={<DeleteIcon />} onClick={handleReset} />
+                                    </Tooltip>
+                                </HStack>
                             </HStack>
                         </VStack>
                     )}
-                </Box>
+                </VStack>
+            </HStack>
+            <HStack
+                justifyContent={'space-between'}
+                alignItems={'end'}
+                paddingRight="10px"
+                paddingLeft="10px"
+                bottom="0"
+                position="fixed"
+                w="90vw"
+            >
+                {questions[currentQuestion] &&
+                    <Button onClick={handleBackButtonPress}>
+                        Back
+                    </Button>
+                }
                 {questions[currentQuestion] &&
                     <Button onClick={handleNextButtonPress}>
                         Next

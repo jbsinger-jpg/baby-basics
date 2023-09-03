@@ -1,8 +1,11 @@
 import { CloseIcon } from '@chakra-ui/icons';
-import { Box, Card, CardBody, CardHeader, FormLabel, HStack, Heading, IconButton, Text } from '@chakra-ui/react';
+import { Box, Card, CardBody, CardHeader, FormLabel, HStack, Heading, IconButton, Text, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
+import { cardBackground } from '../../defaultStyle';
 
 export default function PumpRowTabPanel({ alias, index, timeStamp, leftBreastTime, rightBreastTime, data, setData, fluidOunces }) {
+    const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
+
     const handleDeleteRow = () => {
         const updatedArray = [...data];
         updatedArray.splice(index, 1);
@@ -11,11 +14,12 @@ export default function PumpRowTabPanel({ alias, index, timeStamp, leftBreastTim
 
     return (
         <Box>
-            <Card>
+            <Card
+                bg={_cardBackground}
+                w="90vw"
+            >
                 <CardHeader>
                     <HStack
-                        bg="white"
-                        w="90vw"
                         justifyContent="space-between"
                     >
                         <Box alignSelf="start" justifyContent="flex-start">
@@ -26,8 +30,6 @@ export default function PumpRowTabPanel({ alias, index, timeStamp, leftBreastTim
                 </CardHeader>
                 <CardBody>
                     <HStack
-                        bg="white"
-                        w="90vw"
                         justifyContent="space-between"
                     >
                         <Box>
