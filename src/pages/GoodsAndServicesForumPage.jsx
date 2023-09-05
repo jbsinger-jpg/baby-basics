@@ -1,5 +1,5 @@
 // module imports
-import { Accordion, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Accordion, Heading, Text, VStack, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
 
 // relative imports
@@ -11,15 +11,26 @@ export default function GoodsAndServicesForumPage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
 
     return (
-        <VStack spacing="3" bg={_screenBackground} h="100vh">
-            <Accordion allowToggle width="100%">
-                {allGoodsAndServicesData && allGoodsAndServicesData.map(service =>
-                    <GeneralAccordianItem
-                        question={service.question}
-                        description={service.description}
-                        context={service.context}
-                    />
-                )}
+        <VStack spacing="3" bg={_screenBackground} h="100vh" justifyContent="center">
+            <VStack>
+                <Heading>
+                    Goods and Services FAQs
+                </Heading>
+                <Text as="i">
+                    Please be respectful when posting content.
+                </Text>
+            </VStack>
+            <Accordion allowToggle width="100vw" h="80vh" alignContent="space-evenly" display="grid">
+                {allGoodsAndServicesData && allGoodsAndServicesData.map((data, index) => {
+                    return (
+                        <GeneralAccordianItem
+                            key={index}
+                            question={data.question}
+                            description={data.description}
+                            context={data.context}
+                        />
+                    );
+                })}
             </Accordion>
         </VStack>
     );

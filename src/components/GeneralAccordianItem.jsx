@@ -9,30 +9,33 @@ export default function GeneralAccordianItem({ question, description, context })
     const navigate = useNavigate();
 
     return (
-        <AccordionItem>
-            <h2>
-                <AccordionButton>
-                    <Box as="span" flex='1' textAlign='left'>
-                        {question}
-                    </Box>
-                    <AccordionIcon />
-                </AccordionButton>
-            </h2>
-            <AccordionPanel pb={4}>
-                <HStack justifyContent="space-between">
-                    <Text>
-                        {description}
-                    </Text>
-                    <Button onClick={
-                        async () => {
-                            await localStorage.setItem("pageData", context);
-                            navigate("/message-page");
-                        }
-                    }>
-                        Chat
-                    </Button>
-                </HStack>
-            </AccordionPanel>
-        </AccordionItem>
+        <Box>
+            <AccordionItem>
+                <h2>
+                    <AccordionButton>
+                        <Box as="span" flex='1' textAlign='left'>
+                            {question}
+                        </Box>
+                        <AccordionIcon />
+                    </AccordionButton>
+                </h2>
+                <AccordionPanel>
+                    <HStack justifyContent="space-between">
+                        <Text>
+                            {description}
+                        </Text>
+                        <Button onClick={
+                            async () => {
+                                await localStorage.setItem("pageData", context);
+                                navigate("/message-page");
+                            }
+                        }>
+                            Chat
+                        </Button>
+                    </HStack>
+                </AccordionPanel>
+            </AccordionItem>
+        </Box>
+
     );
 };
