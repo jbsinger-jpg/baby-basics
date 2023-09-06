@@ -5,7 +5,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 // relative imports
-import ColorModeToggleButton from '../components/ColorModeToggleButton';
 import FormQuestion from '../components/FormQuestion';
 import { wordFilter } from '../components/messaging/wordFilter';
 import ProgressBar from '../components/ProgressBar';
@@ -119,8 +118,8 @@ export default function ScreeningPage() {
     return (
         <Box w="100vw" h="80vh" bg={_screenBackground} overflow="hidden">
             <ProgressBar progress={progress} />
-            <HStack>
-                <VStack padding="5" h="500px">
+            <HStack h="100vh" alignItems="center" justifyContent="center">
+                <VStack padding="5">
                     {questions[currentQuestion] &&
                         <FormQuestion
                             question={questions[currentQuestion].question}
@@ -143,27 +142,6 @@ export default function ScreeningPage() {
                                     </Box>
                                 ))}
                             </VStack>
-                            <HStack
-                                justifyContent={'space-between'}
-                                alignItems={'end'}
-                                paddingRight="10px"
-                                paddingLeft="10px"
-                                bottom="0"
-                                position="fixed"
-                                w="90vw"
-                            >
-                                <Button onClick={handleBackButtonPress}>
-                                    Back
-                                </Button>
-                                <HStack>
-                                    <Button onClick={() => setScreeningAlertDialogVisibile(true)}>
-                                        Confirm Answers
-                                    </Button>
-                                    <Tooltip label="Clear Answers">
-                                        <IconButton icon={<DeleteIcon />} onClick={handleReset} />
-                                    </Tooltip>
-                                </HStack>
-                            </HStack>
                         </VStack>
                     )}
                 </VStack>
@@ -177,15 +155,24 @@ export default function ScreeningPage() {
                 position="fixed"
                 w="90vw"
             >
-                {questions[currentQuestion] &&
-                    <Button onClick={handleBackButtonPress}>
-                        Back
-                    </Button>
-                }
+                <Button onClick={handleBackButtonPress}>
+                    Back
+                </Button>
+
                 {questions[currentQuestion] &&
                     <Button onClick={handleNextButtonPress}>
                         Next
                     </Button>
+                }
+                {!questions[currentQuestion] &&
+                    <HStack>
+                        <Button onClick={() => setScreeningAlertDialogVisibile(true)}>
+                            Confirm Answers
+                        </Button>
+                        <Tooltip label="Clear Answers">
+                            <IconButton icon={<DeleteIcon />} onClick={handleReset} />
+                        </Tooltip>
+                    </HStack>
                 }
             </HStack>
             <AlertDialog
