@@ -1,7 +1,5 @@
 // module imports
 import { VStack } from '@chakra-ui/react';
-import MapIcon from '@mui/icons-material/Map';
-import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
 import HomeIcon from '@mui/icons-material/Home';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -10,13 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import ColorModeToggleButton from '../ColorModeToggleButton';
 import FabTemplate from './StandardFab';
 
-export default function FloatingActionButtonsMaternalInfo({ handleSearchPlacesDialogOpen }) {
+export default function FloatingActionButtonsMaternalInfo() {
     const navigate = useNavigate();
-
-    const handleMilestoneResources = () => {
-        navigate("/milestone");
-    };
-
     const handleGoToHome = () => {
         navigate("/");
     };
@@ -30,16 +23,6 @@ export default function FloatingActionButtonsMaternalInfo({ handleSearchPlacesDi
 
         >
             <ColorModeToggleButton />
-            <FabTemplate
-                label="Look up a Location"
-                onClick={handleSearchPlacesDialogOpen}
-                icon={<MapIcon fontSize="large" />}
-            />
-            <FabTemplate
-                label="Baby Milestones"
-                onClick={handleMilestoneResources}
-                icon={<BabyChangingStationIcon fontSize="large" />}
-            />
             <FabTemplate
                 label="Home"
                 onClick={handleGoToHome}

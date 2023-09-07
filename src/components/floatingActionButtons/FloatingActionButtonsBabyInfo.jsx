@@ -1,9 +1,6 @@
 // module imports
-import { Box, HStack, Heading, IconButton, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Tag, TagLabel, VStack, useColorModeValue } from '@chakra-ui/react';
-import PregnantWomanOutlinedIcon from '@mui/icons-material/PregnantWomanOutlined';
+import { HStack, Heading, IconButton, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Tag, TagLabel, VStack, useColorModeValue } from '@chakra-ui/react';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import MapIcon from '@mui/icons-material/Map';
-import HomeIcon from '@mui/icons-material/Home';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import ColorModeToggleButton from '../ColorModeToggleButton';
 import FabTemplate from './StandardFab';
 import { auth, firestore } from '../../firebaseConfig';
-import { InfoIcon } from '@chakra-ui/icons';
+import { AddIcon, InfoIcon } from '@chakra-ui/icons';
 import { cardBackground } from '../../defaultStyle';
 
 export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialogOpen, setProgressModalVisible, selectedAgeRange, progressConfirmed }) {
@@ -175,6 +172,10 @@ export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialog
         }
     };
 
+    const handleAddChild = () => {
+        // TODO: Add Child 
+    };
+
     return (
         <>
             <VStack
@@ -185,40 +186,15 @@ export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialog
             >
                 <ColorModeToggleButton />
                 <FabTemplate
-                    label="Look up a Location"
-                    onClick={handleSearchPlacesDialogOpen}
-                    icon={<MapIcon fontSize="large" />}
-                />
-                <FabTemplate
-                    label="Maternity"
-                    onClick={handleMaternalResources}
-                    icon={<PregnantWomanOutlinedIcon fontSize="large" />}
-                />
-                <FabTemplate
-                    label="Home"
-                    onClick={handleGoToHome}
-                    icon={<HomeIcon fontSize="large" />}
-                />
-            </VStack>
-            <VStack
-                bottom="14"
-                right="4"
-                position="fixed"
-                zIndex={999}
-            >
-                <FabTemplate
                     label="Document Progress"
                     onClick={handleDocumentProgress}
                     icon={<FormatListBulletedIcon fontSize="large" />}
                 />
-            </VStack>
-            <Box
-                bottom="14"
-                left="4"
-                position="fixed"
-                zIndex={999}
-                alignItems="start"
-            >
+                <FabTemplate
+                    label="Add Child"
+                    onClick={handleAddChild}
+                    icon={<AddIcon fontSize="large" />}
+                />
                 <Popover
                     placement="right"
                 >
@@ -302,7 +278,7 @@ export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialog
                         </PopoverBody>
                     </PopoverContent>
                 </Popover>
-            </Box>
+            </VStack>
         </>
     );
 }
