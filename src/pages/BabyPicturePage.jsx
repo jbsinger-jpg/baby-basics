@@ -176,6 +176,7 @@ export default function BabyPicturePage() {
                     return (
                         <VStack
                             ml={index === 0 && 10}
+                            h="500px"
                         >
                             <Card w="220px" bg={_cardBackground} justifyContent="center" alignItems="center">
                                 <CardHeader>
@@ -184,6 +185,7 @@ export default function BabyPicturePage() {
                                         size="lg"
                                         variant="outline"
                                         color="wheat"
+                                        wordBreak="break-word"
                                     >
                                         <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
                                             {picture.name}

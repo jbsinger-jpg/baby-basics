@@ -91,6 +91,7 @@ export default function BabyImagesModal({ babyImagesModalIsOpen, setBabyImagesMo
                                     </FormLabel>
                                     <Input
                                         type="file"
+                                        accept=".jpg, .jpeg"
                                         onChange={handleSelectedFileChange}
                                     />
                                     <FormHelperText>
