@@ -2,7 +2,6 @@
 import { HStack, Heading, IconButton, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Tag, TagLabel, VStack, useColorModeValue } from '@chakra-ui/react';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 // relative imports
 import ColorModeToggleButton from '../ColorModeToggleButton';
@@ -11,7 +10,7 @@ import { auth, firestore } from '../../firebaseConfig';
 import { AddIcon, InfoIcon } from '@chakra-ui/icons';
 import { cardBackground } from '../../defaultStyle';
 
-export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialogOpen, setProgressModalVisible, selectedAgeRange, progressConfirmed }) {
+export default function FloatingActionButtonsBabyInfo({ setProgressModalVisible, selectedAgeRange, progressConfirmed, setChildDrawerVisible, childOption }) {
     const [milestones, setMilestones] = useState([]);
     const [communications, setCommunications] = useState([]);
     const [sensory, setSensory] = useState([]);
@@ -57,16 +56,6 @@ export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialog
             }));
         }
     }, [selectedAgeRange, progressConfirmed]);
-
-    const navigate = useNavigate();
-
-    const handleMaternalResources = () => {
-        navigate("/maternal");
-    };
-
-    const handleGoToHome = () => {
-        navigate("/");
-    };
 
     const handleDocumentProgress = () => {
         setProgressModalVisible(true);
@@ -172,29 +161,29 @@ export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialog
         }
     };
 
-    const handleAddChild = () => {
-        // TODO: Add Child 
+    const handleDrawerVisible = () => {
+        setChildDrawerVisible(true);
     };
 
     return (
-        <>
-            <VStack
-                top="14"
-                right="4"
-                position="fixed"
-                zIndex={999}
-            >
-                <ColorModeToggleButton />
-                <FabTemplate
-                    label="Document Progress"
-                    onClick={handleDocumentProgress}
-                    icon={<FormatListBulletedIcon fontSize="large" />}
-                />
-                <FabTemplate
-                    label="Add Child"
-                    onClick={handleAddChild}
-                    icon={<AddIcon fontSize="large" />}
-                />
+        <VStack
+            top="14"
+            right="4"
+            position="fixed"
+            zIndex={999}
+        >
+            <ColorModeToggleButton />
+            <FabTemplate
+                label="Document Progress"
+                onClick={handleDocumentProgress}
+                icon={<FormatListBulletedIcon fontSize="large" />}
+            />
+            <FabTemplate
+                label="Add Child"
+                onClick={handleDrawerVisible}
+                icon={<AddIcon fontSize="large" />}
+            />
+            {childOption &&
                 <Popover
                     placement="right"
                 >
@@ -278,7 +267,7 @@ export default function FloatingActionButtonsBabyInfo({ handleSearchPlacesDialog
                         </PopoverBody>
                     </PopoverContent>
                 </Popover>
-            </VStack>
-        </>
+            }
+        </VStack>
     );
 }

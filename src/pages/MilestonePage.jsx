@@ -1,20 +1,20 @@
-import { Box, useColorModeValue, useMediaQuery } from '@chakra-ui/react';
-import React, { useState } from 'react';
-import GoogleMapsModal from '../components/modals/GoogleMapsModal';
+import { Box, Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, Input, VStack, useColorModeValue, useMediaQuery, useToast } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
 import ChatIcon from '@mui/icons-material/Chat';
 import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
 import LocalCafeIcon from '@mui/icons-material/LocalCafe';
 import HearingIcon from '@mui/icons-material/Hearing';
 import AbcIcon from '@mui/icons-material/Abc';
-import { screenBackground } from '../defaultStyle';
+import { cardBackground, screenBackground } from '../defaultStyle';
 import AnimatedCard from '../components/animated/AnimatedCard';
 import StyledSelect from '../components/StyledSelect';
 import FloatingActionButtonsBabyInfo from '../components/floatingActionButtons/FloatingActionButtonsBabyInfo';
 import { promptOptions } from '../components/staticPageData/baby-maternal-info';
-import { auth } from '../firebaseConfig';
+import { auth, firestore } from '../firebaseConfig';
 import BabyProgressModal from '../components/modals/BabyProgressModal';
 
 export default function MilestonePage() {
+    // card option props
     const [selectedAge, setSelectedAge] = useState("");
     const [selectedActivities, setSelectedActivities] = useState(promptOptions[0].activities);
     const [selectedMotorMilestones, setSelectedMotorMilestones] = useState(promptOptions[0].motorMilestones);
@@ -23,7 +23,8 @@ export default function MilestonePage() {
     const [selectedSensoryMilestones, setSelectedSensoryMilestones] = useState(promptOptions[0].sensoryMilestones);
     const [selectedHyperLinks, setSelectedHyperLinks] = useState(promptOptions[0].hyperlinks);
     const [videos, setVideos] = useState(promptOptions[0]?.videos);
-    const [places, setPlaces] = useState(false);
+
+    // framer motion props
     const [motorButtonPressed, setMotorButtonPressed] = useState(false);
     const [flippedMotorCard, setFlippedMotorCard] = useState(false);
     const [communicationButtonPressed, setCommunicationButtonPressed] = useState(false);
@@ -36,8 +37,24 @@ export default function MilestonePage() {
     const [flippedActivitiesCard, setFlippedActivitiesCard] = useState(false);
     const [flippedResourcesCard, setFlippedResourcesCard] = useState(false);
     const [resourceButtonPressed, setResourceButtonPressed] = useState(false);
+
+    // progress modal props
     const [progressModalVisible, setProgressModalVisible] = useState(false);
     const [progressConfirmed, setProgressConfirmed] = useState(false);
+
+    // drawer props
+    const [childDrawerVisible, setChildDrawerVisible] = useState(false);
+    const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
+
+    // drawer input field options
+    const [childName, setChildName] = useState("");
+    const [childGender, setChildGender] = useState("");
+    const [childRelationship, setChildRelationship] = useState("");
+    const [childBirth, setChildBirth] = useState("");
+    const [childOptions, setChildOptions] = useState([]);
+    const [selectedChildOption, setSelectedChildOption] = useState("");
+
+    const toast = useToast();
 
     const handleAnswerChange = (event) => {
         if (flippedMotorCard)
@@ -72,9 +89,6 @@ export default function MilestonePage() {
     };
 
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
-    const handleSearchPlacesDialogOpen = () => {
-        setPlaces(true);
-    };
 
     const options = [
         { value: "0-3M", label: "0-3M", key: 0 },
@@ -85,32 +99,105 @@ export default function MilestonePage() {
         { value: "19-24M", label: "19-24M", key: 5 },
     ];
 
+    const childGenderOptions = [
+        { value: "boy", label: "Boy", key: 0 },
+        { value: "girl", label: "Girl", key: 1 },
+    ];
+
+    const childRelationshipOptions = [
+        { value: "mom", label: "Mom", key: 0 },
+        { value: "dad", label: "Dad", key: 1 },
+        { value: "grandmother", label: "Grandmother", key: 2 },
+        { value: "grandfather", label: "Grandfather", key: 3 },
+        { value: "other", label: "Other", key: 4 },
+    ];
+
+    const childBirthOptions = [
+        { value: "vaginal birth", label: "Vaginal Birth", key: 0 },
+        { value: "vbac", label: "Vaginal After C-Section", key: 1 },
+        { value: "c-section", label: "C-Section", key: 2 },
+        { value: "partner", label: "Partner Gave Birth", key: 3 },
+        { value: "adopted", label: "Adopted", key: 4 },
+        { value: "surrogate", label: "Surrogate", key: 5 },
+    ];
+
     const [isLargerThan1300] = useMediaQuery("(min-width: 1300px)");
+    const handleDrawerClose = () => {
+        setChildDrawerVisible(false);
+    };
+
+    const handleAddChild = () => {
+        if (childName) {
+            firestore.collection("users").doc(auth?.currentUser?.uid).collection("children").doc(childName).set({
+                name: childName,
+                gender: childGender,
+                relationship: childRelationship,
+                birth: childBirth,
+            });
+        }
+        else {
+            toast({
+                title: 'Submission Failed',
+                description: "Child name field is required to submit to database",
+                status: 'error',
+                duration: 9000,
+                isClosable: true,
+            });
+        }
+    };
+
+    useEffect(() => {
+        firestore
+            .collection("users")
+            .doc(auth?.currentUser?.uid)
+            .collection("children")
+            .get().then((snapshot) => {
+                let index = 0;
+                let options = [];
+
+                snapshot.docs.forEach(doc => {
+                    const childName = doc.data().name;
+                    const capitalizedName = childName.charAt(0).toUpperCase() + childName.slice(1);
+
+                    options.push({ key: index, label: capitalizedName, value: childName });
+                    index += 1;
+                });
+
+                setChildOptions(options);
+            });
+        // eslint-disable-next-line
+    }, [auth?.currentUser?.uid]);
 
     return (
         <Box bg={_screenBackground} paddingTop="2" h={"100%"}>
             <FloatingActionButtonsBabyInfo
-                handleSearchPlacesDialogOpen={handleSearchPlacesDialogOpen}
                 setProgressModalVisible={setProgressModalVisible}
                 selectedAgeRange={selectedAge}
                 progressConfirmed={progressConfirmed}
+                setChildDrawerVisible={setChildDrawerVisible}
+                childOption={selectedChildOption}
             />
-            <GoogleMapsModal
-                setSearchPlaces={setPlaces}
-                searchPlaces={places}
-            />
-            <StyledSelect
-                w="50vw"
+            <HStack
+                alignItems="center"
                 marginBottom="10"
                 marginTop="5"
-                paddingLeft="5"
-                options={options}
-                value={selectedAge}
-                onChange={(event) => {
-                    setSelectedAge(event.target.value);
-                    handleAnswerChange(event);
-                }}
-            />
+            >
+                <StyledSelect
+                    w="50vw"
+                    options={childOptions}
+                    value={selectedChildOption}
+                    onChange={(event) => setSelectedChildOption(event.target.value)}
+                />
+                <StyledSelect
+                    w="50vw"
+                    options={options}
+                    value={selectedAge}
+                    onChange={(event) => {
+                        setSelectedAge(event.target.value);
+                        handleAnswerChange(event);
+                    }}
+                />
+            </HStack>
             <Box
                 flexWrap="wrap"
                 spacing="4"
@@ -200,6 +287,91 @@ export default function MilestonePage() {
                 progressModalVisible={progressModalVisible}
                 setProgressModalVisible={setProgressModalVisible}
             />
+            <Drawer
+                isOpen={childDrawerVisible}
+                bg={_cardBackground}
+                placement="left"
+            >
+                <DrawerOverlay />
+                <DrawerContent bg={_screenBackground}>
+                    <DrawerHeader>Add Child</DrawerHeader>
+                    <DrawerBody>
+                        <VStack>
+                            <VStack
+                                alignItems="start"
+                                w="100%"
+                            >
+                                <FormControl
+                                    isRequired
+                                >
+                                    <FormLabel>
+                                        Name
+                                    </FormLabel>
+                                    <Input
+                                        w="100%"
+                                        value={childName}
+                                        onChange={(event) => setChildName(event.target.value)}
+                                    />
+                                </FormControl>
+                            </VStack>
+                            <VStack
+                                alignItems="start"
+                                w="100%"
+                            >
+                                <FormLabel>
+                                    Gender
+                                </FormLabel>
+                                <StyledSelect
+                                    w="100%"
+                                    options={childGenderOptions}
+                                    value={childGender}
+                                    onChange={(event) => setChildGender(event.target.value)}
+                                />
+                            </VStack>
+                            <VStack
+                                alignItems="start"
+                                w="100%"
+                            >
+                                <FormLabel>
+                                    Relationship
+                                </FormLabel>
+                                <StyledSelect
+                                    w="100%"
+                                    options={childRelationshipOptions}
+                                    value={childRelationship}
+                                    onChange={(event) => setChildRelationship(event.target.value)}
+                                />
+                            </VStack>
+                            <VStack
+                                alignItems="start"
+                                w="100%"
+                            >
+                                <FormLabel>
+                                    Birth
+                                </FormLabel>
+                                <StyledSelect
+                                    w="100%"
+                                    options={childBirthOptions}
+                                    value={childBirth}
+                                    onChange={(event) => setChildBirth(event.target.value)}
+                                />
+                            </VStack>
+                        </VStack>
+                    </DrawerBody>
+                    <DrawerFooter justifyContent="space-between">
+                        <Button
+                            onClick={handleAddChild}
+                        >
+                            Submit
+                        </Button>
+                        <Button
+                            onClick={handleDrawerClose}
+                        >
+                            Close
+                        </Button>
+                    </DrawerFooter>
+                </DrawerContent>
+            </Drawer>
         </Box>
     );
 }
