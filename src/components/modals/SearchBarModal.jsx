@@ -977,6 +977,7 @@ export default function SearchBarAlertDialog({
                         value={selectedCategory}
                         options={options}
                         onChange={handleTabsChange}
+                        removeNullOption
                     />
                     <Tabs align='start' variant='enclosed' w="100%" h="90%" isFitted index={searchTabIndex}>
                         <TabPanels>

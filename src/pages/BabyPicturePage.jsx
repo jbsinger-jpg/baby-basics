@@ -20,6 +20,8 @@ export default function BabyPicturePage() {
     const [babyImagesModalIsOpen, setBabyImagesModalIsOpen] = useState(false);
     const [selectedTag, setSelectedTag] = useState(null);
     const [selectedAge, setSelectedAge] = useState(null);
+    const [ageOptionsLoading, setAgeOptionsLoading] = useState(false);
+    const [tagOptions, setTagOptions] = useState([]);
     const currentUser = auth?.currentUser?.uid;
 
     const ageOptions = [
@@ -29,13 +31,6 @@ export default function BabyPicturePage() {
         { value: "10-12M", label: "10-12M", key: 3 },
         { value: "13-18M", label: "13-18M", key: 4 },
         { value: "19-24M", label: "19-24M", key: 5 },
-    ];
-
-    const tagOptions = [
-        { value: "Doctor's Visit", label: "Doctor's Visit", key: 0 },
-        { value: "Growth and Development", label: "Growth and Development", key: 1 },
-        { value: "Social Media", label: "Social Media", key: 2 },
-        { value: "Various", label: "Various", key: 3 },
     ];
 
     const getUploadedImages = async () => {
@@ -81,6 +76,41 @@ export default function BabyPicturePage() {
         setSelectedFile(picture);
     };
 
+    const handleSelectedAgeChange = async (event) => {
+        setAgeOptionsLoading(true);
+        setSelectedAge(event.target.value);
+
+        let tagOptions = [];
+        let imagesRef = await firestore
+            .collection("users")
+            .doc(auth?.currentUser?.uid)
+            .collection("uploaded-images");
+
+        if (event.target.value) {
+            imagesRef = imagesRef.where("age", "==", String(event.target.value));
+        }
+
+        imagesRef.get()
+            .then((snapshot) => {
+                let index = 0;
+
+                snapshot.docs.forEach(doc => {
+                    const formattedOption = { label: doc.data().tag, value: doc.data().tag, key: index };
+                    index += 1;
+                    tagOptions.push(formattedOption);
+                });
+
+                setTagOptions(tagOptions);
+            })
+            .finally(() => {
+                setAgeOptionsLoading(false);
+            });
+    };
+
+    const handleSelectedTagChange = (event) => {
+        setSelectedTag(event.target.value);
+    };
+
     useEffect(() => {
         const currentUser = auth?.currentUser?.uid;
         setTimeout(() => {
@@ -106,21 +136,25 @@ export default function BabyPicturePage() {
                 position="fixed"
             >
                 <VStack
+                    w="40vw"
                     alignItems="start"
                     justifyContent='space-evenly'
                 >
                     <Text>Age</Text>
-                    <StyledSelect options={ageOptions} value={selectedAge} onChange={(event) => setSelectedAge(event.target.value)} />
+                    <StyledSelect options={ageOptions} value={selectedAge} onChange={handleSelectedAgeChange} />
                 </VStack>
-                <HStack alignItems="end">
+                <HStack
+                    alignItems="end"
+                >
                     <VStack
                         alignItems="start"
                         justifyContent='space-evenly'
+                        w="40vw"
                     >
                         <Text>Tag</Text>
-                        <StyledSelect options={tagOptions} value={selectedTag} onChange={(event) => setSelectedTag(event.target.value)} />
+                        <StyledSelect options={tagOptions} value={selectedTag} onChange={handleSelectedTagChange} />
                     </VStack>
-                    <Button onClick={getUploadedImages}>Confirm</Button>
+                    <Button onClick={getUploadedImages} isLoading={ageOptionsLoading}>Confirm</Button>
                 </HStack>
             </HStack>
             <FloatingActionButtonsBabyImages
@@ -214,7 +248,7 @@ export default function BabyPicturePage() {
                             <HStack>
                                 <Icon as={InfoOutlineIcon} />
                                 <Text>
-                                    No Data Select Age and Tag
+                                    No Pictures of this Age and Tag Combination
                                 </Text>
                             </HStack>
                         </motion.div>

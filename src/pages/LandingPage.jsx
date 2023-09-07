@@ -12,7 +12,7 @@ import EventIcon from '@mui/icons-material/Event';
 import PendingIcon from '@mui/icons-material/Pending';
 
 // Relative Imports
-import HomePage from './HomePage';
+import HomePage from './StorePage';
 import FabTemplate from '../components/floatingActionButtons/StandardFab';
 import { screenBackground } from '../defaultStyle';
 import FloatingActionButtonsUser from '../components/floatingActionButtons/FloatingActionButtonsUser';

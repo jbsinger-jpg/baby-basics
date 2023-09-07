@@ -24,6 +24,7 @@ import BabyFeedTrackingPage from "./pages/BabyFeedTrackingPage";
 import LandingPage from "./pages/LandingPage";
 import ProgressPage from "./pages/ProgressPage";
 import EventsPage from "./pages/EventsPage";
+import StorePage from "./pages/StorePage";
 
 function App() {
   const [state, setState] = useState(null);
@@ -32,7 +33,7 @@ function App() {
     <Context.Provider value={{ data: state, setData: setState }}>
       <Routes>
         <Route index element={<LandingPage />} />
-        {/* <Route path="store" element={<StorePage />} /> */}
+        <Route path="store" element={<StorePage />} />
         <Route path="pictures" element={<BabyPicturePage />} />
         <Route path="screening" element={<ScreeningPage />} />
         <Route path="login" element={<LoginPage />} />

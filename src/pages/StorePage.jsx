@@ -1,11 +1,7 @@
 // module imports
-import { ChatIcon, WarningIcon } from '@chakra-ui/icons';
-import { Box, Button, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerHeader, DrawerOverlay, TabPanel, TabPanels, Tabs, useColorModeValue, useDisclosure, useMediaQuery, VStack } from '@chakra-ui/react';
+import { Box, TabPanel, TabPanels, Tabs, useColorModeValue, useMediaQuery } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import PublishIcon from '@mui/icons-material/Publish';
-import CalculateIcon from '@mui/icons-material/Calculate';
-import Bedtime from '@mui/icons-material/Bedtime';
 
 // relative imports
 import { auth, firestore } from '../firebaseConfig';
@@ -23,14 +19,9 @@ import StrollersDataTabPanel from '../components/tabPanels/StrollersDataTabPanel
 import { screenBackground } from '../defaultStyle';
 import VitaminDataTabPanel from '../components/tabPanels/VitaminDataTabPanel';
 import BabyImagesModal from '../components/modals/BabyImagesModal';
-import BottleIcon from '../components/staticPageData/BottleIcon';
-import DiaperIcon from '../components/staticPageData/DiaperIcon';
-import StyledSelect from '../components/StyledSelect';
 
-export default function HomePage() {
+export default function StorePage() {
     // hooks
-    const { onOpen } = useDisclosure();
-    const navigate = useNavigate();
     const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
 
     // firebase data
@@ -81,42 +72,12 @@ export default function HomePage() {
     const [vitaminData, setVitaminData] = useState(null);
     const [vitaminDataIsLoading, setVitaminDataIsLoading] = useState(true);
 
-    const [settingsIsOpen, setSettingsIsOpen] = useState(false);
-
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
     const [screenHeight, setScreenHeight] = useState(window.innerHeight);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
 
     const [babyImagesModalIsOpen, setBabyImagesModalIsOpen] = useState(false);
-    const storeOptions = [
-        { key: 0, value: 0, label: "Clothing" },
-        { key: 1, value: 1, label: "Food" },
-        { key: 2, value: 2, label: "Diapers" },
-        { key: 3, value: 3, label: "Vitamins" },
-        { key: 4, value: 4, label: "Maternal" },
-        { key: 5, value: 5, label: "Formula" },
-        { key: 6, value: 6, label: "Toys" },
-        { key: 7, value: 7, label: "Monitors" },
-        { key: 8, value: 8, label: "Seats" },
-        { key: 9, value: 9, label: "Strollers" },
-    ];
-
-    const handleTabsChange = (event) => {
-        setTabIndex(Number(event.target.value));
-    };
-
-    const handleOpenPictureUploadDialog = () => {
-        setBabyImagesModalIsOpen(true);
-    };
-
-    const handleOpenGraphPage = () => {
-        navigate(`/graph`);
-    };
-
-    const handleOpenBabySleepPage = () => {
-        navigate(`/sleep`);
-    };
 
     // // initialize the page with the data from the data base
     useEffect(() => {
@@ -263,12 +224,6 @@ export default function HomePage() {
                 isFitted={true}
                 w="95vw"
             >
-                <StyledSelect
-                    onChange={handleTabsChange}
-                    options={storeOptions}
-                    removeNullOption
-                    value={tabIndex}
-                />
                 <TabPanels>
                     <TabPanel>
                         <ClothingDataTabPanel
@@ -343,7 +298,6 @@ export default function HomePage() {
                 </TabPanels>
             </Tabs>
             <FloatingActionButtons
-                setSettingsIsOpen={setSettingsIsOpen}
                 currentUser={currentUser}
                 setSearchBarIsOpen={setSearchBarIsOpen}
                 searchBarIsOpen={searchBarIsOpen}
