@@ -1,20 +1,19 @@
 // Module Imports
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, HStack, Icon, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverFooter, PopoverHeader, PopoverTrigger, Tag, Text, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, HStack, Icon, Text, VStack, useColorModeValue } from '@chakra-ui/react';
 import { InfoOutlineIcon } from "@chakra-ui/icons";
 import React, { useEffect, useState } from 'react';
 import { motion } from "framer-motion";
-import ReactImageMagnify from '@blacklab/react-image-magnify';
 
 // Relative Imports
-import { cardBackground, screenBackground } from '../defaultStyle';
+import { screenBackground } from '../defaultStyle';
 import { auth, firestore, storage } from '../firebaseConfig';
 import BabyImagesModal from '../components/modals/BabyImagesModal';
 import FloatingActionButtonsBabyImages from '../components/floatingActionButtons/FloatingActionButtonsBabyImages';
 import StyledSelect from '../components/StyledSelect';
+import PictureRow from '../components/componentRows/PictureRow';
 
 export default function BabyPicturePage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
-    const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
     const [babyPictureData, setBabyPictureData] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
     const [babyImagesModalIsOpen, setBabyImagesModalIsOpen] = useState(false);
@@ -174,66 +173,13 @@ export default function BabyPicturePage() {
             >
                 {(babyPictureData && babyPictureData.length) ? babyPictureData.map((picture, index) => {
                     return (
-                        <VStack
-                            ml={index === 0 && 10}
-                            h="500px"
-                        >
-                            <Card w="220px" bg={_cardBackground} justifyContent="center" alignItems="center">
-                                <CardHeader>
-                                    <Tag
-                                        borderRadius="md"
-                                        size="lg"
-                                        variant="outline"
-                                        color="wheat"
-                                        wordBreak="break-word"
-                                    >
-                                        <Text marginLeft="4" marginRight="2" marginTop="2" marginBottom="2">
-                                            {picture.name}
-                                        </Text>
-                                    </Tag>
-                                </CardHeader>
-                                <CardBody display="flex" justifyContent="center">
-                                    <ReactImageMagnify
-                                        imageProps={{
-                                            src: picture.url,
-                                            width: 150,
-                                            height: 200,
-                                        }}
-                                        magnifiedImageProps={{
-                                            src: picture.url,
-                                            width: 600,
-                                            height: 800
-                                        }}
-                                        magnifyContainerProps={{
-                                            height: 300,
-                                            width: 400
-                                        }}
-                                    />
-                                </CardBody>
-                                <CardFooter display={"flex"} w="100%" justifyContent="space-between">
-                                    <Popover>
-                                        <PopoverTrigger>
-                                            <Button onClick={() => handleConfirmation(picture)}>
-                                                Remove
-                                            </Button>
-                                        </PopoverTrigger>
-                                        <PopoverContent bg={_cardBackground}>
-                                            <PopoverArrow />
-                                            <PopoverCloseButton />
-                                            <PopoverHeader>Confirmation!</PopoverHeader>
-                                            <PopoverBody>Are you sure you want to remove this picture?</PopoverBody>
-                                            <PopoverFooter>
-                                                <Button
-                                                    onClick={handleDeleteBabyPicture}
-                                                >
-                                                    Remove
-                                                </Button>
-                                            </PopoverFooter>
-                                        </PopoverContent>
-                                    </Popover>
-                                </CardFooter>
-                            </Card>
-                        </VStack>
+                        <PictureRow
+                            key={index}
+                            picture={picture}
+                            index={index}
+                            handleDeleteBabyPicture={handleDeleteBabyPicture}
+                            handleConfirmation={handleConfirmation}
+                        />
                     );
                 })
                     :
