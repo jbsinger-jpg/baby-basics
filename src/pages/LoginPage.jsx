@@ -28,7 +28,6 @@ export default function LoginPage() {
         if (validator.isEmail(email)) {
             auth.sendPasswordResetEmail(email)
                 .then(() => {
-                    console.log('Password reset email sent!');
                     toast({
                         title: 'Reset Email sent!',
                         description: "We sent an email to the one you have provided",
@@ -169,7 +168,6 @@ export default function LoginPage() {
                     duration: 9000,
                     isClosable: true,
                 });
-                console.log("Signed out!");
             })
             .catch((error) => {
                 // Handle sign-out error

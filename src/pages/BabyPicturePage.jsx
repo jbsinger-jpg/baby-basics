@@ -58,7 +58,6 @@ export default function BabyPicturePage() {
             const fileRef = userRef.child(selectedFile.name);
 
             fileRef.delete(selectedFile).then(() => {
-                console.log('File deleted successfully!');
                 firestore.collection("users")
                     .doc(currentUser)
                     .collection("uploaded-images")

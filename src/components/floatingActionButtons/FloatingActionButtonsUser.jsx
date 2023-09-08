@@ -57,7 +57,6 @@ export default function FloatingActionButtonsUser() {
                     duration: 9000,
                     isClosable: true,
                 });
-                console.log("Signed out!");
             })
             .catch((error) => {
                 // Handle sign-out error
