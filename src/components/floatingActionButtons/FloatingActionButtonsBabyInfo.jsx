@@ -9,53 +9,87 @@ import FabTemplate from './StandardFab';
 import { auth, firestore } from '../../firebaseConfig';
 import { AddIcon, InfoIcon } from '@chakra-ui/icons';
 import { cardBackground } from '../../defaultStyle';
+import { Delete } from '@mui/icons-material';
 
-export default function FloatingActionButtonsBabyInfo({ setProgressModalVisible, selectedAgeRange, progressConfirmed, setChildDrawerVisible, childOption }) {
+export default function FloatingActionButtonsBabyInfo({ setProgressModalVisible, selectedAgeRange, progressConfirmed, setChildDrawerVisible, childOption, setChildOptions, setPopoverVisible, popoverVisible }) {
     const [milestones, setMilestones] = useState([]);
     const [communications, setCommunications] = useState([]);
     const [sensory, setSensory] = useState([]);
     const [feeding, setFeeding] = useState([]);
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
+    const [deleteButtonIsLoading, setDeleteButtonIsLoading] = useState(false);
 
     useEffect(() => {
-        if (selectedAgeRange) {
-            firestore.collection("users").doc(auth?.currentUser?.uid).collection("Milestones").doc(selectedAgeRange).get().then((doc => {
-                if (doc.exists) {
-                    setMilestones([...doc.data().answers]);
-                }
-                else {
-                    setMilestones([]);
-                }
-            }));
+        if (selectedAgeRange && childOption) {
+            firestore
+                .collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(childOption)
+                .collection("Milestones")
+                .doc(selectedAgeRange)
+                .get()
+                .then((doc => {
+                    if (doc.exists) {
+                        setMilestones([...doc.data().answers]);
+                    }
+                    else {
+                        setMilestones([]);
+                    }
+                }));
 
-            firestore.collection("users").doc(auth?.currentUser?.uid).collection("Communication").doc(selectedAgeRange).get().then((doc => {
-                if (doc.exists) {
-                    setCommunications([...doc.data().answers]);
-                }
-                else {
-                    setCommunications([]);
-                }
-            }));
+            firestore
+                .collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(childOption)
+                .collection("Communication")
+                .doc(selectedAgeRange)
+                .get()
+                .then((doc => {
+                    if (doc.exists) {
+                        setCommunications([...doc.data().answers]);
+                    }
+                    else {
+                        setCommunications([]);
+                    }
+                }));
 
-            firestore.collection("users").doc(auth?.currentUser?.uid).collection("Sensory").doc(selectedAgeRange).get().then((doc => {
-                if (doc.exists) {
-                    setSensory([...doc.data().answers]);
-                }
-                else {
-                    setSensory([]);
-                }
-            }));
+            firestore
+                .collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(childOption)
+                .collection("Sensory")
+                .doc(selectedAgeRange)
+                .get()
+                .then((doc => {
+                    if (doc.exists) {
+                        setSensory([...doc.data().answers]);
+                    }
+                    else {
+                        setSensory([]);
+                    }
+                }));
 
-            firestore.collection("users").doc(auth?.currentUser?.uid).collection("Feeding").doc(selectedAgeRange).get().then((doc => {
-                if (doc.exists) {
-                    setFeeding([...doc.data().answers]);
-                }
-                else {
-                    setFeeding([]);
-                }
-            }));
+            firestore
+                .collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(childOption)
+                .collection("Feeding")
+                .doc(selectedAgeRange)
+                .get()
+                .then((doc => {
+                    if (doc.exists) {
+                        setFeeding([...doc.data().answers]);
+                    }
+                    else {
+                        setFeeding([]);
+                    }
+                }));
         }
-    }, [selectedAgeRange, progressConfirmed]);
+    }, [selectedAgeRange, progressConfirmed, childOption]);
 
     const handleDocumentProgress = () => {
         setProgressModalVisible(true);
@@ -165,6 +199,42 @@ export default function FloatingActionButtonsBabyInfo({ setProgressModalVisible,
         setChildDrawerVisible(true);
     };
 
+    const handleDeleteChild = () => {
+        setDeleteButtonIsLoading(true);
+        setPopoverVisible(false);
+
+        firestore
+            .collection("users")
+            .doc(auth?.currentUser?.uid)
+            .collection("children")
+            .doc(childOption)
+            .delete()
+            .then(() => {
+                firestore
+                    .collection("users")
+                    .doc(auth?.currentUser?.uid)
+                    .collection("children")
+                    .get()
+                    .then((snapshot) => {
+                        let index = 0;
+                        let options = [];
+
+                        snapshot.docs.forEach(doc => {
+                            const childName = doc.data().name;
+                            const capitalizedName = childName.charAt(0).toUpperCase() + childName.slice(1);
+
+                            options.push({ key: index, label: capitalizedName, value: childName });
+                            index += 1;
+                        });
+
+                        setChildOptions(options);
+                    });
+            })
+            .finally(() => {
+                setDeleteButtonIsLoading(false);
+            });
+    };
+
     return (
         <VStack
             top="14"
@@ -183,90 +253,98 @@ export default function FloatingActionButtonsBabyInfo({ setProgressModalVisible,
                 onClick={handleDrawerVisible}
                 icon={<AddIcon fontSize="large" />}
             />
-            {childOption &&
-                <Popover
-                    placement="right"
-                >
-                    <PopoverTrigger>
-                        <IconButton
-                            borderRadius="50%"
-                            width="56px"
-                            height="56px"
-                            icon={<InfoIcon w="25px" h="25px" />}
-                        />
-                    </PopoverTrigger>
-                    <PopoverContent
-                        bg={_cardBackground}
+            {popoverVisible &&
+                <>
+                    <FabTemplate
+                        label="Remove Child"
+                        onClick={handleDeleteChild}
+                        icon={<Delete fontSize="large" />}
+                        isLoading={deleteButtonIsLoading}
+                    />
+                    <Popover
+                        placement="right"
                     >
-                        <PopoverArrow />
-                        <PopoverCloseButton />
-                        <PopoverHeader>Progress</PopoverHeader>
-                        <PopoverBody>
-                            <VStack>
-                                <HStack
-                                    w="190px"
-                                    justifyContent="space-between"
-                                >
-                                    <Heading fontSize="m">Milestones: </Heading>
-                                    <Tag
-                                        borderRadius='full'
-                                        variant='outline'
-                                        colorScheme={determineMilestoneCount().colorScheme}
+                        <PopoverTrigger>
+                            <IconButton
+                                borderRadius="50%"
+                                width="56px"
+                                height="56px"
+                                icon={<InfoIcon w="25px" h="25px" />}
+                            />
+                        </PopoverTrigger>
+                        <PopoverContent
+                            bg={_cardBackground}
+                        >
+                            <PopoverArrow />
+                            <PopoverCloseButton />
+                            <PopoverHeader>Progress</PopoverHeader>
+                            <PopoverBody>
+                                <VStack>
+                                    <HStack
+                                        w="190px"
+                                        justifyContent="space-between"
                                     >
-                                        <TagLabel>
-                                            {determineMilestoneCount().tagName}
-                                        </TagLabel>
-                                    </Tag>
-                                </HStack>
-                                <HStack
-                                    w="190px"
-                                    justifyContent="space-between"
-                                >
-                                    <Heading fontSize="m">Communication: </Heading>
-                                    <Tag
-                                        borderRadius='full'
-                                        variant='outline'
-                                        colorScheme={determineCommunicationCount().colorScheme}
+                                        <Heading fontSize="m">Milestones: </Heading>
+                                        <Tag
+                                            borderRadius='full'
+                                            variant='outline'
+                                            colorScheme={determineMilestoneCount().colorScheme}
+                                        >
+                                            <TagLabel>
+                                                {determineMilestoneCount().tagName}
+                                            </TagLabel>
+                                        </Tag>
+                                    </HStack>
+                                    <HStack
+                                        w="190px"
+                                        justifyContent="space-between"
                                     >
-                                        <TagLabel>
-                                            {determineCommunicationCount().tagName}
-                                        </TagLabel>
-                                    </Tag>
-                                </HStack>
-                                <HStack
-                                    w="190px"
-                                    justifyContent="space-between"
-                                >
-                                    <Heading fontSize="m">Feeding: </Heading>
-                                    <Tag
-                                        borderRadius='full'
-                                        variant='outline'
-                                        colorScheme={determineFeedingCount().colorScheme}
+                                        <Heading fontSize="m">Communication: </Heading>
+                                        <Tag
+                                            borderRadius='full'
+                                            variant='outline'
+                                            colorScheme={determineCommunicationCount().colorScheme}
+                                        >
+                                            <TagLabel>
+                                                {determineCommunicationCount().tagName}
+                                            </TagLabel>
+                                        </Tag>
+                                    </HStack>
+                                    <HStack
+                                        w="190px"
+                                        justifyContent="space-between"
                                     >
-                                        <TagLabel>
-                                            {determineFeedingCount().tagName}
-                                        </TagLabel>
-                                    </Tag>
-                                </HStack>
-                                <HStack
-                                    w="190px"
-                                    justifyContent="space-between"
-                                >
-                                    <Heading fontSize="m">Sensory: </Heading>
-                                    <Tag
-                                        borderRadius='full'
-                                        variant='outline'
-                                        colorScheme={determineSensoryCount().colorScheme}
+                                        <Heading fontSize="m">Feeding: </Heading>
+                                        <Tag
+                                            borderRadius='full'
+                                            variant='outline'
+                                            colorScheme={determineFeedingCount().colorScheme}
+                                        >
+                                            <TagLabel>
+                                                {determineFeedingCount().tagName}
+                                            </TagLabel>
+                                        </Tag>
+                                    </HStack>
+                                    <HStack
+                                        w="190px"
+                                        justifyContent="space-between"
                                     >
-                                        <TagLabel>
-                                            {determineSensoryCount().tagName}
-                                        </TagLabel>
-                                    </Tag>
-                                </HStack>
-                            </VStack>
-                        </PopoverBody>
-                    </PopoverContent>
-                </Popover>
+                                        <Heading fontSize="m">Sensory: </Heading>
+                                        <Tag
+                                            borderRadius='full'
+                                            variant='outline'
+                                            colorScheme={determineSensoryCount().colorScheme}
+                                        >
+                                            <TagLabel>
+                                                {determineSensoryCount().tagName}
+                                            </TagLabel>
+                                        </Tag>
+                                    </HStack>
+                                </VStack>
+                            </PopoverBody>
+                        </PopoverContent>
+                    </Popover>
+                </>
             }
         </VStack>
     );

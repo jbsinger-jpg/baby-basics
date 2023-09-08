@@ -22,7 +22,8 @@ export default function AnimatedCard({
     selectedAge,
     progressConfirmed,
     setProgressConfirmed,
-    selectedTrimester
+    selectedTrimester,
+    childOption,
 }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
     const linkColor = useColorModeValue("blue.500", "blue.200");
@@ -33,8 +34,8 @@ export default function AnimatedCard({
     const [confirmProgressButtonLoading, setConfirmProgressButtonLoading] = useState(false);
 
     useEffect(() => {
-        if (selectedAge && title)
-            firestore.collection("users").doc(auth?.currentUser?.uid).collection(title).doc(selectedAge)
+        if (selectedAge && title && childOption)
+            firestore.collection("users").doc(auth?.currentUser?.uid).collection("children").doc(childOption).collection(title).doc(selectedAge)
                 .get().then((doc) => {
                     if (doc.exists) {
                         setCheckboxValues([...doc.data().answers]);
@@ -52,8 +53,8 @@ export default function AnimatedCard({
     }, [auth?.currentUser?.uid, selectedAge]);
 
     useEffect(() => {
-        if (title && selectedTrimester)
-            firestore.collection("users").doc(auth?.currentUser?.uid).collection(title).doc(String(selectedTrimester))
+        if (title && selectedTrimester && childOption)
+            firestore.collection("users").doc(auth?.currentUser?.uid).collection("children").doc(childOption).collection(title).doc(String(selectedTrimester))
                 .get()
                 .then((doc) => {
                     if (doc.data() && doc.data().answers) {
@@ -83,7 +84,8 @@ export default function AnimatedCard({
         const usersRef = await firestore.collection("users");
 
         // Make a reference to the given card title under the user profile
-        const babyProgressRef = usersRef.doc(auth?.currentUser?.uid).collection(title);
+        const babyProgressRef = usersRef.doc(auth?.currentUser?.uid).collection("children").doc(childOption).collection(title);
+
         for (let i = 0; i < checkboxValues.length; i++) {
             if (!checkboxValues[i]) {
                 checkboxValues[i] = false;

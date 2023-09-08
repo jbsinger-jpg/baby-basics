@@ -53,6 +53,8 @@ export default function MilestonePage() {
     const [childBirth, setChildBirth] = useState("");
     const [childOptions, setChildOptions] = useState([]);
     const [selectedChildOption, setSelectedChildOption] = useState("");
+    const [drawerSubmissionButtonLoading, setDrawerSubmissionButtonLoading] = useState(false);
+    const [popoverVisible, setPopoverVisible] = useState(false);
 
     const toast = useToast();
 
@@ -127,6 +129,7 @@ export default function MilestonePage() {
     };
 
     const handleAddChild = () => {
+        setDrawerSubmissionButtonLoading(true);
         if (childName) {
             firestore.collection("users").doc(auth?.currentUser?.uid).collection("children").doc(childName).set({
                 name: childName,
@@ -134,6 +137,20 @@ export default function MilestonePage() {
                 relationship: childRelationship,
                 birth: childBirth,
             });
+            firestore.collection("users").doc(auth?.currentUser?.uid).collection("children")
+                .get().then((snapshot) => {
+                    let options = [];
+                    let index = 0;
+
+                    snapshot.docs.forEach(doc => {
+                        options.push({ key: index, value: doc.data().name, label: doc.data().name });
+                        index += 1;
+                    });
+
+                    setChildOptions(options);
+                }).finally(() => {
+                    setDrawerSubmissionButtonLoading(false);
+                });
         }
         else {
             toast({
@@ -176,6 +193,10 @@ export default function MilestonePage() {
                 progressConfirmed={progressConfirmed}
                 setChildDrawerVisible={setChildDrawerVisible}
                 childOption={selectedChildOption}
+                setChildOptions={setChildOptions}
+                childOptions={childOptions}
+                popoverVisible={popoverVisible}
+                setPopoverVisible={setPopoverVisible}
             />
             <HStack
                 alignItems="center"
@@ -186,7 +207,10 @@ export default function MilestonePage() {
                     w="50vw"
                     options={childOptions}
                     value={selectedChildOption}
-                    onChange={(event) => setSelectedChildOption(event.target.value)}
+                    onChange={(event) => {
+                        setSelectedChildOption(event.target.value);
+                        setPopoverVisible(Boolean(event.target.value));
+                    }}
                 />
                 <StyledSelect
                     w="50vw"
@@ -218,6 +242,7 @@ export default function MilestonePage() {
                     selectedAge={selectedAge}
                     progressConfirmed={progressConfirmed}
                     setProgressConfirmed={setProgressConfirmed}
+                    childOption={selectedChildOption}
                 />
                 <AnimatedCard
                     flippedCard={flippedCommunicationCard}
@@ -231,6 +256,7 @@ export default function MilestonePage() {
                     selectedAge={selectedAge}
                     progressConfirmed={progressConfirmed}
                     setProgressConfirmed={setProgressConfirmed}
+                    childOption={selectedChildOption}
                 />
                 <AnimatedCard
                     flippedCard={flippedFeedingCard}
@@ -244,6 +270,7 @@ export default function MilestonePage() {
                     selectedAge={selectedAge}
                     progressConfirmed={progressConfirmed}
                     setProgressConfirmed={setProgressConfirmed}
+                    childOption={selectedChildOption}
                 />
                 <AnimatedCard
                     flippedCard={flippedSensoryCard}
@@ -257,6 +284,7 @@ export default function MilestonePage() {
                     selectedAge={selectedAge}
                     progressConfirmed={progressConfirmed}
                     setProgressConfirmed={setProgressConfirmed}
+                    childOption={selectedChildOption}
                 />
                 <AnimatedCard
                     flippedCard={flippedResourcesCard}
@@ -269,6 +297,7 @@ export default function MilestonePage() {
                     selectedAge={selectedAge}
                     progressConfirmed={progressConfirmed}
                     setProgressConfirmed={setProgressConfirmed}
+                    childOption={selectedChildOption}
                 />
                 <AnimatedCard
                     flippedCard={flippedActivitiesCard}
@@ -281,6 +310,7 @@ export default function MilestonePage() {
                     selectedAge={selectedAge}
                     progressConfirmed={progressConfirmed}
                     setProgressConfirmed={setProgressConfirmed}
+                    childOption={selectedChildOption}
                 />
             </Box>
             <BabyProgressModal
@@ -361,6 +391,7 @@ export default function MilestonePage() {
                     <DrawerFooter justifyContent="space-between">
                         <Button
                             onClick={handleAddChild}
+                            isLoading={drawerSubmissionButtonLoading}
                         >
                             Submit
                         </Button>

@@ -5,7 +5,7 @@ import React from 'react';
 // relative imports
 // none
 
-export default function FabTemplate({ onClick, icon, label, height }) {
+export default function FabTemplate({ onClick, icon, label, height, isLoading }) {
     return (
         <Tooltip
             label={label}
@@ -21,7 +21,8 @@ export default function FabTemplate({ onClick, icon, label, height }) {
                 height={height ? height : "56px"}
                 borderRadius={height ? "0%" : "50%"}
                 zIndex={!height && 999}
-                // end if
+                isLoading={isLoading}
+            // end if
             />
         </Tooltip>
     );
