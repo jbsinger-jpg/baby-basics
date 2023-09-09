@@ -10,6 +10,7 @@ import { auth, firestore } from '../../firebaseConfig';
 import { AddIcon, InfoIcon } from '@chakra-ui/icons';
 import { cardBackground } from '../../defaultStyle';
 import { Delete } from '@mui/icons-material';
+import FloatingActionButtonContainer from './FloatingActionButtonContainer';
 
 export default function FloatingActionButtonsBabyInfo({ setProgressModalVisible, selectedAgeRange, progressConfirmed, setChildDrawerVisible, childOption, setChildOptions, setPopoverVisible, popoverVisible }) {
     const [milestones, setMilestones] = useState([]);
@@ -236,12 +237,7 @@ export default function FloatingActionButtonsBabyInfo({ setProgressModalVisible,
     };
 
     return (
-        <VStack
-            top="14"
-            right="4"
-            position="fixed"
-            zIndex={999}
-        >
+        <FloatingActionButtonContainer>
             <ColorModeToggleButton />
             <FabTemplate
                 label="Document Progress"
@@ -346,6 +342,6 @@ export default function FloatingActionButtonsBabyInfo({ setProgressModalVisible,
                     </Popover>
                 </>
             }
-        </VStack>
+        </FloatingActionButtonContainer>
     );
 }

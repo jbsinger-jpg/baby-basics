@@ -8,6 +8,7 @@ import { SearchIcon } from '@chakra-ui/icons';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import BabyProgressModal from '../modals/BabyProgressModal';
 import { useState } from 'react';
+import FloatingActionButtonContainer from './FloatingActionButtonContainer';
 
 export default function FloatingActionButtonsGrowthAndSleep({ setSearchBarIsOpen }) {
     const [progressModalVisible, setProgressModalVisible] = useState(false);
@@ -15,13 +16,7 @@ export default function FloatingActionButtonsGrowthAndSleep({ setSearchBarIsOpen
     const navigate = useNavigate();
 
     return (
-        <VStack
-            bottom="0"
-            right="4"
-            position="fixed"
-            zIndex={999}
-            pb="2"
-        >
+        <FloatingActionButtonContainer>
             <ColorModeToggleButton />
             <FabTemplate
                 icon={<HomeIcon fontSize="large" />}
@@ -41,6 +36,6 @@ export default function FloatingActionButtonsGrowthAndSleep({ setSearchBarIsOpen
                 progressModalVisible={progressModalVisible}
                 setProgressModalVisible={setProgressModalVisible}
             />
-        </VStack>
+        </FloatingActionButtonContainer>
     );
 }

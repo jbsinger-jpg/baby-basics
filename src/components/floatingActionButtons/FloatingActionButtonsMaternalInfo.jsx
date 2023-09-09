@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 // relative imports
 import ColorModeToggleButton from '../ColorModeToggleButton';
 import FabTemplate from './StandardFab';
+import FloatingActionButtonContainer from './FloatingActionButtonContainer';
 
 export default function FloatingActionButtonsMaternalInfo() {
     const navigate = useNavigate();
@@ -15,19 +16,13 @@ export default function FloatingActionButtonsMaternalInfo() {
     };
 
     return (
-        <VStack
-            top="14"
-            right="4"
-            position="fixed"
-            zIndex={999}
-
-        >
+        <FloatingActionButtonContainer>
             <ColorModeToggleButton />
             <FabTemplate
                 label="Home"
                 onClick={handleGoToHome}
                 icon={<HomeIcon fontSize="large" />}
             />
-        </VStack>
+        </FloatingActionButtonContainer>
     );
 }

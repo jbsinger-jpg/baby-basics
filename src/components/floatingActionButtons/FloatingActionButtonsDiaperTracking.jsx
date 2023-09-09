@@ -5,18 +5,13 @@ import HomeIcon from '@mui/icons-material/Home';
 import { useNavigate } from 'react-router-dom';
 import ColorModeToggleButton from '../ColorModeToggleButton';
 import { SearchIcon } from '@chakra-ui/icons';
+import FloatingActionButtonContainer from './FloatingActionButtonContainer';
 
 export default function FloatingActionButtonsDiaperTracking({ setSearchBarIsOpen }) {
     const navigate = useNavigate();
 
     return (
-        <VStack
-            bottom="0"
-            right="4"
-            position="fixed"
-            zIndex={999}
-            pb="2"
-        >
+        <FloatingActionButtonContainer>
             <ColorModeToggleButton />
             <FabTemplate
                 icon={<HomeIcon fontSize="large" />}
@@ -28,6 +23,6 @@ export default function FloatingActionButtonsDiaperTracking({ setSearchBarIsOpen
                 onClick={() => setSearchBarIsOpen(true)}
                 label={"Search"}
             />
-        </VStack>
+        </FloatingActionButtonContainer>
     );
 }

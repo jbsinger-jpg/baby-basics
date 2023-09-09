@@ -1,11 +1,12 @@
 // module imports
 import { SearchIcon } from '@chakra-ui/icons';
-import { HStack, VStack } from '@chakra-ui/react';
+import { VStack } from '@chakra-ui/react';
 
 // relative imports
 import ColorModeToggleButton from '../ColorModeToggleButton';
 import SearchBarAlertDialog from '../modals/SearchBarModal';
 import FabTemplate from './StandardFab';
+import FloatingActionButtonContainer from './FloatingActionButtonContainer';
 
 export default function FloatingActionButtons({
     setSearchBarIsOpen,
@@ -26,13 +27,7 @@ export default function FloatingActionButtons({
 
 
     return (
-        <HStack
-            top="14"
-            right="4"
-            position="fixed"
-            h="600px"
-            alignItems="start"
-        >
+        <FloatingActionButtonContainer left>
             <SearchBarAlertDialog
                 searchBarIsOpen={searchBarIsOpen}
                 setSearchBarIsOpen={setSearchBarIsOpen}
@@ -57,7 +52,6 @@ export default function FloatingActionButtons({
                     label={"Search"}
                 />
             </VStack>
-        </HStack>
-
+        </FloatingActionButtonContainer>
     );
 }

@@ -6,6 +6,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { auth, firestore } from '../../firebaseConfig';
 import ColorModeToggleButton from '../ColorModeToggleButton';
 import FabTemplate from './StandardFab';
+import FloatingActionButtonContainer from './FloatingActionButtonContainer';
 
 export default function FloatingActionButtonsUser() {
     const toast = useToast();
@@ -65,13 +66,7 @@ export default function FloatingActionButtonsUser() {
     };
 
     return (
-        <VStack
-            top="14"
-            right="4"
-            position="fixed"
-            h="600px"
-            alignItems="start"
-        >
+        <FloatingActionButtonContainer>
             <ColorModeToggleButton />
             <FabTemplate
                 icon={<UnlockIcon height="30px" width="30px" />}
@@ -83,7 +78,6 @@ export default function FloatingActionButtonsUser() {
                 onClick={handleSignOut}
                 label={"Log Out"}
             />
-        </VStack>
-
+        </FloatingActionButtonContainer>
     );
 }
