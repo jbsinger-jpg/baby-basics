@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, FormLabel, HStack, Input, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
+import { Button, FormControl, FormLabel, HStack, Input, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import BreastRowTabPanel from '../components/tabPanels/BreastRowTabPanel';
 import PumpRowTabPanel from '../components/tabPanels/PumpRowTabPanel';
@@ -193,7 +193,7 @@ export default function BabyFeedTrackingPage({ searchBarIsOpen, setSearchBarIsOp
     };
 
     useEffect(() => {
-        firestore.collection("users").doc(auth.currentUser.uid).collection("breast-feed-tracking").get()
+        firestore.collection("users").doc(auth?.currentUser?.uid).collection("breast-feed-tracking").get()
             .then(snapshot => {
                 let options = [];
                 snapshot.docs.forEach(doc => {
@@ -204,7 +204,7 @@ export default function BabyFeedTrackingPage({ searchBarIsOpen, setSearchBarIsOp
                 options = [];
             });
 
-        firestore.collection("users").doc(auth.currentUser.uid).collection("bottle-feed-tracking").get()
+        firestore.collection("users").doc(auth?.currentUser?.uid).collection("bottle-feed-tracking").get()
             .then(snapshot => {
                 let options = [];
                 snapshot.docs.forEach(doc => {
@@ -215,7 +215,7 @@ export default function BabyFeedTrackingPage({ searchBarIsOpen, setSearchBarIsOp
                 options = [];
             });
 
-        firestore.collection("users").doc(auth.currentUser.uid).collection("pump-feed-tracking").get()
+        firestore.collection("users").doc(auth?.currentUser?.uid).collection("pump-feed-tracking").get()
             .then(snapshot => {
                 let options = [];
                 snapshot.docs.forEach(doc => {

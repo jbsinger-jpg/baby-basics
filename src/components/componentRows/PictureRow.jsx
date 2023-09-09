@@ -14,7 +14,7 @@ export default function PictureRow({ picture, index, handleDeleteBabyPicture, ha
             h="500px"
         >
             <Card w="220px" bg={_cardBackground} justifyContent="center" alignItems="center">
-                {cardFlipped ?
+                {!cardFlipped ?
                     <>
                         <CardHeader>
                             <Tag

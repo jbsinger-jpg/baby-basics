@@ -7,13 +7,14 @@ import { useState } from 'react';
 // Relative imports
 import { screenBackground } from '../defaultStyle';
 import { auth, firestore } from '../firebaseConfig';
+import { useEffect } from 'react';
 
 export default function GraphPage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
     const [selectedAgeOption, setSelectedAgeOption] = useState("1");
-    const [selectedLength, setSelectedLength] = useState("");
-    const [selectedWeight, setSelectedWeight] = useState("");
-    const [headCircumference, setHeadCircumference] = useState("");
+    const [selectedLength, setSelectedLength] = useState(1);
+    const [selectedWeight, setSelectedWeight] = useState(1);
+    const [headCircumference, setHeadCircumference] = useState(1);
     const [graphDialogIsOpen, setGraphDialogIsOpen] = useState(false);
     const [growthChartRelativePath, setGrowthChartRelativePath] = useState(require("../../src/components/staticPageData/growth-chart-for-girls.jpg"));
     const [allGraphPointsIsVisible, setAllGraphPointsIsVisible] = useState(false);
@@ -26,12 +27,9 @@ export default function GraphPage() {
     const [lbValue, setLbValue] = useState(0);
     const [inValue, setInValue] = useState(0);
 
-    // =========================================================================================
-    // =========================================================================================
-    // Length/Weight Graph
-    // x = length, y = weight
-    // =========================================================================================
-    // =========================================================================================
+    const [deleteHCPointIsLoading, setDeleteHCPointIsLoading] = useState(false);
+    const [deleteWLPointIsLoading, setDeleteWLPointIsLoading] = useState(false);
+
     const [weightLengthGraphPoints, setWeightLengthGraphPoints] = useState([]);
     const addWeightLengthPoint = () => {
         setWeightButtonIsLoading(true);
@@ -60,23 +58,28 @@ export default function GraphPage() {
     const [circumferenceWeightGraphPoints, setCircumferenceWeightGraphPoints] = useState([]);
     const addCircumferenceWeightGraphPoint = () => {
         setCircumferenceButtonIsLoading(true);
-        let newGraphPoints = [
-            ...circumferenceWeightGraphPoints,
-            { x: Number(headCircumference), y: Number(selectedWeight) }
-        ];
+        if (Number(headCircumference) && Number(selectedWeight)) {
+            let newGraphPoints = [
+                ...circumferenceWeightGraphPoints,
+                { x: Number(headCircumference), y: Number(selectedWeight) }
+            ];
 
-        // Update both the front and backend whenever the button is pressed
-        firestore
-            .collection("users")
-            .doc(auth.currentUser.uid)
-            .collection("circumference-graph")
-            .doc(selectedAgeOption)
-            .set({
-                graph_points: [...newGraphPoints]
-            }).finally(() => {
-                setCircumferenceButtonIsLoading(false);
-            });
-        setCircumferenceWeightGraphPoints(newGraphPoints);
+            // Update both the front and backend whenever the button is pressed
+            firestore
+                .collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("circumference-graph")
+                .doc(selectedAgeOption)
+                .set({
+                    graph_points: [...newGraphPoints]
+                }).finally(() => {
+                    setCircumferenceButtonIsLoading(false);
+                });
+            setCircumferenceWeightGraphPoints(newGraphPoints);
+        }
+        else {
+            setCircumferenceButtonIsLoading(false);
+        }
     };
     // =========================================================================================
     // =========================================================================================
@@ -132,7 +135,7 @@ export default function GraphPage() {
         if (event.target.checked) {
             firestore
                 .collection("users")
-                .doc(auth.currentUser.uid)
+                .doc(auth?.currentUser?.uid)
                 .collection("circumference-graph")
                 .get()
                 .then(snapshot => {
@@ -144,7 +147,7 @@ export default function GraphPage() {
                 });
             firestore
                 .collection("users")
-                .doc(auth.currentUser.uid)
+                .doc(auth?.currentUser?.uid)
                 .collection("weight-graph")
                 .get()
                 .then(snapshot => {
@@ -158,16 +161,43 @@ export default function GraphPage() {
     };
 
     const handleDeleteHWPoint = () => {
+        setDeleteHCPointIsLoading(true);
         const newHeightLengthPoints = [...circumferenceWeightGraphPoints];
+
         newHeightLengthPoints.pop();
         setCircumferenceWeightGraphPoints(newHeightLengthPoints);
+
+        // TODO: Delete HW point in firebase
     };
 
     const handleDeleteWLPoint = () => {
+        setDeleteWLPointIsLoading(true);
         const newWeightLengthPoints = [...weightLengthGraphPoints];
+
         newWeightLengthPoints.pop();
         setWeightLengthGraphPoints(newWeightLengthPoints);
+
+        // TODO: Delete point for weight/length
     };
+
+    const textColor = useColorModeValue("black", "white");
+
+    useEffect(() => {
+        if (auth?.currentUser?.uid) {
+            firestore.collection("users").doc(auth?.currentUser?.uid)
+                .collection("weight-graph").doc("1")
+                .get().then((doc) => {
+                    setWeightLengthGraphPoints(doc.data().graph_points);
+                });
+
+            firestore.collection("users").doc(auth?.currentUser?.uid)
+                .collection("circumference-graph").doc("1")
+                .get().then((doc) => {
+                    setCircumferenceWeightGraphPoints(doc.data().graph_points);
+                });
+        }
+        // eslint-disable-next-line
+    }, [auth?.currentUser?.uid]);
 
     return (
         <Box
@@ -207,12 +237,13 @@ export default function GraphPage() {
                                 x={150}
                                 y={325}
                                 dy={10}
-                                text="Weight (kg)"
+                                text="Weight"
+                                style={{ fill: textColor }}
                             />
                         </VictoryChart>
                         <HStack>
-                            <Button onClick={addCircumferenceWeightGraphPoint} isLoading={circumferenceButtonIsLoading}>Plot W/H Point</Button>
-                            <Button onClick={handleDeleteHWPoint}>Delete W/H Point</Button>
+                            <Button onClick={addWeightLengthPoint} isLoading={weightButtonIsLoading}>Plot W/L Point</Button>
+                            <Button onClick={handleDeleteWLPoint} isLoading={deleteWLPointIsLoading}>Delete W/L Point</Button>
                         </HStack>
                     </VStack>
                     <VStack
@@ -226,6 +257,7 @@ export default function GraphPage() {
                                 y={5}
                                 dy={10}
                                 text="Head Circumference (cm)"
+                                style={{ fill: textColor }}
                             />
                             <VictoryLine
                                 style={{
@@ -239,12 +271,14 @@ export default function GraphPage() {
                                 x={150}
                                 y={325}
                                 dy={10}
-                                text="Weight (kg)"
+                                text="Weight"
+                                style={{ fill: textColor }}
+
                             />
                         </VictoryChart>
                         <HStack>
-                            <Button onClick={addWeightLengthPoint} isLoading={weightButtonIsLoading}>Plot W/L Point</Button>
-                            <Button onClick={handleDeleteWLPoint}>Delete W/L Point</Button>
+                            <Button onClick={addCircumferenceWeightGraphPoint} isLoading={circumferenceButtonIsLoading}>Plot W/HC Point</Button>
+                            <Button onClick={handleDeleteHWPoint} isLoading={deleteHCPointIsLoading}>Delete W/HC Point</Button>
                         </HStack>
                     </VStack>
                 </HStack>
@@ -290,27 +324,51 @@ export default function GraphPage() {
                     </Checkbox>
                 </VStack>
                 <FormLabel htmlFor='length'>Length</FormLabel>
-                <Input
-                    id="length"
-                    placeholder="length"
+                <NumberInput
+                    min={1}
                     value={selectedLength}
-                    onChange={event => setSelectedLength(event.target.value)}
-                />
+                    onChange={value => setSelectedLength(value)}
+                >
+                    <NumberInputField
+                        id="length"
+                        placeholder="length"
+                    />
+                    <NumberInputStepper>
+                        <NumberIncrementStepper />
+                        <NumberDecrementStepper />
+                    </NumberInputStepper>
+                </NumberInput>
                 <FormLabel htmlFor='weight'>Weight</FormLabel>
-                <Input
-                    id="weight"
-                    placeholder="weight"
+                <NumberInput
+                    min={1}
                     value={selectedWeight}
-                    onChange={event => setSelectedWeight(event.target.value)}
-                />
+                    onChange={value => setSelectedWeight(value)}
+                >
+                    <NumberInputField
+                        id="weight"
+                        placeholder="weight"
+                    />
+                    <NumberInputStepper>
+                        <NumberIncrementStepper />
+                        <NumberDecrementStepper />
+                    </NumberInputStepper>
+                </NumberInput>
                 <FormLabel htmlFor='circumference'>Head Circumference</FormLabel>
-                <Input
-                    id="circumference"
-                    placeholder="head circumference"
+                <NumberInput
+                    min={1}
                     value={headCircumference}
-                    onChange={event => setHeadCircumference(event.target.value)}
-                />
-                <HStack>
+                    onChange={value => setHeadCircumference(value)}
+                >
+                    <NumberInputField
+                        id="circumference"
+                        placeholder="head circumference"
+                    />
+                    <NumberInputStepper>
+                        <NumberIncrementStepper />
+                        <NumberDecrementStepper />
+                    </NumberInputStepper>
+                </NumberInput>
+                <HStack bottom="0" position="fixed" justifyContent="space-between" w="85vw" pb="2">
                     <Button onClick={showGrowthChartDialog}>View Growth Chart</Button>
                     <Button onClick={() => setShowConversionDialog(true)}>Make Conversions</Button>
                 </HStack>
@@ -328,7 +386,7 @@ export default function GraphPage() {
                             flexDir="column"
                         >
                             <Image src={growthChartRelativePath} />
-                            <Button onClick={handleChangeGrowthChart}>Switch Chart</Button>
+                            <Button onClick={handleChangeGrowthChart} bg={_screenBackground} variant="unstyled">Switch Chart</Button>
                         </Box>
                     </AlertDialogContent>
                 </AlertDialogOverlay>
