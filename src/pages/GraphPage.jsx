@@ -166,8 +166,16 @@ export default function GraphPage() {
 
         newHeightLengthPoints.pop();
         setCircumferenceWeightGraphPoints(newHeightLengthPoints);
-
-        // TODO: Delete HW point in firebase
+        firestore
+            .collection("users")
+            .doc(auth?.currentUser?.uid)
+            .collection("circumference-graph")
+            .doc(selectedAgeOption)
+            .set({
+                graph_points: [...newHeightLengthPoints]
+            }).finally(() => {
+                setDeleteHCPointIsLoading(false);
+            });
     };
 
     const handleDeleteWLPoint = () => {
@@ -176,8 +184,16 @@ export default function GraphPage() {
 
         newWeightLengthPoints.pop();
         setWeightLengthGraphPoints(newWeightLengthPoints);
-
-        // TODO: Delete point for weight/length
+        firestore
+            .collection("users")
+            .doc(auth?.currentUser?.uid)
+            .collection("weight-graph")
+            .doc(selectedAgeOption)
+            .set({
+                graph_points: [...newWeightLengthPoints]
+            }).finally(() => {
+                setDeleteWLPointIsLoading(false);
+            });
     };
 
     const textColor = useColorModeValue("black", "white");
