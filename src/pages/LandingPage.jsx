@@ -21,14 +21,14 @@ import StyledSelect from '../components/StyledSelect';
 import { auth, firestore } from '../firebaseConfig';
 import { useCollectionDataOnce } from 'react-firebase-hooks/firestore';
 import Context from '../context/Context';
-import DisclaimerModal from '../components/modals/DisclaimerModal';
 import ScreeningPage from './ScreeningPage';
+import FloatingActionButtonContainer from '../components/floatingActionButtons/FloatingActionButtonContainer';
+import ColorModeToggleButton from '../components/ColorModeToggleButton';
 
 export default function LandingPage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
     const [screenHeight, setScreenHeight] = useState(window.innerHeight);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-    const [screeningAlertDialogVisibile, setScreeningAlertDialogVisibile] = useState(false);
 
     const socialPageOptions = [
         { key: 0, value: "pictures", label: "Pictures" },
@@ -174,6 +174,9 @@ export default function LandingPage() {
                                 );
                             })}
                         </VStack>
+                        <FloatingActionButtonContainer>
+                            <ColorModeToggleButton />
+                        </FloatingActionButtonContainer>
                     </TabPanel>
                     <TabPanel>
                         <FloatingActionButtonsUser />

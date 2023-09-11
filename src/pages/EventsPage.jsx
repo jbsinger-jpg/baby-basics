@@ -5,6 +5,7 @@ import FabTemplate from '../components/floatingActionButtons/StandardFab';
 import { useState } from 'react';
 import GoogleMapsModal from '../components/modals/GoogleMapsModal';
 import CustomPopOver from '../components/CustomPopover';
+import FloatingActionButtonsEvents from '../components/floatingActionButtons/FloatingActionButtonsEvents';
 
 export default function EventsPage() {
     const [searchDialogIsOpen, setSearchDialogIsOpen] = useState(false);
@@ -32,6 +33,7 @@ export default function EventsPage() {
                 searchPlaces={searchDialogIsOpen}
                 setSearchPlaces={setSearchDialogIsOpen}
             />
+            <FloatingActionButtonsEvents />
         </Box>
     );
 }

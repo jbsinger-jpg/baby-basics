@@ -1,4 +1,3 @@
-import { VStack } from '@chakra-ui/react';
 import React from 'react';
 import FabTemplate from './StandardFab';
 import HomeIcon from '@mui/icons-material/Home';

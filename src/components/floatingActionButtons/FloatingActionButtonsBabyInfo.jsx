@@ -11,6 +11,8 @@ import { AddIcon, InfoIcon } from '@chakra-ui/icons';
 import { cardBackground } from '../../defaultStyle';
 import { Delete } from '@mui/icons-material';
 import FloatingActionButtonContainer from './FloatingActionButtonContainer';
+import { useNavigate } from 'react-router-dom';
+import HomeIcon from '@mui/icons-material/Home';
 
 export default function FloatingActionButtonsBabyInfo({ setProgressModalVisible, selectedAgeRange, progressConfirmed, setChildDrawerVisible, childOption, setChildOptions, setPopoverVisible, popoverVisible }) {
     const [milestones, setMilestones] = useState([]);
@@ -236,9 +238,16 @@ export default function FloatingActionButtonsBabyInfo({ setProgressModalVisible,
             });
     };
 
+    const navigate = useNavigate();
+
     return (
         <FloatingActionButtonContainer>
             <ColorModeToggleButton />
+            <FabTemplate
+                icon={<HomeIcon fontSize="large" />}
+                onClick={() => navigate("/")}
+                label={"Home"}
+            />
             <FabTemplate
                 label="Document Progress"
                 onClick={handleDocumentProgress}

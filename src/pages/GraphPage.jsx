@@ -397,12 +397,18 @@ export default function GraphPage() {
                 <AlertDialogOverlay>
                     <AlertDialogContent>
                         <Box
-                            w="40vw"
+                            w="30vw"
                             display="flex"
                             flexDir="column"
                         >
-                            <Image src={growthChartRelativePath} />
-                            <Button onClick={handleChangeGrowthChart} bg={_screenBackground} variant="unstyled">Switch Chart</Button>
+                            <Image src={growthChartRelativePath} h="80vh" />
+                            <Button
+                                onClick={handleChangeGrowthChart}
+                                bg={_screenBackground}
+                                variant="unstyled"
+                            >
+                                Switch Chart
+                            </Button>
                         </Box>
                     </AlertDialogContent>
                 </AlertDialogOverlay>
