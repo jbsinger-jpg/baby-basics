@@ -18,6 +18,7 @@ import StrollersDataTabPanel from '../components/tabPanels/StrollersDataTabPanel
 import { screenBackground } from '../defaultStyle';
 import VitaminDataTabPanel from '../components/tabPanels/VitaminDataTabPanel';
 import BabyImagesModal from '../components/modals/BabyImagesModal';
+import LoadingPageSpinner from '../components/LoadingPageSpinner';
 
 export default function StorePage() {
     // hooks
@@ -216,15 +217,10 @@ export default function StorePage() {
         >
             {/* IF CONTENT IS LOADING DISPLAY SPINNER ICON */}
             {!clothingData || !foodData || !diaperData || !maternialData || !formulaData || !toyData || !monitorData || !seatData || !strollerData || !vitaminData ?
-                <Box
-                    alignItems="center"
-                    justifyContent="center"
-                    h={screenHeight}
-                    w={screenWidth}
-                    display="flex"
-                >
-                    <Spinner size="xl" />
-                </Box>
+                <LoadingPageSpinner
+                    height={screenHeight}
+                    width={screenWidth}
+                />
                 :
                 <>
                     <Tabs

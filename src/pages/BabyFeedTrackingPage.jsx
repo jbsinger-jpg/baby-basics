@@ -1,4 +1,4 @@
-import { Button, FormControl, FormLabel, HStack, Input, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
+import { Box, Button, FormControl, FormLabel, HStack, Input, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import BreastRowTabPanel from '../components/tabPanels/BreastRowTabPanel';
 import PumpRowTabPanel from '../components/tabPanels/PumpRowTabPanel';
@@ -8,11 +8,11 @@ import { auth, firestore } from '../firebaseConfig';
 import FloatingActionButtonsDiaperTracking from '../components/floatingActionButtons/FloatingActionButtonsDiaperTracking';
 import Timer from '../components/Timer';
 
-export default function BabyFeedTrackingPage({ searchBarIsOpen, setSearchBarIsOpen }) {
+export default function BabyFeedTrackingPage({ setSearchBarIsOpen }) {
     const [tabIndex, setTabIndex] = useState(0);
-    const [breastFeedingRows, setBreastFeedingRows] = useState([]);
-    const [pumpFeedingRows, setPumpFeedingRows] = useState([]);
-    const [bottleFeedingRows, setBottleFeedingRows] = useState([]);
+    const [breastFeedingRows, setBreastFeedingRows] = useState(null);
+    const [pumpFeedingRows, setPumpFeedingRows] = useState(null);
+    const [bottleFeedingRows, setBottleFeedingRows] = useState(null);
 
     const [bottleRowAlias, setBottleRowAlias] = useState("");
     const [bottleRowFluidOunces, setBottleRowFluidOunces] = useState(0);
@@ -256,32 +256,47 @@ export default function BabyFeedTrackingPage({ searchBarIsOpen, setSearchBarIsOp
                         <VStack
                             alignItems="start"
                         >
-                            <HStack
-                                alignItems="start"
-                                justifyContent="space-evenly"
-                                w="100vw"
-                            >
-                                <Timer title="L" setValue={setLeftTeetTimerValue} pauseTimer={submittingTimerValues} tabIndex={tabIndex} />
-                                <Timer title="R" setValue={setRightTeetTimerValue} pauseTimer={submittingTimerValues} tabIndex={tabIndex} />
-                            </HStack>
-                            <VStack
-                                overflowY="auto"
-                                h="60vh"
-                            >
-                                {breastFeedingRows && breastFeedingRows.map((breastRow, index) => {
-                                    return (
-                                        <BreastRowTabPanel
-                                            leftBreastTime={leftTeetTimerValue}
-                                            rightBreastTime={rightTeetTimerValue}
-                                            alias={breastRow.alias}
-                                            index={index}
-                                            timeStamp={breastRow.alias}
-                                            data={breastFeedingRows}
-                                            setData={setBreastFeedingRows}
-                                        />
-                                    );
-                                })}
-                            </VStack>
+
+                            {!breastFeedingRows ?
+                                <Box
+                                    alignItems="center"
+                                    justifyContent="center"
+                                    h={"100vh"}
+                                    w={"100vw"}
+                                    display="flex"
+                                >
+                                    <Spinner size="xl" />
+                                </Box>
+                                :
+                                <>
+                                    <HStack
+                                        alignItems="start"
+                                        justifyContent="space-evenly"
+                                        w="100vw"
+                                    >
+                                        <Timer title="L" setValue={setLeftTeetTimerValue} pauseTimer={submittingTimerValues} tabIndex={tabIndex} />
+                                        <Timer title="R" setValue={setRightTeetTimerValue} pauseTimer={submittingTimerValues} tabIndex={tabIndex} />
+                                    </HStack>
+                                    <VStack
+                                        overflowY="auto"
+                                        h="60vh"
+                                    >
+                                        {breastFeedingRows && breastFeedingRows.map((breastRow, index) => {
+                                            return (
+                                                <BreastRowTabPanel
+                                                    leftBreastTime={leftTeetTimerValue}
+                                                    rightBreastTime={rightTeetTimerValue}
+                                                    alias={breastRow.alias}
+                                                    index={index}
+                                                    timeStamp={breastRow.alias}
+                                                    data={breastFeedingRows}
+                                                    setData={setBreastFeedingRows}
+                                                />
+                                            );
+                                        })}
+                                    </VStack>
+                                </>
+                            }
                         </VStack>
                         <VStack
                             position="fixed"
