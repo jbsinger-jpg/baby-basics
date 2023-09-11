@@ -1,10 +1,13 @@
 import { CheckCircleIcon, ChevronDownIcon, ChevronUpIcon, CloseIcon, InfoOutlineIcon, NotAllowedIcon } from '@chakra-ui/icons';
-import { Box, Card, CardBody, CardHeader, Collapse, FormLabel, HStack, Heading, IconButton, Text, Tooltip, VStack } from '@chakra-ui/react';
+import { Box, Card, CardBody, CardHeader, Collapse, FormLabel, HStack, Heading, IconButton, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { STATUS } from '../staticPageData/baby-color-consistency-info';
+import { cardBackground } from '../../defaultStyle';
 
 export default function GenericDiaperTrackingTabPanel({ notes, timeStampDate, alias, index, handleDeleteRow, colorStatus, color }) {
     const [showAllNotes, setShowAllNotes] = useState(false);
+    const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
+
     const handleToggle = () => {
         setShowAllNotes(!showAllNotes);
     };
@@ -26,7 +29,9 @@ export default function GenericDiaperTrackingTabPanel({ notes, timeStampDate, al
 
     return (
         <Box>
-            <Card>
+            <Card
+                bg={_cardBackground}
+            >
                 <CardHeader>
                     <HStack
                         w="90vw"

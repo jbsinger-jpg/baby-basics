@@ -1,8 +1,9 @@
 import { CheckCircleIcon, ChevronDownIcon, ChevronUpIcon, CloseIcon, InfoOutlineIcon, NotAllowedIcon } from '@chakra-ui/icons';
-import { Box, Card, CardBody, CardHeader, Collapse, FormLabel, HStack, Heading, IconButton, Text, Tooltip, VStack } from '@chakra-ui/react';
+import { Box, Card, CardBody, CardHeader, Collapse, FormLabel, HStack, Heading, IconButton, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { auth, firestore } from '../../firebaseConfig';
 import { STATUS } from '../staticPageData/baby-color-consistency-info';
+import { cardBackground } from '../../defaultStyle';
 
 const ColorCircle = ({ color }) => {
     return (
@@ -12,6 +13,7 @@ const ColorCircle = ({ color }) => {
 
 export default function PooTabPanel({ setData, data, index, notes, color, consistency, timeStampDate, alias, colorStatus, consistencyStatus }) {
     const [showAllNotes, setShowAllNotes] = useState(false);
+    const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
 
     const handleToggle = () => {
         setShowAllNotes(!showAllNotes);
@@ -26,7 +28,6 @@ export default function PooTabPanel({ setData, data, index, notes, color, consis
         }
     };
 
-
     const handleDeleteRow = (index) => {
         firestore.collection("users").doc(auth?.currentUser?.uid).collection("poo-tracking").doc(alias).delete();
         const updatedArray = [...data];
@@ -35,7 +36,9 @@ export default function PooTabPanel({ setData, data, index, notes, color, consis
     };
 
     return (
-        <Card>
+        <Card
+            bg={_cardBackground}
+        >
             <CardHeader>
                 <HStack
                     w="90vw"
