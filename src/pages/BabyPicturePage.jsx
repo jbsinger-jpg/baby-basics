@@ -1,5 +1,5 @@
 // Module Imports
-import { Box, Button, HStack, Icon, Text, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, HStack, Icon, Spinner, Text, VStack, useColorModeValue } from '@chakra-ui/react';
 import { InfoOutlineIcon } from "@chakra-ui/icons";
 import React, { useEffect, useState } from 'react';
 import { motion } from "framer-motion";
@@ -164,44 +164,56 @@ export default function BabyPicturePage() {
                 getUploadedImages={getUploadedImages}
                 onPage
             />
-            <HStack
-                flexWrap={"wrap"}
-                marginTop="20"
-                spacing="10"
-                bg={_screenBackground}
-            >
-                {(babyPictureData && babyPictureData.length) ? babyPictureData.map((picture, index) => {
-                    return (
-                        <PictureRow
-                            key={index}
-                            picture={picture}
-                            index={index}
-                            handleDeleteBabyPicture={handleDeleteBabyPicture}
-                            handleConfirmation={handleConfirmation}
-                        />
-                    );
-                })
-                    :
-                    <Box
-                        w="100%"
-                        h="100%"
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                    >
-                        <motion.div
-                            whileHover={{ scale: 1.2 }}
+            {!babyPictureData ?
+                <Box
+                    alignItems="center"
+                    justifyContent="center"
+                    h={"100vh"}
+                    w={"100vw"}
+                    display="flex"
+                >
+                    <Spinner size="xl" />
+                </Box>
+                :
+                <HStack
+                    flexWrap={"wrap"}
+                    marginTop="20"
+                    spacing="10"
+                    bg={_screenBackground}
+                >
+                    {(babyPictureData && babyPictureData.length) ? babyPictureData.map((picture, index) => {
+                        return (
+                            <PictureRow
+                                key={index}
+                                picture={picture}
+                                index={index}
+                                handleDeleteBabyPicture={handleDeleteBabyPicture}
+                                handleConfirmation={handleConfirmation}
+                            />
+                        );
+                    })
+                        :
+                        <Box
+                            w="100%"
+                            h="100%"
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
                         >
-                            <HStack>
-                                <Icon as={InfoOutlineIcon} />
-                                <Text>
-                                    No Pictures of this Age and Tag Combination
-                                </Text>
-                            </HStack>
-                        </motion.div>
-                    </Box>
-                }
-            </HStack>
+                            <motion.div
+                                whileHover={{ scale: 1.2 }}
+                            >
+                                <HStack>
+                                    <Icon as={InfoOutlineIcon} />
+                                    <Text>
+                                        No Pictures of this Age and Tag Combination
+                                    </Text>
+                                </HStack>
+                            </motion.div>
+                        </Box>
+                    }
+                </HStack>
+            }
         </Box >
     );
 }

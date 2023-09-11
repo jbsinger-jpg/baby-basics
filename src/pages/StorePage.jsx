@@ -1,7 +1,6 @@
 // module imports
-import { Box, TabPanel, TabPanels, Tabs, useColorModeValue, useMediaQuery } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Box, Spinner, TabPanel, TabPanels, Tabs, useColorModeValue, useMediaQuery } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 
 // relative imports
 import { auth, firestore } from '../firebaseConfig';
@@ -215,88 +214,104 @@ export default function StorePage() {
             w={screenWidth}
             overflowX="hidden"
         >
-            <Tabs
-                align='start'
-                variant='enclosed'
-                index={tabIndex}
-                bg={_screenBackground}
-                orientation={isLargerThan768 ? "horizontal" : "vertical"}
-                isFitted={true}
-                w="95vw"
-            >
-                <TabPanels>
-                    <TabPanel>
-                        <ClothingDataTabPanel
-                            clothingData={clothingData}
-                            clothingDataLoaded={isClothingDataLoading}
-                            tabIndex={tabIndex}
-                        />
-                    </TabPanel>
-                    <TabPanel>
-                        <FoodDataTabPanel
-                            foodData={foodData}
-                            isFoodDataLoading={isFoodDataLoading}
-                            tabIndex={tabIndex}
-                        />
-                    </TabPanel>
-                    <TabPanel>
-                        <DiaperDataTabPanel
-                            diaperData={diaperData}
-                            isDiapersLoading={isDiapersLoading}
-                            tabIndex={tabIndex}
-                        />
-                    </TabPanel>
-                    <TabPanel>
-                        <VitaminDataTabPanel
-                            vitaminData={vitaminData}
-                            vitaminDataIsLoading={vitaminDataIsLoading}
-                            tabIndex={tabIndex}
-                        />
-                    </TabPanel>
-                    <TabPanel>
-                        <MaternalDataTabPanel
-                            maternialData={maternialData}
-                            maternialDataLoading={maternialDataIsLoading}
-                            tabIndex={tabIndex}
-                        />
-                    </TabPanel>
-                    <TabPanel>
-                        <FormulaDataTabPanel
-                            formulaData={formulaData}
-                            formulaDataIsLoading={formulaDataIsLoading}
-                            tabIndex={tabIndex}
-                        />
-                    </TabPanel>
-                    <TabPanel>
-                        <ToysDataTabPanel
-                            toyData={toyData}
-                            toyDataIsLoading={toyDataIsLoading}
-                            tabIndex={tabIndex}
-                        />
-                    </TabPanel>
-                    <TabPanel>
-                        <MonitorsDataTabPanel
-                            monitorData={monitorData}
-                            monitorDataIsLoading={monitorDataIsLoading}
-                            tabIndex={tabIndex}
-                        />
-                    </TabPanel>
-                    <TabPanel>
-                        <SeatsTabPanel
-                            seatData={seatData}
-                            seatDataIsLoading={seatDataIsLoading}
-                            tabIndex={tabIndex}
-                        />
-                    </TabPanel>
-                    <TabPanel>
-                        <StrollersDataTabPanel
-                            strollerData={strollerData}
-                            strollerDataIsLoading={strollerDataIsLoading}
-                            tabIndex={tabIndex}
-                        />
-                    </TabPanel>
-                </TabPanels>
-            </Tabs>
+            {/* IF CONTENT IS LOADING DISPLAY SPINNER ICON */}
+            {!clothingData || !foodData || !diaperData || !maternialData || !formulaData || !toyData || !monitorData || !seatData || !strollerData || !vitaminData ?
+                <Box
+                    alignItems="center"
+                    justifyContent="center"
+                    h={screenHeight}
+                    w={screenWidth}
+                    display="flex"
+                >
+                    <Spinner size="xl" />
+                </Box>
+                :
+                <>
+                    <Tabs
+                        align='start'
+                        variant='enclosed'
+                        index={tabIndex}
+                        bg={_screenBackground}
+                        orientation={isLargerThan768 ? "horizontal" : "vertical"}
+                        isFitted={true}
+                        w="95vw"
+                    >
+                        <TabPanels>
+                            <TabPanel>
+                                <ClothingDataTabPanel
+                                    clothingData={clothingData}
+                                    clothingDataLoaded={isClothingDataLoading}
+                                    tabIndex={tabIndex}
+                                />
+                            </TabPanel>
+                            <TabPanel>
+                                <FoodDataTabPanel
+                                    foodData={foodData}
+                                    isFoodDataLoading={isFoodDataLoading}
+                                    tabIndex={tabIndex}
+                                />
+                            </TabPanel>
+                            <TabPanel>
+                                <DiaperDataTabPanel
+                                    diaperData={diaperData}
+                                    isDiapersLoading={isDiapersLoading}
+                                    tabIndex={tabIndex}
+                                />
+                            </TabPanel>
+                            <TabPanel>
+                                <VitaminDataTabPanel
+                                    vitaminData={vitaminData}
+                                    vitaminDataIsLoading={vitaminDataIsLoading}
+                                    tabIndex={tabIndex}
+                                />
+                            </TabPanel>
+                            <TabPanel>
+                                <MaternalDataTabPanel
+                                    maternialData={maternialData}
+                                    maternialDataLoading={maternialDataIsLoading}
+                                    tabIndex={tabIndex}
+                                />
+                            </TabPanel>
+                            <TabPanel>
+                                <FormulaDataTabPanel
+                                    formulaData={formulaData}
+                                    formulaDataIsLoading={formulaDataIsLoading}
+                                    tabIndex={tabIndex}
+                                />
+                            </TabPanel>
+                            <TabPanel>
+                                <ToysDataTabPanel
+                                    toyData={toyData}
+                                    toyDataIsLoading={toyDataIsLoading}
+                                    tabIndex={tabIndex}
+                                />
+                            </TabPanel>
+                            <TabPanel>
+                                <MonitorsDataTabPanel
+                                    monitorData={monitorData}
+                                    monitorDataIsLoading={monitorDataIsLoading}
+                                    tabIndex={tabIndex}
+                                />
+                            </TabPanel>
+                            <TabPanel>
+                                <SeatsTabPanel
+                                    seatData={seatData}
+                                    seatDataIsLoading={seatDataIsLoading}
+                                    tabIndex={tabIndex}
+                                />
+                            </TabPanel>
+                            <TabPanel>
+                                <StrollersDataTabPanel
+                                    strollerData={strollerData}
+                                    strollerDataIsLoading={strollerDataIsLoading}
+                                    tabIndex={tabIndex}
+                                />
+                            </TabPanel>
+                        </TabPanels>
+                    </Tabs>
+                </>
+            }
+
             <FloatingActionButtons
                 currentUser={currentUser}
                 setSearchBarIsOpen={setSearchBarIsOpen}

@@ -4,7 +4,7 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Woman2Icon from '@mui/icons-material/Woman2';
 import { Box, HStack, IconButton, useColorModeValue, useMediaQuery } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 // relative imports
 import AnimatedButton from "../components/animated/AnimatedTrimesterButton";
@@ -48,9 +48,7 @@ export default function MaternalResourcesPage() {
   const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
   const [cardRotated, setCardRotated] = useState(false);
   const [isLargerThan1300] = useMediaQuery("(min-width: 1300px)");
-
   const [progressConfirmed, setProgressConfirmed] = useState(false);
-  const [recommendationData, setRecommendationData] = useState([]);
 
   const handleSearchPlacesDialogOpen = () => {
     setSearchPlaces(true);
@@ -103,17 +101,6 @@ export default function MaternalResourcesPage() {
     setSymptomsButtonPressed(false);
   };
 
-  const handleJustifyContent = () => {
-    if (stage && !cardRotated) {
-      return "space-evenly";
-    }
-    else if (stage) {
-      return "space-between";
-    }
-
-    return "center";
-  };
-
   return (
     <Box bg={_screenBackground} paddingTop="2" h={isLargerThan1300 || cardRotated ? "100vh" : "100%"}>
       <HStack alignItems="start" w="100vw" paddingLeft="5" spacing="5" marginTop="5" paddingBottom="10">
@@ -145,11 +132,13 @@ export default function MaternalResourcesPage() {
       </HStack>
       <Box
         flexWrap="wrap"
-        justifyContent={handleJustifyContent()}
+        justifyContent={"space-between"}
         alignItems="center"
         display="flex"
         flexDirection={isLargerThan1300 || cardRotated ? "row" : "column"}
-        w="100%"
+        w="100vw"
+        px="2"
+
       >
         {stage &&
           <IconButton
