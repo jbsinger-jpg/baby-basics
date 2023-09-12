@@ -514,7 +514,6 @@ export default function SearchBarAlertDialog({
             clothingRef = await clothingRef.where(clothingOptions[i].dbField, clothingOptions[i].operator, clothingOptions[i].operand);
         }
 
-
         clothingRef.get().then((querySnapshot => {
             querySnapshot.docs.forEach(doc => {
                 clothingData.push({ ...doc.data() });
