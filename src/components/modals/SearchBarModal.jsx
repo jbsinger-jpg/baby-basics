@@ -277,6 +277,7 @@ export default function SearchBarAlertDialog({
     // monitor
     const [monitorBrand, setMonitorBrand] = useState(null);
     const [monitorPrice, setMonitorPrice] = useState(null);
+
     const monitorOptions = [
         { value: "Sekery", label: "Sekery", key: 0 },
         { value: "VTech", label: "VTech", key: 1 },
@@ -286,6 +287,7 @@ export default function SearchBarAlertDialog({
         { value: "Nanit", label: "Nanit", key: 5 },
         { value: "IFamily", label: "IFamily", key: 6 },
     ];
+
     const getMonitorSearchBarItems = () => {
         return (
             <VStack display="flex" alignItems={"start"}>
@@ -311,12 +313,14 @@ export default function SearchBarAlertDialog({
     // seat
     const [seatBrand, setSeatBrand] = useState(null);
     const [seatPrice, setSeatPrice] = useState(null);
+
     const seatOptions = [
         { value: "Graco", label: "Graco", key: 0 },
         { value: "Evenflo", label: "Evenflo", key: 1 },
         { value: "MESA", label: "MESA", key: 2 },
         { value: "Chicco", label: "Chicco", key: 3 },
     ];
+
     const getSeatSearchBarItems = () => {
         return (
             <VStack display="flex" alignItems={"start"}>
@@ -339,9 +343,11 @@ export default function SearchBarAlertDialog({
             </VStack>
         );
     };
+
     // stroller
     const [strollerBrand, setStrollerBrand] = useState(null);
     const [strollerPrice, setStrollerPrice] = useState(null);
+
     const strollerOptions = [
         { value: "Graco", label: "Graco", key: 0 },
         { value: "Baby Trend", label: "Baby Trend", key: 1 },
@@ -351,6 +357,7 @@ export default function SearchBarAlertDialog({
         { value: "BOB Gear", label: "BOB Gear", key: 5 },
         { value: "Joolz", label: "Joolz", key: 6 },
     ];
+
     const getStrollerSearchBarItems = () => {
         return (
             <VStack display="flex" alignItems={"start"}>
@@ -379,6 +386,7 @@ export default function SearchBarAlertDialog({
         { value: "Nature Made", label: "Nature Made", key: 0 },
         { value: "One A Day", label: "One A Day", key: 1 },
     ];
+
     const [vitaminBrand, setVitaminBrand] = useState(null);
     const [vitaminPrice, setVitaminPrice] = useState(null);
 
