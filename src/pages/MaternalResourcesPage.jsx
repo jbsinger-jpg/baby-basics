@@ -132,7 +132,7 @@ export default function MaternalResourcesPage() {
       </HStack>
       <Box
         flexWrap="wrap"
-        justifyContent={"space-between"}
+        justifyContent={!initialStage ? "center" : "space-between"}
         alignItems="center"
         display="flex"
         flexDirection={isLargerThan1300 || cardRotated ? "row" : "column"}
