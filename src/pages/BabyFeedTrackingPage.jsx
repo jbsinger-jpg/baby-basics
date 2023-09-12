@@ -7,7 +7,6 @@ import { screenBackground } from '../defaultStyle';
 import { auth, firestore } from '../firebaseConfig';
 import FloatingActionButtonsDiaperTracking from '../components/floatingActionButtons/FloatingActionButtonsDiaperTracking';
 import Timer from '../components/Timer';
-import LoadingPageSpinner from '../components/LoadingPageSpinner';
 
 export default function BabyFeedTrackingPage({ setSearchBarIsOpen }) {
     const [tabIndex, setTabIndex] = useState(0);
@@ -259,10 +258,15 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen }) {
                         >
 
                             {!breastFeedingRows ?
-                                <LoadingPageSpinner
-                                    height="100vw"
-                                    width="100vw"
-                                />
+                                <Box
+                                    alignItems="center"
+                                    justifyContent="center"
+                                    h="100%"
+                                    w="100%"
+                                    display="flex"
+                                >
+                                    <Spinner size="xl" />
+                                </Box>
                                 :
                                 <>
                                     <HStack
@@ -322,10 +326,15 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen }) {
                     </TabPanel>
                     <TabPanel>
                         {!bottleFeedingRows ?
-                            <LoadingPageSpinner
-                                height="100vw"
-                                width="100vw"
-                            />
+                            <Box
+                                alignItems="center"
+                                justifyContent="center"
+                                h="100%"
+                                w="100%"
+                                display="flex"
+                            >
+                                <Spinner size="xl" />
+                            </Box>
                             :
                             <VStack
                                 alignItems="start"
@@ -378,7 +387,15 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen }) {
                             alignItems="start"
                         >
                             {!pumpFeedingRows ?
-                                <LoadingPageSpinner height="100vh" width="100vw" />
+                                <Box
+                                    alignItems="center"
+                                    justifyContent="center"
+                                    h="100%"
+                                    w="100%"
+                                    display="flex"
+                                >
+                                    <Spinner size="xl" />
+                                </Box>
                                 :
                                 <>
                                     <HStack

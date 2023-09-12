@@ -1,11 +1,9 @@
 // Module Imports
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useColorModeValue } from '@chakra-ui/color-mode';
 import { Box, VStack } from '@chakra-ui/layout';
 import { Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/tabs';
-import { Avatar, AvatarBadge, AvatarGroup, Badge, Button, Heading, HStack, Text, Tooltip } from '@chakra-ui/react';
-import { CheckIcon, CloseIcon } from '@chakra-ui/icons';
 import PregnantWomanOutlinedIcon from '@mui/icons-material/PregnantWomanOutlined';
 import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
 import EventIcon from '@mui/icons-material/Event';
@@ -18,12 +16,10 @@ import { screenBackground } from '../defaultStyle';
 import FloatingActionButtonsUser from '../components/floatingActionButtons/FloatingActionButtonsUser';
 import BabyPicturePage from './BabyPicturePage';
 import StyledSelect from '../components/StyledSelect';
-import { auth, firestore } from '../firebaseConfig';
-import { useCollectionDataOnce } from 'react-firebase-hooks/firestore';
-import Context from '../context/Context';
 import ScreeningPage from './ScreeningPage';
 import FloatingActionButtonContainer from '../components/floatingActionButtons/FloatingActionButtonContainer';
 import ColorModeToggleButton from '../components/ColorModeToggleButton';
+import ChatPage from './ChatPage';
 
 export default function LandingPage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
@@ -36,60 +32,7 @@ export default function LandingPage() {
         { key: 2, value: "chatWithPeeps", label: "Chat with People" },
     ];
 
-    const [socialPageOption, setSocialPageOption] = useState("pictures");
-    const [, setAlertDialogUser] = useState(null);
-    const [, setAlertDialogVisible] = useState(false);
-
-    const currentUser = auth.currentUser;
-    const [userDataPendingFriends] = useCollectionDataOnce(firestore.collection('users').doc(currentUser?.uid).collection("pendingFriends"), { idField: 'id' });
-    const [userDataConfirmedFriends] = useCollectionDataOnce(firestore.collection('users').doc(currentUser?.uid).collection("confirmedFriends"), { idField: 'id' });
-    const [groups] = useCollectionDataOnce(firestore.collection('groups'), { idField: 'id' });
-    const { setData: setUser } = useContext(Context);
-
-
-    const handleDMPress = (user) => {
-        setUser(user.email);
-        navigate("/message");
-    };
-
-    const handleFriendConfirmation = (user) => {
-        setAlertDialogUser(user);
-        setAlertDialogVisible(true);
-    };
-
-    const handleForumButtonPress = (groupAlias, groupId) => {
-        localStorage.setItem("gid", groupId);
-        localStorage.setItem("pageData", groupAlias);
-
-        if (groupAlias)
-            navigate(`/forum_${groupAlias}`);
-        else {
-            console.log("Could not redirect to the forum page wanted.");
-        }
-    };
-
-    const handleGroupStatus = (groupUsers) => {
-        const userExists = groupUsers.some((user) => user.id === auth?.currentUser?.uid);
-
-        if (userExists) {
-            return (
-                <Tooltip label="In Group">
-                    <Badge colorScheme='green'>
-                        <CheckIcon />
-                    </Badge>
-                </Tooltip>
-            );
-        }
-
-        return (
-            <Tooltip label="Not In Group">
-                <Badge colorScheme='red'>
-                    <CloseIcon />
-                </Badge>
-            </Tooltip>
-        );
-    };
-
+    const [socialPageOption, setSocialPageOption] = useState("chatWithPeeps");
     const navigate = useNavigate();
 
     const informationPanelOptions = [
@@ -210,117 +153,7 @@ export default function LandingPage() {
                             <ScreeningPage />
                         }
                         {socialPageOption === "chatWithPeeps" &&
-                            <Tabs
-                                align='start'
-                                variant='enclosed'
-                                h="85vh"
-                                isFitted
-                                orientation='vertical'
-                            >
-                                <TabList>
-                                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                                        Forums
-                                    </Tab>
-                                    <Tab _selected={{ color: 'white', bg: 'blackAlpha.400' }}>
-                                        DM
-                                    </Tab>
-                                </TabList>
-                                <TabPanels>
-                                    <TabPanel>
-                                        <VStack
-                                            h="60vh"
-                                            alignItems="start"
-                                            justifyContent="space-between"
-                                        >
-                                            <HStack
-                                                justifyContent="space-between"
-                                                w="80vw"
-                                            >
-                                                {groups && groups.slice(0, 2).map(group => {
-                                                    return (
-                                                        <Button variant="unstyled" onClick={() => handleForumButtonPress(group.alias, group.id)} key={group.name}>
-                                                            <Text>{group.name}</Text>
-                                                            <HStack justifyContent="space-between" w="250px">
-                                                                <AvatarGroup size='md' max={3}>
-                                                                    {group.users && group.users.map(user => {
-                                                                        return (<Avatar key={user.id} name={user.full_name} />);
-                                                                    })}
-                                                                </AvatarGroup>
-                                                                {handleGroupStatus(group.users)}
-                                                            </HStack>
-                                                        </Button>
-                                                    );
-                                                })}
-                                            </HStack>
-                                            <HStack
-                                                justifyContent="space-between"
-                                                w="80vw"
-                                            >
-                                                {groups && groups.slice(-2).map(group => {
-                                                    return (
-                                                        <Button variant="unstyled" onClick={() => handleForumButtonPress(group.alias, group.id)} key={group.name}>
-                                                            <Text>{group.name}</Text>
-                                                            <HStack justifyContent="space-between" w="250px">
-                                                                <AvatarGroup size='md' max={3}>
-                                                                    {group.users && group.users.map(user => {
-                                                                        return (<Avatar key={user.id} name={user.full_name} />);
-                                                                    })}
-                                                                </AvatarGroup>
-                                                                {handleGroupStatus(group.users)}
-                                                            </HStack>
-                                                        </Button>
-                                                    );
-                                                })}
-                                            </HStack>
-                                        </VStack>
-                                    </TabPanel>
-                                    <TabPanel>
-                                        <HStack
-                                            h="80vh"
-                                            alignItems="start"
-                                            justifyContent="space-evenly"
-                                        >
-                                            <VStack>
-                                                <Heading size="small">Pending Friends</Heading>
-                                                {userDataPendingFriends && userDataPendingFriends.map(user => {
-                                                    return (
-                                                        <Button variant="unstyled" onClick={() => handleFriendConfirmation(user)} key={user.id}>
-                                                            <HStack>
-                                                                <Avatar name={user.full_name} bg="orange">
-                                                                    <AvatarBadge boxSize='1.25em' bg='green.500' />
-                                                                </Avatar>
-                                                                <VStack spacing="-0.5" alignItems="start">
-                                                                    <Text>{user.full_name}</Text>
-                                                                    <Text>Online</Text>
-                                                                </VStack>
-                                                            </HStack>
-                                                        </Button>
-
-                                                    );
-                                                })}
-                                            </VStack>
-                                            <VStack>
-                                                <Heading size="small">Confirmed Friends</Heading>
-                                                {userDataConfirmedFriends && userDataConfirmedFriends.map(user => {
-                                                    return (
-                                                        <Button variant="unstyled" onClick={() => handleDMPress(user)} key={user.id}>
-                                                            <HStack>
-                                                                <Avatar name={user.full_name} bg="orange">
-                                                                    <AvatarBadge boxSize='1.25em' bg='green.500' />
-                                                                </Avatar>
-                                                                <VStack spacing="-0.5" alignItems="start">
-                                                                    <Text>{user.full_name}</Text>
-                                                                    <Text>Online</Text>
-                                                                </VStack>
-                                                            </HStack>
-                                                        </Button>
-                                                    );
-                                                })}
-                                            </VStack>
-                                        </HStack>
-                                    </TabPanel>
-                                </TabPanels>
-                            </Tabs>
+                            <ChatPage />
                         }
                     </TabPanel>
                     <TabPanel>

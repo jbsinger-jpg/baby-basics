@@ -18,7 +18,6 @@ import StrollersDataTabPanel from '../components/tabPanels/StrollersDataTabPanel
 import { screenBackground } from '../defaultStyle';
 import VitaminDataTabPanel from '../components/tabPanels/VitaminDataTabPanel';
 import BabyImagesModal from '../components/modals/BabyImagesModal';
-import LoadingPageSpinner from '../components/LoadingPageSpinner';
 
 export default function StorePage() {
     // hooks
@@ -78,6 +77,8 @@ export default function StorePage() {
     const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
 
     const [babyImagesModalIsOpen, setBabyImagesModalIsOpen] = useState(false);
+
+    const [searchInProgress, setSearchInProgress] = useState(false);
 
     // // initialize the page with the data from the data base
     useEffect(() => {
@@ -216,11 +217,16 @@ export default function StorePage() {
             overflowX="hidden"
         >
             {/* IF CONTENT IS LOADING DISPLAY SPINNER ICON */}
-            {!clothingData || !foodData || !diaperData || !maternialData || !formulaData || !toyData || !monitorData || !seatData || !strollerData || !vitaminData ?
-                <LoadingPageSpinner
-                    height={screenHeight}
-                    width={screenWidth}
-                />
+            {!clothingData || !foodData || !diaperData || !maternialData || !formulaData || !toyData || !monitorData || !seatData || !strollerData || !vitaminData || searchInProgress ?
+                <Box
+                    alignItems="center"
+                    justifyContent="center"
+                    h="100%"
+                    w="100%"
+                    display="flex"
+                >
+                    <Spinner size="xl" />
+                </Box>
                 :
                 <>
                     <Tabs
@@ -307,7 +313,6 @@ export default function StorePage() {
                     </Tabs>
                 </>
             }
-
             <FloatingActionButtons
                 currentUser={currentUser}
                 setSearchBarIsOpen={setSearchBarIsOpen}
@@ -324,6 +329,7 @@ export default function StorePage() {
                 setVitaminData={setVitaminData}
                 tabIndex={tabIndex}
                 setTabIndex={setTabIndex}
+                setSearchInProgress={setSearchInProgress}
             />
             <FriendRequestModal
                 alertDialogVisible={alertDialogVisible}

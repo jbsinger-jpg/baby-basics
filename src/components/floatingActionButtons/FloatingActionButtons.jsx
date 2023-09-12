@@ -22,7 +22,8 @@ export default function FloatingActionButtons({
     setStrollerData,
     setVitaminData,
     tabIndex,
-    setTabIndex
+    setTabIndex,
+    setSearchInProgress,
 }) {
 
 
@@ -43,6 +44,7 @@ export default function FloatingActionButtons({
                 setVitaminData={setVitaminData}
                 tabIndex={tabIndex}
                 setTabIndex={setTabIndex}
+                setSearchInProgress={setSearchInProgress}
             />
             <VStack>
                 <ColorModeToggleButton />

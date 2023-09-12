@@ -86,8 +86,6 @@ export default function ScreeningPage() {
                     duration: 9000,
                     isClosable: true,
                 });
-
-                navigate("/");
             })
             .catch(error => {
                 toast({
@@ -204,7 +202,7 @@ export default function ScreeningPage() {
                                 isLoading={answerButtonIsLoading}
                                 ml={3}
                             >
-                                Go Home
+                                Submit
                             </Button>
                         </AlertDialogFooter>
                     </AlertDialogContent>

@@ -1,4 +1,4 @@
-import { Box, Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, Input, VStack, useColorModeValue, useMediaQuery, useToast } from '@chakra-ui/react';
+import { Box, Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, Input, Spinner, VStack, useColorModeValue, useMediaQuery, useToast } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import ChatIcon from '@mui/icons-material/Chat';
 import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
@@ -51,7 +51,7 @@ export default function MilestonePage() {
     const [childGender, setChildGender] = useState("");
     const [childRelationship, setChildRelationship] = useState("");
     const [childBirth, setChildBirth] = useState("");
-    const [childOptions, setChildOptions] = useState([]);
+    const [childOptions, setChildOptions] = useState(null);
     const [selectedChildOption, setSelectedChildOption] = useState("");
     const [drawerSubmissionButtonLoading, setDrawerSubmissionButtonLoading] = useState(false);
     const [popoverVisible, setPopoverVisible] = useState(false);
@@ -186,7 +186,7 @@ export default function MilestonePage() {
     }, [auth?.currentUser?.uid]);
 
     return (
-        <Box bg={_screenBackground} paddingTop="2" h={"100%"}>
+        <Box bg={_screenBackground} paddingTop="2" h={"100%"} w={"100%"}>
             <FloatingActionButtonsBabyInfo
                 setProgressModalVisible={setProgressModalVisible}
                 selectedAgeRange={selectedAge}
@@ -222,97 +222,108 @@ export default function MilestonePage() {
                     }}
                 />
             </HStack>
-            <Box
-                flexWrap="wrap"
-                spacing="4"
-                justifyContent="center"
-                alignItems="center"
-                display="flex"
-                flexDirection={isLargerThan1300 ? "row" : "column"}
-            >
-                <AnimatedCard
-                    flippedCard={flippedMotorCard}
-                    setFlippedCard={setFlippedMotorCard}
-                    cardIcon={AccessibilityNewIcon}
-                    cardButtonPressed={motorButtonPressed}
-                    setCardButtonPressed={setMotorButtonPressed}
-                    selectedCardData={selectedMotorMilestones}
-                    title={"Milestones"}
-                    applyCheckbox={auth?.currentUser?.uid ? true : false}
-                    selectedAge={selectedAge}
-                    progressConfirmed={progressConfirmed}
-                    setProgressConfirmed={setProgressConfirmed}
-                    childOption={selectedChildOption}
-                />
-                <AnimatedCard
-                    flippedCard={flippedCommunicationCard}
-                    setFlippedCard={setFlippedCommunicationCard}
-                    cardIcon={ChatIcon}
-                    cardButtonPressed={communicationButtonPressed}
-                    setCardButtonPressed={setCommunicationButtonPressed}
-                    selectedCardData={selectedCommunicationMilestones}
-                    title={"Communication"}
-                    applyCheckbox={auth?.currentUser?.uid ? true : false}
-                    selectedAge={selectedAge}
-                    progressConfirmed={progressConfirmed}
-                    setProgressConfirmed={setProgressConfirmed}
-                    childOption={selectedChildOption}
-                />
-                <AnimatedCard
-                    flippedCard={flippedFeedingCard}
-                    setFlippedCard={setFlippedFeedingCard}
-                    cardIcon={LocalCafeIcon}
-                    cardButtonPressed={feedingButtonPressed}
-                    setCardButtonPressed={setFeedingButtonPressed}
-                    selectedCardData={selectedFeedingMilestones}
-                    title={"Feeding"}
-                    applyCheckbox={auth?.currentUser?.uid ? true : false}
-                    selectedAge={selectedAge}
-                    progressConfirmed={progressConfirmed}
-                    setProgressConfirmed={setProgressConfirmed}
-                    childOption={selectedChildOption}
-                />
-                <AnimatedCard
-                    flippedCard={flippedSensoryCard}
-                    setFlippedCard={setFlippedSensoryCard}
-                    cardIcon={HearingIcon}
-                    cardButtonPressed={sensoryButtonPressed}
-                    setCardButtonPressed={setSensoryButtonPressed}
-                    selectedCardData={selectedSensoryMilestones}
-                    title={"Sensory"}
-                    applyCheckbox={auth?.currentUser?.uid ? true : false}
-                    selectedAge={selectedAge}
-                    progressConfirmed={progressConfirmed}
-                    setProgressConfirmed={setProgressConfirmed}
-                    childOption={selectedChildOption}
-                />
-                <AnimatedCard
-                    flippedCard={flippedResourcesCard}
-                    setFlippedCard={setFlippedResourcesCard}
-                    cardButtonPressed={resourceButtonPressed}
-                    setCardButtonPressed={setResourceButtonPressed}
-                    selectedCardData={selectedHyperLinks}
-                    videos={videos}
-                    title={"Resources"}
-                    selectedAge={selectedAge}
-                    progressConfirmed={progressConfirmed}
-                    setProgressConfirmed={setProgressConfirmed}
-                    childOption={selectedChildOption}
-                />
-                <AnimatedCard
-                    flippedCard={flippedActivitiesCard}
-                    setFlippedCard={setFlippedActivitiesCard}
-                    cardIcon={AbcIcon}
-                    cardButtonPressed={activitiesButtonPressed}
-                    setCardButtonPressed={setActivitiesButtonPressed}
-                    selectedCardData={selectedActivities}
-                    title={"Potential Activities"}
-                    selectedAge={selectedAge}
-                    progressConfirmed={progressConfirmed}
-                    setProgressConfirmed={setProgressConfirmed}
-                    childOption={selectedChildOption}
-                />
-            </Box>
+            {!childOptions ?
+                <Box
+                    alignItems="center"
+                    justifyContent="center"
+                    h="100%"
+                    w="100%"
+                    display="flex"
+                >
+                    <Spinner size="xl" />
+                </Box> :
+                <Box
+                    flexWrap="wrap"
+                    spacing="4"
+                    justifyContent="center"
+                    alignItems="center"
+                    display="flex"
+                    flexDirection={isLargerThan1300 ? "row" : "column"}
+                >
+                    <AnimatedCard
+                        flippedCard={flippedMotorCard}
+                        setFlippedCard={setFlippedMotorCard}
+                        cardIcon={AccessibilityNewIcon}
+                        cardButtonPressed={motorButtonPressed}
+                        setCardButtonPressed={setMotorButtonPressed}
+                        selectedCardData={selectedMotorMilestones}
+                        title={"Milestones"}
+                        applyCheckbox={auth?.currentUser?.uid ? true : false}
+                        selectedAge={selectedAge}
+                        progressConfirmed={progressConfirmed}
+                        setProgressConfirmed={setProgressConfirmed}
+                        childOption={selectedChildOption}
+                    />
+                    <AnimatedCard
+                        flippedCard={flippedCommunicationCard}
+                        setFlippedCard={setFlippedCommunicationCard}
+                        cardIcon={ChatIcon}
+                        cardButtonPressed={communicationButtonPressed}
+                        setCardButtonPressed={setCommunicationButtonPressed}
+                        selectedCardData={selectedCommunicationMilestones}
+                        title={"Communication"}
+                        applyCheckbox={auth?.currentUser?.uid ? true : false}
+                        selectedAge={selectedAge}
+                        progressConfirmed={progressConfirmed}
+                        setProgressConfirmed={setProgressConfirmed}
+                        childOption={selectedChildOption}
+                    />
+                    <AnimatedCard
+                        flippedCard={flippedFeedingCard}
+                        setFlippedCard={setFlippedFeedingCard}
+                        cardIcon={LocalCafeIcon}
+                        cardButtonPressed={feedingButtonPressed}
+                        setCardButtonPressed={setFeedingButtonPressed}
+                        selectedCardData={selectedFeedingMilestones}
+                        title={"Feeding"}
+                        applyCheckbox={auth?.currentUser?.uid ? true : false}
+                        selectedAge={selectedAge}
+                        progressConfirmed={progressConfirmed}
+                        setProgressConfirmed={setProgressConfirmed}
+                        childOption={selectedChildOption}
+                    />
+                    <AnimatedCard
+                        flippedCard={flippedSensoryCard}
+                        setFlippedCard={setFlippedSensoryCard}
+                        cardIcon={HearingIcon}
+                        cardButtonPressed={sensoryButtonPressed}
+                        setCardButtonPressed={setSensoryButtonPressed}
+                        selectedCardData={selectedSensoryMilestones}
+                        title={"Sensory"}
+                        applyCheckbox={auth?.currentUser?.uid ? true : false}
+                        selectedAge={selectedAge}
+                        progressConfirmed={progressConfirmed}
+                        setProgressConfirmed={setProgressConfirmed}
+                        childOption={selectedChildOption}
+                    />
+                    <AnimatedCard
+                        flippedCard={flippedResourcesCard}
+                        setFlippedCard={setFlippedResourcesCard}
+                        cardButtonPressed={resourceButtonPressed}
+                        setCardButtonPressed={setResourceButtonPressed}
+                        selectedCardData={selectedHyperLinks}
+                        videos={videos}
+                        title={"Resources"}
+                        selectedAge={selectedAge}
+                        progressConfirmed={progressConfirmed}
+                        setProgressConfirmed={setProgressConfirmed}
+                        childOption={selectedChildOption}
+                    />
+                    <AnimatedCard
+                        flippedCard={flippedActivitiesCard}
+                        setFlippedCard={setFlippedActivitiesCard}
+                        cardIcon={AbcIcon}
+                        cardButtonPressed={activitiesButtonPressed}
+                        setCardButtonPressed={setActivitiesButtonPressed}
+                        selectedCardData={selectedActivities}
+                        title={"Potential Activities"}
+                        selectedAge={selectedAge}
+                        progressConfirmed={progressConfirmed}
+                        setProgressConfirmed={setProgressConfirmed}
+                        childOption={selectedChildOption}
+                    />
+                </Box>
+            }
             <BabyProgressModal
                 progressModalVisible={progressModalVisible}
                 setProgressModalVisible={setProgressModalVisible}

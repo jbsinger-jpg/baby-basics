@@ -22,7 +22,8 @@ export default function SearchBarAlertDialog({
     setStrollerData,
     setVitaminData,
     tabIndex,
-    setTabIndex
+    setTabIndex,
+    setSearchInProgress,
 }) {
     // food
     const [stageOption, setStageOption] = useState(null);
@@ -520,6 +521,7 @@ export default function SearchBarAlertDialog({
             });
 
             setClothingData(clothingData);
+            setSearchInProgress(false);
         }));
 
         if (!clothingSize && !clothingType && !clothingPrice && !clothingGender && !clothingBrand) {
@@ -532,6 +534,7 @@ export default function SearchBarAlertDialog({
 
                     const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
                     setClothingData(uniqueArray);
+                    setSearchInProgress(false);
                 });
         }
     };
@@ -566,6 +569,7 @@ export default function SearchBarAlertDialog({
             });
 
             setDiaperData(diaperData);
+            setSearchInProgress(false);
         }));
 
         if (!diaperPrice && !diaperSize && !diaperBrand) {
@@ -578,6 +582,7 @@ export default function SearchBarAlertDialog({
 
                     const uniqueArray = [...new Set(options.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
                     setDiaperData(uniqueArray);
+                    setSearchInProgress(false);
                 });
         }
     };
@@ -607,6 +612,7 @@ export default function SearchBarAlertDialog({
             });
 
             setMaternalData(maternalData);
+            setSearchInProgress(false);
         }));
 
         if (!maternalBrand && !maternalPrice) {
@@ -619,6 +625,7 @@ export default function SearchBarAlertDialog({
 
                     const uniqueArray = [...new Set(maternalData.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
                     setMaternalData(uniqueArray);
+                    setSearchInProgress(false);
                 });
         }
 
@@ -649,6 +656,7 @@ export default function SearchBarAlertDialog({
             });
 
             setFormulaData(formulaData);
+            setSearchInProgress(false);
         }));
 
         if (!formulaBrand && !formulaPrice) {
@@ -661,6 +669,7 @@ export default function SearchBarAlertDialog({
 
                     const uniqueArray = [...new Set(formulaData.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
                     setFormulaData(uniqueArray);
+                    setSearchInProgress(false);
                 });
         }
 
@@ -691,6 +700,7 @@ export default function SearchBarAlertDialog({
             });
 
             setToyData(toyData);
+            setSearchInProgress(false);
         }));
 
         if (!toyBrand && !toyPrice) {
@@ -703,6 +713,7 @@ export default function SearchBarAlertDialog({
 
                     const uniqueArray = [...new Set(toyData.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
                     setToyData(uniqueArray);
+                    setSearchInProgress(false);
                 });
         }
     };
@@ -732,6 +743,7 @@ export default function SearchBarAlertDialog({
             });
 
             setMonitorData(monitorData);
+            setSearchInProgress(false);
         }));
 
         if (!monitorBrand && !monitorPrice) {
@@ -744,6 +756,7 @@ export default function SearchBarAlertDialog({
 
                     const uniqueArray = [...new Set(monitorData.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
                     setMonitorData(uniqueArray);
+                    setSearchInProgress(false);
                 });
         }
     };
@@ -773,6 +786,7 @@ export default function SearchBarAlertDialog({
             });
 
             setStrollerData(strollerData);
+            setSearchInProgress(false);
         }));
 
         if (!strollerBrand && !strollerPrice) {
@@ -785,6 +799,7 @@ export default function SearchBarAlertDialog({
 
                     const uniqueArray = [...new Set(strollerData.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
                     setStrollerData(uniqueArray);
+                    setSearchInProgress(false);
                 });
         }
     };
@@ -814,6 +829,7 @@ export default function SearchBarAlertDialog({
             });
 
             setSeatData(seatData);
+            setSearchInProgress(false);
         }));
 
         if (!seatBrand && !seatPrice) {
@@ -826,6 +842,7 @@ export default function SearchBarAlertDialog({
 
                     const uniqueArray = [...new Set(seatData.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
                     setSeatData(uniqueArray);
+                    setSearchInProgress(false);
                 });
         }
     };
@@ -855,6 +872,7 @@ export default function SearchBarAlertDialog({
             });
 
             setVitaminData(vitaminData);
+            setSearchInProgress(false);
         }));
 
         if (!vitaminBrand && !vitaminPrice) {
@@ -867,6 +885,7 @@ export default function SearchBarAlertDialog({
 
                     const uniqueArray = [...new Set(vitaminData.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
                     setVitaminData(uniqueArray);
+                    setSearchInProgress(false);
                 });
         }
     };
@@ -929,6 +948,8 @@ export default function SearchBarAlertDialog({
     };
 
     const handleGenericSearch = () => {
+        setSearchInProgress(true);
+
         if (searchTabIndex === 0) {
             return handleClothingSearch();
         }

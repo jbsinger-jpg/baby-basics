@@ -1,6 +1,6 @@
 // module imports
 import { SearchIcon } from '@chakra-ui/icons';
-import { Box, HStack, Heading, IconButton, Input, Text, Textarea, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, HStack, Heading, IconButton, Input, Spinner, Text, Textarea, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import React, { useState, useRef, useEffect } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import 'firebase/compat/auth';
@@ -148,17 +148,26 @@ function ForumMessagePage() {
                 </HStack>
             </Box>
             <div style={{ height: `calc(100vh - 240px)`, overflowY: 'auto' }} ref={messageBoxRef}>
-                {(messages && sortedMessages) &&
-                    sortedMessages
-                        .map((msg, index) => {
-                            return (
-                                <ChatMessage
-                                    key={index}
-                                    message={msg}
-                                    fontSize={fontSize}
-                                />
-                            );
-                        })
+                {(messages && sortedMessages) ?
+                    sortedMessages.map((msg, index) => {
+                        return (
+                            <ChatMessage
+                                key={index}
+                                message={msg}
+                                fontSize={fontSize}
+                            />
+                        );
+                    })
+                    :
+                    <Box
+                        alignItems="center"
+                        justifyContent="center"
+                        w="100%"
+                        h="100%"
+                        display="flex"
+                    >
+                        <Spinner size="xl" />
+                    </Box>
                 }
             </div>
             <form onSubmit={sendMessage}>

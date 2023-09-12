@@ -1,5 +1,5 @@
 // module imports
-import { Box, HStack, Heading, Text, Textarea, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, HStack, Heading, Spinner, Text, Textarea, VStack, useColorModeValue } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React, { useState, useRef, useContext, useEffect } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
@@ -117,17 +117,26 @@ function DirectMessagePage() {
                 </VStack>
             </Box>
             <div style={{ height: `calc(100vh - 240px)`, overflowY: 'auto' }} ref={messageBoxRef}>
-                {(chatRoomMessagesRecieved && chatRoomMessagesSent) &&
-                    generateMessages()
-                        .map((msg) => {
-                            return (
-                                <DMChatMessage
-                                    key={msg.id}
-                                    message={msg}
-                                    fontSize={fontSize}
-                                />
-                            );
-                        })
+                {(chatRoomMessagesRecieved && chatRoomMessagesSent) ?
+                    generateMessages().map((msg) => {
+                        return (
+                            <DMChatMessage
+                                key={msg.id}
+                                message={msg}
+                                fontSize={fontSize}
+                            />
+                        );
+                    })
+                    :
+                    <Box
+                        alignItems="center"
+                        justifyContent="center"
+                        w="100%"
+                        h="100%"
+                        display="flex"
+                    >
+                        <Spinner size="xl" />
+                    </Box>
                 }
             </div>
             <form onSubmit={sendMessage}>
@@ -156,7 +165,7 @@ function DirectMessagePage() {
                     </HStack>
                 </Box>
             </form>
-        </Box >
+        </Box>
     );
 }
 

@@ -11,7 +11,6 @@ import BabyImagesModal from '../components/modals/BabyImagesModal';
 import FloatingActionButtonsBabyImages from '../components/floatingActionButtons/FloatingActionButtonsBabyImages';
 import StyledSelect from '../components/StyledSelect';
 import PictureRow from '../components/componentRows/PictureRow';
-import LoadingPageSpinner from '../components/LoadingPageSpinner';
 
 export default function BabyPicturePage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
@@ -166,10 +165,15 @@ export default function BabyPicturePage() {
                 onPage
             />
             {!babyPictureData ?
-                <LoadingPageSpinner
-                    height="100vh"
-                    width="100vw"
-                />
+                <Box
+                    alignItems="center"
+                    justifyContent="center"
+                    h="100%"
+                    w="100%"
+                    display="flex"
+                >
+                    <Spinner size="xl" />
+                </Box>
                 :
                 <HStack
                     flexWrap={"wrap"}
