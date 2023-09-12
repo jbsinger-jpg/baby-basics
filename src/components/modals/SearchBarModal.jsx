@@ -29,11 +29,13 @@ export default function SearchBarAlertDialog({
     const [stageOption, setStageOption] = useState(null);
     const [foodPrice, setFoodPrice] = useState(null);
     const [foodBrand, setFoodBrand] = useState(null);
+
     const stageOptions = [
         { value: "1", label: "1", key: 0 },
         { value: "2", label: "2", key: 1 },
         { value: "3", label: "3", key: 2 },
     ];
+
     const foodOptions = [
         { value: "Plum Organics", label: "Plum Organics", key: 0 },
         { value: "Happy Baby", label: "Happy Baby", key: 1 },
@@ -42,6 +44,7 @@ export default function SearchBarAlertDialog({
         { value: "Gerber", label: "Gerber", key: 4 },
         { value: "Sprouts", label: "Sprouts", key: 5 },
     ];
+
     const getFoodSearchBarItems = () => {
         return (
             <VStack display="flex" alignItems={"start"}>
@@ -75,16 +78,19 @@ export default function SearchBarAlertDialog({
     const [clothingPrice, setClothingPrice] = useState(null);
     const [clothingSize, setClothingSize] = useState(null);
     const [clothingType, setClothingType] = useState(null);
+
     const genderOptions = [
         { value: "boy", label: "boy", key: 0 },
         { value: "girl", label: "girl", key: 1 },
     ];
+
     const brandOptions = [
         { value: "Carters", label: "Carters", key: 0 },
         { value: "Gerber", label: "Gerber", key: 1 },
         { value: "Renotemy", label: "Renotemy", key: 2 },
         { value: "Burt's Bees Baby", label: "Burt's Bees Baby", key: 3 },
     ];
+
     const clothingOptions = [
         { value: "footie", label: "footie", key: 0 },
         { value: "shirt", label: "shirt", key: 1 },
@@ -94,6 +100,7 @@ export default function SearchBarAlertDialog({
         { value: "sunsuit", label: "sunsuit", key: 5 },
         { value: "dress", label: "dress", key: 6 },
     ];
+
     const getClothingSearchBarItems = () => {
         return (
             <VStack display="flex" alignItems={"start"} width="100%">
@@ -137,11 +144,13 @@ export default function SearchBarAlertDialog({
     const [diaperBrand, setDiaperBrand] = useState(null);
     const [diaperPrice, setDiaperPrice] = useState(null);
     const [diaperSize, setDiaperSize] = useState(null);
+
     const diaperOptions = [
         { value: "Pampers", label: "Pampers", key: 0 },
         { value: "Huggies", label: "Huggies", key: 1 },
         { value: "Luvs", label: "Luvs", key: 2 },
     ];
+
     const getDiaperSearchBarItems = () => {
         return (
             <VStack display="flex" alignItems={"start"}>
@@ -172,9 +181,11 @@ export default function SearchBarAlertDialog({
             </VStack>
         );
     };
+
     // maternal
     const [maternalBrand, setMaternalBrand] = useState(null);
     const [maternalPrice, setMaternalPrice] = useState(null);
+
     const maternalOptions = [
         { value: "Ekouaer", label: "Ekouaer", key: 0 },
         { value: "Bearsland", label: "Bearsland", key: 1 },
@@ -188,6 +199,7 @@ export default function SearchBarAlertDialog({
         { value: "Medela", label: "Medela", key: 9 },
         { value: "Bellababy", label: "Bellababy", key: 10 },
     ];
+
     const getMaternalSearchBarItems = () => {
         return (
             <VStack display="flex" alignItems={"start"}>
@@ -210,15 +222,18 @@ export default function SearchBarAlertDialog({
             </VStack>
         );
     };
+
     // formula
     const [formulaPrice, setFormulaPrice] = useState(null);
     const [formulaBrand, setFormulaBrand] = useState(null);
+
     const formulaOptions = [
         { value: "Similac", label: "Similac", key: 0 },
         { value: "Enfamil", label: "Enfamil", key: 1 },
         { value: "Nutramigen", label: "Nutramigen", key: 2 },
         { value: "HeyValue", label: "HeyValue", key: 3 },
     ];
+
     const getFormulaSearchBarItems = () => {
         return (
             <VStack display="flex" alignItems={"start"}>
@@ -241,9 +256,11 @@ export default function SearchBarAlertDialog({
             </VStack>
         );
     };
+
     // toy
     const [toyBrand, setToyBrand] = useState(null);
     const [toyPrice, setToyPrice] = useState(null);
+
     const toyOptions = [
         { value: "toytoy", label: "toytoy", key: 0 },
         { value: "TOY Life", label: "TOY Life", key: 1 },
@@ -252,6 +269,7 @@ export default function SearchBarAlertDialog({
         { value: "SSK", label: "SSK", key: 4 },
         { value: "beetoy", label: "beetoy", key: 5 },
     ];
+
     const getToySearchBarItems = () => {
         return (
             <VStack display="flex" alignItems={"start"}>
@@ -274,6 +292,7 @@ export default function SearchBarAlertDialog({
             </VStack>
         );
     };
+
     // monitor
     const [monitorBrand, setMonitorBrand] = useState(null);
     const [monitorPrice, setMonitorPrice] = useState(null);
@@ -310,6 +329,7 @@ export default function SearchBarAlertDialog({
             </VStack>
         );
     };
+
     // seat
     const [seatBrand, setSeatBrand] = useState(null);
     const [seatPrice, setSeatPrice] = useState(null);
@@ -425,6 +445,7 @@ export default function SearchBarAlertDialog({
         { key: 8, value: "Seats", label: "Seats" },
         { key: 9, value: "Strollers", label: "Strollers" },
     ];
+
     const [selectedCategory, setSelectedCategory] = useState(options[tabIndex]?.value);
     const [searchTabIndex, setSearchTabIndex] = useState(tabIndex);
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
