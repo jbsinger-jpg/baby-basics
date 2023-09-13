@@ -10,7 +10,7 @@ import EventIcon from '@mui/icons-material/Event';
 import PendingIcon from '@mui/icons-material/Pending';
 
 // Relative Imports
-import HomePage from './StorePage';
+import StorePage from './StorePage';
 import FabTemplate from '../components/floatingActionButtons/StandardFab';
 import { screenBackground } from '../defaultStyle';
 import FloatingActionButtonsUser from '../components/floatingActionButtons/FloatingActionButtonsUser';
@@ -157,7 +157,7 @@ export default function LandingPage() {
                         }
                     </TabPanel>
                     <TabPanel>
-                        <HomePage />
+                        <StorePage />
                     </TabPanel>
                 </TabPanels>
             </Tabs>

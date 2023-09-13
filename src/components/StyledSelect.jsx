@@ -6,7 +6,7 @@ import React from 'react';
 // none
 
 export default function StyledSelect({ value, onChange, options, w, marginBottom, marginTop, paddingLeft, isRequired, removeNullOption }) {
-    const _optionColor = useColorModeValue("#E6FFFA", "#1A202C");
+    const _optionColor = useColorModeValue("#f0f0f0", "#1A202C");
 
     return (
         <Select
