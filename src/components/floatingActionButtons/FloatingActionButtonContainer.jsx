@@ -9,6 +9,8 @@ export default function FloatingActionButtonContainer({ children, left }) {
             // positional arguments
             right={left ? null : "2"}
             left={left ? "0" : null}
+            pl={left && "2"}
+            pb="5"
         // end positional arguments
         >
             {children}

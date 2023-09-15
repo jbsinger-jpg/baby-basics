@@ -26,7 +26,7 @@ export default function AnimatedCard({
     childOption,
 }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
-    const linkColor = useColorModeValue("blue.500", "blue.200");
+    const linkColor = useColorModeValue("blue.100", "blue.200");
     const MotionIcon = motion(Icon);
     const MotionBox = motion(Box);
     const [selectedVideo, setSelectedVideo] = useState(null);

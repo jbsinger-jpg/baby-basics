@@ -74,11 +74,13 @@ export default function PictureRow({ picture, index, handleDeleteBabyPicture, ha
                                 >
                                     <Tag
                                         variant="outline"
+                                        color="wheat"
                                     >
                                         Age
                                     </Tag>
                                     <Tag
                                         variant="outline"
+                                        color="wheat"
                                     >
                                         Tag
                                     </Tag>
