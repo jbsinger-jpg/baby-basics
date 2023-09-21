@@ -1,14 +1,23 @@
 import { CloseIcon } from '@chakra-ui/icons';
 import { Box, Card, CardBody, CardHeader, FormLabel, HStack, Heading, IconButton, Text, useColorModeValue } from '@chakra-ui/react';
 import { cardBackground } from '../../defaultStyle';
+import { auth, firestore } from '../../firebaseConfig';
 
-export default function BreastRowTabPanel({ leftBreastTime, rightBreastTime, alias, index, timeStamp, data, setData }) {
+export default function BreastRowTabPanel({ leftBreastTime, rightBreastTime, alias, index, timeStamp, data, setData, selectedChildOption }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
 
     const handleDeleteRow = () => {
         const updatedArray = [...data];
         updatedArray.splice(index, 1);
         setData(updatedArray);
+
+        firestore.collection("users")
+            .doc(auth.currentUser.uid)
+            .collection("children")
+            .doc(selectedChildOption)
+            .collection("breast-feed-tracking")
+            .doc(alias)
+            .delete();
     };
 
     return (

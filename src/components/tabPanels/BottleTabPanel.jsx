@@ -2,14 +2,23 @@ import { CloseIcon } from '@chakra-ui/icons';
 import { Box, Card, CardBody, CardHeader, FormLabel, HStack, Heading, IconButton, Text, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
 import { cardBackground } from '../../defaultStyle';
+import { auth, firestore } from '../../firebaseConfig';
 
-export default function BottleTabPanel({ data, setData, index, alias, timeStamp, fluidOunces }) {
+export default function BottleTabPanel({ data, setData, index, alias, timeStamp, fluidOunces, selectedChildOption }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
 
     const handleDeleteRow = () => {
         const updatedArray = [...data];
         updatedArray.splice(index, 1);
         setData(updatedArray);
+
+        firestore.collection("users")
+            .doc(auth.currentUser.uid)
+            .collection("children")
+            .doc(selectedChildOption)
+            .collection("bottle-feed-tracking")
+            .doc(alias)
+            .delete();
     };
 
     return (

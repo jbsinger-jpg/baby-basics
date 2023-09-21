@@ -8,7 +8,7 @@ import { auth, firestore } from '../firebaseConfig';
 import FloatingActionButtonsDiaperTracking from '../components/floatingActionButtons/FloatingActionButtonsDiaperTracking';
 import Timer from '../components/Timer';
 
-export default function BabyFeedTrackingPage({ setSearchBarIsOpen }) {
+export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChildOption }) {
     const [tabIndex, setTabIndex] = useState(0);
     const [breastFeedingRows, setBreastFeedingRows] = useState(null);
     const [pumpFeedingRows, setPumpFeedingRows] = useState(null);
@@ -38,6 +38,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen }) {
     const breastAliasDuplicateFound = async () => {
         return await firestore.collection("users")
             .doc(auth?.currentUser?.uid)
+            .collection("children")
+            .doc(selectedChildOption)
             .collection("breast-feed-tracking")
             .where("alias", "==", String(breastRowAlias).trim())
             .get()
@@ -49,6 +51,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen }) {
     const bottleAliasDuplicateFound = async () => {
         return await firestore.collection("users")
             .doc(auth?.currentUser?.uid)
+            .collection("children")
+            .doc(selectedChildOption)
             .collection("bottle-feed-tracking")
             .where("alias", "==", String(bottleRowAlias).trim())
             .get()
@@ -60,6 +64,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen }) {
     const pumpAliasDuplicateFound = async () => {
         return await firestore.collection("users")
             .doc(auth?.currentUser?.uid)
+            .collection("children")
+            .doc(selectedChildOption)
             .collection("pump-feed-tracking")
             .where("alias", "==", String(pumpRowAlias).trim())
             .get()
@@ -68,7 +74,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen }) {
             });
     };
 
-    const generateBottleRow = async (event) => {
+    const addBottleRow = async (event) => {
         event.preventDefault();
         const breastDuplicate = await breastAliasDuplicateFound();
         const bottleDuplicate = await bottleAliasDuplicateFound();
@@ -76,10 +82,16 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen }) {
 
         if (tabIndex === 0) {
             if (!breastDuplicate) {
-                firestore.collection("users").doc(auth.currentUser.uid).collection("breast-feed-tracking").doc(String(breastRowAlias).trim()).set({
-                    timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
-                    alias: String(breastRowAlias).trim(),
-                });
+                firestore.collection("users")
+                    .doc(auth.currentUser.uid)
+                    .collection("children")
+                    .doc(selectedChildOption)
+                    .collection("breast-feed-tracking")
+                    .doc(String(breastRowAlias).trim())
+                    .set({
+                        timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
+                        alias: String(breastRowAlias).trim(),
+                    });
 
                 setBreastFeedingRows([...breastFeedingRows, {
                     timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
@@ -100,11 +112,17 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen }) {
         }
         else if (tabIndex === 1) {
             if (!bottleDuplicate) {
-                firestore.collection("users").doc(auth.currentUser.uid).collection("bottle-feed-tracking").doc(String(bottleRowAlias).trim()).set({
-                    timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
-                    alias: String(bottleRowAlias).trim(),
-                    fluidOunces: Number(bottleRowFluidOunces)
-                });
+                firestore.collection("users")
+                    .doc(auth.currentUser.uid)
+                    .collection("children")
+                    .doc(selectedChildOption)
+                    .collection("bottle-feed-tracking")
+                    .doc(String(bottleRowAlias).trim())
+                    .set({
+                        timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
+                        alias: String(bottleRowAlias).trim(),
+                        fluidOunces: Number(bottleRowFluidOunces)
+                    });
 
                 setBottleFeedingRows([...bottleFeedingRows, {
                     timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
@@ -124,11 +142,17 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen }) {
         }
         else if (tabIndex === 2) {
             if (!pumpDuplicate) {
-                firestore.collection("users").doc(auth.currentUser.uid).collection("pump-feed-tracking").doc(String(pumpRowAlias).trim()).set({
-                    timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
-                    alias: String(pumpRowAlias).trim(),
-                    fluidOunces: Number(pumpFluidOunces)
-                });
+                firestore.collection("users")
+                    .doc(auth.currentUser.uid)
+                    .collection("children")
+                    .doc(selectedChildOption)
+                    .collection("pump-feed-tracking")
+                    .doc(String(pumpRowAlias).trim())
+                    .set({
+                        timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
+                        alias: String(pumpRowAlias).trim(),
+                        fluidOunces: Number(pumpFluidOunces)
+                    });
 
                 setPumpFeedingRows([...pumpFeedingRows, {
                     timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
@@ -193,40 +217,54 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen }) {
     };
 
     useEffect(() => {
-        firestore.collection("users").doc(auth?.currentUser?.uid).collection("breast-feed-tracking").get()
-            .then(snapshot => {
-                let options = [];
-                snapshot.docs.forEach(doc => {
-                    options.push({ ...doc.data() });
+        if (selectedChildOption) {
+            firestore.collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("breast-feed-tracking").get()
+                .then(snapshot => {
+                    let options = [];
+                    snapshot.docs.forEach(doc => {
+                        options.push({ ...doc.data() });
+                    });
+
+                    setBreastFeedingRows(options);
+                    options = [];
                 });
 
-                setBreastFeedingRows(options);
-                options = [];
-            });
+            firestore.collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("bottle-feed-tracking").get()
+                .then(snapshot => {
+                    let options = [];
+                    snapshot.docs.forEach(doc => {
+                        options.push({ ...doc.data() });
+                    });
 
-        firestore.collection("users").doc(auth?.currentUser?.uid).collection("bottle-feed-tracking").get()
-            .then(snapshot => {
-                let options = [];
-                snapshot.docs.forEach(doc => {
-                    options.push({ ...doc.data() });
+                    setBottleFeedingRows(options);
+                    options = [];
                 });
 
-                setBottleFeedingRows(options);
-                options = [];
-            });
+            firestore.collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("pump-feed-tracking")
+                .get().then(snapshot => {
+                    let options = [];
+                    snapshot.docs.forEach(doc => {
+                        options.push({ ...doc.data() });
+                    });
 
-        firestore.collection("users").doc(auth?.currentUser?.uid).collection("pump-feed-tracking").get()
-            .then(snapshot => {
-                let options = [];
-                snapshot.docs.forEach(doc => {
-                    options.push({ ...doc.data() });
+                    setPumpFeedingRows(options);
+                    options = [];
                 });
-
-                setPumpFeedingRows(options);
-                options = [];
-            });
+        }
         // eslint-disable-next-line
-    }, []);
+    }, [selectedChildOption]);
 
     return (
         <>
@@ -291,6 +329,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen }) {
                                                     timeStamp={breastRow.alias}
                                                     data={breastFeedingRows}
                                                     setData={setBreastFeedingRows}
+                                                    selectedChildOption={selectedChildOption}
                                                 />
                                             );
                                         })}
@@ -303,7 +342,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen }) {
                             bottom="0"
                             w="100vw"
                         >
-                            <form onSubmit={generateBottleRow}>
+                            <form onSubmit={addBottleRow}>
                                 <HStack alignItems="end" w="100vw">
                                     <HStack alignItems="end" justifyContent="center" w="80vw">
                                         <FormControl isRequired>
@@ -350,6 +389,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen }) {
                                             alias={bottleRow.alias}
                                             timeStamp={bottleRow.timeStamp}
                                             fluidOunces={bottleRow.fluidOunces}
+                                            selectedChildOption={selectedChildOption}
                                         />
                                     );
                                 })}
@@ -359,7 +399,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen }) {
                                     bottom="0"
                                     w="100vw"
                                 >
-                                    <form onSubmit={generateBottleRow}>
+                                    <form onSubmit={addBottleRow}>
                                         <HStack alignItems="end" w="100vw">
                                             <HStack alignItems="end" justifyContent="center" w="80vw">
                                                 <FormControl isRequired>
@@ -421,6 +461,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen }) {
                                                     data={pumpFeedingRows}
                                                     setData={setPumpFeedingRows}
                                                     fluidOunces={pumpRow.fluidOunces}
+                                                    selectedChildOption={selectedChildOption}
                                                 />
                                             );
                                         })}
@@ -434,7 +475,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen }) {
                             bottom="0"
                             w="100vw"
                         >
-                            <form onSubmit={generateBottleRow}>
+                            <form onSubmit={addBottleRow}>
                                 <HStack alignItems="end" w="100vw">
                                     <HStack alignItems="end" justifyContent="center" w="80vw">
                                         <FormControl isRequired>

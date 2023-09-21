@@ -1,15 +1,26 @@
+// Module imports
 import { CloseIcon } from '@chakra-ui/icons';
 import { Box, Card, CardBody, CardHeader, FormLabel, HStack, Heading, IconButton, Text, useColorModeValue } from '@chakra-ui/react';
-import React from 'react';
-import { cardBackground } from '../../defaultStyle';
 
-export default function PumpRowTabPanel({ alias, index, timeStamp, leftBreastTime, rightBreastTime, data, setData, fluidOunces }) {
+// Relative imports
+import { cardBackground } from '../../defaultStyle';
+import { auth, firestore } from '../../firebaseConfig';
+
+export default function PumpRowTabPanel({ alias, index, timeStamp, leftBreastTime, rightBreastTime, data, setData, fluidOunces, selectedChildOption }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
 
     const handleDeleteRow = () => {
         const updatedArray = [...data];
         updatedArray.splice(index, 1);
         setData(updatedArray);
+
+        firestore.collection("users")
+            .doc(auth.currentUser.uid)
+            .collection("children")
+            .doc(selectedChildOption)
+            .collection("pump-feed-tracking")
+            .doc(alias)
+            .delete();
     };
 
     return (
