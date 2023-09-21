@@ -1,5 +1,6 @@
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, ButtonGroup, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, Input, InputGroup, InputRightAddon, Radio, RadioGroup, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Textarea, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { CloseIcon, Icon } from '@chakra-ui/icons';
 
 import { cardBackground, screenBackground } from '../defaultStyle';
 import FloatingActionButtonsDiaperTracking from '../components/floatingActionButtons/FloatingActionButtonsDiaperTracking';
@@ -7,12 +8,10 @@ import GenericDiaperTrackingTabPanel from '../components/tabPanels/GenericDiaper
 import PooTabPanel from '../components/tabPanels/PooTabPanel';
 import { STATUS, babyPeeColorData, babyPoopColorData, babyPoopConsistencyData } from '../components/staticPageData/baby-color-consistency-info';
 import { auth, firestore } from '../firebaseConfig';
-import { useEffect } from 'react';
 import WaterDropIcon from '../components/staticPageData/WaterDropIcon';
 import PoopIcon from '../components/staticPageData/PoopIcon';
-import { CloseIcon, Icon } from '@chakra-ui/icons';
 
-export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen }) {
+export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen, selectedChildOption }) {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
 
@@ -30,9 +29,9 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
     const [pooTabAlias, setPooTabAlias] = useState("");
     const [dryTabAlias, setDryTabAlias] = useState("");
 
-    const [peeTabData, setPeeTabData] = useState([]);
-    const [pooTabData, setPooTabData] = useState([]);
-    const [dryTabData, setDryTabData] = useState([]);
+    const [peeTabData, setPeeTabData] = useState(null);
+    const [pooTabData, setPooTabData] = useState(null);
+    const [dryTabData, setDryTabData] = useState(null);
 
     // Search bar useStates
     const [peeSearchDateMonth, setPeeSearchDateMonth] = useState("");
@@ -54,7 +53,6 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
     const [drySearchDateDay, setDrySearchDateDay] = useState("");
     const [drySearchDateYear, setDrySearchDateYear] = useState("");
     const [drySearchAlias, setDrySearchAlias] = useState("");
-
 
     const handleTabsChange = (index) => {
         setTabIndex(index);
@@ -186,6 +184,8 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
     const peeTabAliasDuplicateFound = async () => {
         return await firestore.collection("users")
             .doc(auth?.currentUser?.uid)
+            .collection("children")
+            .doc(selectedChildOption)
             .collection("pee-tracking")
             .where("alias", "==", String(peeTabAlias).trim())
             .get()
@@ -197,6 +197,8 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
     const pooTabAliasDuplicateFound = async () => {
         return await firestore.collection("users")
             .doc(auth?.currentUser?.uid)
+            .collection("children")
+            .doc(selectedChildOption)
             .collection("poo-tracking")
             .where("alias", "==", String(pooTabAlias).trim())
             .get()
@@ -208,6 +210,8 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
     const dryTabAliasDuplicateFound = async () => {
         return await firestore.collection("users")
             .doc(auth?.currentUser?.uid)
+            .collection("children")
+            .doc(selectedChildOption)
             .collection("dry-tracking")
             .where("alias", "==", String(dryTabAlias).trim())
             .get()
@@ -221,136 +225,181 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
         const peeDuplicate = await peeTabAliasDuplicateFound();
         const pooDuplicate = await pooTabAliasDuplicateFound();
         const dryDuplicate = await dryTabAliasDuplicateFound();
+        if (selectedChildOption) {
+            if (tabIndex === 0) {
+                if (!peeDuplicate) {
+                    firestore.collection("users")
+                        .doc(auth.currentUser.uid)
+                        .collection("children")
+                        .doc(selectedChildOption)
+                        .collection("pee-tracking")
+                        .doc(String(peeTabAlias).trim()).set({
+                            alias: String(peeTabAlias).trim(),
+                            notes: peeTabNotes,
+                            timeStampDate: new Date().toLocaleDateString(),
+                        });
 
-        if (tabIndex === 0) {
-            if (!peeDuplicate) {
-                firestore.collection("users").doc(auth.currentUser.uid).collection("pee-tracking").doc(String(peeTabAlias).trim()).set({
-                    alias: String(peeTabAlias).trim(),
-                    notes: peeTabNotes,
+                    setPeeTabData(
+                        [...peeTabData, {
+                            alias: String(peeTabAlias).trim(),
+                            notes: peeTabNotes,
+                            timeStampDate: new Date().toLocaleDateString(),
+                            color: colorValue,
+                            colorStatus: getPeeStatusForColor(),
+                        }]
+                    );
+                }
+                else {
+                    toast({
+                        title: 'Unable to add new entry!',
+                        description: "Entry has a duplicate alias!",
+                        status: 'error',
+                        duration: 3000,
+                        isClosable: true,
+                    });
+                }
+            }
+            else if (tabIndex === 1) {
+                let newEntry = {
+                    alias: String(pooTabAlias).trim(),
+                    color: colorValue,
+                    consistency: consistencyValue,
+                    notes: pooTabNotes,
                     timeStampDate: new Date().toLocaleDateString(),
-                });
+                    colorStatus: getStatusForColor(),
+                    consistencyStatus: getStatusForConsistency(),
+                };
 
-                setPeeTabData(
-                    [...peeTabData, {
-                        alias: String(peeTabAlias).trim(),
-                        notes: peeTabNotes,
-                        timeStampDate: new Date().toLocaleDateString(),
-                        color: colorValue,
-                        colorStatus: getPeeStatusForColor(),
-                    }]
-                );
-            }
-            else {
-                toast({
-                    title: 'Unable to add new entry!',
-                    description: "Entry has a duplicate alias!",
-                    status: 'error',
-                    duration: 3000,
-                    isClosable: true,
-                });
-            }
-        }
-        else if (tabIndex === 1) {
-            let newEntry = {
-                alias: String(pooTabAlias).trim(),
-                color: colorValue,
-                consistency: consistencyValue,
-                notes: pooTabNotes,
-                timeStampDate: new Date().toLocaleDateString(),
-                colorStatus: getStatusForColor(),
-                consistencyStatus: getStatusForConsistency(),
-            };
+                if (!pooDuplicate) {
+                    firestore.collection("users")
+                        .doc(auth.currentUser.uid)
+                        .collection("children")
+                        .doc(selectedChildOption)
+                        .collection("poo-tracking")
+                        .doc(String(pooTabAlias).trim()).set({
+                            ...newEntry
+                        });
 
-            if (!pooDuplicate) {
-                firestore.collection("users").doc(auth.currentUser.uid).collection("poo-tracking").doc(String(pooTabAlias).trim()).set({
-                    ...newEntry
-                });
+                    setPooTabData([...pooTabData, newEntry]);
+                }
+                else {
+                    toast({
+                        title: 'Unable to add new entry!',
+                        description: "Entry has a duplicate alias!",
+                        status: 'error',
+                        duration: 3000,
+                        isClosable: true,
+                    });
+                }
+            }
+            else if (tabIndex === 2) {
+                if (!dryDuplicate) {
+                    firestore.collection("users")
+                        .doc(auth.currentUser.uid)
+                        .collection("children")
+                        .doc(selectedChildOption)
+                        .collection("dry-tracking")
+                        .doc(String(dryTabAlias).trim()).set({
+                            alias: String(dryTabAlias).trim(),
+                            notes: dryTabNotes,
+                            timeStampDate: new Date().toLocaleDateString(),
+                        });
 
-                setPooTabData([...pooTabData, newEntry]);
-            }
-            else {
-                toast({
-                    title: 'Unable to add new entry!',
-                    description: "Entry has a duplicate alias!",
-                    status: 'error',
-                    duration: 3000,
-                    isClosable: true,
-                });
-            }
-        }
-        else if (tabIndex === 2) {
-            if (!dryDuplicate) {
-                firestore.collection("users").doc(auth.currentUser.uid).collection("dry-tracking").doc(String(dryTabAlias).trim()).set({
-                    alias: String(dryTabAlias).trim(),
-                    notes: dryTabNotes,
-                    timeStampDate: new Date().toLocaleDateString(),
-                });
-
-                setDryTabData(
-                    [...dryTabData, {
-                        alias: dryTabAlias,
-                        notes: dryTabNotes,
-                        timeStampDate: new Date().toLocaleDateString(),
-                    }]
-                );
-            }
-            else {
-                toast({
-                    title: 'Unable to add new entry!',
-                    description: "Entry has a duplicate alias!",
-                    status: 'error',
-                    duration: 3000,
-                    isClosable: true,
-                });
+                    setDryTabData(
+                        [...dryTabData, {
+                            alias: dryTabAlias,
+                            notes: dryTabNotes,
+                            timeStampDate: new Date().toLocaleDateString(),
+                        }]
+                    );
+                }
+                else {
+                    toast({
+                        title: 'Unable to add new entry!',
+                        description: "Entry has a duplicate alias!",
+                        status: 'error',
+                        duration: 3000,
+                        isClosable: true,
+                    });
+                }
             }
         }
     };
 
     useEffect(() => {
-        firestore.collection("users").doc(auth?.currentUser?.uid).collection("pee-tracking")
-            .get()
-            .then((snapshot) => {
-                let initialData = [];
-                snapshot.docs.forEach(doc => {
-                    initialData.push(doc.data());
+        if (selectedChildOption) {
+            firestore.collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("pee-tracking")
+                .get()
+                .then((snapshot) => {
+                    let initialData = [];
+                    snapshot.docs.forEach(doc => {
+                        initialData.push(doc.data());
+                    });
+                    setPeeTabData(initialData);
                 });
-                setPeeTabData(initialData);
-            });
 
-        firestore.collection("users").doc(auth?.currentUser?.uid).collection("poo-tracking")
-            .get()
-            .then((snapshot) => {
-                let initialData = [];
-                snapshot.docs.forEach(doc => {
-                    initialData.push(doc.data());
+            firestore.collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("poo-tracking")
+                .get()
+                .then((snapshot) => {
+                    let initialData = [];
+                    snapshot.docs.forEach(doc => {
+                        initialData.push(doc.data());
+                    });
+                    setPooTabData(initialData);
                 });
-                setPooTabData(initialData);
-            });
 
-        firestore.collection("users").doc(auth?.currentUser?.uid).collection("dry-tracking")
-            .get()
-            .then((snapshot) => {
-                let initialData = [];
-                snapshot.docs.forEach(doc => {
-                    initialData.push(doc.data());
+            firestore.collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("dry-tracking")
+                .get()
+                .then((snapshot) => {
+                    let initialData = [];
+                    snapshot.docs.forEach(doc => {
+                        initialData.push(doc.data());
+                    });
+                    setDryTabData(initialData);
                 });
-                setDryTabData(initialData);
-            });
-        //eslint-disable-next-line
-    }, [auth?.currentUser?.uid]);
+        }
+    }, [selectedChildOption]);
 
     const handleDeletePeeRow = (index, alias) => {
-        firestore.collection("users").doc(auth?.currentUser?.uid).collection("pee-tracking").doc(alias).delete();
-        const updatedArray = [...peeTabData];
-        updatedArray.splice(index, 1);
-        setPeeTabData(updatedArray);
+        if (selectedChildOption) {
+            firestore.collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("pee-tracking")
+                .doc(alias).delete();
+
+            const updatedArray = [...peeTabData];
+            updatedArray.splice(index, 1);
+            setPeeTabData(updatedArray);
+        }
     };
 
     const handleDeleteDryRow = (index, alias) => {
-        firestore.collection("users").doc(auth?.currentUser?.uid).collection("dry-tracking").doc(alias).delete();
-        const updatedArray = [...dryTabData];
-        updatedArray.splice(index, 1);
-        setDryTabData(updatedArray);
+        if (selectedChildOption) {
+            firestore.collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("dry-tracking")
+                .doc(alias).delete();
+
+            const updatedArray = [...dryTabData];
+            updatedArray.splice(index, 1);
+            setDryTabData(updatedArray);
+        }
     };
 
     const getPeeTabSearchItems = () => {
@@ -426,89 +475,106 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
 
     const generateSearch = async () => {
         // TODO: Double check the dbFields that are being passed in for database search. Not sure if these line up with what is supposed to be seen in firebase.
-        if (tabIndex === 0) {
-            let peeRef = firestore.collection("users").doc(auth?.currentUser?.uid).collection("pee-tracking");
-            let peeQueryFilters = [];
-            let peeData = [];
+        if (selectedChildOption) {
+            if (tabIndex === 0) {
+                let peeRef = firestore.collection("users")
+                    .doc(auth?.currentUser?.uid)
+                    .collection("children")
+                    .doc(selectedChildOption)
+                    .collection("pee-tracking");
 
-            if (peeSearchDateDay && peeSearchDateMonth && peeSearchDateYear) {
-                peeQueryFilters.push({ dbField: "timeStampDate", operator: "==", operand: peeSearchDateMonth + "/" + peeSearchDateDay + "/" + peeSearchDateYear });
+                let peeQueryFilters = [];
+                let peeData = [];
+
+                if (peeSearchDateDay && peeSearchDateMonth && peeSearchDateYear) {
+                    peeQueryFilters.push({ dbField: "timeStampDate", operator: "==", operand: peeSearchDateMonth + "/" + peeSearchDateDay + "/" + peeSearchDateYear });
+                }
+
+                if (peeSearchAlias) {
+                    peeQueryFilters.push({ dbField: "alias", operator: "==", operand: peeSearchAlias });
+                }
+
+                for (let i = 0; i < peeQueryFilters.length; i++) {
+                    peeRef = await peeRef.where(peeQueryFilters[i].dbField, peeQueryFilters[i].operator, peeQueryFilters[i].operand);
+                }
+
+                peeRef.get().then((querySnapshot => {
+                    querySnapshot.docs.forEach(doc => {
+                        peeData.push({ ...doc.data() });
+                    });
+
+                    setPeeTabData(peeData);
+                }));
             }
+            else if (tabIndex === 1) {
+                let pooRef = firestore.collection("users")
+                    .doc(auth?.currentUser?.uid)
+                    .collection("children")
+                    .doc(selectedChildOption)
+                    .collection("poo-tracking");
 
-            if (peeSearchAlias) {
-                peeQueryFilters.push({ dbField: "alias", operator: "==", operand: peeSearchAlias });
+                let pooQueryFilters = [];
+                let pooData = [];
+
+                if (pooSearchDateDay && pooSearchDateMonth && pooSearchDateYear) {
+                    pooQueryFilters.push({ dbField: "timeStampDate", operator: "==", operand: pooSearchDateMonth + "/" + pooSearchDateDay + "/" + pooSearchDateYear });
+                }
+
+                if (pooSearchAlias) {
+                    pooQueryFilters.push({ dbField: "alias", operator: "==", operand: pooSearchAlias });
+                }
+
+                if (pooSearchColor) {
+                    pooQueryFilters.push({ dbField: "color", operator: "==", operand: pooSearchColor });
+                }
+
+                if (pooSearchConsistency) {
+                    pooQueryFilters.push({ dbField: "consistency", operator: "==", operand: pooSearchConsistency });
+                }
+
+
+                for (let i = 0; i < pooQueryFilters.length; i++) {
+                    pooRef = await pooRef.where(pooQueryFilters[i].dbField, pooQueryFilters[i].operator, pooQueryFilters[i].operand);
+                }
+
+                pooRef.get().then((querySnapshot => {
+                    querySnapshot.docs.forEach(doc => {
+                        pooData.push({ ...doc.data() });
+                    });
+
+                    setPooTabData(pooData);
+                }));
             }
+            else if (tabIndex === 2) {
+                let dryRef = firestore.collection("users")
+                    .doc(auth?.currentUser?.uid)
+                    .collection("children")
+                    .doc(selectedChildOption)
+                    .collection("dry-tracking");
 
-            for (let i = 0; i < peeQueryFilters.length; i++) {
-                peeRef = await peeRef.where(peeQueryFilters[i].dbField, peeQueryFilters[i].operator, peeQueryFilters[i].operand);
+                let dryQueryFilters = [];
+                let dryData = [];
+
+                if (drySearchDateDay && drySearchDateMonth && drySearchDateYear) {
+                    dryQueryFilters.push({ dbField: "timeStampDate", operator: "==", operand: drySearchDateMonth + "/" + drySearchDateDay + "/" + drySearchDateYear });
+                }
+
+                if (drySearchAlias) {
+                    dryQueryFilters.push({ dbField: "alias", operator: "==", operand: drySearchAlias });
+                }
+
+                for (let i = 0; i < dryQueryFilters.length; i++) {
+                    dryRef = await dryRef.where(dryQueryFilters[i].dbField, dryQueryFilters[i].operator, dryQueryFilters[i].operand);
+                }
+
+                dryRef.get().then((querySnapshot => {
+                    querySnapshot.docs.forEach(doc => {
+                        dryData.push({ ...doc.data() });
+                    });
+
+                    setDryTabData(dryData);
+                }));
             }
-
-            peeRef.get().then((querySnapshot => {
-                querySnapshot.docs.forEach(doc => {
-                    peeData.push({ ...doc.data() });
-                });
-
-                setPeeTabData(peeData);
-            }));
-        }
-        else if (tabIndex === 1) {
-            let pooRef = firestore.collection("users").doc(auth?.currentUser?.uid).collection("poo-tracking");
-            let pooQueryFilters = [];
-            let pooData = [];
-
-            if (pooSearchDateDay && pooSearchDateMonth && pooSearchDateYear) {
-                pooQueryFilters.push({ dbField: "timeStampDate", operator: "==", operand: pooSearchDateMonth + "/" + pooSearchDateDay + "/" + pooSearchDateYear });
-            }
-
-            if (pooSearchAlias) {
-                pooQueryFilters.push({ dbField: "alias", operator: "==", operand: pooSearchAlias });
-            }
-
-            if (pooSearchColor) {
-                pooQueryFilters.push({ dbField: "color", operator: "==", operand: pooSearchColor });
-            }
-
-            if (pooSearchConsistency) {
-                pooQueryFilters.push({ dbField: "consistency", operator: "==", operand: pooSearchConsistency });
-            }
-
-
-            for (let i = 0; i < pooQueryFilters.length; i++) {
-                pooRef = await pooRef.where(pooQueryFilters[i].dbField, pooQueryFilters[i].operator, pooQueryFilters[i].operand);
-            }
-
-            pooRef.get().then((querySnapshot => {
-                querySnapshot.docs.forEach(doc => {
-                    pooData.push({ ...doc.data() });
-                });
-
-                setPooTabData(pooData);
-            }));
-        }
-        else if (tabIndex === 2) {
-            let dryRef = firestore.collection("users").doc(auth?.currentUser?.uid).collection("dry-tracking");
-            let dryQueryFilters = [];
-            let dryData = [];
-
-            if (drySearchDateDay && drySearchDateMonth && drySearchDateYear) {
-                dryQueryFilters.push({ dbField: "timeStampDate", operator: "==", operand: drySearchDateMonth + "/" + drySearchDateDay + "/" + drySearchDateYear });
-            }
-
-            if (drySearchAlias) {
-                dryQueryFilters.push({ dbField: "alias", operator: "==", operand: drySearchAlias });
-            }
-
-            for (let i = 0; i < dryQueryFilters.length; i++) {
-                dryRef = await dryRef.where(dryQueryFilters[i].dbField, dryQueryFilters[i].operator, dryQueryFilters[i].operand);
-            }
-
-            dryRef.get().then((querySnapshot => {
-                querySnapshot.docs.forEach(doc => {
-                    dryData.push({ ...doc.data() });
-                });
-
-                setDryTabData(dryData);
-            }));
         }
     };
 
