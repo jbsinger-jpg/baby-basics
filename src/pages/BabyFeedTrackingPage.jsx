@@ -294,6 +294,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                 <TabPanels>
                     <TabPanel>
                         <ProgressTabFormatter
+                            TabPanel={BreastRowTabPanel}
                             rows={breastFeedingRows}
                             setRows={setBreastFeedingRows}
                             selectedChildOption={selectedChildOption}
@@ -328,6 +329,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                     </TabPanel>
                     <TabPanel>
                         <ProgressTabFormatter
+                            TabPanel={BottleTabPanel}
                             rows={bottleFeedingRows}
                             setRows={setBottleFeedingRows}
                             selectedChildOption={selectedChildOption}
@@ -362,6 +364,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                     </TabPanel>
                     <TabPanel>
                         <ProgressTabFormatter
+                            TabPanel={PumpRowTabPanel}
                             rows={pumpFeedingRows}
                             setRows={setPumpFeedingRows}
                             selectedChildOption={selectedChildOption}

@@ -5,7 +5,7 @@ import Timer from './Timer';
 import BreastRowTabPanel from './tabPanels/BreastRowTabPanel';
 import MissingDataMessage from './MissingDataMessage';
 
-export default function ProgressTabFormatter({ rows, setRows, selectedChildOption, tabIndex, submittingTimerValues }) {
+export default function ProgressTabFormatter({ rows, setRows, selectedChildOption, tabIndex, submittingTimerValues, TabPanel }) {
     const [leftTeetTimerValue, setLeftTeetTimerValue] = useState(0);
     const [rightTeetTimerValue, setRightTeetTimerValue] = useState(0);
 
@@ -39,10 +39,11 @@ export default function ProgressTabFormatter({ rows, setRows, selectedChildOptio
                         overflowY="auto"
                         h="60vh"
                         w="100vw"
+                        alignItems="start"
                     >
                         {(rows && rows.length) ? rows.map((breastRow, index) => {
                             return (
-                                <BreastRowTabPanel
+                                <TabPanel
                                     leftBreastTime={leftTeetTimerValue}
                                     rightBreastTime={rightTeetTimerValue}
                                     alias={breastRow.alias}

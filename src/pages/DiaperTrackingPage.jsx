@@ -801,7 +801,7 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                     position="fixed"
                     bottom="0"
                     w="100vw"
-                    alignItems="center"
+                    alignItems="start"
                 >
                     <HStack
                         alignItems="end"
@@ -817,8 +817,8 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                         </FormControl>
                     </HStack>
                     <HStack alignItems="start" w="90vw" justifyContent="space-between">
-                        <Button type='submit'>Save</Button>
                         <Button onClick={handleClearNotes}>Clear</Button>
+                        <Button type='submit'>Save</Button>
                     </HStack>
                 </VStack>
             </form>
