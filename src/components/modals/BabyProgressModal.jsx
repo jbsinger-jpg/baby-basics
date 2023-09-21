@@ -1,9 +1,11 @@
+// Module imports
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, FormControl, FormHelperText, FormLabel, HStack, Input, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger, Textarea, VStack, useColorModeValue } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
+
+// Relative imports
 import { cardBackground, screenBackground } from '../../defaultStyle';
 import StyledSelect from '../StyledSelect';
 import { auth, firestore } from '../../firebaseConfig';
-import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 export default function BabyProgressModal({ progressModalVisible, setProgressModalVisible }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
@@ -14,7 +16,7 @@ export default function BabyProgressModal({ progressModalVisible, setProgressMod
     const [progressButtonLoading, setProgressButtonLoading] = useState(false);
     const [selectedAgeOption, setSelectedAgeOption] = useState(null);
     const [selectedTagOption, setSelectedTagOption] = useState(null);
-    const [userTagData] = useCollectionData(firestore.collection("users").doc(auth?.currentUser?.uid).collection("baby_progress").where("age", "==", selectedAgeOption), { idField: "id" });
+    const [userTagData, setUserTagData] = useState(null);
 
     const clearEntries = () => {
         setTag("");
@@ -91,6 +93,17 @@ export default function BabyProgressModal({ progressModalVisible, setProgressMod
         { value: "Neutral", label: "Neutral", key: 2 },
         { value: "Pediatrist", label: "Pediatrist", key: 3 },
     ];
+
+    useEffect(() => {
+        firestore.collection("users").doc(auth?.currentUser?.uid).collection("baby_progress").where("age", "==", selectedAgeOption).get().then(snapshot => {
+            let options = [];
+
+            snapshot.docs.forEach(doc => {
+                options.push(doc.data());
+            });
+            setUserTagData(options);
+        });
+    }, [selectedAgeOption]);
 
     return (
         <AlertDialog

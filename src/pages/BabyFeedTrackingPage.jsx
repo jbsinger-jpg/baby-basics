@@ -1,13 +1,14 @@
-import { Box, Button, FormControl, FormLabel, HStack, Input, Spinner, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
+// Module imports
+import { Button, FormControl, FormLabel, HStack, Input, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
+
+// Relative imports
 import BreastRowTabPanel from '../components/tabPanels/BreastRowTabPanel';
 import PumpRowTabPanel from '../components/tabPanels/PumpRowTabPanel';
 import BottleTabPanel from '../components/tabPanels/BottleTabPanel';
 import { screenBackground } from '../defaultStyle';
 import { auth, firestore } from '../firebaseConfig';
 import FloatingActionButtonsDiaperTracking from '../components/floatingActionButtons/FloatingActionButtonsDiaperTracking';
-import Timer from '../components/Timer';
-import MissingDataMessage from '../components/MissingDataMessage';
 import ProgressTabFormatter from '../components/ProgressTabFormatter';
 
 export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChildOption }) {

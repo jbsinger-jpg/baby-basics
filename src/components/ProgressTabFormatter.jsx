@@ -1,8 +1,6 @@
-import { HStack, Spinner, VStack } from '@chakra-ui/react';
-import React, { useState } from 'react';
-import { Box } from 'victory';
+import { Box, HStack, Spinner, VStack } from '@chakra-ui/react';
+import { useState } from 'react';
 import Timer from './Timer';
-import BreastRowTabPanel from './tabPanels/BreastRowTabPanel';
 import MissingDataMessage from './MissingDataMessage';
 
 export default function ProgressTabFormatter({ rows, setRows, selectedChildOption, tabIndex, submittingTimerValues, TabPanel }) {
