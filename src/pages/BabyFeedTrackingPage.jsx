@@ -7,6 +7,8 @@ import { screenBackground } from '../defaultStyle';
 import { auth, firestore } from '../firebaseConfig';
 import FloatingActionButtonsDiaperTracking from '../components/floatingActionButtons/FloatingActionButtonsDiaperTracking';
 import Timer from '../components/Timer';
+import MissingDataMessage from '../components/MissingDataMessage';
+import ProgressTabFormatter from '../components/ProgressTabFormatter';
 
 export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChildOption }) {
     const [tabIndex, setTabIndex] = useState(0);
@@ -291,52 +293,13 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                 </TabList>
                 <TabPanels>
                     <TabPanel>
-                        <VStack
-                            alignItems="start"
-                        >
-
-                            {!breastFeedingRows ?
-                                <Box
-                                    alignItems="center"
-                                    justifyContent="center"
-                                    h="100%"
-                                    w="100%"
-                                    display="flex"
-                                >
-                                    <Spinner size="xl" />
-                                </Box>
-                                :
-                                <>
-                                    <HStack
-                                        alignItems="start"
-                                        justifyContent="space-evenly"
-                                        w="100vw"
-                                    >
-                                        <Timer title="L" setValue={setLeftTeetTimerValue} pauseTimer={submittingTimerValues} tabIndex={tabIndex} />
-                                        <Timer title="R" setValue={setRightTeetTimerValue} pauseTimer={submittingTimerValues} tabIndex={tabIndex} />
-                                    </HStack>
-                                    <VStack
-                                        overflowY="auto"
-                                        h="60vh"
-                                    >
-                                        {breastFeedingRows && breastFeedingRows.map((breastRow, index) => {
-                                            return (
-                                                <BreastRowTabPanel
-                                                    leftBreastTime={leftTeetTimerValue}
-                                                    rightBreastTime={rightTeetTimerValue}
-                                                    alias={breastRow.alias}
-                                                    index={index}
-                                                    timeStamp={breastRow.alias}
-                                                    data={breastFeedingRows}
-                                                    setData={setBreastFeedingRows}
-                                                    selectedChildOption={selectedChildOption}
-                                                />
-                                            );
-                                        })}
-                                    </VStack>
-                                </>
-                            }
-                        </VStack>
+                        <ProgressTabFormatter
+                            rows={breastFeedingRows}
+                            setRows={setBreastFeedingRows}
+                            selectedChildOption={selectedChildOption}
+                            tabIndex={tabIndex}
+                            submittingTimerValues={submittingTimerValues}
+                        />
                         <VStack
                             position="fixed"
                             bottom="0"
@@ -364,111 +327,47 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                         </VStack>
                     </TabPanel>
                     <TabPanel>
-                        {!bottleFeedingRows ?
-                            <Box
-                                alignItems="center"
-                                justifyContent="center"
-                                h="100%"
-                                w="100%"
-                                display="flex"
-                            >
-                                <Spinner size="xl" />
-                            </Box>
-                            :
-                            <VStack
-                                alignItems="start"
-                                overflowY="auto"
-                                h="60vh"
-                            >
-                                {bottleFeedingRows && bottleFeedingRows.map((bottleRow, index) => {
-                                    return (
-                                        <BottleTabPanel
-                                            data={bottleFeedingRows}
-                                            setData={setBottleFeedingRows}
-                                            index={index}
-                                            alias={bottleRow.alias}
-                                            timeStamp={bottleRow.timeStamp}
-                                            fluidOunces={bottleRow.fluidOunces}
-                                            selectedChildOption={selectedChildOption}
-                                        />
-                                    );
-                                })}
-                                <VStack
-                                    alignItems="start"
-                                    position="fixed"
-                                    bottom="0"
-                                    w="100vw"
-                                >
-                                    <form onSubmit={addBottleRow}>
-                                        <HStack alignItems="end" w="100vw">
-                                            <HStack alignItems="end" justifyContent="center" w="80vw">
-                                                <FormControl isRequired>
-                                                    <FormLabel>
-                                                        Alias
-                                                    </FormLabel>
-                                                    <Input value={getTabAlias()} onChange={handleTabAliasChange} />
-                                                </FormControl>
-                                                <FormControl isRequired>
-                                                    <FormLabel>
-                                                        Fluid Ounces
-                                                    </FormLabel>
-                                                    <Input value={getTabFluidOunces()} onChange={handleFluidOunceChange} />
-                                                </FormControl>
-                                            </HStack>
-                                            <Button type="submit">Submit</Button>
-                                        </HStack>
-                                    </form>
-                                </VStack>
-                            </VStack>
-                        }
-                    </TabPanel>
-                    <TabPanel>
+                        <ProgressTabFormatter
+                            rows={bottleFeedingRows}
+                            setRows={setBottleFeedingRows}
+                            selectedChildOption={selectedChildOption}
+                            tabIndex={tabIndex}
+                        />
                         <VStack
                             alignItems="start"
+                            position="fixed"
+                            bottom="0"
+                            w="100vw"
                         >
-                            {!pumpFeedingRows ?
-                                <Box
-                                    alignItems="center"
-                                    justifyContent="center"
-                                    h="100%"
-                                    w="100%"
-                                    display="flex"
-                                >
-                                    <Spinner size="xl" />
-                                </Box>
-                                :
-                                <>
-                                    <HStack
-                                        alignItems="start"
-                                        justifyContent="space-evenly"
-                                        w="100vw"
-                                    >
-                                        <Timer title="L" setValue={setLeftTeetTimerValue} pauseTimer={submittingTimerValues} tabIndex={tabIndex} />
-                                        <Timer title="R" setValue={setRightTeetTimerValue} pauseTimer={submittingTimerValues} tabIndex={tabIndex} />
+                            <form onSubmit={addBottleRow}>
+                                <HStack alignItems="end" w="100vw">
+                                    <HStack alignItems="end" justifyContent="center" w="80vw">
+                                        <FormControl isRequired>
+                                            <FormLabel>
+                                                Alias
+                                            </FormLabel>
+                                            <Input value={getTabAlias()} onChange={handleTabAliasChange} />
+                                        </FormControl>
+                                        <FormControl isRequired>
+                                            <FormLabel>
+                                                Fluid Ounces
+                                            </FormLabel>
+                                            <Input value={getTabFluidOunces()} onChange={handleFluidOunceChange} />
+                                        </FormControl>
                                     </HStack>
-                                    <VStack
-                                        overflowY="auto"
-                                        h="60vh"
-                                    >
-                                        {pumpFeedingRows && pumpFeedingRows.map((pumpRow, index) => {
-                                            return (
-                                                <PumpRowTabPanel
-                                                    alias={pumpRow.alias}
-                                                    index={index}
-                                                    timeStamp={pumpRow.timeStamp}
-                                                    leftBreastTime={pumpRow.leftBreastTime}
-                                                    rightBreastTime={pumpRow.rightBreastTime}
-                                                    data={pumpFeedingRows}
-                                                    setData={setPumpFeedingRows}
-                                                    fluidOunces={pumpRow.fluidOunces}
-                                                    selectedChildOption={selectedChildOption}
-                                                />
-                                            );
-                                        })}
-                                    </VStack>
-                                </>
-                            }
+                                    <Button type="submit">Submit</Button>
+                                </HStack>
+                            </form>
                         </VStack>
+                    </TabPanel>
+                    <TabPanel>
+                        <ProgressTabFormatter
+                            rows={pumpFeedingRows}
+                            setRows={setPumpFeedingRows}
+                            selectedChildOption={selectedChildOption}
+                            tabIndex={tabIndex}
+                            submittingTimerValues={submittingTimerValues}
+                        />
                         <VStack
                             alignItems="start"
                             position="fixed"

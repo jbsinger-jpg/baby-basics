@@ -1,6 +1,6 @@
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, ButtonGroup, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, Input, InputGroup, InputRightAddon, Radio, RadioGroup, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Textarea, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
-import { CloseIcon, Icon } from '@chakra-ui/icons';
+import { CloseIcon, Icon, InfoOutlineIcon } from '@chakra-ui/icons';
 
 import { cardBackground, screenBackground } from '../defaultStyle';
 import FloatingActionButtonsDiaperTracking from '../components/floatingActionButtons/FloatingActionButtonsDiaperTracking';
@@ -10,6 +10,7 @@ import { STATUS, babyPeeColorData, babyPoopColorData, babyPoopConsistencyData } 
 import { auth, firestore } from '../firebaseConfig';
 import WaterDropIcon from '../components/staticPageData/WaterDropIcon';
 import PoopIcon from '../components/staticPageData/PoopIcon';
+import MissingDataMessage from '../components/MissingDataMessage';
 
 export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen, selectedChildOption }) {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
@@ -656,7 +657,7 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                                     overflowY="auto"
                                 >
                                     <Button onClick={showColorationDialog}>Color</Button>
-                                    {peeTabData && peeTabData.length && peeTabData.map((peeRow, index) => {
+                                    {(peeTabData && peeTabData.length) ? peeTabData.map((peeRow, index) => {
                                         return (
                                             <GenericDiaperTrackingTabPanel
                                                 alias={peeRow.alias}
@@ -668,7 +669,10 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                                                 index={index}
                                             />
                                         );
-                                    })}
+                                    })
+                                        :
+                                        <MissingDataMessage />
+                                    }
                                 </VStack>
                             </TabPanel>
                             <TabPanel>
@@ -678,7 +682,7 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                                     pr="2"
                                 >
                                     <Button onClick={showColorationDialog}>Color and/or Consistency</Button>
-                                    {pooTabData && pooTabData.length && pooTabData.map((pooRow, index) => {
+                                    {(pooTabData && pooTabData.length) ? pooTabData.map((pooRow, index) => {
                                         return (
                                             <PooTabPanel
                                                 alias={pooRow.alias}
@@ -695,7 +699,10 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                                                 consistencyStatus={pooRow.consistencyStatus}
                                             />
                                         );
-                                    })}
+                                    })
+                                        :
+                                        <MissingDataMessage />
+                                    }
                                 </VStack>
                             </TabPanel>
                             <TabPanel>
@@ -704,7 +711,7 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                                     pl="2"
                                     pr="2"
                                 >
-                                    {dryTabData && dryTabData.length && dryTabData.map((dryRow, index) => {
+                                    {dryTabData && dryTabData.length ? dryTabData.map((dryRow, index) => {
                                         return (
                                             <GenericDiaperTrackingTabPanel
                                                 alias={dryRow.alias}
@@ -716,7 +723,10 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                                                 index={index}
                                             />
                                         );
-                                    })}
+                                    })
+                                        :
+                                        <MissingDataMessage />
+                                    }
                                 </VStack>
                             </TabPanel>
                         </TabPanels>
