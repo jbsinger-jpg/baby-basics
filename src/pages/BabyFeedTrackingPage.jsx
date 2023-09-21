@@ -305,6 +305,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                         <VStack
                             position="fixed"
                             bottom="0"
+                            left="0"
+                            pl="10"
                             w="100vw"
                         >
                             <form onSubmit={addBottleRow}>
@@ -337,9 +339,10 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                             tabIndex={tabIndex}
                         />
                         <VStack
-                            alignItems="start"
                             position="fixed"
                             bottom="0"
+                            left="0"
+                            pl="10"
                             w="100vw"
                         >
                             <form onSubmit={addBottleRow}>
@@ -373,9 +376,10 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                             submittingTimerValues={submittingTimerValues}
                         />
                         <VStack
-                            alignItems="start"
                             position="fixed"
                             bottom="0"
+                            left="0"
+                            pl="10"
                             w="100vw"
                         >
                             <form onSubmit={addBottleRow}>

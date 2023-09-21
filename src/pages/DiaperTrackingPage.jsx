@@ -226,6 +226,7 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
         const peeDuplicate = await peeTabAliasDuplicateFound();
         const pooDuplicate = await pooTabAliasDuplicateFound();
         const dryDuplicate = await dryTabAliasDuplicateFound();
+
         if (selectedChildOption) {
             if (tabIndex === 0) {
                 if (!peeDuplicate) {
