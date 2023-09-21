@@ -15,7 +15,7 @@ export default function Timer({ title, setValue, tabIndex }) {
             interval = setInterval(() => {
                 setSeconds((prevSeconds) => prevSeconds + 1);
                 if (setValue) {
-                    setValue(seconds + 1);
+                    setValue((prevSeconds) => prevSeconds + 1);
                 }
             }, 1000);
         } else if (!isActive && seconds !== 0) {
@@ -45,6 +45,9 @@ export default function Timer({ title, setValue, tabIndex }) {
 
     const handleReset = () => {
         setSeconds(0);
+        if (setValue)
+            setValue(0);
+
         setIsActive(false);
     };
 

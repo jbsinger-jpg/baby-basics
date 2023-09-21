@@ -77,7 +77,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
             });
     };
 
-    const addBottleRow = async (event) => {
+    const addTabRow = async (event) => {
         event.preventDefault();
         const breastDuplicate = await breastAliasDuplicateFound();
         const bottleDuplicate = await bottleAliasDuplicateFound();
@@ -298,6 +298,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                             TabPanel={BreastRowTabPanel}
                             rows={breastFeedingRows}
                             setRows={setBreastFeedingRows}
+                            setLeftTeetTimerValue={setLeftTeetTimerValue}
+                            setRightTeetTimerValue={setRightTeetTimerValue}
                             selectedChildOption={selectedChildOption}
                             tabIndex={tabIndex}
                             submittingTimerValues={submittingTimerValues}
@@ -309,7 +311,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                             pl="10"
                             w="100vw"
                         >
-                            <form onSubmit={addBottleRow}>
+                            <form onSubmit={addTabRow}>
                                 <HStack alignItems="end" w="100vw">
                                     <HStack alignItems="end" justifyContent="center" w="80vw">
                                         <FormControl isRequired>
@@ -334,6 +336,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                         <ProgressTabFormatter
                             TabPanel={BottleTabPanel}
                             rows={bottleFeedingRows}
+                            setLeftTeetTimerValue={setLeftTeetTimerValue}
+                            setRightTeetTimerValue={setRightTeetTimerValue}
                             setRows={setBottleFeedingRows}
                             selectedChildOption={selectedChildOption}
                             tabIndex={tabIndex}
@@ -345,7 +349,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                             pl="10"
                             w="100vw"
                         >
-                            <form onSubmit={addBottleRow}>
+                            <form onSubmit={addTabRow}>
                                 <HStack alignItems="end" w="100vw">
                                     <HStack alignItems="end" justifyContent="center" w="80vw">
                                         <FormControl isRequired>
@@ -371,6 +375,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                             TabPanel={PumpRowTabPanel}
                             rows={pumpFeedingRows}
                             setRows={setPumpFeedingRows}
+                            setLeftTeetTimerValue={setLeftTeetTimerValue}
+                            setRightTeetTimerValue={setRightTeetTimerValue}
                             selectedChildOption={selectedChildOption}
                             tabIndex={tabIndex}
                             submittingTimerValues={submittingTimerValues}
@@ -382,7 +388,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                             pl="10"
                             w="100vw"
                         >
-                            <form onSubmit={addBottleRow}>
+                            <form onSubmit={addTabRow}>
                                 <HStack alignItems="end" w="100vw">
                                     <HStack alignItems="end" justifyContent="center" w="80vw">
                                         <FormControl isRequired>

@@ -1,12 +1,10 @@
 import { Box, HStack, Spinner, VStack } from '@chakra-ui/react';
 import { useState } from 'react';
+
 import Timer from './Timer';
 import MissingDataMessage from './MissingDataMessage';
 
-export default function ProgressTabFormatter({ rows, setRows, selectedChildOption, tabIndex, submittingTimerValues, TabPanel }) {
-    const [leftTeetTimerValue, setLeftTeetTimerValue] = useState(0);
-    const [rightTeetTimerValue, setRightTeetTimerValue] = useState(0);
-
+export default function ProgressTabFormatter({ rows, setRows, selectedChildOption, tabIndex, submittingTimerValues, setLeftTeetTimerValue, setRightTeetTimerValue, TabPanel }) {
     return (
         <VStack
             alignItems="start"
@@ -39,14 +37,14 @@ export default function ProgressTabFormatter({ rows, setRows, selectedChildOptio
                         w="100vw"
                         alignItems="start"
                     >
-                        {(rows && rows.length) ? rows.map((breastRow, index) => {
+                        {(rows && rows.length) ? rows.map((row, index) => {
                             return (
                                 <TabPanel
-                                    leftBreastTime={leftTeetTimerValue}
-                                    rightBreastTime={rightTeetTimerValue}
-                                    alias={breastRow.alias}
+                                    leftBreastTime={row.leftBreastTime}
+                                    rightBreastTime={row.rightBreastTime}
+                                    alias={row.alias}
                                     index={index}
-                                    timeStamp={breastRow.alias}
+                                    timeStamp={row.alias}
                                     data={rows}
                                     setData={setRows}
                                     selectedChildOption={selectedChildOption}
