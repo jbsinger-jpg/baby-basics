@@ -1,5 +1,4 @@
 import { Box, HStack, Spinner, VStack } from '@chakra-ui/react';
-import { useState } from 'react';
 
 import Timer from './Timer';
 import MissingDataMessage from './MissingDataMessage';
@@ -44,7 +43,7 @@ export default function ProgressTabFormatter({ rows, setRows, selectedChildOptio
                                     rightBreastTime={row.rightBreastTime}
                                     alias={row.alias}
                                     index={index}
-                                    timeStamp={row.alias}
+                                    timeStamp={row.timeStamp}
                                     data={rows}
                                     setData={setRows}
                                     selectedChildOption={selectedChildOption}

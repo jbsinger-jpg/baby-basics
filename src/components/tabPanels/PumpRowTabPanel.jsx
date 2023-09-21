@@ -1,13 +1,17 @@
 // Module imports
-import { CloseIcon } from '@chakra-ui/icons';
-import { Box, Card, CardBody, CardHeader, FormLabel, HStack, Heading, IconButton, Text, useColorModeValue } from '@chakra-ui/react';
+import { CloseIcon, TimeIcon } from '@chakra-ui/icons';
+import { Box, Button, Card, CardBody, CardHeader, FormLabel, HStack, Heading, IconButton, Text, useColorModeValue } from '@chakra-ui/react';
 
 // Relative imports
 import { cardBackground } from '../../defaultStyle';
 import { auth, firestore } from '../../firebaseConfig';
+import { useState } from 'react';
 
 export default function PumpRowTabPanel({ alias, index, timeStamp, leftBreastTime, rightBreastTime, data, setData, fluidOunces, selectedChildOption }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
+    const [rightTime, setRightTime] = useState(rightBreastTime);
+    const [leftTime, setLeftTime] = useState(leftBreastTime);
+    const [isTimeInMinutes, setIsTimeInMinutes] = useState(false);
 
     const handleDeleteRow = () => {
         const updatedArray = [...data];
@@ -23,6 +27,23 @@ export default function PumpRowTabPanel({ alias, index, timeStamp, leftBreastTim
             .delete();
     };
 
+    const convertTime = () => {
+        // if times are equal to the props passed assume that the time is in seconds
+        // otherwise assume minute conversion has taken place
+
+        if (rightTime === rightBreastTime && leftTime === leftBreastTime) {
+            setRightTime(rightBreastTime / 60);
+            setLeftTime(leftBreastTime / 60);
+            setIsTimeInMinutes(true);
+
+        }
+        else {
+            setRightTime(rightBreastTime);
+            setLeftTime(leftBreastTime);
+            setIsTimeInMinutes(false);
+        }
+    };
+
     return (
         <Box>
             <Card
@@ -33,9 +54,13 @@ export default function PumpRowTabPanel({ alias, index, timeStamp, leftBreastTim
                     <HStack
                         justifyContent="space-between"
                     >
-                        <Box alignSelf="start" justifyContent="flex-start">
+                        <HStack alignSelf="start" justifyContent="flex-start">
                             <Heading size='md'>{alias}</Heading>
-                        </Box>
+                            <IconButton
+                                icon={<TimeIcon />}
+                                onClick={convertTime}
+                            />
+                        </HStack>
                         <IconButton variant="unstyled" icon={<CloseIcon />} onClick={() => handleDeleteRow(index)} />
                     </HStack>
                 </CardHeader>
@@ -50,15 +75,15 @@ export default function PumpRowTabPanel({ alias, index, timeStamp, leftBreastTim
                             </Text>
                         </Box>
                         <Box>
-                            <FormLabel>Left Breast Time</FormLabel>
+                            <FormLabel>Left Breast {isTimeInMinutes ? "(min)" : "(sec)"}</FormLabel>
                             <Text>
-                                {leftBreastTime}
+                                {leftTime}
                             </Text>
                         </Box>
                         <Box>
-                            <FormLabel>Right Breast Time</FormLabel>
+                            <FormLabel>Right Breast {isTimeInMinutes ? "(min)" : "(sec)"}</FormLabel>
                             <Text>
-                                {rightBreastTime}
+                                {rightTime}
                             </Text>
                         </Box>
                         <Box>

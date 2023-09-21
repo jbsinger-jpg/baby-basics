@@ -1,10 +1,14 @@
-import { CloseIcon } from '@chakra-ui/icons';
+import { CloseIcon, TimeIcon } from '@chakra-ui/icons';
 import { Box, Card, CardBody, CardHeader, FormLabel, HStack, Heading, IconButton, Text, useColorModeValue } from '@chakra-ui/react';
 import { cardBackground } from '../../defaultStyle';
 import { auth, firestore } from '../../firebaseConfig';
+import { useState } from 'react';
 
 export default function BreastRowTabPanel({ leftBreastTime, rightBreastTime, alias, index, timeStamp, data, setData, selectedChildOption }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
+    const [rightTime, setRightTime] = useState(rightBreastTime);
+    const [leftTime, setLeftTime] = useState(leftBreastTime);
+    const [isTimeInMinutes, setIsTimeInMinutes] = useState(false);
 
     const handleDeleteRow = () => {
         const updatedArray = [...data];
@@ -20,6 +24,23 @@ export default function BreastRowTabPanel({ leftBreastTime, rightBreastTime, ali
             .delete();
     };
 
+    const convertTime = () => {
+        // if times are equal to the props passed assume that the time is in seconds
+        // otherwise assume minute conversion has taken place
+
+        if (rightTime === rightBreastTime && leftTime === leftBreastTime) {
+            setRightTime(rightBreastTime / 60);
+            setLeftTime(leftBreastTime / 60);
+            setIsTimeInMinutes(true);
+
+        }
+        else {
+            setRightTime(rightBreastTime);
+            setLeftTime(leftBreastTime);
+            setIsTimeInMinutes(false);
+        }
+    };
+
     return (
         <Box>
             <Card
@@ -31,7 +52,13 @@ export default function BreastRowTabPanel({ leftBreastTime, rightBreastTime, ali
                         justifyContent="space-between"
                     >
                         <Box alignSelf="start" justifyContent="flex-start">
-                            <Heading size='md'>{alias}</Heading>
+                            <HStack>
+                                <Heading size='md'>{alias}</Heading>
+                                <IconButton
+                                    icon={<TimeIcon />}
+                                    onClick={convertTime}
+                                />
+                            </HStack>
                         </Box>
                         <IconButton variant="unstyled" icon={<CloseIcon />} onClick={() => handleDeleteRow(index)} />
                     </HStack>
@@ -47,15 +74,15 @@ export default function BreastRowTabPanel({ leftBreastTime, rightBreastTime, ali
                             </Text>
                         </Box>
                         <Box>
-                            <FormLabel>Left Breast Time</FormLabel>
+                            <FormLabel>Left Breast {isTimeInMinutes ? "(min)" : "(sec)"}</FormLabel>
                             <Text>
-                                {leftBreastTime}
+                                {leftTime}
                             </Text>
                         </Box>
                         <Box>
-                            <FormLabel>Right Breast Time</FormLabel>
+                            <FormLabel>Right Breast {isTimeInMinutes ? "(min)" : "(sec)"}</FormLabel>
                             <Text>
-                                {rightBreastTime}
+                                {rightTime}
                             </Text>
                         </Box>
                     </HStack>
