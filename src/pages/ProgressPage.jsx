@@ -37,7 +37,7 @@ export default function ProgressPage() {
         setDrawerSubmissionButtonLoading(true);
 
         const duplicateNameFound = await firestore.collection("users").doc(auth?.currentUser?.uid).collection("children").doc(childName).get().then((doc) => {
-            if (doc.exists) {
+            if (doc.exists && !selectedChildOption) {
                 toast({
                     title: 'Submission Failed',
                     description: "Child name already exists",

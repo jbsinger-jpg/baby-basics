@@ -107,16 +107,50 @@ export default function MilestonePage() {
         setChildDrawerVisible(false);
     };
 
-    const handleAddChild = () => {
+    const handleAddChild = async () => {
         setDrawerSubmissionButtonLoading(true);
-        if (childName) {
-            firestore.collection("users").doc(auth?.currentUser?.uid).collection("children").doc(childName).set({
-                name: childName,
-                gender: childGender,
-                relationship: childRelationship,
-                birth: childBirth,
-            });
-            firestore.collection("users").doc(auth?.currentUser?.uid).collection("children")
+        const duplicateNameFound = await firestore.collection("users").doc(auth?.currentUser?.uid).collection("children").doc(childName).get().then((doc) => {
+            if (doc.exists && !selectedChildOption) {
+                toast({
+                    title: 'Submission Failed',
+                    description: "Child name already exists",
+                    status: 'error',
+                    duration: 9000,
+                    isClosable: true,
+                });
+
+                setDrawerSubmissionButtonLoading(false);
+                return true;
+            }
+
+            return false;
+        });
+
+        if (selectedChildOption && childName) {
+            // updating the child list create new entry, then delete the old
+            firestore.collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(String(childName)).set({
+                    name: childName,
+                    gender: childGender,
+                    relationship: childRelationship,
+                    birth: childBirth,
+                })
+                .then(() => {
+                    firestore.collection("users")
+                        .doc(auth?.currentUser?.uid)
+                        .collection("children")
+                        .doc(String(selectedChildOption))
+                        .delete().then(() => {
+                            setSelectedChildOption(childName);
+                        });
+                });
+
+            // get the new options from children collection
+            firestore.collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
                 .get().then((snapshot) => {
                     let options = [];
                     let index = 0;
@@ -130,6 +164,75 @@ export default function MilestonePage() {
                 }).finally(() => {
                     setDrawerSubmissionButtonLoading(false);
                 });
+        }
+        else if (!duplicateNameFound && !selectedChildOption && childName) {
+            // adding to the child list
+            firestore.collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(String(childName)).set({
+                    name: childName,
+                    gender: childGender,
+                    relationship: childRelationship,
+                    birth: childBirth,
+                }).then(() => {
+                    setSelectedChildOption(childName);
+                });
+
+            firestore.collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .get().then((snapshot) => {
+                    let options = [];
+                    let index = 0;
+
+                    snapshot.docs.forEach(doc => {
+                        options.push({ key: index, value: doc.data().name, label: doc.data().name });
+                        index += 1;
+                    });
+
+                    setChildOptions(options);
+                }).finally(() => {
+                    setDrawerSubmissionButtonLoading(false);
+                });
+        }
+        else if (!childName) {
+            toast({
+                title: 'Submission Failed',
+                description: "Child name field is required to submit to database",
+                status: 'error',
+                duration: 9000,
+                isClosable: true,
+            });
+        }
+    };
+
+    const handleDeleteChild = () => {
+        setDrawerSubmissionButtonLoading(true);
+        if (selectedChildOption) {
+            firestore.collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(String(selectedChildOption))
+                .delete().then(() => {
+                    firestore.collection("users")
+                        .doc(auth?.currentUser?.uid)
+                        .collection("children")
+                        .get().then((snapshot) => {
+                            let options = [];
+                            let index = 0;
+
+                            snapshot.docs.forEach(doc => {
+                                options.push({ key: index, value: doc.data().name, label: doc.data().name });
+                                index += 1;
+                            });
+
+                            setChildOptions(options);
+                        }).finally(() => {
+                            setDrawerSubmissionButtonLoading(false);
+                        });
+                });
+
         }
         else {
             toast({
@@ -317,6 +420,14 @@ export default function MilestonePage() {
                     <DrawerHeader>Add Child</DrawerHeader>
                     <DrawerBody>
                         <VStack>
+                            <StyledSelect
+                                options={childOptions}
+                                value={selectedChildOption}
+                                onChange={(event) => {
+                                    setSelectedChildOption(event.target.value);
+                                    setChildName(event.target.value);
+                                }}
+                            />
                             <VStack
                                 alignItems="start"
                                 w="100%"
@@ -384,6 +495,12 @@ export default function MilestonePage() {
                             isLoading={drawerSubmissionButtonLoading}
                         >
                             Submit
+                        </Button>
+                        <Button
+                            onClick={handleDeleteChild}
+                            isLoading={drawerSubmissionButtonLoading}
+                        >
+                            Delete
                         </Button>
                         <Button
                             onClick={handleDrawerClose}
