@@ -673,7 +673,7 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                                         );
                                     })
                                         :
-                                        <MissingDataMessage />
+                                        <MissingDataMessage message="No entries, add one!" />
                                     }
                                 </VStack>
                             </TabPanel>
@@ -703,7 +703,7 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                                         );
                                     })
                                         :
-                                        <MissingDataMessage />
+                                        <MissingDataMessage message="No entries, add one!" />
                                     }
                                 </VStack>
                             </TabPanel>
@@ -727,7 +727,7 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                                         );
                                     })
                                         :
-                                        <MissingDataMessage />
+                                        <MissingDataMessage message="No entries, add one!" />
                                     }
                                 </VStack>
                             </TabPanel>

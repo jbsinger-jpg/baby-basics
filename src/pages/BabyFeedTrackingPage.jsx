@@ -10,8 +10,6 @@ import { cardBackground, screenBackground } from '../defaultStyle';
 import { auth, firestore } from '../firebaseConfig';
 import FloatingActionButtonsDiaperTracking from '../components/floatingActionButtons/FloatingActionButtonsDiaperTracking';
 import ProgressTabFormatter from '../components/ProgressTabFormatter';
-import StyledSelect from '../components/StyledSelect';
-import { childBirthOptions, childGenderOptions, childRelationshipOptions } from '../components/staticPageData/child-options';
 
 export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChildOption, setDrawerVisible }) {
     const [tabIndex, setTabIndex] = useState(0);

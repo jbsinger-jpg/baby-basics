@@ -51,7 +51,7 @@ export default function ProgressTabFormatter({ rows, setRows, selectedChildOptio
                             );
                         })
                             :
-                            <MissingDataMessage />
+                            <MissingDataMessage message="No entries, add one!"/>
                         }
                     </VStack>
                 </>

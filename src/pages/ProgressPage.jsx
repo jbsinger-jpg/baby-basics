@@ -10,6 +10,7 @@ import FloatingActionButtonsGrowthAndSleep from '../components/floatingActionBut
 import GraphPage from './GraphPage';
 import { auth, firestore } from '../firebaseConfig';
 import { childBirthOptions, childGenderOptions, childRelationshipOptions } from '../components/staticPageData/child-options';
+import MissingDataMessage from '../components/MissingDataMessage';
 
 export default function ProgressPage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
@@ -249,7 +250,6 @@ export default function ProgressPage() {
                                 options={childOptions}
                                 value={selectedChildOption}
                                 onChange={handleChildOptionChange}
-                                removeNullOption
                             />
                             <StyledSelect
                                 options={feedingDiaperOptions}
@@ -258,24 +258,31 @@ export default function ProgressPage() {
                                 removeNullOption
                             />
                         </HStack>
-
                         <VStack alignItems="start">
-                            {feedingDiaperOption === "feeding" ?
-                                <BabyFeedTrackingPage
-                                    searchBarIsOpen={searchBarIsOpen}
-                                    setSearchBarIsOpen={setSearchBarIsOpen}
-                                    selectedChildOption={selectedChildOption}
-                                    setChildOptions={setChildOptions}
-                                    setDrawerVisible={setChildDrawerVisible}
-                                />
+                            {selectedChildOption ?
+                                <>
+                                    {feedingDiaperOption === "feeding" ?
+                                        <BabyFeedTrackingPage
+                                            searchBarIsOpen={searchBarIsOpen}
+                                            setSearchBarIsOpen={setSearchBarIsOpen}
+                                            selectedChildOption={selectedChildOption}
+                                            setChildOptions={setChildOptions}
+                                            setDrawerVisible={setChildDrawerVisible}
+                                        />
+                                        :
+                                        <DiaperTrackingPage
+                                            searchBarIsOpen={searchBarIsOpen}
+                                            setSearchBarIsOpen={setSearchBarIsOpen}
+                                            selectedChildOption={selectedChildOption}
+                                            setChildOptions={setChildOptions}
+                                            setDrawerVisible={setChildDrawerVisible}
+                                        />
+                                    }
+                                </>
                                 :
-                                <DiaperTrackingPage
-                                    searchBarIsOpen={searchBarIsOpen}
-                                    setSearchBarIsOpen={setSearchBarIsOpen}
-                                    selectedChildOption={selectedChildOption}
-                                    setChildOptions={setChildOptions}
-                                    setDrawerVisible={setChildDrawerVisible}
-                                />
+                                <Box h="80vh" w="100%" display="flex" alignItems="center">
+                                    <MissingDataMessage message="No child selected, add or select one!" />
+                                </Box>
                             }
                         </VStack>
                     </TabPanel>
