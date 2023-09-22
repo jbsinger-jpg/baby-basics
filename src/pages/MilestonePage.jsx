@@ -12,6 +12,7 @@ import FloatingActionButtonsBabyInfo from '../components/floatingActionButtons/F
 import { promptOptions } from '../components/staticPageData/baby-maternal-info';
 import { auth, firestore } from '../firebaseConfig';
 import BabyProgressModal from '../components/modals/BabyProgressModal';
+import { childBirthOptions, childGenderOptions, childRelationshipOptions } from '../components/staticPageData/child-options';
 
 export default function MilestonePage() {
     // card option props
@@ -99,28 +100,6 @@ export default function MilestonePage() {
         { value: "10-12M", label: "10-12M", key: 3 },
         { value: "13-18M", label: "13-18M", key: 4 },
         { value: "19-24M", label: "19-24M", key: 5 },
-    ];
-
-    const childGenderOptions = [
-        { value: "boy", label: "Boy", key: 0 },
-        { value: "girl", label: "Girl", key: 1 },
-    ];
-
-    const childRelationshipOptions = [
-        { value: "mom", label: "Mom", key: 0 },
-        { value: "dad", label: "Dad", key: 1 },
-        { value: "grandmother", label: "Grandmother", key: 2 },
-        { value: "grandfather", label: "Grandfather", key: 3 },
-        { value: "other", label: "Other", key: 4 },
-    ];
-
-    const childBirthOptions = [
-        { value: "vaginal birth", label: "Vaginal Birth", key: 0 },
-        { value: "vbac", label: "Vaginal After C-Section", key: 1 },
-        { value: "c-section", label: "C-Section", key: 2 },
-        { value: "partner", label: "Partner Gave Birth", key: 3 },
-        { value: "adopted", label: "Adopted", key: 4 },
-        { value: "surrogate", label: "Surrogate", key: 5 },
     ];
 
     const [isLargerThan1300] = useMediaQuery("(min-width: 1300px)");

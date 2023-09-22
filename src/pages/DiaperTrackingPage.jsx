@@ -1,6 +1,6 @@
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, ButtonGroup, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, Input, InputGroup, InputRightAddon, Radio, RadioGroup, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text, Textarea, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
 import { useState, useEffect } from 'react';
-import { CloseIcon, Icon, InfoOutlineIcon } from '@chakra-ui/icons';
+import { CloseIcon, Icon } from '@chakra-ui/icons';
 
 import { cardBackground, screenBackground } from '../defaultStyle';
 import FloatingActionButtonsDiaperTracking from '../components/floatingActionButtons/FloatingActionButtonsDiaperTracking';
@@ -12,7 +12,7 @@ import WaterDropIcon from '../components/staticPageData/WaterDropIcon';
 import PoopIcon from '../components/staticPageData/PoopIcon';
 import MissingDataMessage from '../components/MissingDataMessage';
 
-export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen, selectedChildOption }) {
+export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen, selectedChildOption, setDrawerVisible }) {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
 
@@ -615,6 +615,7 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
             >
                 <FloatingActionButtonsDiaperTracking
                     setSearchBarIsOpen={setSearchBarIsOpen}
+                    setDrawerVisible={setDrawerVisible}
                 />
                 <HStack
                     alignItems='start'

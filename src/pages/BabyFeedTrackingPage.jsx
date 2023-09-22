@@ -1,17 +1,19 @@
 // Module imports
-import { Button, FormControl, FormLabel, HStack, Input, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
+import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, Input, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
 // Relative imports
 import BreastRowTabPanel from '../components/tabPanels/BreastRowTabPanel';
 import PumpRowTabPanel from '../components/tabPanels/PumpRowTabPanel';
 import BottleTabPanel from '../components/tabPanels/BottleTabPanel';
-import { screenBackground } from '../defaultStyle';
+import { cardBackground, screenBackground } from '../defaultStyle';
 import { auth, firestore } from '../firebaseConfig';
 import FloatingActionButtonsDiaperTracking from '../components/floatingActionButtons/FloatingActionButtonsDiaperTracking';
 import ProgressTabFormatter from '../components/ProgressTabFormatter';
+import StyledSelect from '../components/StyledSelect';
+import { childBirthOptions, childGenderOptions, childRelationshipOptions } from '../components/staticPageData/child-options';
 
-export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChildOption }) {
+export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChildOption, setDrawerVisible }) {
     const [tabIndex, setTabIndex] = useState(0);
     const [breastFeedingRows, setBreastFeedingRows] = useState(null);
     const [pumpFeedingRows, setPumpFeedingRows] = useState(null);
@@ -273,6 +275,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
         <>
             <FloatingActionButtonsDiaperTracking
                 setSearchBarIsOpen={setSearchBarIsOpen}
+                setDrawerVisible={setDrawerVisible}
             />
             <Tabs index={tabIndex} onChange={handleTabsChange} bg={_screenBackground} orientation='vertical' isFitted h="80vh">
                 <TabList>

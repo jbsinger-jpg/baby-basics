@@ -1,13 +1,11 @@
-import { VStack } from '@chakra-ui/react';
-import React from 'react';
 import FabTemplate from './StandardFab';
 import HomeIcon from '@mui/icons-material/Home';
 import { useNavigate } from 'react-router-dom';
 import ColorModeToggleButton from '../ColorModeToggleButton';
-import { SearchIcon } from '@chakra-ui/icons';
+import { AddIcon, SearchIcon } from '@chakra-ui/icons';
 import FloatingActionButtonContainer from './FloatingActionButtonContainer';
 
-export default function FloatingActionButtonsDiaperTracking({ setSearchBarIsOpen }) {
+export default function FloatingActionButtonsDiaperTracking({ setSearchBarIsOpen, setDrawerVisible }) {
     const navigate = useNavigate();
 
     return (
@@ -22,6 +20,11 @@ export default function FloatingActionButtonsDiaperTracking({ setSearchBarIsOpen
                 icon={<SearchIcon height="30px" width="30px" />}
                 onClick={() => setSearchBarIsOpen(true)}
                 label={"Search"}
+            />
+            <FabTemplate
+                label="Add Child"
+                onClick={() => setDrawerVisible(true)}
+                icon={<AddIcon fontSize="large" />}
             />
         </FloatingActionButtonContainer>
     );
