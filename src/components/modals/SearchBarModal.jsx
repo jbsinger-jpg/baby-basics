@@ -21,6 +21,7 @@ export default function SearchBarAlertDialog({
     setSeatData,
     setStrollerData,
     setVitaminData,
+    setSleepData,
     tabIndex,
     setTabIndex,
     setSearchInProgress,
@@ -433,6 +434,38 @@ export default function SearchBarAlertDialog({
         );
     };
 
+    // sleep data
+    const sleepOptions = [
+        { value: "", label: "", key: 0 },
+        { value: "", label: "", key: 1 },
+    ];
+
+    const [sleepBrand, setSleepBrand] = useState(null);
+    const [sleepPrice, setSleepPrice] = useState(null);
+
+    const getSleepSearchBarItems = () => {
+        return (
+            <VStack display="flex" alignItems={"start"}>
+                <Text>Brand</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={sleepOptions}
+                        value={sleepBrand}
+                        onChange={(event) => { setSleepBrand(event.target.value); }}
+                    />
+                </HStack>
+                <Text>Price</Text>
+                <HStack width="100%">
+                    <Input
+                        placeholder="price no more than..."
+                        value={sleepPrice}
+                        onChange={(event) => setSleepPrice(event.target.value.replace(/[^0-9.-]/g, ""))}
+                    />
+                </HStack>
+            </VStack>
+        );
+    };
+
     const options = [
         { key: 0, value: "Clothing", label: "Clothing" },
         { key: 1, value: "Food", label: "Food" },
@@ -444,6 +477,7 @@ export default function SearchBarAlertDialog({
         { key: 7, value: "Monitors", label: "Monitors" },
         { key: 8, value: "Seats", label: "Seats" },
         { key: 9, value: "Strollers", label: "Strollers" },
+        { key: 10, value: "Sleep", label: "Sleep" },
     ];
 
     const [selectedCategory, setSelectedCategory] = useState(options[tabIndex]?.value);
@@ -918,6 +952,49 @@ export default function SearchBarAlertDialog({
         }
     };
 
+    const handleSleepSearch = async () => {
+        let sleepOptions = [];
+        let sleepData = [];
+
+        const formattedSleepPrice = Number(sleepPrice).toFixed(2);
+        let sleepRef = await firestore.collection('sleep');
+
+        if (sleepBrand) {
+            sleepOptions.push({ dbField: "brand", operator: "==", operand: sleepBrand });
+        }
+
+        if (formattedSleepPrice && formattedSleepPrice > 0) {
+            sleepOptions.push({ dbField: "price", operator: "<=", operand: Number(formattedSleepPrice) });
+        }
+
+        for (let i = 0; i < sleepOptions.length; i++) {
+            sleepRef = await sleepRef.where(sleepOptions[i].dbField, sleepOptions[i].operator, sleepOptions[i].operand);
+        }
+
+        sleepRef.get().then((querySnapshot => {
+            querySnapshot.docs.forEach(doc => {
+                sleepData.push({ ...doc.data() });
+            });
+
+            setSleepData(sleepData);
+            setSearchInProgress(false);
+        }));
+
+        if (!sleepBrand && !sleepPrice) {
+            firestore.collection('sleep')
+                .get()
+                .then(snapshot => {
+                    snapshot.docs.forEach(doc => {
+                        sleepData.push({ ...doc.data() });
+                    });
+
+                    const uniqueArray = [...new Set(sleepData.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+                    setSleepData(uniqueArray);
+                    setSearchInProgress(false);
+                });
+        }
+    };
+
     useEffect(() => {
         if (searchBarIsOpen) {
             setSearchTabIndex(tabIndex);
@@ -973,6 +1050,10 @@ export default function SearchBarAlertDialog({
             setStrollerBrand("");
             setStrollerPrice("");
         }
+        else if (searchTabIndex === 10) {
+            setSleepBrand("");
+            setSleepPrice("");
+        }
     };
 
     const handleGenericSearch = () => {
@@ -1007,6 +1088,9 @@ export default function SearchBarAlertDialog({
         }
         else if (searchTabIndex === 9) {
             return handleStrollerSearch();
+        }
+        else if (searchTabIndex === 10) {
+            return handleSleepSearch();
         }
     };
 
@@ -1059,6 +1143,9 @@ export default function SearchBarAlertDialog({
                             </TabPanel>
                             <TabPanel>
                                 {getStrollerSearchBarItems()}
+                            </TabPanel>
+                            <TabPanel>
+                                {getSleepSearchBarItems()}
                             </TabPanel>
                         </TabPanels>
                     </Tabs>

@@ -18,6 +18,7 @@ import StrollersDataTabPanel from '../components/tabPanels/StrollersDataTabPanel
 import { screenBackground } from '../defaultStyle';
 import VitaminDataTabPanel from '../components/tabPanels/VitaminDataTabPanel';
 import BabyImagesModal from '../components/modals/BabyImagesModal';
+import SleepTabPanel from '../components/tabPanels/SleepTabPanel';
 
 export default function StorePage() {
     // hooks
@@ -68,8 +69,12 @@ export default function StorePage() {
     const [strollerData, setStrollerData] = useState(null);
     const [strollerDataIsLoading, setStrollerDataIsLoading] = useState(true);
 
+    // vitamin data
     const [vitaminData, setVitaminData] = useState(null);
     const [vitaminDataIsLoading, setVitaminDataIsLoading] = useState(true);
+
+    const [sleepData, setSleepData] = useState(null);
+    const [sleepDataIsLoading, setSleepDataIsLoading] = useState(true);
 
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
     const [screenHeight, setScreenHeight] = useState(window.innerHeight);
@@ -194,6 +199,17 @@ export default function StorePage() {
                 setVitaminDataIsLoading(false);
                 options = [];
             });
+
+        firestore.collection('sleep').get()
+            .then(snapshot => {
+                snapshot.docs.forEach(doc => {
+                    options.push({ ...doc.data() });
+                });
+
+                setSleepData(options);
+                setSleepDataIsLoading(false);
+                options = [];
+            });
     }, []);
 
     useEffect(() => {
@@ -217,7 +233,7 @@ export default function StorePage() {
             overflowX="hidden"
         >
             {/* IF CONTENT IS LOADING DISPLAY SPINNER ICON */}
-            {!clothingData || !foodData || !diaperData || !maternialData || !formulaData || !toyData || !monitorData || !seatData || !strollerData || !vitaminData || searchInProgress ?
+            {!clothingData || !foodData || !diaperData || !maternialData || !formulaData || !toyData || !monitorData || !seatData || !strollerData || !vitaminData || !sleepData || searchInProgress ?
                 <Box
                     alignItems="center"
                     justifyContent="center"
@@ -309,6 +325,13 @@ export default function StorePage() {
                                     tabIndex={tabIndex}
                                 />
                             </TabPanel>
+                            <TabPanel>
+                                <SleepTabPanel
+                                    sleepData={sleepData}
+                                    sleepDataIsLoading={sleepDataIsLoading}
+                                    tabIndex={tabIndex}
+                                />
+                            </TabPanel>
                         </TabPanels>
                     </Tabs>
                 </>
@@ -327,6 +350,7 @@ export default function StorePage() {
                 setSeatData={setSeatData}
                 setStrollerData={setStrollerData}
                 setVitaminData={setVitaminData}
+                setSleepData={setSleepData}
                 tabIndex={tabIndex}
                 setTabIndex={setTabIndex}
                 setSearchInProgress={setSearchInProgress}
