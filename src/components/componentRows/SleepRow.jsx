@@ -131,7 +131,7 @@ export default function SleepRow({ sleep, sleepDataIsLoading, ml, tabIndex }) {
                                     }}
                                 >
                                     {/* Prevent image from exploding in dimensions */}
-                                    {(tabIndex === 8 && !buttonsPressed) &&
+                                    {(tabIndex === 10 && !buttonsPressed) &&
                                         <div style={{ width: '150px', height: '200px' }}>
                                             <ReactImageMagnify
                                                 imageProps={{

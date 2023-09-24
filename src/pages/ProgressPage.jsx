@@ -1,4 +1,4 @@
-import { Box, Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, Input, Tab, TabList, TabPanel, TabPanels, Tabs, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
+import { Box, Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, IconButton, Input, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverTrigger, Tab, TabList, TabPanel, TabPanels, Tabs, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
 import { cardBackground, screenBackground } from '../defaultStyle';
@@ -11,6 +11,9 @@ import GraphPage from './GraphPage';
 import { auth, firestore } from '../firebaseConfig';
 import { childBirthOptions, childGenderOptions, childRelationshipOptions } from '../components/staticPageData/child-options';
 import MissingDataMessage from '../components/MissingDataMessage';
+import { CalendarIcon } from '@chakra-ui/icons';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function ProgressPage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
@@ -32,6 +35,7 @@ export default function ProgressPage() {
     const [drawerSubmissionButtonLoading, setDrawerSubmissionButtonLoading] = useState(false);
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
     const toast = useToast();
+    const [selectedDate, setSelectedDate] = useState("");
 
     const handleAddChild = async () => {
         setDrawerSubmissionButtonLoading(true);
@@ -223,6 +227,10 @@ export default function ProgressPage() {
         setSelectedChildOption(event.target.value);
     };
 
+    const handleSelectedDateChange = (date) => {
+        setSelectedDate(date);
+    };
+
     return (
         <Box
             bg={_screenBackground}
@@ -257,6 +265,25 @@ export default function ProgressPage() {
                                 onChange={handleFeedingDiaperOptionChange}
                                 removeNullOption
                             />
+                            <Popover>
+                                <PopoverTrigger>
+                                    <IconButton icon={<CalendarIcon />} />
+                                </PopoverTrigger>
+                                <PopoverContent>
+                                    <PopoverArrow />
+                                    <PopoverCloseButton />
+                                    <PopoverBody>
+                                        <FormLabel>
+                                            Set Date
+                                        </FormLabel>
+                                        <DatePicker
+                                            customInput={<Input />}
+                                            selected={selectedDate}
+                                            onChange={handleSelectedDateChange}
+                                        />
+                                    </PopoverBody>
+                                </PopoverContent>
+                            </Popover>
                         </HStack>
                         <VStack alignItems="start">
                             {selectedChildOption ?

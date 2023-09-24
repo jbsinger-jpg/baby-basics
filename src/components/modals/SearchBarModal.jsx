@@ -436,8 +436,18 @@ export default function SearchBarAlertDialog({
 
     // sleep data
     const sleepOptions = [
-        { value: "", label: "", key: 0 },
-        { value: "", label: "", key: 1 },
+        { value: "carter's by davinci", label: "Carter's by DaVinci", key: 0 },
+        { value: "snuza", label: "SNUZA", key: 1 },
+        { value: "totaha", label: "totaha", key: 2 },
+        { value: "babytone", label: "Babytone", key: 3 },
+        { value: "sense-u", label: "Sense-U", key: 4 },
+        { value: "dreamland baby", label: "Dreamland Baby", key: 5 },
+        { value: "eufy", label: "Eufy", key: 6 },
+        { value: "dream on me", label: "Dream On Me", key: 7 },
+        { value: "babyletto", label: "BabyLetto", key: 8 },
+        { value: "burt's bees baby", label: "Burt's Bees Baby", key: 9 },
+        { value: "hatch", label: "Hatch", key: 10 },
+        { value: "owlet", label: "Owlet", key: 11 },
     ];
 
     const [sleepBrand, setSleepBrand] = useState(null);
