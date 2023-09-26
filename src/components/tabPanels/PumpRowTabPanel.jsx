@@ -1,13 +1,13 @@
 // Module imports
 import { CloseIcon, TimeIcon } from '@chakra-ui/icons';
-import { Box, Button, Card, CardBody, CardHeader, FormLabel, HStack, Heading, IconButton, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Card, CardBody, CardHeader, FormLabel, HStack, Heading, IconButton, Text, useColorModeValue } from '@chakra-ui/react';
 
 // Relative imports
 import { cardBackground } from '../../defaultStyle';
 import { auth, firestore } from '../../firebaseConfig';
 import { useState } from 'react';
 
-export default function PumpRowTabPanel({ alias, index, timeStamp, leftBreastTime, rightBreastTime, data, setData, fluidOunces, selectedChildOption }) {
+export default function PumpRowTabPanel({ alias, index, timeStamp, leftBreastTime, rightBreastTime, data, setData, fluidOunces, selectedChildOption, selectedDateOption }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
     const [rightTime, setRightTime] = useState(rightBreastTime);
     const [leftTime, setLeftTime] = useState(leftBreastTime);
@@ -22,6 +22,8 @@ export default function PumpRowTabPanel({ alias, index, timeStamp, leftBreastTim
             .doc(auth.currentUser.uid)
             .collection("children")
             .doc(selectedChildOption)
+            .collection("dates")
+            .doc(selectedDateOption)
             .collection("pump-feed-tracking")
             .doc(alias)
             .delete();

@@ -1,17 +1,17 @@
 // Module imports
-import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, Input, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
+import { Button, FormControl, FormLabel, HStack, Input, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
 // Relative imports
 import BreastRowTabPanel from '../components/tabPanels/BreastRowTabPanel';
 import PumpRowTabPanel from '../components/tabPanels/PumpRowTabPanel';
 import BottleTabPanel from '../components/tabPanels/BottleTabPanel';
-import { cardBackground, screenBackground } from '../defaultStyle';
+import { screenBackground } from '../defaultStyle';
 import { auth, firestore } from '../firebaseConfig';
 import FloatingActionButtonsDiaperTracking from '../components/floatingActionButtons/FloatingActionButtonsDiaperTracking';
 import ProgressTabFormatter from '../components/ProgressTabFormatter';
 
-export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChildOption, setDrawerVisible }) {
+export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChildOption, setDrawerVisible, selectedDateOption }) {
     const [tabIndex, setTabIndex] = useState(0);
     const [breastFeedingRows, setBreastFeedingRows] = useState(null);
     const [pumpFeedingRows, setPumpFeedingRows] = useState(null);
@@ -43,6 +43,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
             .doc(auth?.currentUser?.uid)
             .collection("children")
             .doc(selectedChildOption)
+            .collection("dates")
+            .doc(selectedDateOption)
             .collection("breast-feed-tracking")
             .where("alias", "==", String(breastRowAlias).trim())
             .get()
@@ -56,6 +58,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
             .doc(auth?.currentUser?.uid)
             .collection("children")
             .doc(selectedChildOption)
+            .collection("dates")
+            .doc(selectedDateOption)
             .collection("bottle-feed-tracking")
             .where("alias", "==", String(bottleRowAlias).trim())
             .get()
@@ -69,6 +73,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
             .doc(auth?.currentUser?.uid)
             .collection("children")
             .doc(selectedChildOption)
+            .collection("dates")
+            .doc(selectedDateOption)
             .collection("pump-feed-tracking")
             .where("alias", "==", String(pumpRowAlias).trim())
             .get()
@@ -89,6 +95,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                     .doc(auth.currentUser.uid)
                     .collection("children")
                     .doc(selectedChildOption)
+                    .collection("dates")
+                    .doc(selectedDateOption)
                     .collection("breast-feed-tracking")
                     .doc(String(breastRowAlias).trim())
                     .set({
@@ -119,6 +127,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                     .doc(auth.currentUser.uid)
                     .collection("children")
                     .doc(selectedChildOption)
+                    .collection("dates")
+                    .doc(selectedDateOption)
                     .collection("bottle-feed-tracking")
                     .doc(String(bottleRowAlias).trim())
                     .set({
@@ -149,6 +159,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                     .doc(auth.currentUser.uid)
                     .collection("children")
                     .doc(selectedChildOption)
+                    .collection("dates")
+                    .doc(selectedDateOption)
                     .collection("pump-feed-tracking")
                     .doc(String(pumpRowAlias).trim())
                     .set({
@@ -225,6 +237,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                 .doc(auth?.currentUser?.uid)
                 .collection("children")
                 .doc(selectedChildOption)
+                .collection("dates")
+                .doc(selectedDateOption)
                 .collection("breast-feed-tracking").get()
                 .then(snapshot => {
                     let options = [];
@@ -240,6 +254,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                 .doc(auth?.currentUser?.uid)
                 .collection("children")
                 .doc(selectedChildOption)
+                .collection("dates")
+                .doc(selectedDateOption)
                 .collection("bottle-feed-tracking").get()
                 .then(snapshot => {
                     let options = [];
@@ -255,6 +271,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                 .doc(auth?.currentUser?.uid)
                 .collection("children")
                 .doc(selectedChildOption)
+                .collection("dates")
+                .doc(selectedDateOption)
                 .collection("pump-feed-tracking")
                 .get().then(snapshot => {
                     let options = [];
@@ -267,7 +285,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                 });
         }
         // eslint-disable-next-line
-    }, [selectedChildOption]);
+    }, [selectedChildOption, selectedDateOption]);
 
     return (
         <>
@@ -302,6 +320,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                             setLeftTeetTimerValue={setLeftTeetTimerValue}
                             setRightTeetTimerValue={setRightTeetTimerValue}
                             selectedChildOption={selectedChildOption}
+                            selectedDateOption={selectedDateOption}
                             tabIndex={tabIndex}
                             submittingTimerValues={submittingTimerValues}
                         />
@@ -379,6 +398,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                             setLeftTeetTimerValue={setLeftTeetTimerValue}
                             setRightTeetTimerValue={setRightTeetTimerValue}
                             selectedChildOption={selectedChildOption}
+                            selectedDateOption={selectedDateOption}
                             tabIndex={tabIndex}
                             submittingTimerValues={submittingTimerValues}
                         />

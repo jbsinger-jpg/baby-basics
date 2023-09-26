@@ -3,7 +3,7 @@ import { Box, HStack, Spinner, VStack } from '@chakra-ui/react';
 import Timer from './Timer';
 import MissingDataMessage from './MissingDataMessage';
 
-export default function ProgressTabFormatter({ rows, setRows, selectedChildOption, tabIndex, submittingTimerValues, setLeftTeetTimerValue, setRightTeetTimerValue, TabPanel }) {
+export default function ProgressTabFormatter({ rows, setRows, selectedChildOption, selectedDateOption, tabIndex, submittingTimerValues, setLeftTeetTimerValue, setRightTeetTimerValue, TabPanel }) {
     return (
         <VStack
             alignItems="start"
@@ -47,11 +47,12 @@ export default function ProgressTabFormatter({ rows, setRows, selectedChildOptio
                                     data={rows}
                                     setData={setRows}
                                     selectedChildOption={selectedChildOption}
+                                    selectedDateOption={selectedDateOption}
                                 />
                             );
                         })
                             :
-                            <MissingDataMessage message="No entries, add one!"/>
+                            <MissingDataMessage message="No entries, add one!" />
                         }
                     </VStack>
                 </>

@@ -4,7 +4,7 @@ import { cardBackground } from '../../defaultStyle';
 import { auth, firestore } from '../../firebaseConfig';
 import { useState } from 'react';
 
-export default function BreastRowTabPanel({ leftBreastTime, rightBreastTime, alias, index, timeStamp, data, setData, selectedChildOption }) {
+export default function BreastRowTabPanel({ leftBreastTime, rightBreastTime, alias, index, timeStamp, data, setData, selectedChildOption, selectedDateOption }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
     const [rightTime, setRightTime] = useState(rightBreastTime);
     const [leftTime, setLeftTime] = useState(leftBreastTime);
@@ -19,6 +19,8 @@ export default function BreastRowTabPanel({ leftBreastTime, rightBreastTime, ali
             .doc(auth.currentUser.uid)
             .collection("children")
             .doc(selectedChildOption)
+            .collection("dates")
+            .doc(selectedDateOption)
             .collection("breast-feed-tracking")
             .doc(alias)
             .delete();

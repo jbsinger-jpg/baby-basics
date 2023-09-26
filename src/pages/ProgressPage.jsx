@@ -35,7 +35,7 @@ export default function ProgressPage() {
     const [drawerSubmissionButtonLoading, setDrawerSubmissionButtonLoading] = useState(false);
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
     const toast = useToast();
-    const [selectedDate, setSelectedDate] = useState("");
+    const [selectedDate, setSelectedDate] = useState(new Date());
 
     const handleAddChild = async () => {
         setDrawerSubmissionButtonLoading(true);
@@ -231,6 +231,10 @@ export default function ProgressPage() {
         setSelectedDate(date);
     };
 
+    const formattedDateOption = () => {
+        return selectedDate.toLocaleDateString().replace(/\//g, '-');
+    };
+
     return (
         <Box
             bg={_screenBackground}
@@ -295,6 +299,7 @@ export default function ProgressPage() {
                                             selectedChildOption={selectedChildOption}
                                             setChildOptions={setChildOptions}
                                             setDrawerVisible={setChildDrawerVisible}
+                                            selectedDateOption={formattedDateOption()}
                                         />
                                         :
                                         <DiaperTrackingPage
@@ -303,6 +308,7 @@ export default function ProgressPage() {
                                             selectedChildOption={selectedChildOption}
                                             setChildOptions={setChildOptions}
                                             setDrawerVisible={setChildDrawerVisible}
+                                            selectedDateOption={formattedDateOption()}
                                         />
                                     }
                                 </>

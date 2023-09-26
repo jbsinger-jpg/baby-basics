@@ -4,7 +4,7 @@ import React from 'react';
 import { cardBackground } from '../../defaultStyle';
 import { auth, firestore } from '../../firebaseConfig';
 
-export default function BottleTabPanel({ data, setData, index, alias, timeStamp, fluidOunces, selectedChildOption }) {
+export default function BottleTabPanel({ data, setData, index, alias, timeStamp, fluidOunces, selectedChildOption, selectedDateOption }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
 
     const handleDeleteRow = () => {
@@ -16,6 +16,8 @@ export default function BottleTabPanel({ data, setData, index, alias, timeStamp,
             .doc(auth.currentUser.uid)
             .collection("children")
             .doc(selectedChildOption)
+            .collection("dates")
+            .doc(selectedDateOption)
             .collection("bottle-feed-tracking")
             .doc(alias)
             .delete();

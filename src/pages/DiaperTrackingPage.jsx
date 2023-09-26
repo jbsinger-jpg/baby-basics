@@ -12,7 +12,7 @@ import WaterDropIcon from '../components/staticPageData/WaterDropIcon';
 import PoopIcon from '../components/staticPageData/PoopIcon';
 import MissingDataMessage from '../components/MissingDataMessage';
 
-export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen, selectedChildOption, setDrawerVisible }) {
+export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen, selectedChildOption, setDrawerVisible, seelctedDateOption }) {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
 
