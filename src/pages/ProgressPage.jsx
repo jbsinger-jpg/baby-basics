@@ -326,6 +326,7 @@ export default function ProgressPage() {
                 </TabPanels>
             </Tabs>
             <Drawer
+                onClose={() => setChildDrawerVisible(false)}
                 isOpen={childDrawerVisible}
                 bg={_cardBackground}
                 placement="left"

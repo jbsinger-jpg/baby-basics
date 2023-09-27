@@ -49,7 +49,6 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
     const [pooSearchConsistency, setPooSearchConsistency] = useState("");
     const [pooSearchColor, setPooSearchColor] = useState("");
 
-
     const [drySearchDateMonth, setDrySearchDateMonth] = useState("");
     const [drySearchDateDay, setDrySearchDateDay] = useState("");
     const [drySearchDateYear, setDrySearchDateYear] = useState("");

@@ -1,13 +1,14 @@
 // Module imports
 import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Checkbox, FormLabel, HStack, Heading, Image, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, VStack, useColorModeValue } from '@chakra-ui/react';
-import React from 'react';
 import { VictoryLine, VictoryLabel, VictoryChart, VictoryTheme } from 'victory';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 // Relative imports
 import { screenBackground } from '../defaultStyle';
 import { auth, firestore } from '../firebaseConfig';
-import { useEffect } from 'react';
+
 
 export default function GraphPage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
@@ -31,6 +32,13 @@ export default function GraphPage() {
     const [deleteWLPointIsLoading, setDeleteWLPointIsLoading] = useState(false);
 
     const [weightLengthGraphPoints, setWeightLengthGraphPoints] = useState([]);
+
+    const [selectedDate, setSelectedDate] = useState(new Date());
+
+    const handleSelectedDateChange = (date) => {
+        setSelectedDate(date);
+    };
+
     const addWeightLengthPoint = () => {
         setWeightButtonIsLoading(true);
         let newGraphPoints = [
@@ -224,23 +232,17 @@ export default function GraphPage() {
         >
             <Box
                 width="100vw"
-                height="45vh"
+                height="40vh"
                 justifyContent="center"
                 display="flex"
             >
                 <HStack spacing={10}>
                     <VStack
-                        h={500}
+                        h={450}
                     >
                         <VictoryChart
                             theme={VictoryTheme.material}
                         >
-                            <VictoryLabel
-                                x={5}
-                                y={5}
-                                dy={10}
-                                text="Length (cm)"
-                            />
                             <VictoryLine
                                 style={{
                                     data: { stroke: "#c43a31" },
@@ -263,18 +265,11 @@ export default function GraphPage() {
                         </HStack>
                     </VStack>
                     <VStack
-                        h={500}
+                        h={450}
                     >
                         <VictoryChart
                             theme={VictoryTheme.material}
                         >
-                            <VictoryLabel
-                                x={5}
-                                y={5}
-                                dy={10}
-                                text="Head Circumference (cm)"
-                                style={{ fill: textColor }}
-                            />
                             <VictoryLine
                                 style={{
                                     data: { stroke: "#c43a31" },
@@ -307,8 +302,14 @@ export default function GraphPage() {
                 pl="2"
                 pr="2"
             >
-                <FormLabel htmlFor='age-months'>Age Months</FormLabel>
                 <VStack alignItems="start">
+                    <FormLabel>Date</FormLabel>
+                    <DatePicker
+                        customInput={<Input />}
+                        selected={selectedDate}
+                        onChange={handleSelectedDateChange}
+                    />
+                    <FormLabel htmlFor='age-months'>Age Months</FormLabel>
                     <HStack justifyContent="space-between">
                         <HStack>
                             <NumberInput

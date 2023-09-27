@@ -411,6 +411,7 @@ export default function MilestonePage() {
                 setProgressModalVisible={setProgressModalVisible}
             />
             <Drawer
+                onClose={() => setChildDrawerVisible(false)}
                 isOpen={childDrawerVisible}
                 bg={_cardBackground}
                 placement="left"
