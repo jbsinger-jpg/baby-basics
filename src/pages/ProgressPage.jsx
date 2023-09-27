@@ -320,7 +320,7 @@ export default function ProgressPage() {
                         </VStack>
                     </TabPanel>
                     <TabPanel>
-                        <GraphPage />
+                        <GraphPage selectedDateOption={formattedDateOption()} />
                         <FloatingActionButtonsGrowthAndSleep setSearchBarIsOpen={setSearchBarIsOpen} />
                     </TabPanel>
                 </TabPanels>

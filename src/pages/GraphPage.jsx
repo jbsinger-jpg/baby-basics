@@ -30,9 +30,7 @@ export default function GraphPage() {
 
     const [deleteHCPointIsLoading, setDeleteHCPointIsLoading] = useState(false);
     const [deleteWLPointIsLoading, setDeleteWLPointIsLoading] = useState(false);
-
     const [weightLengthGraphPoints, setWeightLengthGraphPoints] = useState([]);
-
     const [selectedDate, setSelectedDate] = useState(new Date());
 
     const handleSelectedDateChange = (date) => {
@@ -52,6 +50,8 @@ export default function GraphPage() {
             .doc(auth.currentUser.uid)
             .collection("weight-graph")
             .doc(selectedAgeOption)
+            .collection("dates")
+            .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
             .set({
                 graph_points: [...newGraphPoints]
             }).finally(() => {
@@ -78,6 +78,8 @@ export default function GraphPage() {
                 .doc(auth?.currentUser?.uid)
                 .collection("circumference-graph")
                 .doc(selectedAgeOption)
+                .collection("dates")
+                .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
                 .set({
                     graph_points: [...newGraphPoints]
                 }).finally(() => {
@@ -91,16 +93,19 @@ export default function GraphPage() {
     };
     // =========================================================================================
     // =========================================================================================
-    const queryDatabaseForBabyAge = () => {
+    const queryDatabaseForBabyAge = async () => {
         setGraphButtonDataIsLoading(true);
-        firestore
+        await firestore
             .collection("users")
             .doc(auth.currentUser.uid)
             .collection("circumference-graph")
             .doc(selectedAgeOption)
+            .collection("dates")
+            .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
             .get()
             .then(doc => {
-                if (doc.exists) {
+                if (doc.data()) {
+                    console.log(doc.data());
                     setCircumferenceWeightGraphPoints(doc.data().graph_points);
                 }
                 else {
@@ -108,14 +113,17 @@ export default function GraphPage() {
                 }
             });
 
-        firestore
+        await firestore
             .collection("users")
             .doc(auth.currentUser.uid)
             .collection("weight-graph")
             .doc(selectedAgeOption)
+            .collection("dates")
+            .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
             .get()
             .then(doc => {
-                if (doc.exists) {
+                if (doc.data()) {
+                    console.log(doc.data());
                     setWeightLengthGraphPoints(doc.data().graph_points);
                 }
                 else {
@@ -179,6 +187,8 @@ export default function GraphPage() {
             .doc(auth?.currentUser?.uid)
             .collection("circumference-graph")
             .doc(selectedAgeOption)
+            .collection("dates")
+            .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
             .set({
                 graph_points: [...newHeightLengthPoints]
             }).finally(() => {
@@ -197,6 +207,8 @@ export default function GraphPage() {
             .doc(auth?.currentUser?.uid)
             .collection("weight-graph")
             .doc(selectedAgeOption)
+            .collection("dates")
+            .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
             .set({
                 graph_points: [...newWeightLengthPoints]
             }).finally(() => {
@@ -208,16 +220,36 @@ export default function GraphPage() {
 
     useEffect(() => {
         if (auth?.currentUser?.uid) {
-            firestore.collection("users").doc(auth?.currentUser?.uid)
-                .collection("weight-graph").doc("1")
-                .get().then((doc) => {
-                    setWeightLengthGraphPoints(doc.data().graph_points);
+            firestore.collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("weight-graph")
+                .doc("1")
+                .collection("dates")
+                .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
+                .get()
+                .then((doc) => {
+                    if (doc.data()) {
+                        setWeightLengthGraphPoints(doc.data().graph_points);
+                    }
+                    else {
+                        setWeightLengthGraphPoints([]);
+                    }
                 });
 
-            firestore.collection("users").doc(auth?.currentUser?.uid)
-                .collection("circumference-graph").doc("1")
-                .get().then((doc) => {
-                    setCircumferenceWeightGraphPoints(doc.data().graph_points);
+            firestore.collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("circumference-graph")
+                .doc("1")
+                .collection("dates")
+                .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
+                .get()
+                .then((doc) => {
+                    if (doc.data()) {
+                        setCircumferenceWeightGraphPoints(doc.data().graph_points);
+                    }
+                    else {
+                        setCircumferenceWeightGraphPoints([]);
+                    }
                 });
         }
         // eslint-disable-next-line
