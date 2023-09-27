@@ -1,5 +1,8 @@
 import { Box, Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, IconButton, Input, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverTrigger, Tab, TabList, TabPanel, TabPanels, Tabs, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
+import { CalendarIcon } from '@chakra-ui/icons';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 import { cardBackground, screenBackground } from '../defaultStyle';
 import BabyProgressModal from '../components/modals/BabyProgressModal';
@@ -11,9 +14,6 @@ import GraphPage from './GraphPage';
 import { auth, firestore } from '../firebaseConfig';
 import { childBirthOptions, childGenderOptions, childRelationshipOptions } from '../components/staticPageData/child-options';
 import MissingDataMessage from '../components/MissingDataMessage';
-import { CalendarIcon } from '@chakra-ui/icons';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 
 export default function ProgressPage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);

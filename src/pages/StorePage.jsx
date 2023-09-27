@@ -19,6 +19,7 @@ import { screenBackground } from '../defaultStyle';
 import VitaminDataTabPanel from '../components/tabPanels/VitaminDataTabPanel';
 import BabyImagesModal from '../components/modals/BabyImagesModal';
 import SleepTabPanel from '../components/tabPanels/SleepTabPanel';
+import BathTabPanel from '../components/tabPanels/BathTabPanel';
 
 export default function StorePage() {
     // hooks
@@ -73,16 +74,19 @@ export default function StorePage() {
     const [vitaminData, setVitaminData] = useState(null);
     const [vitaminDataIsLoading, setVitaminDataIsLoading] = useState(true);
 
+    // sleep data
     const [sleepData, setSleepData] = useState(null);
     const [sleepDataIsLoading, setSleepDataIsLoading] = useState(true);
+
+    // bath data
+    const [bathData, setBathData] = useState(null);
+    const [bathDataIsLoading, setBathDataIsLoading] = useState(true);
 
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
     const [screenHeight, setScreenHeight] = useState(window.innerHeight);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
-
     const [babyImagesModalIsOpen, setBabyImagesModalIsOpen] = useState(false);
-
     const [searchInProgress, setSearchInProgress] = useState(false);
 
     // // initialize the page with the data from the data base
@@ -210,6 +214,17 @@ export default function StorePage() {
                 setSleepDataIsLoading(false);
                 options = [];
             });
+
+        firestore.collection('bath').get()
+            .then(snapshot => {
+                snapshot.docs.forEach(doc => {
+                    options.push({ ...doc.data() });
+                });
+
+                setBathData(options);
+                setBathDataIsLoading(false);
+                options = [];
+            });
     }, []);
 
     useEffect(() => {
@@ -233,7 +248,7 @@ export default function StorePage() {
             overflowX="hidden"
         >
             {/* IF CONTENT IS LOADING DISPLAY SPINNER ICON */}
-            {!clothingData || !foodData || !diaperData || !maternialData || !formulaData || !toyData || !monitorData || !seatData || !strollerData || !vitaminData || !sleepData || searchInProgress ?
+            {!clothingData || !foodData || !diaperData || !maternialData || !formulaData || !toyData || !monitorData || !seatData || !strollerData || !vitaminData || !sleepData || !bathData || searchInProgress ?
                 <Box
                     alignItems="center"
                     justifyContent="center"
@@ -329,6 +344,13 @@ export default function StorePage() {
                                 <SleepTabPanel
                                     sleepData={sleepData}
                                     sleepDataIsLoading={sleepDataIsLoading}
+                                    tabIndex={tabIndex}
+                                />
+                            </TabPanel>
+                            <TabPanel>
+                                <BathTabPanel
+                                    bathData={bathData}
+                                    bathDataIsLoading={bathDataIsLoading}
                                     tabIndex={tabIndex}
                                 />
                             </TabPanel>
