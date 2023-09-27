@@ -9,7 +9,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import { screenBackground } from '../defaultStyle';
 import { auth, firestore } from '../firebaseConfig';
 
-
 export default function GraphPage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
     const [selectedAgeOption, setSelectedAgeOption] = useState("1");
