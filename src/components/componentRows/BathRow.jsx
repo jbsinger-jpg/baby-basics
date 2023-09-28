@@ -131,7 +131,7 @@ export default function BathRow({ bath, bathDataIsLoading, tabIndex, ml }) {
                                     }}
                                 >
                                     {/* Prevent image from exploding in dimensions */}
-                                    {(tabIndex === 10 && !buttonsPressed) &&
+                                    {(tabIndex === 11 && !buttonsPressed) &&
                                         <div style={{ width: '150px', height: '200px' }}>
                                             <ReactImageMagnify
                                                 imageProps={{

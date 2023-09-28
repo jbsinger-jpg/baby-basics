@@ -15,7 +15,7 @@ export default function BathTabPanel({ bathData, bathDataIsLoading, tabIndex }) 
                         bath={bath}
                         bathDataIsLoading={bathDataIsLoading}
                         tabIndex={tabIndex}
-                        ml={index === 0 && "13"}
+                        ml={index === 0 && "10"}
                     />
                 );
             })}

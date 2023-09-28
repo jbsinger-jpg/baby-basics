@@ -373,6 +373,7 @@ export default function StorePage() {
                 setStrollerData={setStrollerData}
                 setVitaminData={setVitaminData}
                 setSleepData={setSleepData}
+                setBathData={setBathData}
                 tabIndex={tabIndex}
                 setTabIndex={setTabIndex}
                 setSearchInProgress={setSearchInProgress}

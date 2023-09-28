@@ -14,7 +14,7 @@ export default function SleepTabPanel({ sleepData, sleepDataIsLoading, tabIndex 
                         sleep={sleep}
                         sleepDataIsLoading={sleepDataIsLoading}
                         tabIndex={tabIndex}
-                        ml={index === 0 && "12"}
+                        ml={index === 0 && "10"}
                     />
                 );
             })}

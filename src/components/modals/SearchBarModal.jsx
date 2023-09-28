@@ -22,10 +22,46 @@ export default function SearchBarAlertDialog({
     setStrollerData,
     setVitaminData,
     setSleepData,
+    setBathData,
     tabIndex,
     setTabIndex,
     setSearchInProgress,
 }) {
+    // Search bar category options
+    const options = [
+        { key: 0, value: "Clothing", label: "Clothing" },
+        { key: 1, value: "Food", label: "Food" },
+        { key: 2, value: "Diapers", label: "Diapers" },
+        { key: 3, value: "Vitamins", label: "Vitamins" },
+        { key: 4, value: "Maternal", label: "Maternal" },
+        { key: 5, value: "Formula", label: "Formula" },
+        { key: 6, value: "Toys", label: "Toys" },
+        { key: 7, value: "Monitors", label: "Monitors" },
+        { key: 8, value: "Seats", label: "Seats" },
+        { key: 9, value: "Strollers", label: "Strollers" },
+        { key: 10, value: "Sleep", label: "Sleep" },
+        { key: 11, value: "Bath", label: "Bath" },
+    ];
+
+    const [selectedCategory, setSelectedCategory] = useState(options[tabIndex]?.value);
+    const [searchTabIndex, setSearchTabIndex] = useState(tabIndex);
+    const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
+    const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
+
+    const handleTabsChange = (event) => {
+        let matchedValue = null;
+
+        for (const option of options) {
+            if (option.value === event.target.value) {
+                matchedValue = option;
+            }
+        }
+
+        setSearchTabIndex(matchedValue.key);
+        setTabIndex(matchedValue.key);
+        setSelectedCategory(event.target.value);
+    };
+
     // food
     const [stageOption, setStageOption] = useState(null);
     const [foodPrice, setFoodPrice] = useState(null);
@@ -476,37 +512,57 @@ export default function SearchBarAlertDialog({
         );
     };
 
-    const options = [
-        { key: 0, value: "Clothing", label: "Clothing" },
-        { key: 1, value: "Food", label: "Food" },
-        { key: 2, value: "Diapers", label: "Diapers" },
-        { key: 3, value: "Vitamins", label: "Vitamins" },
-        { key: 4, value: "Maternal", label: "Maternal" },
-        { key: 5, value: "Formula", label: "Formula" },
-        { key: 6, value: "Toys", label: "Toys" },
-        { key: 7, value: "Monitors", label: "Monitors" },
-        { key: 8, value: "Seats", label: "Seats" },
-        { key: 9, value: "Strollers", label: "Strollers" },
-        { key: 10, value: "Sleep", label: "Sleep" },
+    const bathOptions = [
+        { value: "stokke", label: "Stokke", key: 0 },
+        { value: "the first years", label: "The First Years", key: 1 },
+        { value: "contours", label: "Contours", key: 2 },
+        { value: "mukin", label: "Mukin", key: 3 },
+        { value: "ease cubs", label: "Ease Cubs", key: 4 },
+        { value: "burt's bees baby", label: "Burt's Bees Baby", key: 5 },
+        { value: "cetaphil", label: "Cetaphil", key: 6 },
+        { value: "aveeno baby", label: "Aveeno Baby", key: 7 },
+        { value: "pigeon", label: "Pigeon", key: 8 },
+        { value: "pandaEar", label: "PandaEar", key: 9 },
     ];
 
-    const [selectedCategory, setSelectedCategory] = useState(options[tabIndex]?.value);
-    const [searchTabIndex, setSearchTabIndex] = useState(tabIndex);
-    const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
-    const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
+    const [bathBrand, setBathBrand] = useState("");
+    const [bathPrice, setBathPrice] = useState("");
+    const [bathType, setBathType] = useState("");
 
-    const handleTabsChange = (event) => {
-        let matchedValue = null;
+    const bathTypeOptions = [
+        { value: "bath", label: "bath", key: 0 },
+        { value: "cloth", label: "wash cloths", key: 1 },
+    ];
 
-        for (const option of options) {
-            if (option.value === event.target.value) {
-                matchedValue = option;
-            }
-        }
-
-        setSearchTabIndex(matchedValue.key);
-        setTabIndex(matchedValue.key);
-        setSelectedCategory(event.target.value);
+    const getBathSearchBarItems = () => {
+        return (
+            <VStack display="flex" alignItems={"start"}>
+                <Text>Brand</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={bathOptions}
+                        value={bathBrand}
+                        onChange={(event) => { setBathBrand(event.target.value); }}
+                    />
+                </HStack>
+                <Text>Price</Text>
+                <HStack width="100%">
+                    <Input
+                        placeholder="price no more than..."
+                        value={bathPrice}
+                        onChange={(event) => setBathPrice(event.target.value.replace(/[^0-9.-]/g, ""))}
+                    />
+                </HStack>
+                <Text>Type</Text>
+                <HStack width="100%">
+                    <StyledSelect
+                        options={bathTypeOptions}
+                        value={bathType}
+                        onChange={(event) => setBathType(event.target.value)}
+                    />
+                </HStack>
+            </VStack>
+        );
     };
 
     const handleFoodSearch = async () => {
@@ -1005,6 +1061,53 @@ export default function SearchBarAlertDialog({
         }
     };
 
+    const handleBathSearch = async () => {
+        let bathOptions = [];
+        let bathData = [];
+
+        const formattedBathPrice = Number(bathPrice).toFixed(2);
+        let bathRef = await firestore.collection('bath');
+
+        if (bathBrand) {
+            bathOptions.push({ dbField: "brand", operator: "==", operand: bathBrand });
+        }
+
+        if (formattedBathPrice && formattedBathPrice > 0) {
+            bathOptions.push({ dbField: "price", operator: "<=", operand: Number(formattedBathPrice) });
+        }
+
+        if (bathType) {
+            bathOptions.push({ dbField: "type", operator: "==", operand: bathType });
+        }
+
+        for (let i = 0; i < bathOptions.length; i++) {
+            bathRef = await bathRef.where(bathOptions[i].dbField, bathOptions[i].operator, bathOptions[i].operand);
+        }
+
+        bathRef.get().then((querySnapshot => {
+            querySnapshot.docs.forEach(doc => {
+                bathData.push({ ...doc.data() });
+            });
+
+            setBathData(bathData);
+            setSearchInProgress(false);
+        }));
+
+        if (!bathBrand && !bathPrice && !bathType) {
+            firestore.collection('bath')
+                .get()
+                .then(snapshot => {
+                    snapshot.docs.forEach(doc => {
+                        bathData.push({ ...doc.data() });
+                    });
+
+                    const uniqueArray = [...new Set(bathData.map(obj => JSON.stringify(obj)))].map(str => JSON.parse(str));
+                    setBathData(uniqueArray);
+                    setSearchInProgress(false);
+                });
+        }
+    };
+
     useEffect(() => {
         if (searchBarIsOpen) {
             setSearchTabIndex(tabIndex);
@@ -1022,7 +1125,6 @@ export default function SearchBarAlertDialog({
             setClothingType("");
         }
         else if (searchTabIndex === 1) {
-            // clear food entry
             setFoodBrand("");
             setFoodPrice("");
             setStageOption("");
@@ -1064,6 +1166,11 @@ export default function SearchBarAlertDialog({
             setSleepBrand("");
             setSleepPrice("");
         }
+        else if (searchTabIndex === 11) {
+            setBathBrand("");
+            setBathPrice("");
+            setBathType("");
+        }
     };
 
     const handleGenericSearch = () => {
@@ -1101,6 +1208,9 @@ export default function SearchBarAlertDialog({
         }
         else if (searchTabIndex === 10) {
             return handleSleepSearch();
+        }
+        else if (searchTabIndex === 11) {
+            return handleBathSearch();
         }
     };
 
@@ -1156,6 +1266,9 @@ export default function SearchBarAlertDialog({
                             </TabPanel>
                             <TabPanel>
                                 {getSleepSearchBarItems()}
+                            </TabPanel>
+                            <TabPanel>
+                                {getBathSearchBarItems()}
                             </TabPanel>
                         </TabPanels>
                     </Tabs>
