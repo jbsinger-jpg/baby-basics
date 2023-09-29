@@ -96,7 +96,7 @@ export default function GraphPage() {
         setGraphButtonDataIsLoading(true);
         await firestore
             .collection("users")
-            .doc(auth.currentUser.uid)
+            .doc(auth?.currentUser?.uid)
             .collection("circumference-graph")
             .doc(selectedAgeOption)
             .collection("dates")
@@ -114,7 +114,7 @@ export default function GraphPage() {
 
         await firestore
             .collection("users")
-            .doc(auth.currentUser.uid)
+            .doc(auth?.currentUser?.uid)
             .collection("weight-graph")
             .doc(selectedAgeOption)
             .collection("dates")
@@ -128,6 +128,7 @@ export default function GraphPage() {
                 else {
                     setWeightLengthGraphPoints([]);
                 }
+            }).finally(() => {
                 setGraphButtonDataIsLoading(false);
             });
     };
