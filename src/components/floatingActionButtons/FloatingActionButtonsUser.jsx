@@ -1,4 +1,4 @@
-import { VStack, useToast } from '@chakra-ui/react';
+import { useToast } from '@chakra-ui/react';
 import { GoogleAuthProvider } from 'firebase/auth';
 import { UnlockIcon } from '@chakra-ui/icons';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -8,10 +8,11 @@ import ColorModeToggleButton from '../ColorModeToggleButton';
 import FabTemplate from './StandardFab';
 import FloatingActionButtonContainer from './FloatingActionButtonContainer';
 
-export default function FloatingActionButtonsUser() {
+export default function FloatingActionButtonsUser({ setSignInLoading }) {
     const toast = useToast();
 
     const handleSignInGoogle = () => {
+        setSignInLoading(true);
         const provider = new GoogleAuthProvider();
 
         auth.signInWithPopup(provider).then(async (result) => {
@@ -45,6 +46,8 @@ export default function FloatingActionButtonsUser() {
                 duration: 9000,
                 isClosable: true,
             });
+        }).finally(() => {
+            setSignInLoading(false);
         });
     };
 

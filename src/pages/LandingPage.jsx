@@ -20,11 +20,15 @@ import ScreeningPage from './ScreeningPage';
 import FloatingActionButtonContainer from '../components/floatingActionButtons/FloatingActionButtonContainer';
 import ColorModeToggleButton from '../components/ColorModeToggleButton';
 import ChatPage from './ChatPage';
+import { auth } from '../firebaseConfig';
+import MissingDataMessage from '../components/MissingDataMessage';
+import { Spinner } from '@chakra-ui/react';
 
 export default function LandingPage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
     const [screenHeight, setScreenHeight] = useState(window.innerHeight);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+    const [signInLoading, setSignInLoading] = useState(false);
 
     const socialPageOptions = [
         { key: 0, value: "pictures", label: "Pictures" },
@@ -85,82 +89,105 @@ export default function LandingPage() {
             w={screenWidth}
             overflowX="hidden"
         >
-            <Tabs isFitted>
-                <TabList>
-                    <Tab>
-                        Information
-                    </Tab>
-                    <Tab>
-                        User
-                    </Tab>
-                    <Tab>
-                        Social
-                    </Tab>
-                    <Tab>
-                        Store
-                    </Tab>
-                </TabList>
-                <TabPanels>
-                    <TabPanel>
-                        <VStack
-                            alignItems="start"
-                        >
-                            {informationPanelOptions && informationPanelOptions.map((panelOption, index) => {
-                                return (
-                                    <FabTemplate
-                                        key={index}
-                                        height={informationCardHeight}
-                                        icon={panelOption.icon}
-                                        onClick={panelOption.handleClick}
-                                        label={panelOption.label}
-                                    />
-                                );
-                            })}
-                        </VStack>
-                        <FloatingActionButtonContainer>
-                            <ColorModeToggleButton />
-                        </FloatingActionButtonContainer>
-                    </TabPanel>
-                    <TabPanel>
-                        <FloatingActionButtonsUser />
-                        <VStack
-                            alignItems="start"
-                        >
-                            {userPanelOptions && userPanelOptions.map((panelOption, index) => {
-                                return (
-                                    <FabTemplate
-                                        key={index}
-                                        height={userCardHeight}
-                                        icon={panelOption.icon}
-                                        onClick={panelOption.handleClick}
-                                        label={panelOption.label}
-                                    />
-                                );
-                            })}
-                        </VStack>
-                    </TabPanel>
-                    <TabPanel>
-                        <StyledSelect
-                            options={socialPageOptions}
-                            value={socialPageOption}
-                            onChange={handleSocialPageOptionChange}
-                            removeNullOption
-                        />
-                        {socialPageOption === "pictures" &&
-                            <BabyPicturePage />
+            {signInLoading ?
+                <VStack
+                    w="100vw"
+                    h="100vh"
+                    justifyContent="center"
+                >
+                    <Spinner size="xl" />
+                </VStack>
+                :
+                <Tabs isFitted>
+                    <TabList>
+                        {auth?.currentUser?.uid &&
+                            <Tab>
+                                Information
+                            </Tab>
                         }
-                        {socialPageOption === "about" &&
-                            <ScreeningPage />
+                        <Tab>
+                            User
+                        </Tab>
+                        {auth?.currentUser?.uid &&
+                            <Tab>
+                                Social
+                            </Tab>
                         }
-                        {socialPageOption === "chatWithPeeps" &&
-                            <ChatPage />
+                        <Tab>
+                            Store
+                        </Tab>
+                    </TabList>
+                    <TabPanels>
+                        {auth?.currentUser?.uid &&
+                            <TabPanel>
+                                <VStack
+                                    alignItems="start"
+                                >
+                                    {informationPanelOptions && informationPanelOptions.map((panelOption, index) => {
+                                        return (
+                                            <FabTemplate
+                                                key={index}
+                                                height={informationCardHeight}
+                                                icon={panelOption.icon}
+                                                onClick={panelOption.handleClick}
+                                                label={panelOption.label}
+                                            />
+                                        );
+                                    })}
+                                </VStack>
+                                <FloatingActionButtonContainer>
+                                    <ColorModeToggleButton />
+                                </FloatingActionButtonContainer>
+                            </TabPanel>
                         }
-                    </TabPanel>
-                    <TabPanel>
-                        <StorePage />
-                    </TabPanel>
-                </TabPanels>
-            </Tabs>
+                        <TabPanel>
+                            <FloatingActionButtonsUser setSignInLoading={setSignInLoading} />
+                            <VStack
+                                alignItems="start"
+                            >
+                                {auth?.currentUser?.uid && userPanelOptions ? userPanelOptions.map((panelOption, index) => {
+                                    return (
+                                        <FabTemplate
+                                            key={index}
+                                            height={userCardHeight}
+                                            icon={panelOption.icon}
+                                            onClick={panelOption.handleClick}
+                                            label={panelOption.label}
+                                        />
+                                    );
+                                })
+                                    :
+                                    <VStack alignItems="center" justifyContent="center" h="90vh" w="100vw">
+                                        <MissingDataMessage message="Please sign in to access other site features!" />
+                                    </VStack>
+                                }
+                            </VStack>
+                        </TabPanel>
+                        {auth?.currentUser?.uid &&
+                            <TabPanel>
+                                <StyledSelect
+                                    options={socialPageOptions}
+                                    value={socialPageOption}
+                                    onChange={handleSocialPageOptionChange}
+                                    removeNullOption
+                                />
+                                {socialPageOption === "pictures" &&
+                                    <BabyPicturePage />
+                                }
+                                {socialPageOption === "about" &&
+                                    <ScreeningPage />
+                                }
+                                {socialPageOption === "chatWithPeeps" &&
+                                    <ChatPage />
+                                }
+                            </TabPanel>
+                        }
+                        <TabPanel>
+                            <StorePage />
+                        </TabPanel>
+                    </TabPanels>
+                </Tabs>
+            }
         </Box>
     );
 }
