@@ -8,10 +8,10 @@ import "react-datepicker/dist/react-datepicker.css";
 // Relative imports
 import { screenBackground } from '../defaultStyle';
 import { auth, firestore } from '../firebaseConfig';
+import StyledSelect from '../components/StyledSelect';
 
 export default function GraphPage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
-    const [selectedAgeOption, setSelectedAgeOption] = useState("1");
     const [selectedLength, setSelectedLength] = useState(1);
     const [selectedWeight, setSelectedWeight] = useState(1);
     const [headCircumference, setHeadCircumference] = useState(1);
@@ -31,6 +31,8 @@ export default function GraphPage() {
     const [deleteWLPointIsLoading, setDeleteWLPointIsLoading] = useState(false);
     const [weightLengthGraphPoints, setWeightLengthGraphPoints] = useState([]);
     const [selectedDate, setSelectedDate] = useState(new Date());
+    const [childOptions, setChildOptions] = useState(null);
+    const [selectedChildOption, setSelectedChildOption] = useState("");
 
     const handleSelectedDateChange = (date) => {
         setSelectedDate(date);
@@ -46,10 +48,10 @@ export default function GraphPage() {
         // Update both the front and backend whenever the button is pressed
         firestore
             .collection("users")
-            .doc(auth.currentUser.uid)
+            .doc(auth?.currentUser?.uid)
+            .collection("children")
+            .doc(selectedChildOption)
             .collection("weight-graph")
-            .doc(selectedAgeOption)
-            .collection("dates")
             .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
             .set({
                 graph_points: [...newGraphPoints]
@@ -63,6 +65,7 @@ export default function GraphPage() {
     // Head Circumference/Weight Graph
     // x = head circumference, y = weight
     const [circumferenceWeightGraphPoints, setCircumferenceWeightGraphPoints] = useState([]);
+
     const addCircumferenceWeightGraphPoint = () => {
         setCircumferenceButtonIsLoading(true);
         if (Number(headCircumference) && Number(selectedWeight)) {
@@ -75,9 +78,9 @@ export default function GraphPage() {
             firestore
                 .collection("users")
                 .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
                 .collection("circumference-graph")
-                .doc(selectedAgeOption)
-                .collection("dates")
                 .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
                 .set({
                     graph_points: [...newGraphPoints]
@@ -97,14 +100,13 @@ export default function GraphPage() {
         await firestore
             .collection("users")
             .doc(auth?.currentUser?.uid)
+            .collection("children")
+            .doc(selectedChildOption)
             .collection("circumference-graph")
-            .doc(selectedAgeOption)
-            .collection("dates")
             .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
             .get()
             .then(doc => {
                 if (doc.data()) {
-                    console.log(doc.data());
                     setCircumferenceWeightGraphPoints(doc.data().graph_points);
                 }
                 else {
@@ -115,14 +117,13 @@ export default function GraphPage() {
         await firestore
             .collection("users")
             .doc(auth?.currentUser?.uid)
+            .collection("children")
+            .doc(selectedChildOption)
             .collection("weight-graph")
-            .doc(selectedAgeOption)
-            .collection("dates")
             .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
             .get()
             .then(doc => {
                 if (doc.data()) {
-                    console.log(doc.data());
                     setWeightLengthGraphPoints(doc.data().graph_points);
                 }
                 else {
@@ -152,6 +153,8 @@ export default function GraphPage() {
             firestore
                 .collection("users")
                 .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
                 .collection("circumference-graph")
                 .get()
                 .then(snapshot => {
@@ -161,9 +164,12 @@ export default function GraphPage() {
                     });
                     setCircumferenceWeightGraphPoints(newGraphPoints);
                 });
+
             firestore
                 .collection("users")
                 .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
                 .collection("weight-graph")
                 .get()
                 .then(snapshot => {
@@ -172,6 +178,41 @@ export default function GraphPage() {
                         newGraphPoints = newGraphPoints.concat(doc.data().graph_points);
                     });
                     setWeightLengthGraphPoints(newGraphPoints);
+                });
+        }
+        else {
+            firestore
+                .collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("circumference-graph")
+                .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
+                .get()
+                .then(doc => {
+                    if (doc.data() && doc.data().graph_points) {
+                        setCircumferenceWeightGraphPoints(doc.data().graph_points);
+                    }
+                    else {
+                        setCircumferenceWeightGraphPoints([]);
+                    }
+                });
+
+            firestore
+                .collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("weight-graph")
+                .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
+                .get()
+                .then(doc => {
+                    if (doc.data() && doc.data().graph_points) {
+                        setWeightLengthGraphPoints(doc.data().graph_points);
+                    }
+                    else {
+                        setWeightLengthGraphPoints([]);
+                    }
                 });
         }
     };
@@ -185,9 +226,9 @@ export default function GraphPage() {
         firestore
             .collection("users")
             .doc(auth?.currentUser?.uid)
+            .collection("children")
+            .doc(selectedChildOption)
             .collection("circumference-graph")
-            .doc(selectedAgeOption)
-            .collection("dates")
             .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
             .set({
                 graph_points: [...newHeightLengthPoints]
@@ -205,14 +246,54 @@ export default function GraphPage() {
         firestore
             .collection("users")
             .doc(auth?.currentUser?.uid)
+            .collection("children")
+            .doc(selectedChildOption)
             .collection("weight-graph")
-            .doc(selectedAgeOption)
-            .collection("dates")
             .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
             .set({
                 graph_points: [...newWeightLengthPoints]
             }).finally(() => {
                 setDeleteWLPointIsLoading(false);
+            });
+    };
+
+    const handleSelectedChildChange = async (event) => {
+        setSelectedChildOption(event.target.value);
+
+        await firestore
+            .collection("users")
+            .doc(auth?.currentUser?.uid)
+            .collection("children")
+            .doc(selectedChildOption)
+            .collection("circumference-graph")
+            .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
+            .get()
+            .then(doc => {
+                if (doc.data()) {
+                    setCircumferenceWeightGraphPoints(doc.data().graph_points);
+                }
+                else {
+                    setCircumferenceWeightGraphPoints([]);
+                }
+            });
+
+        await firestore
+            .collection("users")
+            .doc(auth?.currentUser?.uid)
+            .collection("children")
+            .doc(selectedChildOption)
+            .collection("weight-graph")
+            .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
+            .get()
+            .then(doc => {
+                if (doc.data()) {
+                    setWeightLengthGraphPoints(doc.data().graph_points);
+                }
+                else {
+                    setWeightLengthGraphPoints([]);
+                }
+            }).finally(() => {
+                setGraphButtonDataIsLoading(false);
             });
     };
 
@@ -222,33 +303,54 @@ export default function GraphPage() {
         if (auth?.currentUser?.uid) {
             firestore.collection("users")
                 .doc(auth?.currentUser?.uid)
-                .collection("weight-graph")
-                .doc("1")
-                .collection("dates")
-                .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
-                .get()
-                .then((doc) => {
-                    if (doc.data()) {
-                        setWeightLengthGraphPoints(doc.data().graph_points);
-                    }
-                    else {
-                        setWeightLengthGraphPoints([]);
-                    }
-                });
+                .collection("children")
+                .get().then(async (snapshot) => {
+                    let options = [];
+                    let index = 0;
 
-            firestore.collection("users")
-                .doc(auth?.currentUser?.uid)
-                .collection("circumference-graph")
-                .doc("1")
-                .collection("dates")
-                .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
-                .get()
-                .then((doc) => {
-                    if (doc.data()) {
-                        setCircumferenceWeightGraphPoints(doc.data().graph_points);
+                    snapshot.docs.forEach(doc => {
+                        options.push({ key: index, value: doc.data().name, label: doc.data().name });
+                        index += 1;
+                    });
+
+                    await setChildOptions(options);
+
+                    if (options.length) {
+                        await setSelectedChildOption(options[0].value);
+                        firestore.collection("users")
+                            .doc(auth?.currentUser?.uid)
+                            .collection("children")
+                            .doc(options[0].value)
+                            .collection("weight-graph")
+                            .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
+                            .get()
+                            .then((doc) => {
+                                if (doc.data()) {
+                                    setWeightLengthGraphPoints(doc.data().graph_points);
+                                }
+                                else {
+                                    setWeightLengthGraphPoints([]);
+                                }
+                            });
+
+                        firestore.collection("users")
+                            .doc(auth?.currentUser?.uid)
+                            .collection("children")
+                            .doc(options[0].value)
+                            .collection("circumference-graph")
+                            .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
+                            .get()
+                            .then((doc) => {
+                                if (doc.data()) {
+                                    setCircumferenceWeightGraphPoints(doc.data().graph_points);
+                                }
+                                else {
+                                    setCircumferenceWeightGraphPoints([]);
+                                }
+                            });
                     }
                     else {
-                        setCircumferenceWeightGraphPoints([]);
+                        await setSelectedChildOption([]);
                     }
                 });
         }
@@ -336,35 +438,28 @@ export default function GraphPage() {
             >
                 <VStack alignItems="start">
                     <FormLabel>Date</FormLabel>
-                    <DatePicker
-                        customInput={<Input />}
-                        selected={selectedDate}
-                        onChange={handleSelectedDateChange}
-                    />
-                    <FormLabel htmlFor='age-months'>Age Months</FormLabel>
-                    <HStack justifyContent="space-between">
-                        <HStack>
-                            <NumberInput
-                                min={1}
-                                max={24}
-                                value={selectedAgeOption}
-                                onChange={valueString => setSelectedAgeOption(valueString)}
-                                isDisabled={allGraphPointsIsVisible}
-                            >
-                                <NumberInputField
-                                    id="age-months"
-                                    placeholder="Age-months"
-                                />
-                                <NumberInputStepper>
-                                    <NumberIncrementStepper />
-                                    <NumberDecrementStepper />
-                                </NumberInputStepper>
-                            </NumberInput>
-                            <Button onClick={queryDatabaseForBabyAge} isLoading={graphButtonDataIsLoading} isDisabled={allGraphPointsIsVisible}>
-                                View Graph
-                            </Button>
-                        </HStack>
+                    <HStack>
+                        <DatePicker
+                            disabled={allGraphPointsIsVisible}
+                            customInput={<Input />}
+                            selected={selectedDate}
+                            onChange={handleSelectedDateChange}
+                        />
+                        <Button
+                            onClick={queryDatabaseForBabyAge}
+                            isLoading={graphButtonDataIsLoading}
+                            isDisabled={allGraphPointsIsVisible}
+                        >
+                            View Graph
+                        </Button>
                     </HStack>
+                    <FormLabel>Child</FormLabel>
+                    <StyledSelect
+                        removeNullOption
+                        options={childOptions}
+                        value={selectedChildOption}
+                        onChange={handleSelectedChildChange}
+                    />
                     <Checkbox
                         isChecked={allGraphPointsIsVisible}
                         onChange={handleShowAllGraphData}
