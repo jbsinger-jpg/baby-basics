@@ -9,10 +9,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import { screenBackground } from '../defaultStyle';
 import { auth, firestore } from '../firebaseConfig';
 import StyledSelect from '../components/StyledSelect';
-import MissingDataMessage from '../components/MissingDataMessage';
 import { Icon, InfoOutlineIcon } from '@chakra-ui/icons';
 
-export default function GraphPage() {
+export default function GraphPage({ childOptions }) {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
     const [selectedLength, setSelectedLength] = useState(1);
     const [selectedWeight, setSelectedWeight] = useState(1);
@@ -33,7 +32,6 @@ export default function GraphPage() {
     const [deleteWLPointIsLoading, setDeleteWLPointIsLoading] = useState(false);
     const [weightLengthGraphPoints, setWeightLengthGraphPoints] = useState([]);
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const [childOptions, setChildOptions] = useState(null);
     const [selectedChildOption, setSelectedChildOption] = useState("");
 
     const handleSelectedDateChange = (date) => {
@@ -302,62 +300,48 @@ export default function GraphPage() {
     const textColor = useColorModeValue("black", "white");
 
     useEffect(() => {
+        console.log("Child options: " + childOptions);
         if (auth?.currentUser?.uid) {
-            firestore.collection("users")
-                .doc(auth?.currentUser?.uid)
-                .collection("children")
-                .get().then(async (snapshot) => {
-                    let options = [];
-                    let index = 0;
-
-                    snapshot.docs.forEach(doc => {
-                        options.push({ key: index, value: doc.data().name, label: doc.data().name });
-                        index += 1;
+            if (childOptions && childOptions.length) {
+                setSelectedChildOption(childOptions[0].value);
+                firestore.collection("users")
+                    .doc(auth?.currentUser?.uid)
+                    .collection("children")
+                    .doc(childOptions[0].value)
+                    .collection("weight-graph")
+                    .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
+                    .get()
+                    .then((doc) => {
+                        if (doc.data()) {
+                            setWeightLengthGraphPoints(doc.data().graph_points);
+                        }
+                        else {
+                            setWeightLengthGraphPoints([]);
+                        }
                     });
 
-                    await setChildOptions(options);
-
-                    if (options.length) {
-                        await setSelectedChildOption(options[0].value);
-                        firestore.collection("users")
-                            .doc(auth?.currentUser?.uid)
-                            .collection("children")
-                            .doc(options[0].value)
-                            .collection("weight-graph")
-                            .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
-                            .get()
-                            .then((doc) => {
-                                if (doc.data()) {
-                                    setWeightLengthGraphPoints(doc.data().graph_points);
-                                }
-                                else {
-                                    setWeightLengthGraphPoints([]);
-                                }
-                            });
-
-                        firestore.collection("users")
-                            .doc(auth?.currentUser?.uid)
-                            .collection("children")
-                            .doc(options[0].value)
-                            .collection("circumference-graph")
-                            .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
-                            .get()
-                            .then((doc) => {
-                                if (doc.data()) {
-                                    setCircumferenceWeightGraphPoints(doc.data().graph_points);
-                                }
-                                else {
-                                    setCircumferenceWeightGraphPoints([]);
-                                }
-                            });
-                    }
-                    else {
-                        await setSelectedChildOption([]);
-                    }
-                });
+                firestore.collection("users")
+                    .doc(auth?.currentUser?.uid)
+                    .collection("children")
+                    .doc(childOptions[0].value)
+                    .collection("circumference-graph")
+                    .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
+                    .get()
+                    .then((doc) => {
+                        if (doc.data()) {
+                            setCircumferenceWeightGraphPoints(doc.data().graph_points);
+                        }
+                        else {
+                            setCircumferenceWeightGraphPoints([]);
+                        }
+                    });
+            }
+            else {
+                setSelectedChildOption("");
+            }
         }
         // eslint-disable-next-line
-    }, [auth?.currentUser?.uid]);
+    }, [auth?.currentUser?.uid, childOptions]);
 
     return (
         <Box
