@@ -1,5 +1,5 @@
 // Module imports
-import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Checkbox, FormLabel, HStack, Heading, Image, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, VStack, useColorModeValue } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Checkbox, FormLabel, HStack, Heading, Image, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Text, VStack, useColorModeValue } from '@chakra-ui/react';
 import { VictoryLine, VictoryLabel, VictoryChart, VictoryTheme } from 'victory';
 import { useState, useEffect } from 'react';
 import DatePicker from "react-datepicker";
@@ -9,6 +9,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { screenBackground } from '../defaultStyle';
 import { auth, firestore } from '../firebaseConfig';
 import StyledSelect from '../components/StyledSelect';
+import MissingDataMessage from '../components/MissingDataMessage';
+import { Icon, InfoOutlineIcon } from '@chakra-ui/icons';
 
 export default function GraphPage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
@@ -393,10 +395,19 @@ export default function GraphPage() {
                                 style={{ fill: textColor }}
                             />
                         </VictoryChart>
-                        <HStack>
-                            <Button onClick={addWeightLengthPoint} isLoading={weightButtonIsLoading}>Plot W/L Point</Button>
-                            <Button onClick={handleDeleteWLPoint} isLoading={deleteWLPointIsLoading}>Delete W/L Point</Button>
-                        </HStack>
+                        {childOptions && childOptions.length ?
+                            <HStack>
+                                <Button onClick={addWeightLengthPoint} isLoading={weightButtonIsLoading}>Plot W/L Point</Button>
+                                <Button onClick={handleDeleteWLPoint} isLoading={deleteWLPointIsLoading}>Delete W/L Point</Button>
+                            </HStack>
+                            :
+                            <HStack>
+                                <Icon as={InfoOutlineIcon} />
+                                <Text>
+                                    Add a child to plot points!
+                                </Text>
+                            </HStack>
+                        }
                     </VStack>
                     <VStack
                         h={450}
@@ -421,10 +432,19 @@ export default function GraphPage() {
 
                             />
                         </VictoryChart>
-                        <HStack>
-                            <Button onClick={addCircumferenceWeightGraphPoint} isLoading={circumferenceButtonIsLoading}>Plot W/HC Point</Button>
-                            <Button onClick={handleDeleteHWPoint} isLoading={deleteHCPointIsLoading}>Delete W/HC Point</Button>
-                        </HStack>
+                        {childOptions && childOptions.length ?
+                            <HStack>
+                                <Button onClick={addCircumferenceWeightGraphPoint} isLoading={circumferenceButtonIsLoading}>Plot W/HC Point</Button>
+                                <Button onClick={handleDeleteHWPoint} isLoading={deleteHCPointIsLoading}>Delete W/HC Point</Button>
+                            </HStack>
+                            :
+                            <HStack>
+                                <Icon as={InfoOutlineIcon} />
+                                <Text>
+                                    Add a child to plot points!
+                                </Text>
+                            </HStack>
+                        }
                     </VStack>
                 </HStack>
             </Box>
@@ -440,7 +460,7 @@ export default function GraphPage() {
                     <FormLabel>Date</FormLabel>
                     <HStack>
                         <DatePicker
-                            disabled={allGraphPointsIsVisible}
+                            disabled={allGraphPointsIsVisible || !childOptions?.length}
                             customInput={<Input />}
                             selected={selectedDate}
                             onChange={handleSelectedDateChange}
@@ -448,7 +468,7 @@ export default function GraphPage() {
                         <Button
                             onClick={queryDatabaseForBabyAge}
                             isLoading={graphButtonDataIsLoading}
-                            isDisabled={allGraphPointsIsVisible}
+                            isDisabled={allGraphPointsIsVisible || !childOptions?.length}
                         >
                             View Graph
                         </Button>
@@ -459,10 +479,12 @@ export default function GraphPage() {
                         options={childOptions}
                         value={selectedChildOption}
                         onChange={handleSelectedChildChange}
+                        isDisabled={!childOptions?.length}
                     />
                     <Checkbox
                         isChecked={allGraphPointsIsVisible}
                         onChange={handleShowAllGraphData}
+                        isDisabled={!childOptions?.length}
                     >
                         Show All Graph Points
                     </Checkbox>
