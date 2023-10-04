@@ -1,5 +1,5 @@
 // Module imports
-import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Checkbox, FormLabel, HStack, Heading, Image, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Text, VStack, useColorModeValue } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Checkbox, CheckboxGroup, FormLabel, HStack, Heading, Image, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Text, VStack, useColorModeValue } from '@chakra-ui/react';
 import { VictoryLine, VictoryLabel, VictoryChart, VictoryTheme } from 'victory';
 import { useState, useEffect } from 'react';
 import DatePicker from "react-datepicker";
@@ -20,7 +20,6 @@ export default function GraphPage({ childOptions }) {
     const [growthChartRelativePath, setGrowthChartRelativePath] = useState(require("../../src/components/staticPageData/growth-chart-for-girls.jpg"));
     const [allGraphPointsIsVisible, setAllGraphPointsIsVisible] = useState(false);
 
-    const [graphButtonDataIsLoading, setGraphButtonDataIsLoading] = useState(false);
     const [weightButtonIsLoading, setWeightButtonIsLoading] = useState(false);
     const [circumferenceButtonIsLoading, setCircumferenceButtonIsLoading] = useState(false);
 
@@ -34,15 +33,214 @@ export default function GraphPage({ childOptions }) {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [selectedChildOption, setSelectedChildOption] = useState("");
 
+    const [weeklyGraphPointsVisible, setWeeklyGraphPointsVisible] = useState(false);
+    const [monthlyGraphPointsVisible, setMonthlyGraphPointsVisible] = useState(false);
+    const [dailyGraphPointsVisible, setDailyGraphPointsVisible] = useState(false);
+
+    const handleMonthlyGraphDataChange = (event) => {
+        setMonthlyGraphPointsVisible(event.target.checked);
+        if (event.target.checked) {
+            setAllGraphPointsIsVisible(false);
+            setWeeklyGraphPointsVisible(false);
+            setDailyGraphPointsVisible(false);
+
+            firestore
+                .collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("circumference-graph")
+                .get()
+                .then(snapshot => {
+                    let newGraphPoints = [];
+
+                    snapshot.docs.forEach(doc => {
+                        doc.data().graph_points.forEach(point => {
+                            if (new Date(point.date.toDate()).getMonth() === new Date().getMonth()) {
+                                newGraphPoints.push(point);
+                            }
+
+                        });
+                    });
+                    setCircumferenceWeightGraphPoints(newGraphPoints);
+                });
+
+            firestore
+                .collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("weight-graph")
+                .get()
+                .then(snapshot => {
+                    let newGraphPoints = [];
+                    snapshot.docs.forEach(doc => {
+                        doc.data().graph_points.forEach(point => {
+                            if (new Date(point.date.toDate()).getMonth() === new Date().getMonth()) {
+                                newGraphPoints.push(point);
+                            }
+
+                        });
+                    });
+                    setWeightLengthGraphPoints(newGraphPoints);
+                });
+        }
+        else {
+            firestore
+                .collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("circumference-graph")
+                .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
+                .get()
+                .then(doc => {
+                    if (doc.data() && doc.data().graph_points) {
+                        setCircumferenceWeightGraphPoints(doc.data().graph_points);
+                    }
+                    else {
+                        setCircumferenceWeightGraphPoints([]);
+                    }
+                });
+
+            firestore
+                .collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("weight-graph")
+                .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
+                .get()
+                .then(doc => {
+                    if (doc.data() && doc.data().graph_points) {
+                        setWeightLengthGraphPoints(doc.data().graph_points);
+                    }
+                    else {
+                        setWeightLengthGraphPoints([]);
+                    }
+                });
+        }
+    };
+
+    const handleDailyGraphDataChange = async (event) => {
+        setDailyGraphPointsVisible(event.target.checked);
+
+        if (event.target.checked) {
+            setAllGraphPointsIsVisible(false);
+            setWeeklyGraphPointsVisible(false);
+            setMonthlyGraphPointsVisible(false);
+
+            await firestore
+                .collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("circumference-graph")
+                .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
+                .get()
+                .then(doc => {
+                    if (doc.data()) {
+                        setCircumferenceWeightGraphPoints(doc.data().graph_points);
+                    }
+                    else {
+                        setCircumferenceWeightGraphPoints([]);
+                    }
+                });
+
+            await firestore
+                .collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("weight-graph")
+                .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
+                .get()
+                .then(doc => {
+                    if (doc.data()) {
+                        setWeightLengthGraphPoints(doc.data().graph_points);
+                    }
+                    else {
+                        setWeightLengthGraphPoints([]);
+                    }
+                });
+        }
+    };
+
+    const getWeekFromDate = (dateStr1, dateStr2) => {
+        const date1 = new Date(dateStr1);
+        const date2 = new Date(dateStr2);
+        const difference = Math.abs(date2 - date1);
+        const weeks = Math.floor(difference / (1000 * 60 * 60 * 24 * 7));
+        return Number(weeks);
+    };
+
+    const handleWeeklyGraphDataChange = (event) => {
+        setWeeklyGraphPointsVisible(event.target.checked);
+        if (event.target.checked) {
+            setDailyGraphPointsVisible(false);
+            setMonthlyGraphPointsVisible(false);
+            setAllGraphPointsIsVisible(false);
+            getWeekFromDate(new Date(), new Date("2023-09-15"));
+
+            firestore
+                .collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("circumference-graph")
+                .get()
+                .then(snapshot => {
+                    let newGraphPoints = [];
+                    snapshot.docs.forEach(doc => {
+                        doc.data().graph_points.forEach(point => {
+                            let weekDifference = getWeekFromDate(new Date(), new Date(point.date.toDate()));
+
+                            if (!weekDifference) {
+                                newGraphPoints.push(point);
+                            }
+                        });
+                    });
+                    setCircumferenceWeightGraphPoints(newGraphPoints);
+                });
+
+            firestore
+                .collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("weight-graph")
+                .get()
+                .then(snapshot => {
+                    let newGraphPoints = [];
+                    snapshot.docs.forEach(doc => {
+                        doc.data().graph_points.forEach(point => {
+                            let weekDifference = getWeekFromDate(new Date(), new Date(point.date.toDate()));
+
+                            if (!weekDifference) {
+                                newGraphPoints.push(point);
+                            }
+                        });
+                    });
+                    setWeightLengthGraphPoints(newGraphPoints);
+                });
+        }
+    };
+
     const handleSelectedDateChange = (date) => {
         setSelectedDate(date);
     };
 
     const addWeightLengthPoint = () => {
         setWeightButtonIsLoading(true);
+
+        setAllGraphPointsIsVisible(false);
+        setMonthlyGraphPointsVisible(false);
+        setWeeklyGraphPointsVisible(false);
+        setDailyGraphPointsVisible(false);
+
         let newGraphPoints = [
             ...weightLengthGraphPoints,
-            { x: Number(selectedLength), y: Number(selectedWeight) }
+            { x: Number(selectedLength), y: Number(selectedWeight), date: new Date(selectedDate) }
         ];
 
         // Update both the front and backend whenever the button is pressed
@@ -68,10 +266,16 @@ export default function GraphPage({ childOptions }) {
 
     const addCircumferenceWeightGraphPoint = () => {
         setCircumferenceButtonIsLoading(true);
+
+        setAllGraphPointsIsVisible(false);
+        setMonthlyGraphPointsVisible(false);
+        setWeeklyGraphPointsVisible(false);
+        setDailyGraphPointsVisible(false);
+
         if (Number(headCircumference) && Number(selectedWeight)) {
             let newGraphPoints = [
                 ...circumferenceWeightGraphPoints,
-                { x: Number(headCircumference), y: Number(selectedWeight) }
+                { x: Number(headCircumference), y: Number(selectedWeight), date: selectedDate }
             ];
 
             // Update both the front and backend whenever the button is pressed
@@ -95,45 +299,6 @@ export default function GraphPage({ childOptions }) {
     };
     // =========================================================================================
     // =========================================================================================
-    const queryDatabaseForBabyAge = async () => {
-        setGraphButtonDataIsLoading(true);
-        await firestore
-            .collection("users")
-            .doc(auth?.currentUser?.uid)
-            .collection("children")
-            .doc(selectedChildOption)
-            .collection("circumference-graph")
-            .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
-            .get()
-            .then(doc => {
-                if (doc.data()) {
-                    setCircumferenceWeightGraphPoints(doc.data().graph_points);
-                }
-                else {
-                    setCircumferenceWeightGraphPoints([]);
-                }
-            });
-
-        await firestore
-            .collection("users")
-            .doc(auth?.currentUser?.uid)
-            .collection("children")
-            .doc(selectedChildOption)
-            .collection("weight-graph")
-            .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
-            .get()
-            .then(doc => {
-                if (doc.data()) {
-                    setWeightLengthGraphPoints(doc.data().graph_points);
-                }
-                else {
-                    setWeightLengthGraphPoints([]);
-                }
-            }).finally(() => {
-                setGraphButtonDataIsLoading(false);
-            });
-    };
-
     const showGrowthChartDialog = () => {
         setGraphDialogIsOpen(true);
     };
@@ -150,6 +315,10 @@ export default function GraphPage({ childOptions }) {
     const handleShowAllGraphData = (event) => {
         setAllGraphPointsIsVisible(event.target.checked);
         if (event.target.checked) {
+            setMonthlyGraphPointsVisible(false);
+            setWeeklyGraphPointsVisible(false);
+            setDailyGraphPointsVisible(false);
+
             firestore
                 .collection("users")
                 .doc(auth?.currentUser?.uid)
@@ -219,8 +388,13 @@ export default function GraphPage({ childOptions }) {
 
     const handleDeleteHWPoint = () => {
         setDeleteHCPointIsLoading(true);
-        const newHeightLengthPoints = [...circumferenceWeightGraphPoints];
 
+        setAllGraphPointsIsVisible(false);
+        setMonthlyGraphPointsVisible(false);
+        setWeeklyGraphPointsVisible(false);
+        setDailyGraphPointsVisible(false);
+
+        const newHeightLengthPoints = [...circumferenceWeightGraphPoints];
         newHeightLengthPoints.pop();
         setCircumferenceWeightGraphPoints(newHeightLengthPoints);
         firestore
@@ -239,8 +413,13 @@ export default function GraphPage({ childOptions }) {
 
     const handleDeleteWLPoint = () => {
         setDeleteWLPointIsLoading(true);
-        const newWeightLengthPoints = [...weightLengthGraphPoints];
 
+        setAllGraphPointsIsVisible(false);
+        setMonthlyGraphPointsVisible(false);
+        setWeeklyGraphPointsVisible(false);
+        setDailyGraphPointsVisible(false);
+
+        const newWeightLengthPoints = [...weightLengthGraphPoints];
         newWeightLengthPoints.pop();
         setWeightLengthGraphPoints(newWeightLengthPoints);
         firestore
@@ -292,15 +471,12 @@ export default function GraphPage({ childOptions }) {
                 else {
                     setWeightLengthGraphPoints([]);
                 }
-            }).finally(() => {
-                setGraphButtonDataIsLoading(false);
             });
     };
 
     const textColor = useColorModeValue("black", "white");
 
     useEffect(() => {
-        console.log("Child options: " + childOptions);
         if (auth?.currentUser?.uid) {
             if (childOptions && childOptions.length) {
                 setSelectedChildOption(childOptions[0].value);
@@ -449,13 +625,6 @@ export default function GraphPage({ childOptions }) {
                             selected={selectedDate}
                             onChange={handleSelectedDateChange}
                         />
-                        <Button
-                            onClick={queryDatabaseForBabyAge}
-                            isLoading={graphButtonDataIsLoading}
-                            isDisabled={allGraphPointsIsVisible || !childOptions?.length}
-                        >
-                            View Graph
-                        </Button>
                     </HStack>
                     <FormLabel>Child</FormLabel>
                     <StyledSelect
@@ -465,13 +634,38 @@ export default function GraphPage({ childOptions }) {
                         onChange={handleSelectedChildChange}
                         isDisabled={!childOptions?.length}
                     />
-                    <Checkbox
-                        isChecked={allGraphPointsIsVisible}
-                        onChange={handleShowAllGraphData}
-                        isDisabled={!childOptions?.length}
-                    >
-                        Show All Graph Points
-                    </Checkbox>
+                    <HStack>
+                        <CheckboxGroup>
+                            <Checkbox
+                                isChecked={allGraphPointsIsVisible}
+                                onChange={handleShowAllGraphData}
+                                isDisabled={!childOptions?.length}
+                            >
+                                Show All Graph Points
+                            </Checkbox>
+                            <Checkbox
+                                isChecked={monthlyGraphPointsVisible}
+                                onChange={handleMonthlyGraphDataChange}
+                                isDisabled={!childOptions?.length}
+                            >
+                                Show Monthly Graph Points
+                            </Checkbox>
+                            <Checkbox
+                                isChecked={weeklyGraphPointsVisible}
+                                onChange={handleWeeklyGraphDataChange}
+                                isDisabled={!childOptions?.length}
+                            >
+                                Show Weekly Graph Points
+                            </Checkbox>
+                            <Checkbox
+                                isChecked={dailyGraphPointsVisible}
+                                onChange={handleDailyGraphDataChange}
+                                isDisabled={!childOptions?.length}
+                            >
+                                Show Daily Graph Points
+                            </Checkbox>
+                        </CheckboxGroup>
+                    </HStack>
                 </VStack>
                 <FormLabel htmlFor='length'>Length</FormLabel>
                 <NumberInput

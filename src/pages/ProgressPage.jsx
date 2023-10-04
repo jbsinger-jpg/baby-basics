@@ -1,6 +1,6 @@
 import { Box, Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, IconButton, Input, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverTrigger, Tab, TabList, TabPanel, TabPanels, Tabs, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { AddIcon, CalendarIcon } from '@chakra-ui/icons';
+import { CalendarIcon } from '@chakra-ui/icons';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -14,8 +14,6 @@ import GraphPage from './GraphPage';
 import { auth, firestore } from '../firebaseConfig';
 import { childBirthOptions, childGenderOptions, childRelationshipOptions } from '../components/staticPageData/child-options';
 import MissingDataMessage from '../components/MissingDataMessage';
-import FloatingActionButtonContainer from '../components/floatingActionButtons/FloatingActionButtonContainer';
-import FabTemplate from '../components/floatingActionButtons/StandardFab';
 import FloatingActionButtonsFeedingDiaper from '../components/floatingActionButtons/FloatingActionButtonsFeedingDiaper';
 
 export default function ProgressPage() {
