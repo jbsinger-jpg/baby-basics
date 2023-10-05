@@ -229,7 +229,6 @@ export default function FloatingActionButtonsBabyInfo({ setProgressModalVisible,
                             options.push({ key: index, label: capitalizedName, value: childName });
                             index += 1;
                         });
-
                         setChildOptions(options);
                     });
             })

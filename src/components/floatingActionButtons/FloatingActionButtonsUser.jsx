@@ -8,7 +8,7 @@ import ColorModeToggleButton from '../ColorModeToggleButton';
 import FabTemplate from './StandardFab';
 import FloatingActionButtonContainer from './FloatingActionButtonContainer';
 
-export default function FloatingActionButtonsUser({ setSignInLoading }) {
+export default function FloatingActionButtonsUser({ setSignInLoading, setCurrentUser }) {
     const toast = useToast();
 
     const handleSignInGoogle = () => {
@@ -61,6 +61,7 @@ export default function FloatingActionButtonsUser({ setSignInLoading }) {
                     duration: 9000,
                     isClosable: true,
                 });
+                setCurrentUser(null);
             })
             .catch((error) => {
                 // Handle sign-out error

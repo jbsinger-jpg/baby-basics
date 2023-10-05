@@ -29,6 +29,7 @@ export default function LandingPage() {
     const [screenHeight, setScreenHeight] = useState(window.innerHeight);
     const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const [signInLoading, setSignInLoading] = useState(false);
+    const [currentUser, setCurrentUser] = useState(auth?.currentUser?.uid);
 
     const socialPageOptions = [
         { key: 0, value: "pictures", label: "Pictures" },
@@ -82,6 +83,14 @@ export default function LandingPage() {
         };
     }, [screenHeight, screenWidth]);
 
+    useEffect(() => {
+        if (auth?.currentUser) {
+            setCurrentUser(auth?.currentUser?.uid);
+        }
+
+        //eslint-disable-next-line
+    }, [auth?.currentUser]);
+
     return (
         <Box
             bg={_screenBackground}
@@ -100,7 +109,7 @@ export default function LandingPage() {
                 :
                 <Tabs isFitted>
                     <TabList>
-                        {auth?.currentUser?.uid &&
+                        {currentUser &&
                             <Tab>
                                 Information
                             </Tab>
@@ -108,7 +117,7 @@ export default function LandingPage() {
                         <Tab>
                             User
                         </Tab>
-                        {auth?.currentUser?.uid &&
+                        {currentUser &&
                             <Tab>
                                 Social
                             </Tab>
@@ -118,7 +127,7 @@ export default function LandingPage() {
                         </Tab>
                     </TabList>
                     <TabPanels>
-                        {auth?.currentUser?.uid &&
+                        {currentUser &&
                             <TabPanel>
                                 <VStack
                                     alignItems="start"
@@ -141,7 +150,7 @@ export default function LandingPage() {
                             </TabPanel>
                         }
                         <TabPanel>
-                            <FloatingActionButtonsUser setSignInLoading={setSignInLoading} />
+                            <FloatingActionButtonsUser setSignInLoading={setSignInLoading} setCurrentUser={setCurrentUser}/>
                             <VStack
                                 alignItems="start"
                             >
@@ -163,7 +172,7 @@ export default function LandingPage() {
                                 }
                             </VStack>
                         </TabPanel>
-                        {auth?.currentUser?.uid &&
+                        {currentUser &&
                             <TabPanel>
                                 <StyledSelect
                                     options={socialPageOptions}
