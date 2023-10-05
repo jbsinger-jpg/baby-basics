@@ -40,6 +40,17 @@ export default function GrowthPage({ childOptions }) {
     const [dailyGraphPointsVisible, setDailyGraphPointsVisible] = useState(true);
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
 
+    const getSortedPoints = (data) => {
+        if (data && data.length) {
+            return data.sort((a, b) => {
+                return a.date.seconds - b.date.seconds;
+            });
+        }
+        else {
+            return [];
+        }
+    };
+
     const handleMonthlyGraphDataChange = (event) => {
         setMonthlyGraphPointsVisible(event.target.checked);
         if (event.target.checked) {
@@ -87,6 +98,26 @@ export default function GrowthPage({ childOptions }) {
                     });
                     setWeightGraphPoints(newGraphPoints);
                 });
+
+            firestore
+                .collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("length-graph")
+                .get()
+                .then(snapshot => {
+                    let newGraphPoints = [];
+                    snapshot.docs.forEach(doc => {
+                        doc.data().graph_points.forEach(point => {
+                            if (new Date(point.date.toDate()).getMonth() === new Date().getMonth()) {
+                                newGraphPoints.push(point);
+                            }
+
+                        });
+                    });
+                    setLengthGraphPoints(newGraphPoints);
+                });
         }
         else {
             firestore
@@ -120,6 +151,23 @@ export default function GrowthPage({ childOptions }) {
                     }
                     else {
                         setWeightGraphPoints([]);
+                    }
+                });
+
+            firestore
+                .collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("length-graph")
+                .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
+                .get()
+                .then(doc => {
+                    if (doc.data() && doc.data().graph_points) {
+                        setLengthGraphPoints(doc.data().graph_points);
+                    }
+                    else {
+                        setLengthGraphPoints([]);
                     }
                 });
         }
@@ -164,6 +212,23 @@ export default function GrowthPage({ childOptions }) {
                     }
                     else {
                         setWeightGraphPoints([]);
+                    }
+                });
+
+            await firestore
+                .collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("length-graph")
+                .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
+                .get()
+                .then(doc => {
+                    if (doc.data()) {
+                        setLengthGraphPoints(doc.data().graph_points);
+                    }
+                    else {
+                        setLengthGraphPoints([]);
                     }
                 });
         }
@@ -223,13 +288,100 @@ export default function GrowthPage({ childOptions }) {
                             }
                         });
                     });
+
                     setWeightGraphPoints(newGraphPoints);
+                });
+
+            firestore
+                .collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("length-graph")
+                .get()
+                .then(snapshot => {
+                    let newGraphPoints = [];
+                    snapshot.docs.forEach(doc => {
+                        doc.data().graph_points.forEach(point => {
+                            let weekDifference = getWeekFromDate(new Date(), new Date(point.date.toDate()));
+
+                            if (!weekDifference) {
+                                newGraphPoints.push(point);
+                            }
+                        });
+                    });
+                    setLengthGraphPoints(newGraphPoints);
                 });
         }
     };
 
-    const handleSelectedDateChange = (date) => {
+    const handleSelectedDateChange = async (date) => {
         setSelectedDate(date);
+
+        setDailyGraphPointsVisible(true);
+        setWeeklyGraphPointsVisible(false);
+        setMonthlyGraphPointsVisible(false);
+        setAllGraphPointsIsVisible(false);
+
+        setWeightButtonIsLoading(true);
+        setCircumferenceButtonIsLoading(true);
+        setLengthButtonIsLoading(true);
+
+        await firestore
+            .collection("users")
+            .doc(auth?.currentUser?.uid)
+            .collection("children")
+            .doc(selectedChildOption)
+            .collection("circumference-graph")
+            .doc(date.toLocaleDateString().replace(/\//g, '-'))
+            .get()
+            .then(doc => {
+                if (doc.data()) {
+                    setCircumferenceGraphPoints(doc.data().graph_points);
+                }
+                else {
+                    setCircumferenceGraphPoints([]);
+                }
+            });
+
+        await firestore
+            .collection("users")
+            .doc(auth?.currentUser?.uid)
+            .collection("children")
+            .doc(selectedChildOption)
+            .collection("weight-graph")
+            .doc(date.toLocaleDateString().replace(/\//g, '-'))
+            .get()
+            .then(doc => {
+                if (doc.data()) {
+                    setWeightGraphPoints(doc.data().graph_points);
+                }
+                else {
+                    setWeightGraphPoints([]);
+                }
+            });
+
+        await firestore
+            .collection("users")
+            .doc(auth?.currentUser?.uid)
+            .collection("children")
+            .doc(selectedChildOption)
+            .collection("length-graph")
+            .doc(date.toLocaleDateString().replace(/\//g, '-'))
+            .get()
+            .then(doc => {
+                if (doc.data()) {
+                    setLengthGraphPoints(doc.data().graph_points);
+                }
+                else {
+                    setLengthGraphPoints([]);
+                }
+            })
+            .finally(() => {
+                setWeightButtonIsLoading(false);
+                setCircumferenceButtonIsLoading(false);
+                setLengthButtonIsLoading(false);
+            });
     };
 
     const addWeightPoint = () => {
@@ -238,7 +390,7 @@ export default function GrowthPage({ childOptions }) {
         setAllGraphPointsIsVisible(false);
         setMonthlyGraphPointsVisible(false);
         setWeeklyGraphPointsVisible(false);
-        setDailyGraphPointsVisible(false);
+        setDailyGraphPointsVisible(true);
 
         let newGraphPoints = [
             ...weightGraphPoints,
@@ -258,19 +410,20 @@ export default function GrowthPage({ childOptions }) {
             }).finally(() => {
                 setWeightButtonIsLoading(false);
             });
+
         setWeightGraphPoints(newGraphPoints);
     };
     // =========================================================================================
     // =========================================================================================
     // Head Circumference/Weight Graph
     // x = head circumference, y = weight
-    const addCircumferenceWeightGraphPoint = () => {
+    const addCircumferenceGraphPoint = () => {
         setCircumferenceButtonIsLoading(true);
 
         setAllGraphPointsIsVisible(false);
         setMonthlyGraphPointsVisible(false);
         setWeeklyGraphPointsVisible(false);
-        setDailyGraphPointsVisible(false);
+        setDailyGraphPointsVisible(true);
 
         let newGraphPoints = [
             ...circumferenceGraphPoints,
@@ -290,6 +443,7 @@ export default function GrowthPage({ childOptions }) {
             }).finally(() => {
                 setCircumferenceButtonIsLoading(false);
             });
+
         setCircumferenceGraphPoints(newGraphPoints);
     };
     // =========================================================================================
@@ -300,7 +454,7 @@ export default function GrowthPage({ childOptions }) {
         setAllGraphPointsIsVisible(false);
         setMonthlyGraphPointsVisible(false);
         setWeeklyGraphPointsVisible(false);
-        setDailyGraphPointsVisible(false);
+        setDailyGraphPointsVisible(true);
 
         let newGraphPoints = [
             ...lengthGraphPoints,
@@ -320,6 +474,7 @@ export default function GrowthPage({ childOptions }) {
             }).finally(() => {
                 setLengthButtonIsLoading(false);
             });
+
         setLengthGraphPoints(newGraphPoints);
     };
 
@@ -448,6 +603,7 @@ export default function GrowthPage({ childOptions }) {
         const newWeightPoints = [...weightGraphPoints];
         newWeightPoints.pop();
         setWeightGraphPoints(newWeightPoints);
+
         firestore
             .collection("users")
             .doc(auth?.currentUser?.uid)
@@ -591,7 +747,7 @@ export default function GrowthPage({ childOptions }) {
                                     data: { stroke: "#c43a31" },
                                     parent: { border: "1px solid #ccc" }
                                 }}
-                                data={weightGraphPoints}
+                                data={getSortedPoints(weightGraphPoints)}
                             >
                             </VictoryLine>
                             <VictoryLabel
@@ -627,7 +783,7 @@ export default function GrowthPage({ childOptions }) {
                                     data: { stroke: "#c43a31" },
                                     parent: { border: "1px solid #ccc" }
                                 }}
-                                data={circumferenceGraphPoints}
+                                data={getSortedPoints(circumferenceGraphPoints)}
                             >
                             </VictoryLine>
                             <VictoryLabel
@@ -641,7 +797,7 @@ export default function GrowthPage({ childOptions }) {
                         </VictoryChart>
                         {childOptions && childOptions.length ?
                             <HStack>
-                                <Button onClick={addCircumferenceWeightGraphPoint} isLoading={circumferenceButtonIsLoading}>Plot Head Circumference</Button>
+                                <Button onClick={addCircumferenceGraphPoint} isLoading={circumferenceButtonIsLoading}>Plot Head Circumference</Button>
                                 <Button onClick={handleDeleteHeightPoint} isLoading={deleteHeadCircumferenceIsLoading}>Delete Head Circumference</Button>
                             </HStack>
                             :
@@ -664,7 +820,7 @@ export default function GrowthPage({ childOptions }) {
                                     data: { stroke: "#c43a31" },
                                     parent: { border: "1px solid #ccc" }
                                 }}
-                                data={lengthGraphPoints}
+                                data={getSortedPoints(lengthGraphPoints)}
                             >
                             </VictoryLine>
                             <VictoryLabel
