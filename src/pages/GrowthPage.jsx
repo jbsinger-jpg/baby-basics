@@ -18,24 +18,27 @@ export default function GrowthPage({ childOptions }) {
 
     const [weightButtonIsLoading, setWeightButtonIsLoading] = useState(false);
     const [circumferenceButtonIsLoading, setCircumferenceButtonIsLoading] = useState(false);
+    const [lengthButtonIsLoading, setLengthButtonIsLoading] = useState(false);
 
     const [showConversionDialog, setShowConversionDialog] = useState(false);
     const [lbValue, setLbValue] = useState(0);
     const [inValue, setInValue] = useState(0);
 
-    const [deleteHCPointIsLoading, setDeleteHCPointIsLoading] = useState(false);
-    const [deleteWLPointIsLoading, setDeleteWLPointIsLoading] = useState(false);
+    const [deleteHeadCircumferenceIsLoading, setDeleteHeadCircumferenceIsLoading] = useState(false);
+    const [deleteWeightPointIsLoading, setDeleteWeightPointIsLoading] = useState(false);
+    const [deleteLengthButtonIsLoading, setDeleteLengthButtonIsLoading] = useState(false);
+
     const [weightGraphPoints, setWeightGraphPoints] = useState([]);
     const [circumferenceGraphPoints, setCircumferenceGraphPoints] = useState([]);
+    const [lengthGraphPoints, setLengthGraphPoints] = useState([]);
 
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [selectedChildOption, setSelectedChildOption] = useState("");
 
     const [weeklyGraphPointsVisible, setWeeklyGraphPointsVisible] = useState(false);
     const [monthlyGraphPointsVisible, setMonthlyGraphPointsVisible] = useState(false);
-    const [dailyGraphPointsVisible, setDailyGraphPointsVisible] = useState(false);
+    const [dailyGraphPointsVisible, setDailyGraphPointsVisible] = useState(true);
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
-
 
     const handleMonthlyGraphDataChange = (event) => {
         setMonthlyGraphPointsVisible(event.target.checked);
@@ -291,6 +294,36 @@ export default function GrowthPage({ childOptions }) {
     };
     // =========================================================================================
     // =========================================================================================
+    const addLengthPoint = () => {
+        setLengthButtonIsLoading(true);
+
+        setAllGraphPointsIsVisible(false);
+        setMonthlyGraphPointsVisible(false);
+        setWeeklyGraphPointsVisible(false);
+        setDailyGraphPointsVisible(false);
+
+        let newGraphPoints = [
+            ...lengthGraphPoints,
+            { x: new Date(selectedDate).toLocaleDateString(), y: Number(selectedLength), date: new Date(selectedDate) }
+        ];
+
+        // Update both the front and backend whenever the button is pressed
+        firestore
+            .collection("users")
+            .doc(auth?.currentUser?.uid)
+            .collection("children")
+            .doc(selectedChildOption)
+            .collection("length-graph")
+            .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
+            .set({
+                graph_points: [...newGraphPoints]
+            }).finally(() => {
+                setLengthButtonIsLoading(false);
+            });
+        setLengthGraphPoints(newGraphPoints);
+    };
+
+
     const showGrowthChartDialog = () => {
         setGraphDialogIsOpen(true);
     };
@@ -378,17 +411,18 @@ export default function GrowthPage({ childOptions }) {
         }
     };
 
-    const handleDeleteHWPoint = () => {
-        setDeleteHCPointIsLoading(true);
+    const handleDeleteHeightPoint = () => {
+        setDeleteHeadCircumferenceIsLoading(true);
 
         setAllGraphPointsIsVisible(false);
         setMonthlyGraphPointsVisible(false);
         setWeeklyGraphPointsVisible(false);
         setDailyGraphPointsVisible(false);
 
-        const newHeightLengthPoints = [...circumferenceGraphPoints];
-        newHeightLengthPoints.pop();
-        setCircumferenceGraphPoints(newHeightLengthPoints);
+        const newCircumferencePoints = [...circumferenceGraphPoints];
+        newCircumferencePoints.pop();
+        setCircumferenceGraphPoints(newCircumferencePoints);
+
         firestore
             .collection("users")
             .doc(auth?.currentUser?.uid)
@@ -397,14 +431,14 @@ export default function GrowthPage({ childOptions }) {
             .collection("circumference-graph")
             .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
             .set({
-                graph_points: [...newHeightLengthPoints]
+                graph_points: [...newCircumferencePoints]
             }).finally(() => {
-                setDeleteHCPointIsLoading(false);
+                setDeleteHeadCircumferenceIsLoading(false);
             });
     };
 
     const handleDeleteWeightPoint = () => {
-        setDeleteWLPointIsLoading(true);
+        setDeleteWeightPointIsLoading(true);
 
         setAllGraphPointsIsVisible(false);
         setMonthlyGraphPointsVisible(false);
@@ -424,7 +458,33 @@ export default function GrowthPage({ childOptions }) {
             .set({
                 graph_points: [...newWeightPoints]
             }).finally(() => {
-                setDeleteWLPointIsLoading(false);
+                setDeleteWeightPointIsLoading(false);
+            });
+    };
+
+    const handleDeleteLengthPoint = () => {
+        setDeleteLengthButtonIsLoading(true);
+
+        setAllGraphPointsIsVisible(false);
+        setMonthlyGraphPointsVisible(false);
+        setWeeklyGraphPointsVisible(false);
+        setDailyGraphPointsVisible(false);
+
+        const newLengthPoints = [...lengthGraphPoints];
+        newLengthPoints.pop();
+        setLengthGraphPoints(newLengthPoints);
+
+        firestore
+            .collection("users")
+            .doc(auth?.currentUser?.uid)
+            .collection("children")
+            .doc(selectedChildOption)
+            .collection("length-graph")
+            .doc(selectedDate.toLocaleDateString().replace(/\//g, '-'))
+            .set({
+                graph_points: [...newLengthPoints]
+            }).finally(() => {
+                setDeleteLengthButtonIsLoading(false);
             });
     };
 
@@ -545,7 +605,7 @@ export default function GrowthPage({ childOptions }) {
                         {childOptions && childOptions.length ?
                             <HStack>
                                 <Button onClick={addWeightPoint} isLoading={weightButtonIsLoading}>Plot Weight</Button>
-                                <Button onClick={handleDeleteWeightPoint} isLoading={deleteWLPointIsLoading}>Delete Weight</Button>
+                                <Button onClick={handleDeleteWeightPoint} isLoading={deleteWeightPointIsLoading}>Delete Weight</Button>
                             </HStack>
                             :
                             <HStack>
@@ -574,7 +634,7 @@ export default function GrowthPage({ childOptions }) {
                                 x={150}
                                 y={325}
                                 dy={10}
-                                text="Weight"
+                                text="Circumference"
                                 style={{ fill: textColor }}
 
                             />
@@ -582,7 +642,7 @@ export default function GrowthPage({ childOptions }) {
                         {childOptions && childOptions.length ?
                             <HStack>
                                 <Button onClick={addCircumferenceWeightGraphPoint} isLoading={circumferenceButtonIsLoading}>Plot Head Circumference</Button>
-                                <Button onClick={handleDeleteHWPoint} isLoading={deleteHCPointIsLoading}>Delete Head Circumference</Button>
+                                <Button onClick={handleDeleteHeightPoint} isLoading={deleteHeadCircumferenceIsLoading}>Delete Head Circumference</Button>
                             </HStack>
                             :
                             <HStack>
@@ -604,21 +664,21 @@ export default function GrowthPage({ childOptions }) {
                                     data: { stroke: "#c43a31" },
                                     parent: { border: "1px solid #ccc" }
                                 }}
-                                data={weightGraphPoints}
+                                data={lengthGraphPoints}
                             >
                             </VictoryLine>
                             <VictoryLabel
                                 x={150}
                                 y={325}
                                 dy={10}
-                                text="Weight"
+                                text="Length"
                                 style={{ fill: textColor }}
                             />
                         </VictoryChart>
                         {childOptions && childOptions.length ?
                             <HStack>
-                                <Button onClick={addWeightPoint} isLoading={weightButtonIsLoading}>Plot W/L Point</Button>
-                                <Button onClick={handleDeleteWeightPoint} isLoading={deleteWLPointIsLoading}>Delete W/L Point</Button>
+                                <Button onClick={addLengthPoint} isLoading={lengthButtonIsLoading}>Plot Length</Button>
+                                <Button onClick={handleDeleteLengthPoint} isLoading={deleteLengthButtonIsLoading}>Delete Length</Button>
                             </HStack>
                             :
                             <HStack>
