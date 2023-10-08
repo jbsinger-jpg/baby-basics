@@ -33,7 +33,7 @@ export default function GraphPage({ childOptions }) {
                 <GrowthPage childOptions={childOptions} />
             }
             {selectedPageOption === "sleep" &&
-                <SleepPage />
+                <SleepPage childOptions={childOptions} />
             }
         </Box>
     );

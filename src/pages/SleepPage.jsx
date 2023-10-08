@@ -1,12 +1,36 @@
-import { Box, Button, ButtonGroup, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, VStack, useColorModeValue } from '@chakra-ui/react';
-import { useState } from 'react';
+import { Box, Button, ButtonGroup, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormLabel, HStack, Icon, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Text, VStack, useColorModeValue } from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 import { cardBackground, screenBackground } from '../defaultStyle';
+import { VictoryChart, VictoryLabel, VictoryScatter, VictoryTheme } from 'victory';
+import { InfoOutlineIcon } from '@chakra-ui/icons';
+import { auth, firestore } from '../firebaseConfig';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import StyledSelect from '../components/StyledSelect';
 
-export default function SleepPage() {
+export default function SleepPage({ childOptions }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
+    const textColor = useColorModeValue("black", "white");
 
     const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
+    const [buttonIsLoading, setButtonIsLoading] = useState(false);
+    const [deletePointButttonIsLoading, setDeletePointButttonIsLoading] = useState(false);
+
+    const [selectedChildOption, setSelectedChildOption] = useState("");
+    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [selectedSleepHrs, setSelectedSleepHrs] = useState(1);
+
+    const [sleepPoints, setSleepPoints] = useState([]);
+    const [latestSleepID, setLatestSleepID] = useState(0);
+
+    const handleSelectedDateChange = async (date) => {
+        setSelectedDate(date);
+    };
+
+    const handleSelectedChildChange = async (event) => {
+        setSelectedChildOption(event.target.value);
+    };
 
     const clearSearch = () => {
         // TODO: Clear sleep search fields
@@ -17,16 +41,198 @@ export default function SleepPage() {
         // TODO: Generate data according to query fields
     };
 
-    return (
-        <Box
-            width="100vw"
-            height="100vh"
-            display="flex"
-            justifyContent="center"
-            alignItems="start"
-        >
-            <VStack>
+    const getSortedPoints = (data) => {
+        if (data && data.length) {
+            return data.sort((a, b) => {
+                return a.date.seconds - b.date.seconds;
+            });
+        }
+        else {
+            return [];
+        }
+    };
 
+    const addPoint = () => {
+        setButtonIsLoading(true);
+
+        let newGraphPoints = [
+            ...sleepPoints,
+            { x: new Date(selectedDate).toLocaleDateString(), y: Number(selectedSleepHrs), date: new Date(selectedDate) }
+        ];
+
+        // Update both the front and backend whenever the button is pressed
+        firestore
+            .collection("users")
+            .doc(auth?.currentUser?.uid)
+            .collection("children")
+            .doc(selectedChildOption)
+            .collection("sleep-graph")
+            .doc(String(Number(latestSleepID)))
+            .set({ x: new Date(selectedDate).toLocaleDateString(), y: Number(selectedSleepHrs), date: new Date(selectedDate) })
+            .then(() => {
+                setLatestSleepID(latestSleepID + 1);
+            })
+            .finally(() => {
+                setButtonIsLoading(false);
+            });
+
+        setSleepPoints(newGraphPoints);
+    };
+
+    const handleDeletePoint = () => {
+        setDeletePointButttonIsLoading(true);
+
+        const newSleepPoints = [...sleepPoints];
+        newSleepPoints.pop();
+        setSleepPoints(newSleepPoints);
+
+        firestore
+            .collection("users")
+            .doc(auth?.currentUser?.uid)
+            .collection("children")
+            .doc(selectedChildOption)
+            .collection("sleep-graph")
+            .doc(String(Number(latestSleepID - 1)))
+            .delete()
+            .then(() => {
+                setLatestSleepID(latestSleepID - 1);
+            })
+            .finally(() => {
+                setDeletePointButttonIsLoading(false);
+            });
+    };
+
+    useEffect(() => {
+        if (auth?.currentUser?.uid && childOptions && childOptions.length) {
+            setSelectedChildOption(childOptions[0].value);
+            firestore.collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(childOptions[0].value)
+                .collection("sleep-graph")
+                .get()
+                .then((snapshot) => {
+                    let options = [];
+                    let index = 0;
+
+                    snapshot.docs.forEach(doc => {
+                        options.push(doc.data());
+                        index++;
+                    });
+
+                    setSleepPoints(options);
+                    setLatestSleepID(index);
+                });
+        }
+        else {
+            setSelectedChildOption("");
+        }
+
+        // eslint-disable-next-line
+    }, [auth?.currentUser?.uid, childOptions]);
+
+    return (
+        <>
+            <Box
+                width="100vw"
+                height="55vh"
+            >
+                <HStack
+                    spacing={10}
+                >
+                    <VStack
+                        h={450}
+                        w="100vw"
+                        alignContent="center"
+                        justifyContent="center"
+                    >
+                        <VictoryChart
+                            theme={VictoryTheme.material}
+                        >
+                            <VictoryScatter
+                                style={{
+                                    data: { fill: "#c43a31" },
+                                    parent: { border: "1px solid #ccc" }
+                                }}
+                                size={7}
+                                data={getSortedPoints(sleepPoints)}
+                            >
+                            </VictoryScatter>
+                            <VictoryLabel
+                                x={150}
+                                y={325}
+                                dy={10}
+                                text="Sleep (hrs)"
+                                style={{ fill: textColor }}
+                            />
+                        </VictoryChart>
+                        {childOptions && childOptions.length ?
+                            <HStack>
+                                <Button onClick={addPoint} isLoading={buttonIsLoading}>Plot Sleep</Button>
+                                <Button onClick={handleDeletePoint} isLoading={deletePointButttonIsLoading}>Delete Sleep</Button>
+                            </HStack>
+                            :
+                            <HStack>
+                                <Icon as={InfoOutlineIcon} />
+                                <Text>
+                                    Add a child to plot points!
+                                </Text>
+                            </HStack>
+                        }
+                    </VStack>
+                </HStack>
+            </Box>
+            <VStack
+                justifyContent="space-between"
+                w="90vw"
+                alignItems="stretch"
+                spacing="1"
+                pl="2"
+                pr="2"
+            >
+                <VStack
+                    alignItems="start"
+                >
+                    <HStack>
+                        <VStack
+                            alignItems="start"
+                        >
+                            <FormLabel>Date</FormLabel>
+                            <DatePicker
+                                disabled={!childOptions?.length}
+                                customInput={<Input />}
+                                selected={selectedDate}
+                                onChange={handleSelectedDateChange}
+                            />
+                        </VStack>
+                        <VStack
+                            alignItems="start"
+                        >
+                            <FormLabel>Sleep Hours</FormLabel>
+                            <NumberInput
+                                min={1}
+                                value={selectedSleepHrs}
+                                onChange={value => setSelectedSleepHrs(value)}
+                            >
+                                <NumberInputField
+                                    placeholder="sleep-hrs"
+                                />
+                                <NumberInputStepper>
+                                    <NumberIncrementStepper />
+                                    <NumberDecrementStepper />
+                                </NumberInputStepper>
+                            </NumberInput>
+                        </VStack>
+                    </HStack>
+                    <FormLabel>Child</FormLabel>
+                    <StyledSelect
+                        removeNullOption
+                        options={childOptions}
+                        value={selectedChildOption}
+                        onChange={handleSelectedChildChange}
+                        isDisabled={!childOptions?.length}
+                    />
+                </VStack>
             </VStack>
             <Drawer
                 onClose={() => setSearchBarIsOpen(false)}
@@ -51,6 +257,6 @@ export default function SleepPage() {
                     </DrawerFooter>
                 </DrawerContent>
             </Drawer>
-        </Box>
+        </>
     );
 }
