@@ -48,6 +48,7 @@ export default function ProgressTabFormatter({ rows, setRows, selectedChildOptio
                                     setData={setRows}
                                     selectedChildOption={selectedChildOption}
                                     selectedDateOption={selectedDateOption}
+                                    fluidOunces={row.fluidOunces}
                                 />
                             );
                         })

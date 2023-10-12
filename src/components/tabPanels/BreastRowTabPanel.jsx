@@ -4,7 +4,7 @@ import { cardBackground } from '../../defaultStyle';
 import { auth, firestore } from '../../firebaseConfig';
 import { useState } from 'react';
 
-export default function BreastRowTabPanel({ leftBreastTime, rightBreastTime, alias, index, timeStamp, data, setData, selectedChildOption, selectedDateOption }) {
+export default function BreastRowTabPanel({ leftBreastTime, rightBreastTime, alias, index, timeStamp, data, setData, selectedChildOption, selectedDateOption, fluidOunces }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
     const [rightTime, setRightTime] = useState(rightBreastTime);
     const [leftTime, setLeftTime] = useState(leftBreastTime);
@@ -86,6 +86,10 @@ export default function BreastRowTabPanel({ leftBreastTime, rightBreastTime, ali
                             <Text>
                                 {rightTime}
                             </Text>
+                        </Box>
+                        <Box>
+                            <FormLabel>Fluid Ounces</FormLabel>
+                            {fluidOunces}
                         </Box>
                     </HStack>
                 </CardBody>

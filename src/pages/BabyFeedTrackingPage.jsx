@@ -1,5 +1,5 @@
 // Module imports
-import { Button, ButtonGroup, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, Icon, Input, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
+import { Button, ButtonGroup, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, Icon, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
 // Relative imports
@@ -10,8 +10,6 @@ import { cardBackground, screenBackground } from '../defaultStyle';
 import { auth, firestore } from '../firebaseConfig';
 import FloatingActionButtonsDiaperTracking from '../components/floatingActionButtons/FloatingActionButtonsDiaperTracking';
 import ProgressTabFormatter from '../components/ProgressTabFormatter';
-import WaterDropIcon from '../components/staticPageData/WaterDropIcon';
-import PoopIcon from '../components/staticPageData/PoopIcon';
 import { CloseIcon } from '@chakra-ui/icons';
 
 export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChildOption, setDrawerVisible, selectedDateOption, searchBarIsOpen }) {
@@ -24,6 +22,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
     const [bottleRowFluidOunces, setBottleRowFluidOunces] = useState(0);
 
     const [breastRowAlias, setBreastRowAlias] = useState("");
+    const [breastFluidOunces, setBreastFluidOunces] = useState(0);
 
     const [pumpRowAlias, setPumpRowAlias] = useState("");
     const [pumpFluidOunces, setPumpFluidOunces] = useState(0);
@@ -107,13 +106,17 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                     .set({
                         timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
                         alias: String(breastRowAlias).trim(),
+                        fluidOunces: Number(breastFluidOunces),
+                        leftBreastTime: Number(leftTeetTimerValue),
+                        rightBreastTime: Number(rightTeetTimerValue),
                     });
 
                 setBreastFeedingRows([...breastFeedingRows, {
                     timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
                     alias: String(breastRowAlias).trim(),
-                    leftBreastTime: leftTeetTimerValue,
-                    rightBreastTime: rightTeetTimerValue,
+                    fluidOunces: Number(breastFluidOunces),
+                    leftBreastTime: Number(leftTeetTimerValue),
+                    rightBreastTime: Number(rightTeetTimerValue),
                 }]);
             }
             else {
@@ -171,15 +174,17 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                     .set({
                         timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
                         alias: String(pumpRowAlias).trim(),
-                        fluidOunces: Number(pumpFluidOunces)
+                        fluidOunces: Number(pumpFluidOunces),
+                        leftBreastTime: Number(leftTeetTimerValue),
+                        rightBreastTime: Number(rightTeetTimerValue),
                     });
 
                 setPumpFeedingRows([...pumpFeedingRows, {
                     timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
                     alias: String(pumpRowAlias).trim(),
                     fluidOunces: Number(pumpFluidOunces),
-                    leftBreastTime: leftTeetTimerValue,
-                    rightBreastTime: rightTeetTimerValue,
+                    leftBreastTime: Number(leftTeetTimerValue),
+                    rightBreastTime: Number(rightTeetTimerValue),
                 }]);
             }
             else {
@@ -207,7 +212,10 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
     };
 
     const getTabFluidOunces = () => {
-        if (tabIndex === 1) {
+        if (tabIndex === 0) {
+            return breastFluidOunces;
+        }
+        else if (tabIndex === 1) {
             return bottleRowFluidOunces;
         }
         else if (tabIndex === 2) {
@@ -228,7 +236,10 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
     };
 
     const handleFluidOunceChange = (event) => {
-        if (tabIndex === 1) {
+        if (tabIndex === 0) {
+            setBreastFluidOunces(event.target.value);
+        }
+        else if (tabIndex === 1) {
             setBottleRowFluidOunces(event.target.value);
         }
         else if (tabIndex === 2) {
@@ -237,11 +248,11 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
     };
 
     const clearSearch = () => {
-
+        // TODO: Clear Search options
     };
 
     const generateSearch = () => {
-
+        // TODO: Generate Search options
     };
 
     useEffect(() => {
@@ -357,7 +368,17 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                                             <FormLabel>
                                                 Fluid Ounces
                                             </FormLabel>
-                                            <Input value={getTabFluidOunces()} onChange={handleFluidOunceChange} />
+                                            <NumberInput min={0}>
+                                                <NumberInputField
+                                                    value={getTabFluidOunces()}
+                                                    onChange={handleFluidOunceChange}
+                                                />
+                                                <NumberInputStepper>
+                                                    <NumberIncrementStepper />
+                                                    <NumberDecrementStepper />
+                                                </NumberInputStepper>
+                                            </NumberInput>
+                                            {/* <Input value={getTabFluidOunces()} onChange={handleFluidOunceChange} /> */}
                                         </FormControl>
                                     </HStack>
                                     <Button type="submit">Submit</Button>
