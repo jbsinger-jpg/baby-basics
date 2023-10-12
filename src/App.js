@@ -4,8 +4,6 @@ import { useState } from "react";
 
 // relative imports
 import LoginPage from './pages/LoginPage';
-// TODO: Uncomment when UI/UX overhaul finished
-// import HomePage from './pages/HomePage';
 import ForumMessagePage from "./pages/ForumMessagePage";
 import DirectMessagePage from "./pages/DirectMessagePage";
 import Context from './context/Context';

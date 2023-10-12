@@ -1,14 +1,14 @@
 // Module imports
 import { Box, Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormLabel, HStack, IconButton, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, TabPanel, TabPanels, Tabs, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import { useState } from 'react';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 // Relative imports
 import { cardBackground, screenBackground } from '../defaultStyle';
 import StyledSelect from '../components/StyledSelect';
 import SleepPage from './SleepPage';
 import GrowthPage from './GrowthPage';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import { DeleteIcon } from '@chakra-ui/icons';
 
 export default function GraphPage({ childOptions, setSearchBarIsOpen, searchBarIsOpen }) {

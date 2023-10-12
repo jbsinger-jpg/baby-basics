@@ -416,7 +416,7 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                         <Input value={peeSearchDateYear} onChange={(event) => setPeeSearchDateYear(event.target.value)} />
                     </InputGroup>
                 </VStack>
-                <VStack alignItems="start">
+                <VStack alignItems="start" w="100%">
                     <FormLabel htmlFor="alias">Alias</FormLabel>
                     <Input id="alias" value={peeSearchAlias} onChange={(event) => setPeeSearchAlias(event.target.value)} />
                 </VStack>
@@ -437,15 +437,15 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                         <Input value={pooSearchDateYear} onChange={(event) => setPooSearchDateYear(event.target.value)} />
                     </InputGroup>
                 </VStack>
-                <VStack alignItems="start">
+                <VStack alignItems="start" w="100%">
                     <FormLabel htmlFor="alias">Alias</FormLabel>
                     <Input id="alias" value={pooSearchAlias} onChange={(event) => setPooSearchAlias(event.target.value)} />
                 </VStack>
-                <VStack alignItems="start">
+                <VStack alignItems="start" w="100%">
                     <FormLabel htmlFor="consistency">Consistency</FormLabel>
                     <Input id="consistency" value={pooSearchConsistency} onChange={(event) => setPooSearchConsistency(event.target.value)} />
                 </VStack>
-                <VStack alignItems="start">
+                <VStack alignItems="start" w="100%">
                     <FormLabel htmlFor="color">Color</FormLabel>
                     <Input id="color" value={pooSearchColor} onChange={(event) => setPooSearchColor(event.target.value)} />
                 </VStack>
@@ -466,7 +466,7 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                         <Input value={drySearchDateYear} onChange={(event) => setDrySearchDateYear(event.target.value)} />
                     </InputGroup>
                 </VStack>
-                <VStack alignItems="start">
+                <VStack alignItems="start" w="100%">
                     <FormLabel htmlFor="alias">Alias</FormLabel>
                     <Input id="alias" value={drySearchAlias} onChange={(event) => setDrySearchAlias(event.target.value)} />
                 </VStack>
@@ -836,7 +836,7 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                 >
                     <DrawerHeader>Filter Items</DrawerHeader>
                     <DrawerBody>
-                        <Tabs variant='enclosed' index={tabIndex} onChange={handleTabsChange} overflowX="hidden" align="start">
+                        <Tabs variant='enclosed' index={tabIndex} onChange={handleTabsChange} overflowX="hidden" align="start" isFitted>
                             <TabList>
                                 <Tab>
                                     <HStack>

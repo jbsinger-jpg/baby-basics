@@ -1,6 +1,8 @@
 // Module imports
 import { Button, ButtonGroup, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, Icon, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 // Relative imports
 import BreastRowTabPanel from '../components/tabPanels/BreastRowTabPanel';
@@ -10,7 +12,6 @@ import { cardBackground, screenBackground } from '../defaultStyle';
 import { auth, firestore } from '../firebaseConfig';
 import FloatingActionButtonsDiaperTracking from '../components/floatingActionButtons/FloatingActionButtonsDiaperTracking';
 import ProgressTabFormatter from '../components/ProgressTabFormatter';
-import { CloseIcon } from '@chakra-ui/icons';
 
 export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChildOption, setDrawerVisible, selectedDateOption, searchBarIsOpen }) {
     const [tabIndex, setTabIndex] = useState(0);
@@ -33,6 +34,11 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
 
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
+
+    const [queryDate, setQueryDate] = useState(new Date());
+    const [queryLeftBreastTime, setQueryLeftBreastTime] = useState(0);
+    const [queryRightBreastTime, setQueryRightBreastTime] = useState(0);
+    const [queryFluidOunces, setQueryFluidOunces] = useState(0);
 
     const toast = useToast();
 
@@ -311,6 +317,126 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
         // eslint-disable-next-line
     }, [selectedChildOption, selectedDateOption]);
 
+    const handleChangeQueryDate = (date) => {
+        setQueryDate(date);
+    };
+
+    const getBreastTabItems = () => {
+        return (
+            <VStack display="flex" alignItems="start" width="100%">
+                <Text>Date</Text>
+                <DatePicker
+                    customInput={<Input />}
+                    selected={queryDate}
+                    onChange={handleChangeQueryDate}
+                />
+                <Text>Left Breast Time</Text>
+                <NumberInput min={0} w="100%">
+                    <NumberInputField
+                        value={queryLeftBreastTime}
+                        onChange={(event) => setQueryLeftBreastTime(event.target.value)}
+                    />
+                    <NumberInputStepper>
+                        <NumberIncrementStepper />
+                        <NumberDecrementStepper />
+                    </NumberInputStepper>
+                </NumberInput>
+                <Text>Right Breast Time</Text>
+                <NumberInput min={0} w="100%">
+                    <NumberInputField
+                        value={queryRightBreastTime}
+                        onChange={(event) => setQueryRightBreastTime(event.target.value)}
+                    />
+                    <NumberInputStepper>
+                        <NumberIncrementStepper />
+                        <NumberDecrementStepper />
+                    </NumberInputStepper>
+                </NumberInput>
+                <Text>Fluid Ounces</Text>
+                <NumberInput min={0} w="100%">
+                    <NumberInputField
+                        value={queryFluidOunces}
+                        onChange={(event) => setQueryFluidOunces(event.target.value)}
+                    />
+                    <NumberInputStepper>
+                        <NumberIncrementStepper />
+                        <NumberDecrementStepper />
+                    </NumberInputStepper>
+                </NumberInput>
+            </VStack>
+        );
+    };
+
+    const getBottleTabItems = () => {
+        return (
+            <VStack display="flex" alignItems="start" width="100%">
+                <Text>Date</Text>
+                <DatePicker
+                    customInput={<Input />}
+                    selected={queryDate}
+                    onChange={handleChangeQueryDate}
+                />
+                <Text>Fluid Ounces</Text>
+                <NumberInput min={0} w="100%">
+                    <NumberInputField
+                        value={queryFluidOunces}
+                        onChange={(event) => setQueryFluidOunces(event.target.value)}
+                    />
+                    <NumberInputStepper>
+                        <NumberIncrementStepper />
+                        <NumberDecrementStepper />
+                    </NumberInputStepper>
+                </NumberInput>
+            </VStack>
+        );
+    };
+
+    const getPumpTabItems = () => {
+        return (
+            <VStack display="flex" alignItems="start" width="100%">
+                <Text>Date</Text>
+                <DatePicker
+                    customInput={<Input />}
+                    selected={queryDate}
+                    onChange={handleChangeQueryDate}
+                />
+                <Text>Left Breast Time</Text>
+                <NumberInput min={0} w="100%">
+                    <NumberInputField
+                        value={queryLeftBreastTime}
+                        onChange={(event) => setQueryLeftBreastTime(event.target.value)}
+                    />
+                    <NumberInputStepper>
+                        <NumberIncrementStepper />
+                        <NumberDecrementStepper />
+                    </NumberInputStepper>
+                </NumberInput>
+                <Text>Right Breast Time</Text>
+                <NumberInput min={0} w="100%">
+                    <NumberInputField
+                        value={queryRightBreastTime}
+                        onChange={(event) => setQueryRightBreastTime(event.target.value)}
+                    />
+                    <NumberInputStepper>
+                        <NumberIncrementStepper />
+                        <NumberDecrementStepper />
+                    </NumberInputStepper>
+                </NumberInput>
+                <Text>Fluid Ounces</Text>
+                <NumberInput min={0} w="100%">
+                    <NumberInputField
+                        value={queryFluidOunces}
+                        onChange={(event) => setQueryFluidOunces(event.target.value)}
+                    />
+                    <NumberInputStepper>
+                        <NumberIncrementStepper />
+                        <NumberDecrementStepper />
+                    </NumberInputStepper>
+                </NumberInput>
+            </VStack>
+        );
+    };
+
     return (
         <>
             <FloatingActionButtonsDiaperTracking
@@ -378,7 +504,6 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                                                     <NumberDecrementStepper />
                                                 </NumberInputStepper>
                                             </NumberInput>
-                                            {/* <Input value={getTabFluidOunces()} onChange={handleFluidOunceChange} /> */}
                                         </FormControl>
                                     </HStack>
                                     <Button type="submit">Submit</Button>
@@ -479,7 +604,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                 >
                     <DrawerHeader>Filter Items</DrawerHeader>
                     <DrawerBody>
-                        <Tabs variant='enclosed' index={tabIndex} onChange={handleTabsChange} overflowX="hidden" align="start">
+                        <Tabs variant='enclosed' index={tabIndex} onChange={handleTabsChange} overflowX="hidden" align="start" isFitted>
                             <TabList>
                                 <Tab>
                                     <HStack>
@@ -494,21 +619,18 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                                 <Tab>
                                     <HStack>
                                         <Text>Pump</Text>
-                                        <Icon as={CloseIcon} viewBox="0 0 512 512" boxSize="35" color="white" fill="white" scale={0.5} opacity={0}>
-                                            {/* Icon deliberately empty to make text consistent */}
-                                        </Icon>
                                     </HStack>
                                 </Tab>
                             </TabList>
                             <TabPanels>
                                 <TabPanel>
-                                    {/* TODO: Get Pee tab items */}
+                                    {getBreastTabItems()}
                                 </TabPanel>
                                 <TabPanel>
-                                    {/* TODO: Get Poo tab items */}
+                                    {getBottleTabItems()}
                                 </TabPanel>
                                 <TabPanel>
-                                    {/* TODO: Get Dry tab items */}
+                                    {getPumpTabItems()}
                                 </TabPanel>
                             </TabPanels>
                         </Tabs>
