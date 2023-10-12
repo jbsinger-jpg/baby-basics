@@ -324,7 +324,11 @@ export default function ProgressPage() {
                         </VStack>
                     </TabPanel>
                     <TabPanel>
-                        <GraphPage childOptions={childOptions} />
+                        <GraphPage
+                            childOptions={childOptions}
+                            searchBarIsOpen={searchBarIsOpen}
+                            setSearchBarIsOpen={setSearchBarIsOpen}
+                        />
                         <FloatingActionButtonsGrowthAndSleep
                             setSearchBarIsOpen={setSearchBarIsOpen}
                             setChildDrawerVisible={setChildDrawerVisible}

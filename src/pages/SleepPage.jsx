@@ -1,6 +1,5 @@
-import { Box, Button, ButtonGroup, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormLabel, HStack, Icon, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Text, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, FormLabel, HStack, Icon, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Text, VStack, useColorModeValue } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { cardBackground, screenBackground } from '../defaultStyle';
 import { VictoryChart, VictoryLabel, VictoryScatter, VictoryTheme } from 'victory';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import { auth, firestore } from '../firebaseConfig';
@@ -9,11 +8,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import StyledSelect from '../components/StyledSelect';
 
 export default function SleepPage({ childOptions }) {
-    const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
-    const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
     const textColor = useColorModeValue("black", "white");
 
-    const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
     const [buttonIsLoading, setButtonIsLoading] = useState(false);
     const [deletePointButttonIsLoading, setDeletePointButttonIsLoading] = useState(false);
 
@@ -30,15 +26,6 @@ export default function SleepPage({ childOptions }) {
 
     const handleSelectedChildChange = async (event) => {
         setSelectedChildOption(event.target.value);
-    };
-
-    const clearSearch = () => {
-        // TODO: Clear sleep search fields
-        // TODO: Update firebase data for page
-    };
-
-    const generateSearch = () => {
-        // TODO: Generate data according to query fields
     };
 
     const getSortedPoints = (data) => {
@@ -234,29 +221,6 @@ export default function SleepPage({ childOptions }) {
                     />
                 </VStack>
             </VStack>
-            <Drawer
-                onClose={() => setSearchBarIsOpen(false)}
-                bg={_cardBackground}
-                isOpen={searchBarIsOpen}
-                placement='right'
-                size="sm"
-            >
-                <DrawerOverlay />
-                <DrawerContent
-                    bg={_screenBackground}
-                >
-                    <DrawerHeader>Filter Items</DrawerHeader>
-                    <DrawerBody>
-                        {/* TODO: Add Search Fields */}
-                    </DrawerBody>
-                    <DrawerFooter>
-                        <ButtonGroup>
-                            <Button onClick={clearSearch}>Clear</Button>
-                            <Button onClick={generateSearch}>Search</Button>
-                        </ButtonGroup>
-                    </DrawerFooter>
-                </DrawerContent>
-            </Drawer>
         </>
     );
 }
