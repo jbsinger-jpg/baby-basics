@@ -7,6 +7,8 @@ import { cardBackground, screenBackground } from '../defaultStyle';
 import StyledSelect from '../components/StyledSelect';
 import SleepPage from './SleepPage';
 import GrowthPage from './GrowthPage';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { DeleteIcon } from '@chakra-ui/icons';
 
 export default function GraphPage({ childOptions, setSearchBarIsOpen, searchBarIsOpen }) {
@@ -19,15 +21,32 @@ export default function GraphPage({ childOptions, setSearchBarIsOpen, searchBarI
     ];
     const [tabIndex, setTabIndex] = useState(0);
 
+    // Growth tab useStates
+    const [selectedLength, setSelectedLength] = useState(1);
+    const [selectedWeight, setSelectedWeight] = useState(1);
+    const [selectedHeadCircumference, setSelectedHeadCircumference] = useState(1);
+
+    // Sleep tab useStates
+    const [selectedDate, setSelectedDate] = useState(new Date());
+    const [sleepHours, setSleepHours] = useState(1);
+
+    const handleSelectedDateChange = (date) => {
+        setSelectedDate(date);
+    };
+
     const getGrowthPageSearchItems = () => {
         return (
             <VStack display="flex" alignItems="start">
+                <FormLabel htmlFor='child'>Child</FormLabel>
+                <StyledSelect
+
+                />
                 <FormLabel htmlFor='length'>Length</FormLabel>
                 <NumberInput
                     w="100%"
                     min={1}
-                // value={selectedLength}
-                // onChange={value => setSelectedLength(value)}
+                    value={selectedLength}
+                    onChange={value => setSelectedLength(value)}
                 >
                     <NumberInputField
                         id="length"
@@ -42,8 +61,8 @@ export default function GraphPage({ childOptions, setSearchBarIsOpen, searchBarI
                 <NumberInput
                     min={1}
                     w="100%"
-                // value={selectedWeight}
-                // onChange={value => setSelectedWeight(value)}
+                    value={selectedWeight}
+                    onChange={value => setSelectedWeight(value)}
                 >
                     <NumberInputField
                         id="weight"
@@ -58,8 +77,8 @@ export default function GraphPage({ childOptions, setSearchBarIsOpen, searchBarI
                 <NumberInput
                     min={1}
                     w="100%"
-                // value={headCircumference}
-                // onChange={value => setHeadCircumference(value)}
+                    value={selectedHeadCircumference}
+                    onChange={value => setSelectedHeadCircumference(value)}
                 >
                     <NumberInputField
                         id="circumference"
@@ -78,24 +97,57 @@ export default function GraphPage({ childOptions, setSearchBarIsOpen, searchBarI
         return (
             <VStack display="flex" alignItems="start">
                 <FormLabel htmlFor='date'>Date</FormLabel>
-                <Input />
-                <FormLabel htmlFor='sleep'>Sleep Hours</FormLabel>
-                <Input />
+                <DatePicker
+                    customInput={<Input />}
+                    selected={selectedDate}
+                    onChange={handleSelectedDateChange}
+                />
                 <FormLabel htmlFor='child'>Child</FormLabel>
                 <StyledSelect
 
                 />
+                <FormLabel htmlFor='sleep'>Sleep Hours</FormLabel>
+                <NumberInput
+                    w="100%"
+                    min={1}
+                    value={sleepHours}
+                    onChange={value => setSleepHours(value)}
+                >
+                    <NumberInputField
+                        id="sleephours"
+                        placeholder="sleep hours"
+                    />
+                    <NumberInputStepper>
+                        <NumberIncrementStepper />
+                        <NumberDecrementStepper />
+                    </NumberInputStepper>
+                </NumberInput>
             </VStack>
         );
     };
 
-    const options = [];
     const handleClearSearch = () => {
-        // TODO: Clear Search
+        if (tabIndex === 0) {
+            setSelectedLength(1);
+            setSelectedWeight(1);
+            setSelectedHeadCircumference(1);
+            // TODO: Handle child reset
+        }
+        else if (tabIndex === 1) {
+            setSleepHours(1);
+            setSelectedDate(new Date());
+            // TODO: Handle child reset
+        }
     };
 
     const handleGenericSearch = () => {
-        // TODO: Generic Search
+        // TODO: Set tab data to have query filters applied
+        if (tabIndex === 0) {
+
+        }
+        else if (tabIndex === 1) {
+
+        }
     };
 
     const handleTabsChange = (event) => {
@@ -119,15 +171,11 @@ export default function GraphPage({ childOptions, setSearchBarIsOpen, searchBarI
             {selectedPageOption === "growth" &&
                 <GrowthPage
                     childOptions={childOptions}
-                    setSearchBarIsOpen={setSearchBarIsOpen}
-                    searchBarIsOpen={searchBarIsOpen}
                 />
             }
             {selectedPageOption === "sleep" &&
                 <SleepPage
                     childOptions={childOptions}
-                    setSearchBarIsOpen={setSearchBarIsOpen}
-                    searchBarIsOpen={searchBarIsOpen}
                 />
             }
             <Drawer
