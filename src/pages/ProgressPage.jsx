@@ -23,6 +23,7 @@ export default function ProgressPage() {
     const [progressModalVisible, setProgressModalVisible] = useState(false);
     const [feedingDiaperOption, setFeedingDiaperOption] = useState("feeding");
     const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
+    const [graphSearchBarIsOpen, setGraphSearchBarIsOpen] = useState(false);
     const [childOptions, setChildOptions] = useState(null);
     const [selectedChildOption, setSelectedChildOption] = useState("");
 
@@ -326,11 +327,11 @@ export default function ProgressPage() {
                     <TabPanel>
                         <GraphPage
                             childOptions={childOptions}
-                            searchBarIsOpen={searchBarIsOpen}
-                            setSearchBarIsOpen={setSearchBarIsOpen}
+                            searchBarIsOpen={graphSearchBarIsOpen}
+                            setSearchBarIsOpen={setGraphSearchBarIsOpen}
                         />
                         <FloatingActionButtonsGrowthAndSleep
-                            setSearchBarIsOpen={setSearchBarIsOpen}
+                            setSearchBarIsOpen={setGraphSearchBarIsOpen}
                             setChildDrawerVisible={setChildDrawerVisible}
                         />
                     </TabPanel>

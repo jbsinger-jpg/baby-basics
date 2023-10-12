@@ -1,17 +1,20 @@
 // Module imports
-import { Button, FormControl, FormLabel, HStack, Input, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
+import { Button, ButtonGroup, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, Icon, Input, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
 // Relative imports
 import BreastRowTabPanel from '../components/tabPanels/BreastRowTabPanel';
 import PumpRowTabPanel from '../components/tabPanels/PumpRowTabPanel';
 import BottleTabPanel from '../components/tabPanels/BottleTabPanel';
-import { screenBackground } from '../defaultStyle';
+import { cardBackground, screenBackground } from '../defaultStyle';
 import { auth, firestore } from '../firebaseConfig';
 import FloatingActionButtonsDiaperTracking from '../components/floatingActionButtons/FloatingActionButtonsDiaperTracking';
 import ProgressTabFormatter from '../components/ProgressTabFormatter';
+import WaterDropIcon from '../components/staticPageData/WaterDropIcon';
+import PoopIcon from '../components/staticPageData/PoopIcon';
+import { CloseIcon } from '@chakra-ui/icons';
 
-export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChildOption, setDrawerVisible, selectedDateOption }) {
+export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChildOption, setDrawerVisible, selectedDateOption, searchBarIsOpen }) {
     const [tabIndex, setTabIndex] = useState(0);
     const [breastFeedingRows, setBreastFeedingRows] = useState(null);
     const [pumpFeedingRows, setPumpFeedingRows] = useState(null);
@@ -30,6 +33,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
     const [submittingTimerValues] = useState(false);
 
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
+    const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
+
     const toast = useToast();
 
     const handleTabsChange = (index) => {
@@ -229,6 +234,14 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
         else if (tabIndex === 2) {
             setPumpFluidOunces(event.target.value);
         }
+    };
+
+    const clearSearch = () => {
+
+    };
+
+    const generateSearch = () => {
+
     };
 
     useEffect(() => {
@@ -432,6 +445,61 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                     </TabPanel>
                 </TabPanels>
             </Tabs>
+            <Drawer
+                onClose={() => setSearchBarIsOpen(false)}
+                bg={_cardBackground}
+                isOpen={searchBarIsOpen}
+                placement='right'
+                size="sm"
+            >
+                <DrawerOverlay />
+                <DrawerContent
+                    bg={_screenBackground}
+                >
+                    <DrawerHeader>Filter Items</DrawerHeader>
+                    <DrawerBody>
+                        <Tabs variant='enclosed' index={tabIndex} onChange={handleTabsChange} overflowX="hidden" align="start">
+                            <TabList>
+                                <Tab>
+                                    <HStack>
+                                        <Text>Breast</Text>
+                                    </HStack>
+                                </Tab>
+                                <Tab>
+                                    <HStack>
+                                        <Text>Bottle</Text>
+                                    </HStack>
+                                </Tab>
+                                <Tab>
+                                    <HStack>
+                                        <Text>Pump</Text>
+                                        <Icon as={CloseIcon} viewBox="0 0 512 512" boxSize="35" color="white" fill="white" scale={0.5} opacity={0}>
+                                            {/* Icon deliberately empty to make text consistent */}
+                                        </Icon>
+                                    </HStack>
+                                </Tab>
+                            </TabList>
+                            <TabPanels>
+                                <TabPanel>
+                                    {/* TODO: Get Pee tab items */}
+                                </TabPanel>
+                                <TabPanel>
+                                    {/* TODO: Get Poo tab items */}
+                                </TabPanel>
+                                <TabPanel>
+                                    {/* TODO: Get Dry tab items */}
+                                </TabPanel>
+                            </TabPanels>
+                        </Tabs>
+                    </DrawerBody>
+                    <DrawerFooter>
+                        <ButtonGroup>
+                            <Button onClick={clearSearch}>Clear</Button>
+                            <Button onClick={generateSearch}>Search</Button>
+                        </ButtonGroup>
+                    </DrawerFooter>
+                </DrawerContent>
+            </Drawer>
         </>
     );
 }
