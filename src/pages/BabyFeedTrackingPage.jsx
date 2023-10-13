@@ -1,5 +1,5 @@
 // Module imports
-import { Button, ButtonGroup, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, Icon, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
+import { Button, ButtonGroup, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -101,6 +101,14 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
 
         if (tabIndex === 0) {
             if (!breastDuplicate) {
+                firestore.collection("users")
+                    .doc(auth.currentUser.uid)
+                    .collection("children")
+                    .doc(selectedChildOption)
+                    .collection("dates")
+                    .doc(selectedDateOption)
+                    .set({ time: selectedDateOption });
+
                 firestore.collection("users")
                     .doc(auth.currentUser.uid)
                     .collection("children")
@@ -241,15 +249,15 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
         }
     };
 
-    const handleFluidOunceChange = (event) => {
+    const handleFluidOunceChange = (valueString) => {
         if (tabIndex === 0) {
-            setBreastFluidOunces(event.target.value);
+            setBreastFluidOunces(valueString);
         }
         else if (tabIndex === 1) {
-            setBottleRowFluidOunces(event.target.value);
+            setBottleRowFluidOunces(valueString);
         }
         else if (tabIndex === 2) {
-            setPumpFluidOunces(event.target.value);
+            setPumpFluidOunces(valueString);
         }
     };
 
@@ -257,8 +265,58 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
         // TODO: Clear Search options
     };
 
-    const generateSearch = () => {
-        // TODO: Generate Search options
+    const generateSearch = async () => {
+        let searchRef = await firestore.collection("users").doc(auth.currentUser.uid).collection("children").doc(selectedChildOption).collection("dates");
+
+        if (queryDate) {
+            searchRef = searchRef.doc(queryDate.toLocaleDateString().replace(/\//g, '-')).collection("breast-feed-tracking");
+
+            if (queryLeftBreastTime) {
+                searchRef = searchRef.where("leftBreastTime", "<=", queryLeftBreastTime);
+            }
+
+            if (queryRightBreastTime) {
+                searchRef = searchRef.where("rightBreastTime", "<=", queryRightBreastTime);
+            }
+
+            if (queryFluidOunces) {
+                searchRef = searchRef.where("fluidOunces", "<=", queryFluidOunces);
+            }
+        }
+        else {
+            let dateTimes = [];
+
+            // Get the time stamp data that is present within the dates collection
+            await searchRef.get().then((snapshot) => {
+                snapshot.docs.forEach(doc => {
+                    dateTimes.push(doc.data().time);
+                    console.log(doc.data());
+                });
+            });
+
+            // Make a new reference to get all of snapshots with a given timestamp for the doc id within the dates collection
+            let breastFeedingOptions = [];
+
+            for (let i = 0; i < dateTimes.length; i++) {
+                await firestore.collection("users")
+                    .doc(auth.currentUser.uid)
+                    .collection("children")
+                    .doc(selectedChildOption)
+                    .collection("dates")
+                    .doc(dateTimes[i])
+                    .collection("breast-feed-tracking")
+                    .get().then(snapshot => {
+                        snapshot.docs.forEach(doc => {
+                            if (doc.data().fluidOunces >= Number(queryFluidOunces) || doc.data().leftBreastTime >= Number(queryLeftBreastTime) || doc.data().rightBreastTime >= Number(queryRightBreastTime)) {
+                                breastFeedingOptions.push(doc.data());
+                            }
+                        });
+
+                        // TODO: Set breast feeding data to options generated.
+                        console.log(breastFeedingOptions);
+                    });
+            }
+        }
     };
 
     useEffect(() => {
@@ -331,33 +389,39 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                     onChange={handleChangeQueryDate}
                 />
                 <Text>Left Breast Time</Text>
-                <NumberInput min={0} w="100%">
-                    <NumberInputField
-                        value={queryLeftBreastTime}
-                        onChange={(event) => setQueryLeftBreastTime(event.target.value)}
-                    />
+                <NumberInput
+                    min={0}
+                    w="100%"
+                    value={queryLeftBreastTime}
+                    onChange={(valueString) => setQueryLeftBreastTime(valueString)}
+                >
+                    <NumberInputField />
                     <NumberInputStepper>
                         <NumberIncrementStepper />
                         <NumberDecrementStepper />
                     </NumberInputStepper>
                 </NumberInput>
                 <Text>Right Breast Time</Text>
-                <NumberInput min={0} w="100%">
-                    <NumberInputField
-                        value={queryRightBreastTime}
-                        onChange={(event) => setQueryRightBreastTime(event.target.value)}
-                    />
+                <NumberInput
+                    min={0}
+                    w="100%"
+                    value={queryRightBreastTime}
+                    onChange={(valueString) => setQueryRightBreastTime(valueString)}
+                >
+                    <NumberInputField />
                     <NumberInputStepper>
                         <NumberIncrementStepper />
                         <NumberDecrementStepper />
                     </NumberInputStepper>
                 </NumberInput>
                 <Text>Fluid Ounces</Text>
-                <NumberInput min={0} w="100%">
-                    <NumberInputField
-                        value={queryFluidOunces}
-                        onChange={(event) => setQueryFluidOunces(event.target.value)}
-                    />
+                <NumberInput
+                    min={0}
+                    w="100%"
+                    value={queryFluidOunces}
+                    onChange={(valueString) => setQueryFluidOunces(valueString)}
+                >
+                    <NumberInputField />
                     <NumberInputStepper>
                         <NumberIncrementStepper />
                         <NumberDecrementStepper />
@@ -377,11 +441,13 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                     onChange={handleChangeQueryDate}
                 />
                 <Text>Fluid Ounces</Text>
-                <NumberInput min={0} w="100%">
-                    <NumberInputField
-                        value={queryFluidOunces}
-                        onChange={(event) => setQueryFluidOunces(event.target.value)}
-                    />
+                <NumberInput
+                    min={0}
+                    w="100%"
+                    value={queryFluidOunces}
+                    onChange={(valueString) => setQueryFluidOunces(valueString)}
+                >
+                    <NumberInputField />
                     <NumberInputStepper>
                         <NumberIncrementStepper />
                         <NumberDecrementStepper />
@@ -401,33 +467,39 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                     onChange={handleChangeQueryDate}
                 />
                 <Text>Left Breast Time</Text>
-                <NumberInput min={0} w="100%">
-                    <NumberInputField
-                        value={queryLeftBreastTime}
-                        onChange={(event) => setQueryLeftBreastTime(event.target.value)}
-                    />
+                <NumberInput
+                    min={0}
+                    w="100%"
+                    value={queryLeftBreastTime}
+                    onChange={(value) => setQueryLeftBreastTime(value)}
+                >
+                    <NumberInputField />
                     <NumberInputStepper>
                         <NumberIncrementStepper />
                         <NumberDecrementStepper />
                     </NumberInputStepper>
                 </NumberInput>
                 <Text>Right Breast Time</Text>
-                <NumberInput min={0} w="100%">
-                    <NumberInputField
-                        value={queryRightBreastTime}
-                        onChange={(event) => setQueryRightBreastTime(event.target.value)}
-                    />
+                <NumberInput
+                    min={0}
+                    w="100%"
+                    value={queryRightBreastTime}
+                    onChange={(value) => setQueryRightBreastTime(value)}
+                >
+                    <NumberInputField />
                     <NumberInputStepper>
                         <NumberIncrementStepper />
                         <NumberDecrementStepper />
                     </NumberInputStepper>
                 </NumberInput>
                 <Text>Fluid Ounces</Text>
-                <NumberInput min={0} w="100%">
-                    <NumberInputField
-                        value={queryFluidOunces}
-                        onChange={(event) => setQueryFluidOunces(event.target.value)}
-                    />
+                <NumberInput
+                    min={0}
+                    w="100%"
+                    value={queryFluidOunces}
+                    onChange={(valueString) => setQueryFluidOunces(valueString)}
+                >
+                    <NumberInputField />
                     <NumberInputStepper>
                         <NumberIncrementStepper />
                         <NumberDecrementStepper />
@@ -494,11 +566,12 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                                             <FormLabel>
                                                 Fluid Ounces
                                             </FormLabel>
-                                            <NumberInput min={0}>
-                                                <NumberInputField
-                                                    value={getTabFluidOunces()}
-                                                    onChange={handleFluidOunceChange}
-                                                />
+                                            <NumberInput
+                                                min={0}
+                                                value={getTabFluidOunces()}
+                                                onChange={handleFluidOunceChange}
+                                            >
+                                                <NumberInputField />
                                                 <NumberInputStepper>
                                                     <NumberIncrementStepper />
                                                     <NumberDecrementStepper />
