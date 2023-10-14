@@ -1,8 +1,6 @@
 // Module imports
 import { Button, ButtonGroup, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, FormControl, FormLabel, HStack, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Tab, TabList, TabPanel, TabPanels, Tabs, Text, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 
 // Relative imports
 import BreastRowTabPanel from '../components/tabPanels/BreastRowTabPanel';
@@ -35,7 +33,6 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
 
-    const [queryDate, setQueryDate] = useState(new Date());
     const [queryLeftBreastTime, setQueryLeftBreastTime] = useState(0);
     const [queryRightBreastTime, setQueryRightBreastTime] = useState(0);
     const [queryFluidOunces, setQueryFluidOunces] = useState(0);
@@ -151,6 +148,14 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                     .doc(selectedChildOption)
                     .collection("dates")
                     .doc(selectedDateOption)
+                    .set({ time: selectedDateOption });
+
+                firestore.collection("users")
+                    .doc(auth.currentUser.uid)
+                    .collection("children")
+                    .doc(selectedChildOption)
+                    .collection("dates")
+                    .doc(selectedDateOption)
                     .collection("bottle-feed-tracking")
                     .doc(String(bottleRowAlias).trim())
                     .set({
@@ -177,6 +182,14 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
         }
         else if (tabIndex === 2) {
             if (!pumpDuplicate) {
+                firestore.collection("users")
+                    .doc(auth.currentUser.uid)
+                    .collection("children")
+                    .doc(selectedChildOption)
+                    .collection("dates")
+                    .doc(selectedDateOption)
+                    .set({ time: selectedDateOption });
+
                 firestore.collection("users")
                     .doc(auth.currentUser.uid)
                     .collection("children")
@@ -267,36 +280,19 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
 
     const generateSearch = async () => {
         let searchRef = await firestore.collection("users").doc(auth.currentUser.uid).collection("children").doc(selectedChildOption).collection("dates");
+        let dateTimes = [];
 
-        if (queryDate) {
-            searchRef = searchRef.doc(queryDate.toLocaleDateString().replace(/\//g, '-')).collection("breast-feed-tracking");
+        // Make a new reference to get all of snapshots with a given timestamp for the doc id within the dates collection
+        let searchRowOptions = [];
 
-            if (queryLeftBreastTime) {
-                searchRef = searchRef.where("leftBreastTime", "<=", queryLeftBreastTime);
-            }
-
-            if (queryRightBreastTime) {
-                searchRef = searchRef.where("rightBreastTime", "<=", queryRightBreastTime);
-            }
-
-            if (queryFluidOunces) {
-                searchRef = searchRef.where("fluidOunces", "<=", queryFluidOunces);
-            }
-        }
-        else {
-            let dateTimes = [];
-
-            // Get the time stamp data that is present within the dates collection
-            await searchRef.get().then((snapshot) => {
-                snapshot.docs.forEach(doc => {
-                    dateTimes.push(doc.data().time);
-                    console.log(doc.data());
-                });
+        // Get the time stamp data that is present within the dates collection
+        await searchRef.get().then((snapshot) => {
+            snapshot.docs.forEach(doc => {
+                dateTimes.push(doc.data().time);
             });
+        });
 
-            // Make a new reference to get all of snapshots with a given timestamp for the doc id within the dates collection
-            let breastFeedingOptions = [];
-
+        if (tabIndex === 0) {
             for (let i = 0; i < dateTimes.length; i++) {
                 await firestore.collection("users")
                     .doc(auth.currentUser.uid)
@@ -308,12 +304,54 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                     .get().then(snapshot => {
                         snapshot.docs.forEach(doc => {
                             if (doc.data().fluidOunces >= Number(queryFluidOunces) || doc.data().leftBreastTime >= Number(queryLeftBreastTime) || doc.data().rightBreastTime >= Number(queryRightBreastTime)) {
-                                breastFeedingOptions.push(doc.data());
+                                searchRowOptions.push(doc.data());
                             }
                         });
 
-                        // TODO: Set breast feeding data to options generated.
-                        console.log(breastFeedingOptions);
+                        // Set breast feeding data to options generated.
+                        setBreastFeedingRows(searchRowOptions);
+                    });
+            }
+        }
+        else if (tabIndex === 1) {
+            for (let i = 0; i < dateTimes.length; i++) {
+                await firestore.collection("users")
+                    .doc(auth.currentUser.uid)
+                    .collection("children")
+                    .doc(selectedChildOption)
+                    .collection("dates")
+                    .doc(dateTimes[i])
+                    .collection("bottle-feed-tracking")
+                    .get().then(snapshot => {
+                        snapshot.docs.forEach(doc => {
+                            if (doc.data().fluidOunces >= Number(queryFluidOunces)) {
+                                searchRowOptions.push(doc.data());
+                            }
+                        });
+
+                        // Set breast feeding data to options generated.
+                        setBottleFeedingRows(searchRowOptions);
+                    });
+            }
+        }
+        else if (tabIndex === 2) {
+            for (let i = 0; i < dateTimes.length; i++) {
+                await firestore.collection("users")
+                    .doc(auth.currentUser.uid)
+                    .collection("children")
+                    .doc(selectedChildOption)
+                    .collection("dates")
+                    .doc(dateTimes[i])
+                    .collection("pump-feed-tracking")
+                    .get().then(snapshot => {
+                        snapshot.docs.forEach(doc => {
+                            if (doc.data().fluidOunces >= Number(queryFluidOunces) || doc.data().leftBreastTime >= Number(queryLeftBreastTime) || doc.data().rightBreastTime >= Number(queryRightBreastTime)) {
+                                searchRowOptions.push(doc.data());
+                            }
+                        });
+
+                        // Set breast feeding data to options generated.
+                        setPumpFeedingRows(searchRowOptions);
                     });
             }
         }
@@ -375,19 +413,9 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
         // eslint-disable-next-line
     }, [selectedChildOption, selectedDateOption]);
 
-    const handleChangeQueryDate = (date) => {
-        setQueryDate(date);
-    };
-
     const getBreastTabItems = () => {
         return (
             <VStack display="flex" alignItems="start" width="100%">
-                <Text>Date</Text>
-                <DatePicker
-                    customInput={<Input />}
-                    selected={queryDate}
-                    onChange={handleChangeQueryDate}
-                />
                 <Text>Left Breast Time</Text>
                 <NumberInput
                     min={0}
@@ -434,12 +462,6 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
     const getBottleTabItems = () => {
         return (
             <VStack display="flex" alignItems="start" width="100%">
-                <Text>Date</Text>
-                <DatePicker
-                    customInput={<Input />}
-                    selected={queryDate}
-                    onChange={handleChangeQueryDate}
-                />
                 <Text>Fluid Ounces</Text>
                 <NumberInput
                     min={0}
@@ -460,12 +482,6 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
     const getPumpTabItems = () => {
         return (
             <VStack display="flex" alignItems="start" width="100%">
-                <Text>Date</Text>
-                <DatePicker
-                    customInput={<Input />}
-                    selected={queryDate}
-                    onChange={handleChangeQueryDate}
-                />
                 <Text>Left Breast Time</Text>
                 <NumberInput
                     min={0}
@@ -614,7 +630,18 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                                             <FormLabel>
                                                 Fluid Ounces
                                             </FormLabel>
-                                            <Input value={getTabFluidOunces()} onChange={handleFluidOunceChange} />
+                                            <NumberInput
+                                                min={0}
+                                                w="100%"
+                                                value={getTabFluidOunces()}
+                                                onChange={handleFluidOunceChange}
+                                            >
+                                                <NumberInputField />
+                                                <NumberInputStepper>
+                                                    <NumberIncrementStepper />
+                                                    <NumberDecrementStepper />
+                                                </NumberInputStepper>
+                                            </NumberInput>
                                         </FormControl>
                                     </HStack>
                                     <Button type="submit">Submit</Button>
