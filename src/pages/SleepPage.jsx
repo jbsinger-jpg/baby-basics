@@ -47,6 +47,37 @@ export default function SleepPage({ childOptions }) {
             { x: new Date(selectedDate).toLocaleDateString(), y: Number(selectedSleepHrs), date: new Date(selectedDate) }
         ];
 
+        // Step 1: Keep count of entries with duplicate x keys
+        let counts = {};
+        let graphPointsWithCount = newGraphPoints.map((point) => {
+            let x = point.x;
+            counts[x] = counts[x] ? counts[x] + 1 : 1;
+            return { ...point, count: counts[x] };
+        });
+
+        // Step 2: Get only unique entries
+        let uniqueNewGraphPoints = graphPointsWithCount.reduce((acc, curr) => {
+            let existing = acc.find(item => item.x === curr.x);
+            if (existing) {
+                existing.count = Math.max(existing.count, curr.count);
+            } else {
+                acc.push(curr);
+            }
+            return acc;
+        }, []);
+
+        // Step 3: Make sure the object with the highest count is kept
+        let finalNewGraphPoints = uniqueNewGraphPoints.reduce((acc, curr) => {
+            let existing = acc.find(item => item.x === curr.x);
+            if (existing) {
+                existing.count = Math.max(existing.count, curr.count);
+            } else {
+                acc.push(curr);
+            }
+            return acc;
+        }, []);
+
+        console.log(finalNewGraphPoints);
         // Update both the front and backend whenever the button is pressed
         firestore
             .collection("users")

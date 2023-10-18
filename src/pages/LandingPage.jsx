@@ -109,7 +109,7 @@ export default function LandingPage() {
                 :
                 <Tabs isFitted>
                     <TabList>
-                        {currentUser &&
+                        {auth?.currentUser?.uid &&
                             <Tab>
                                 Information
                             </Tab>
@@ -117,7 +117,7 @@ export default function LandingPage() {
                         <Tab>
                             User
                         </Tab>
-                        {currentUser &&
+                        {auth?.currentUser?.uid &&
                             <Tab>
                                 Social
                             </Tab>
@@ -127,7 +127,7 @@ export default function LandingPage() {
                         </Tab>
                     </TabList>
                     <TabPanels>
-                        {currentUser &&
+                        {auth?.currentUser?.uid &&
                             <TabPanel>
                                 <VStack
                                     alignItems="start"
@@ -150,7 +150,7 @@ export default function LandingPage() {
                             </TabPanel>
                         }
                         <TabPanel>
-                            <FloatingActionButtonsUser setSignInLoading={setSignInLoading} setCurrentUser={setCurrentUser}/>
+                            <FloatingActionButtonsUser setSignInLoading={setSignInLoading} setCurrentUser={setCurrentUser} />
                             <VStack
                                 alignItems="start"
                             >
