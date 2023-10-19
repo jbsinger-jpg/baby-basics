@@ -986,5 +986,6 @@ export default function GrowthPage({ childOptions }) {
                     </AlertDialogContent>
                 </AlertDialogOverlay>
             </AlertDialog>
-        </>);
+        </>
+    );
 }
