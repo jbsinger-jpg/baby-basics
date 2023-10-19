@@ -47,37 +47,6 @@ export default function SleepPage({ childOptions }) {
             { x: new Date(selectedDate).toLocaleDateString(), y: Number(selectedSleepHrs), date: new Date(selectedDate) }
         ];
 
-        // Step 1: Keep count of entries with duplicate x keys
-        let counts = {};
-        let graphPointsWithCount = newGraphPoints.map((point) => {
-            let x = point.x;
-            counts[x] = counts[x] ? counts[x] + 1 : 1;
-            return { ...point, count: counts[x] };
-        });
-
-        // Step 2: Get only unique entries
-        let uniqueNewGraphPoints = graphPointsWithCount.reduce((acc, curr) => {
-            let existing = acc.find(item => item.x === curr.x);
-            if (existing) {
-                existing.count = Math.max(existing.count, curr.count);
-            } else {
-                acc.push(curr);
-            }
-            return acc;
-        }, []);
-
-        // Step 3: Make sure the object with the highest count is kept
-        let finalNewGraphPoints = uniqueNewGraphPoints.reduce((acc, curr) => {
-            let existing = acc.find(item => item.x === curr.x);
-            if (existing) {
-                existing.count = Math.max(existing.count, curr.count);
-            } else {
-                acc.push(curr);
-            }
-            return acc;
-        }, []);
-
-        console.log(finalNewGraphPoints);
         // Update both the front and backend whenever the button is pressed
         firestore
             .collection("users")
@@ -104,20 +73,25 @@ export default function SleepPage({ childOptions }) {
         newSleepPoints.pop();
         setSleepPoints(newSleepPoints);
 
-        firestore
-            .collection("users")
-            .doc(auth?.currentUser?.uid)
-            .collection("children")
-            .doc(selectedChildOption)
-            .collection("sleep-graph")
-            .doc(String(Number(latestSleepID - 1)))
-            .delete()
-            .then(() => {
-                setLatestSleepID(latestSleepID - 1);
-            })
-            .finally(() => {
-                setDeletePointButttonIsLoading(false);
-            });
+        if ((latestSleepID - 1) >= 0) {
+            firestore
+                .collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("sleep-graph")
+                .doc(String(Number(latestSleepID - 1)))
+                .delete()
+                .then(() => {
+                    setLatestSleepID(latestSleepID - 1);
+                })
+                .finally(() => {
+                    setDeletePointButttonIsLoading(false);
+                });
+        }
+        else {
+            setDeletePointButttonIsLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -149,6 +123,40 @@ export default function SleepPage({ childOptions }) {
         // eslint-disable-next-line
     }, [auth?.currentUser?.uid, childOptions]);
 
+    const formatSleepPoints = (points) => {
+        // Step 1: Keep count of entries with duplicate x keys
+        let counts = {};
+        let graphPointsWithCount = points.map((point) => {
+            let x = point.x;
+            counts[x] = counts[x] ? counts[x] + 1 : 1;
+            return { ...point, count: counts[x] };
+        });
+
+        // Step 2: Get only unique entries
+        let uniqueNewGraphPoints = graphPointsWithCount.reduce((acc, curr) => {
+            let existing = acc.find(item => item.x === curr.x);
+            if (existing) {
+                existing.count = Math.max(existing.count, curr.count);
+            } else {
+                acc.push(curr);
+            }
+            return acc;
+        }, []);
+
+        // Step 3: Make sure the object with the highest count is kept
+        let finalNewGraphPoints = uniqueNewGraphPoints.reduce((acc, curr) => {
+            let existing = acc.find(item => item.x === curr.x);
+            if (existing) {
+                existing.count = Math.max(existing.count, curr.count);
+            } else {
+                acc.push(curr);
+            }
+            return acc;
+        }, []);
+
+        return finalNewGraphPoints;
+    };
+
     return (
         <>
             <Box
@@ -170,10 +178,12 @@ export default function SleepPage({ childOptions }) {
                             <VictoryScatter
                                 style={{
                                     data: { fill: "#c43a31" },
-                                    parent: { border: "1px solid #ccc" }
+                                    parent: { border: "1px solid #ccc" },
+                                    labels: { fill: "white", fontSize: 18, }
                                 }}
                                 size={7}
-                                data={getSortedPoints(sleepPoints)}
+                                data={formatSleepPoints(getSortedPoints(sleepPoints))}
+                                labels={({ datum }) => datum.count}
                             >
                             </VictoryScatter>
                             <VictoryLabel
