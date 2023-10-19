@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { auth, firestore } from '../firebaseConfig';
-import { VictoryChart, VictoryLabel, VictoryLine, VictoryTheme } from 'victory';
+import { VictoryChart, VictoryLabel, VictoryLine, VictoryScatter, VictoryTheme } from 'victory';
 import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Checkbox, CheckboxGroup, FormLabel, HStack, Heading, Icon, Image, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Text, VStack, useColorModeValue } from '@chakra-ui/react';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import StyledSelect from '../components/StyledSelect';
@@ -417,85 +417,91 @@ export default function GrowthPage({ childOptions }) {
     const handleDeleteHeightPoint = () => {
         setDeleteHeadCircumferenceIsLoading(true);
 
-        setAllGraphPointsIsVisible(false);
-        setMonthlyGraphPointsVisible(false);
-        setWeeklyGraphPointsVisible(false);
-        setDailyGraphPointsVisible(false);
+        if (circumferenceGraphPoints.length > 0) {
+            const newCircumferencePoints = [...circumferenceGraphPoints];
+            newCircumferencePoints.pop();
+            setCircumferenceGraphPoints(newCircumferencePoints);
+        }
 
-        const newCircumferencePoints = [...circumferenceGraphPoints];
-        newCircumferencePoints.pop();
-        setCircumferenceGraphPoints(newCircumferencePoints);
-
-        firestore
-            .collection("users")
-            .doc(auth?.currentUser?.uid)
-            .collection("children")
-            .doc(selectedChildOption)
-            .collection("circumference-graph")
-            .doc(String(Number(latestHCPointID - 1)))
-            .delete()
-            .then(() => {
-                setLatestHCPointID(latestHCPointID - 1);
-            })
-            .finally(() => {
-                setDeleteHeadCircumferenceIsLoading(false);
-            });
+        if (latestHCPointID - 1 >= 0) {
+            firestore
+                .collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("circumference-graph")
+                .doc(String(Number(latestHCPointID - 1)))
+                .delete()
+                .then(() => {
+                    setLatestHCPointID(latestHCPointID - 1);
+                })
+                .finally(() => {
+                    setDeleteHeadCircumferenceIsLoading(false);
+                });
+        }
+        else {
+            setDeleteHeadCircumferenceIsLoading(false);
+        }
     };
 
     const handleDeleteWeightPoint = () => {
         setDeleteWeightPointIsLoading(true);
 
-        setAllGraphPointsIsVisible(false);
-        setMonthlyGraphPointsVisible(false);
-        setWeeklyGraphPointsVisible(false);
-        setDailyGraphPointsVisible(false);
+        if (weightGraphPoints.length > 0) {
+            const newWeightPoints = [...weightGraphPoints];
+            newWeightPoints.pop();
+            setWeightGraphPoints(newWeightPoints);
+        }
 
-        const newWeightPoints = [...weightGraphPoints];
-        newWeightPoints.pop();
-        setWeightGraphPoints(newWeightPoints);
-
-        firestore
-            .collection("users")
-            .doc(auth?.currentUser?.uid)
-            .collection("children")
-            .doc(selectedChildOption)
-            .collection("weight-graph")
-            .doc(String(Number(latestWeightID - 1)))
-            .delete()
-            .then(() => {
-                setLatestWeightID(latestWeightID - 1);
-            })
-            .finally(() => {
-                setDeleteWeightPointIsLoading(false);
-            });
+        if (latestWeightID - 1 >= 0) {
+            firestore
+                .collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("weight-graph")
+                .doc(String(Number(latestWeightID - 1)))
+                .delete()
+                .then(() => {
+                    setLatestWeightID(latestWeightID - 1);
+                })
+                .finally(() => {
+                    setDeleteWeightPointIsLoading(false);
+                });
+        }
+        else {
+            setDeleteWeightPointIsLoading(false);
+        }
     };
 
     const handleDeleteLengthPoint = () => {
         setDeleteLengthButtonIsLoading(true);
 
-        setAllGraphPointsIsVisible(false);
-        setMonthlyGraphPointsVisible(false);
-        setWeeklyGraphPointsVisible(false);
-        setDailyGraphPointsVisible(false);
+        if (lengthGraphPoints.length > 0) {
+            const newLengthPoints = [...lengthGraphPoints];
+            newLengthPoints.pop();
+            setLengthGraphPoints(newLengthPoints);
+        }
 
-        const newLengthPoints = [...lengthGraphPoints];
-        newLengthPoints.pop();
-        setLengthGraphPoints(newLengthPoints);
-
-        firestore
-            .collection("users")
-            .doc(auth?.currentUser?.uid)
-            .collection("children")
-            .doc(selectedChildOption)
-            .collection("length-graph")
-            .doc(String(Number(latestLengthID - 1)))
-            .delete()
-            .then(() => {
-                setLatestLengthID(latestLengthID - 1);
-            })
-            .finally(() => {
-                setDeleteLengthButtonIsLoading(false);
-            });
+        if (latestLengthID - 1 >= 0) {
+            firestore
+                .collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("length-graph")
+                .doc(String(Number(latestLengthID - 1)))
+                .delete()
+                .then(() => {
+                    setLatestLengthID(latestLengthID - 1);
+                })
+                .finally(() => {
+                    setDeleteLengthButtonIsLoading(false);
+                });
+        }
+        else {
+            setDeleteLengthButtonIsLoading(false);
+        }
     };
 
     const handleSelectedChildChange = async (event) => {
@@ -552,6 +558,24 @@ export default function GrowthPage({ childOptions }) {
     };
 
     const textColor = useColorModeValue("black", "white");
+
+    const getUniquePoints = (graphPoints) => {
+        let uniqueNewGraphPoints = [];
+
+        if (graphPoints.length > 0) {
+            uniqueNewGraphPoints = graphPoints.reduce((acc, curr) => {
+                let isUnique = acc.every(item => (item.x !== curr.x || item.y !== curr.y));
+                if (isUnique) {
+                    acc.push(curr);
+                }
+
+                return acc;
+            }, []);
+        }
+
+
+        return uniqueNewGraphPoints;
+    };
 
     useEffect(() => {
         if (auth?.currentUser?.uid) {
@@ -617,14 +641,24 @@ export default function GrowthPage({ childOptions }) {
                         <VictoryChart
                             theme={VictoryTheme.material}
                         >
-                            <VictoryLine
-                                style={{
-                                    data: { stroke: "#c43a31" },
-                                    parent: { border: "1px solid #ccc" }
-                                }}
-                                data={getSortedPoints(weightGraphPoints)}
-                            >
-                            </VictoryLine>
+                            {getUniquePoints(weightGraphPoints).length > 1 ?
+                                <VictoryLine
+                                    style={{
+                                        data: { stroke: "#c43a31" },
+                                        parent: { border: "1px solid #ccc" }
+                                    }}
+                                    data={getSortedPoints(weightGraphPoints)}
+                                />
+                                :
+                                <VictoryScatter
+                                    style={{
+                                        data: { fill: "#c43a31" },
+                                        parent: { border: "1px solid #ccc" },
+                                    }}
+                                    data={getSortedPoints(weightGraphPoints)}
+                                    size={7}
+                                />
+                            }
                             <VictoryLabel
                                 x={150}
                                 y={325}
@@ -653,14 +687,24 @@ export default function GrowthPage({ childOptions }) {
                         <VictoryChart
                             theme={VictoryTheme.material}
                         >
-                            <VictoryLine
-                                style={{
-                                    data: { stroke: "#c43a31" },
-                                    parent: { border: "1px solid #ccc" }
-                                }}
-                                data={getSortedPoints(circumferenceGraphPoints)}
-                            >
-                            </VictoryLine>
+                            {getUniquePoints(circumferenceGraphPoints).length > 1 ?
+                                <VictoryLine
+                                    style={{
+                                        data: { stroke: "#c43a31" },
+                                        parent: { border: "1px solid #ccc" }
+                                    }}
+                                    data={getSortedPoints(circumferenceGraphPoints)}
+                                />
+                                :
+                                <VictoryScatter
+                                    style={{
+                                        data: { fill: "#c43a31" },
+                                        parent: { border: "1px solid #ccc" },
+                                    }}
+                                    data={getSortedPoints(circumferenceGraphPoints)}
+                                    size={7}
+                                />
+                            }
                             <VictoryLabel
                                 x={150}
                                 y={325}
@@ -690,14 +734,24 @@ export default function GrowthPage({ childOptions }) {
                         <VictoryChart
                             theme={VictoryTheme.material}
                         >
-                            <VictoryLine
-                                style={{
-                                    data: { stroke: "#c43a31" },
-                                    parent: { border: "1px solid #ccc" }
-                                }}
-                                data={getSortedPoints(lengthGraphPoints)}
-                            >
-                            </VictoryLine>
+                            {getUniquePoints(lengthGraphPoints).length > 1 ?
+                                <VictoryLine
+                                    style={{
+                                        data: { stroke: "#c43a31" },
+                                        parent: { border: "1px solid #ccc" }
+                                    }}
+                                    data={getSortedPoints(lengthGraphPoints)}
+                                />
+                                :
+                                <VictoryScatter
+                                    style={{
+                                        data: { fill: "#c43a31" },
+                                        parent: { border: "1px solid #ccc" },
+                                    }}
+                                    data={getSortedPoints(lengthGraphPoints)}
+                                    size={7}
+                                />
+                            }
                             <VictoryLabel
                                 x={150}
                                 y={325}

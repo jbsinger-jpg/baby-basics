@@ -132,7 +132,7 @@ export default function SleepPage({ childOptions }) {
             return { ...point, count: counts[x] };
         });
 
-        // Step 2: Get only unique entries
+        // Step 2: Get only unique entries and make sure the object with the highest count is kept
         let uniqueNewGraphPoints = graphPointsWithCount.reduce((acc, curr) => {
             let existing = acc.find(item => item.x === curr.x);
             if (existing) {
@@ -143,18 +143,7 @@ export default function SleepPage({ childOptions }) {
             return acc;
         }, []);
 
-        // Step 3: Make sure the object with the highest count is kept
-        let finalNewGraphPoints = uniqueNewGraphPoints.reduce((acc, curr) => {
-            let existing = acc.find(item => item.x === curr.x);
-            if (existing) {
-                existing.count = Math.max(existing.count, curr.count);
-            } else {
-                acc.push(curr);
-            }
-            return acc;
-        }, []);
-
-        return finalNewGraphPoints;
+        return uniqueNewGraphPoints;
     };
 
     return (
