@@ -206,7 +206,7 @@ export default function GrowthPage({ childOptions }) {
                 .then(snapshot => {
                     let newGraphPoints = [];
                     snapshot.docs.forEach(doc => {
-                        let weekDifference = getWeekFromDate(new Date(), new Date(doc.data().date.toDate()));
+                        let weekDifference = getWeekFromDate(selectedDate, new Date(doc.data().date.toDate()));
 
                         if (!weekDifference) {
                             newGraphPoints.push(doc.data());
@@ -226,7 +226,7 @@ export default function GrowthPage({ childOptions }) {
                 .then(snapshot => {
                     let newGraphPoints = [];
                     snapshot.docs.forEach(doc => {
-                        let weekDifference = getWeekFromDate(new Date(), new Date(doc.data().date.toDate()));
+                        let weekDifference = getWeekFromDate(selectedDate, new Date(doc.data().date.toDate()));
 
                         if (!weekDifference) {
                             newGraphPoints.push(doc.data());
@@ -246,7 +246,7 @@ export default function GrowthPage({ childOptions }) {
                 .then(snapshot => {
                     let newGraphPoints = [];
                     snapshot.docs.forEach(doc => {
-                        let weekDifference = getWeekFromDate(new Date(), new Date(doc.data().date.toDate()));
+                        let weekDifference = getWeekFromDate(selectedDate, new Date(doc.data().date.toDate()));
 
                         if (!weekDifference) {
                             newGraphPoints.push(doc.data());
