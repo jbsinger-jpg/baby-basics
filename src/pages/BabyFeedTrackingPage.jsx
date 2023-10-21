@@ -16,18 +16,15 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
     const [breastFeedingRows, setBreastFeedingRows] = useState(null);
     const [pumpFeedingRows, setPumpFeedingRows] = useState(null);
     const [bottleFeedingRows, setBottleFeedingRows] = useState(null);
-
     const [bottleRowAlias, setBottleRowAlias] = useState("");
     const [bottleRowFluidOunces, setBottleRowFluidOunces] = useState(0);
 
     const [breastRowAlias, setBreastRowAlias] = useState("");
     const [breastFluidOunces, setBreastFluidOunces] = useState(0);
-
     const [pumpRowAlias, setPumpRowAlias] = useState("");
     const [pumpFluidOunces, setPumpFluidOunces] = useState(0);
     const [leftTeetTimerValue, setLeftTeetTimerValue] = useState(0);
     const [rightTeetTimerValue, setRightTeetTimerValue] = useState(0);
-
     const [submittingTimerValues] = useState(false);
 
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
@@ -36,7 +33,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
     const [queryLeftBreastTime, setQueryLeftBreastTime] = useState(0);
     const [queryRightBreastTime, setQueryRightBreastTime] = useState(0);
     const [queryFluidOunces, setQueryFluidOunces] = useState(0);
-
+    const [queryAlias, setQueryAlias] = useState(0);
     const toast = useToast();
 
     const handleTabsChange = (index) => {
@@ -50,8 +47,6 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
             .doc(auth?.currentUser?.uid)
             .collection("children")
             .doc(selectedChildOption)
-            .collection("dates")
-            .doc(selectedDateOption)
             .collection("breast-feed-tracking")
             .where("alias", "==", String(breastRowAlias).trim())
             .get()
@@ -62,12 +57,10 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
 
     const bottleAliasDuplicateFound = async () => {
         return await firestore.collection("users")
-            .doc(auth?.currentUser?.uid)
+            .doc(auth.currentUser.uid)
             .collection("children")
             .doc(selectedChildOption)
-            .collection("dates")
-            .doc(selectedDateOption)
-            .collection("bottle-feed-tracking")
+            .collection("breast-feed-tracking")
             .where("alias", "==", String(bottleRowAlias).trim())
             .get()
             .then((snapshot) => {
@@ -80,8 +73,6 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
             .doc(auth?.currentUser?.uid)
             .collection("children")
             .doc(selectedChildOption)
-            .collection("dates")
-            .doc(selectedDateOption)
             .collection("pump-feed-tracking")
             .where("alias", "==", String(pumpRowAlias).trim())
             .get()
@@ -102,28 +93,18 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                     .doc(auth.currentUser.uid)
                     .collection("children")
                     .doc(selectedChildOption)
-                    .collection("dates")
-                    .doc(selectedDateOption)
-                    .set({ time: selectedDateOption });
-
-                firestore.collection("users")
-                    .doc(auth.currentUser.uid)
-                    .collection("children")
-                    .doc(selectedChildOption)
-                    .collection("dates")
-                    .doc(selectedDateOption)
                     .collection("breast-feed-tracking")
-                    .doc(String(breastRowAlias).trim())
+                    .doc(breastRowAlias)
                     .set({
-                        timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
+                        timeStamp: `${new Date().toLocaleDateString().replace(/\//g, '-')}`,
                         alias: String(breastRowAlias).trim(),
                         fluidOunces: Number(breastFluidOunces),
                         leftBreastTime: Number(leftTeetTimerValue),
                         rightBreastTime: Number(rightTeetTimerValue),
-                    });
+                    })
 
                 setBreastFeedingRows([...breastFeedingRows, {
-                    timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
+                    timeStamp: `${new Date().toLocaleDateString().replace(/\//g, '-')}`,
                     alias: String(breastRowAlias).trim(),
                     fluidOunces: Number(breastFluidOunces),
                     leftBreastTime: Number(leftTeetTimerValue),
@@ -146,26 +127,16 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                     .doc(auth.currentUser.uid)
                     .collection("children")
                     .doc(selectedChildOption)
-                    .collection("dates")
-                    .doc(selectedDateOption)
-                    .set({ time: selectedDateOption });
-
-                firestore.collection("users")
-                    .doc(auth.currentUser.uid)
-                    .collection("children")
-                    .doc(selectedChildOption)
-                    .collection("dates")
-                    .doc(selectedDateOption)
                     .collection("bottle-feed-tracking")
                     .doc(String(bottleRowAlias).trim())
                     .set({
-                        timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
+                        timeStamp: `${new Date().toLocaleDateString().replace(/\//g, '-')}`,
                         alias: String(bottleRowAlias).trim(),
                         fluidOunces: Number(bottleRowFluidOunces)
                     });
 
                 setBottleFeedingRows([...bottleFeedingRows, {
-                    timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
+                    timeStamp: `${new Date().toLocaleDateString().replace(/\//g, '-')}`,
                     alias: String(bottleRowAlias).trim(),
                     fluidOunces: Number(bottleRowFluidOunces)
                 }]);
@@ -186,20 +157,10 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                     .doc(auth.currentUser.uid)
                     .collection("children")
                     .doc(selectedChildOption)
-                    .collection("dates")
-                    .doc(selectedDateOption)
-                    .set({ time: selectedDateOption });
-
-                firestore.collection("users")
-                    .doc(auth.currentUser.uid)
-                    .collection("children")
-                    .doc(selectedChildOption)
-                    .collection("dates")
-                    .doc(selectedDateOption)
                     .collection("pump-feed-tracking")
                     .doc(String(pumpRowAlias).trim())
                     .set({
-                        timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
+                        timeStamp: `${new Date().toLocaleDateString().replace(/\//g, '-')}`,
                         alias: String(pumpRowAlias).trim(),
                         fluidOunces: Number(pumpFluidOunces),
                         leftBreastTime: Number(leftTeetTimerValue),
@@ -207,7 +168,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                     });
 
                 setPumpFeedingRows([...pumpFeedingRows, {
-                    timeStamp: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
+                    timeStamp: `${new Date().toLocaleDateString().replace(/\//g, '-')}`,
                     alias: String(pumpRowAlias).trim(),
                     fluidOunces: Number(pumpFluidOunces),
                     leftBreastTime: Number(leftTeetTimerValue),
@@ -275,97 +236,71 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
     };
 
     const clearSearch = () => {
-        // TODO: Clear Search options
+        setQueryFluidOunces(0);
+        setQueryLeftBreastTime(0);
+        setQueryRightBreastTime(0);
+        setQueryAlias("");
     };
 
     const generateSearch = async () => {
-        let searchRef = await firestore.collection("users").doc(auth.currentUser.uid).collection("children").doc(selectedChildOption).collection("dates");
-        let dateTimes = [];
-
-        // Make a new reference to get all of snapshots with a given timestamp for the doc id within the dates collection
         let searchRowOptions = [];
 
-        // Get the time stamp data that is present within the dates collection
-        await searchRef.get().then((snapshot) => {
-            snapshot.docs.forEach(doc => {
-                dateTimes.push(doc.data().time);
-            });
-        });
-
         if (tabIndex === 0) {
-            for (let i = 0; i < dateTimes.length; i++) {
-                await firestore.collection("users")
-                    .doc(auth.currentUser.uid)
-                    .collection("children")
-                    .doc(selectedChildOption)
-                    .collection("dates")
-                    .doc(dateTimes[i])
-                    .collection("breast-feed-tracking")
-                    .get().then(snapshot => {
-                        snapshot.docs.forEach(doc => {
-                            if (doc.data().fluidOunces >= Number(queryFluidOunces) || doc.data().leftBreastTime >= Number(queryLeftBreastTime) || doc.data().rightBreastTime >= Number(queryRightBreastTime)) {
-                                searchRowOptions.push(doc.data());
-                            }
-                        });
-
-                        // Set breast feeding data to options generated.
-                        setBreastFeedingRows(searchRowOptions);
+            await firestore.collection("users")
+                .doc(auth.currentUser.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("breast-feed-tracking")
+                .get().then(snapshot => {
+                    snapshot.docs.forEach(doc => {
+                        searchRowOptions.push(doc.data());
                     });
-            }
+
+                    // Set breast feeding data to options generated.
+                    setBreastFeedingRows(searchRowOptions);
+                });
         }
         else if (tabIndex === 1) {
-            for (let i = 0; i < dateTimes.length; i++) {
-                await firestore.collection("users")
-                    .doc(auth.currentUser.uid)
-                    .collection("children")
-                    .doc(selectedChildOption)
-                    .collection("dates")
-                    .doc(dateTimes[i])
-                    .collection("bottle-feed-tracking")
-                    .get().then(snapshot => {
-                        snapshot.docs.forEach(doc => {
-                            if (doc.data().fluidOunces >= Number(queryFluidOunces)) {
-                                searchRowOptions.push(doc.data());
-                            }
-                        });
-
-                        // Set breast feeding data to options generated.
-                        setBottleFeedingRows(searchRowOptions);
+            await firestore.collection("users")
+                .doc(auth.currentUser.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("bottle-feed-tracking")
+                .get().then(snapshot => {
+                    snapshot.docs.forEach(doc => {
+                        searchRowOptions.push(doc.data());
                     });
-            }
+
+                    // Set breast feeding data to options generated.
+                    setBottleFeedingRows(searchRowOptions);
+                });
         }
         else if (tabIndex === 2) {
-            for (let i = 0; i < dateTimes.length; i++) {
-                await firestore.collection("users")
-                    .doc(auth.currentUser.uid)
-                    .collection("children")
-                    .doc(selectedChildOption)
-                    .collection("dates")
-                    .doc(dateTimes[i])
-                    .collection("pump-feed-tracking")
-                    .get().then(snapshot => {
-                        snapshot.docs.forEach(doc => {
-                            if (doc.data().fluidOunces >= Number(queryFluidOunces) || doc.data().leftBreastTime >= Number(queryLeftBreastTime) || doc.data().rightBreastTime >= Number(queryRightBreastTime)) {
-                                searchRowOptions.push(doc.data());
-                            }
-                        });
-
-                        // Set breast feeding data to options generated.
-                        setPumpFeedingRows(searchRowOptions);
+            await firestore.collection("users")
+                .doc(auth.currentUser.uid)
+                .collection("children")
+                .doc(selectedChildOption)
+                .collection("pump-feed-tracking")
+                .get().then(snapshot => {
+                    snapshot.docs.forEach(doc => {
+                        searchRowOptions.push(doc.data());
                     });
-            }
+
+                    // Set breast feeding data to options generated.
+                    setPumpFeedingRows(searchRowOptions);
+                });
         }
     };
 
     useEffect(() => {
-        if (selectedChildOption) {
+        if (selectedChildOption && selectedDateOption) {   
             firestore.collection("users")
                 .doc(auth?.currentUser?.uid)
                 .collection("children")
                 .doc(selectedChildOption)
-                .collection("dates")
-                .doc(selectedDateOption)
-                .collection("breast-feed-tracking").get()
+                .collection("breast-feed-tracking")
+                .where("timeStamp", "==", selectedDateOption)
+                .get()
                 .then(snapshot => {
                     let options = [];
                     snapshot.docs.forEach(doc => {
@@ -380,9 +315,9 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                 .doc(auth?.currentUser?.uid)
                 .collection("children")
                 .doc(selectedChildOption)
-                .collection("dates")
-                .doc(selectedDateOption)
-                .collection("bottle-feed-tracking").get()
+                .collection("bottle-feed-tracking")
+                .where("timeStamp", "==", selectedDateOption)
+                .get()
                 .then(snapshot => {
                     let options = [];
                     snapshot.docs.forEach(doc => {
@@ -397,9 +332,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                 .doc(auth?.currentUser?.uid)
                 .collection("children")
                 .doc(selectedChildOption)
-                .collection("dates")
-                .doc(selectedDateOption)
                 .collection("pump-feed-tracking")
+                .where("timeStamp", "==", selectedDateOption)
                 .get().then(snapshot => {
                     let options = [];
                     snapshot.docs.forEach(doc => {
@@ -455,6 +389,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                         <NumberDecrementStepper />
                     </NumberInputStepper>
                 </NumberInput>
+                <Text>Alias</Text>
+                <Input value={queryAlias} onChange={event => setQueryAlias(event.target.value)} />
             </VStack>
         );
     };
@@ -475,6 +411,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                         <NumberDecrementStepper />
                     </NumberInputStepper>
                 </NumberInput>
+                <Text>Alias</Text>
+                <Input value={queryAlias} onChange={event => setQueryAlias(event.target.value)} />
             </VStack>
         );
     };
@@ -521,6 +459,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                         <NumberDecrementStepper />
                     </NumberInputStepper>
                 </NumberInput>
+                <Text>Alias</Text>
+                <Input value={queryAlias} onChange={event => setQueryAlias(event.target.value)} />
             </VStack>
         );
     };

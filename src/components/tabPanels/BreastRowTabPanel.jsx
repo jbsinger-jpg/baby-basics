@@ -19,8 +19,6 @@ export default function BreastRowTabPanel({ leftBreastTime, rightBreastTime, ali
             .doc(auth.currentUser.uid)
             .collection("children")
             .doc(selectedChildOption)
-            .collection("dates")
-            .doc(selectedDateOption)
             .collection("breast-feed-tracking")
             .doc(alias)
             .delete();
