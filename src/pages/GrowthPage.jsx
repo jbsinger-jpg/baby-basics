@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { auth, firestore } from '../firebaseConfig';
-import { VictoryChart, VictoryLabel, VictoryLine, VictoryScatter, VictoryTheme } from 'victory';
+import { VictoryAxis, VictoryChart, VictoryLabel, VictoryLine, VictoryScatter, VictoryTheme } from 'victory';
 import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Checkbox, CheckboxGroup, FormLabel, HStack, Heading, Icon, Image, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Text, VStack, useColorModeValue } from '@chakra-ui/react';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import StyledSelect from '../components/StyledSelect';
@@ -641,6 +641,13 @@ export default function GrowthPage({ childOptions }) {
                         <VictoryChart
                             theme={VictoryTheme.material}
                         >
+                            <VictoryAxis 
+                                fixLabelOverlap
+                            />
+                            <VictoryAxis
+                                dependentAxis
+                                fixLabelOverlap
+                            />
                             {getUniquePoints(weightGraphPoints).length > 1 ?
                                 <VictoryLine
                                     style={{
@@ -687,6 +694,13 @@ export default function GrowthPage({ childOptions }) {
                         <VictoryChart
                             theme={VictoryTheme.material}
                         >
+                            <VictoryAxis 
+                                fixLabelOverlap
+                            />
+                            <VictoryAxis
+                                dependentAxis
+                                fixLabelOverlap
+                            />
                             {getUniquePoints(circumferenceGraphPoints).length > 1 ?
                                 <VictoryLine
                                     style={{
@@ -734,6 +748,13 @@ export default function GrowthPage({ childOptions }) {
                         <VictoryChart
                             theme={VictoryTheme.material}
                         >
+                            <VictoryAxis 
+                                fixLabelOverlap
+                            />
+                            <VictoryAxis
+                                dependentAxis
+                                fixLabelOverlap
+                            />
                             {getUniquePoints(lengthGraphPoints).length > 1 ?
                                 <VictoryLine
                                     style={{
