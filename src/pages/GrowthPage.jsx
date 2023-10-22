@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { auth, firestore } from '../firebaseConfig';
-import { VictoryChart, VictoryLabel, VictoryLine, VictoryScatter, VictoryTheme } from 'victory';
-import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Checkbox, CheckboxGroup, FormLabel, HStack, Heading, Icon, Image, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Text, VStack, useColorModeValue } from '@chakra-ui/react';
+import { VictoryAxis, VictoryChart, VictoryLabel, VictoryLine, VictoryScatter, VictoryTheme } from 'victory';
+import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Checkbox, CheckboxGroup, FormLabel, HStack, Heading, Icon, Image, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Spinner, Text, VStack, useColorModeValue } from '@chakra-ui/react';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import StyledSelect from '../components/StyledSelect';
 import { screenBackground } from '../defaultStyle';
@@ -43,6 +43,8 @@ export default function GrowthPage({ childOptions }) {
     const [latestHCPointID, setLatestHCPointID] = useState(0);
     const [latestWeightID, setLatestWeightID] = useState(0);
     const [latestLengthID, setLatestLengthID] = useState(0);
+
+    const [chartsAreLoading, setChartsAreLoading] = useState(false);
 
     const getSortedPoints = (data) => {
         if (data && data.length) {
@@ -206,7 +208,7 @@ export default function GrowthPage({ childOptions }) {
                 .then(snapshot => {
                     let newGraphPoints = [];
                     snapshot.docs.forEach(doc => {
-                        let weekDifference = getWeekFromDate(new Date(), new Date(doc.data().date.toDate()));
+                        let weekDifference = getWeekFromDate(selectedDate, new Date(doc.data().date.toDate()));
 
                         if (!weekDifference) {
                             newGraphPoints.push(doc.data());
@@ -226,7 +228,7 @@ export default function GrowthPage({ childOptions }) {
                 .then(snapshot => {
                     let newGraphPoints = [];
                     snapshot.docs.forEach(doc => {
-                        let weekDifference = getWeekFromDate(new Date(), new Date(doc.data().date.toDate()));
+                        let weekDifference = getWeekFromDate(selectedDate, new Date(doc.data().date.toDate()));
 
                         if (!weekDifference) {
                             newGraphPoints.push(doc.data());
@@ -246,7 +248,7 @@ export default function GrowthPage({ childOptions }) {
                 .then(snapshot => {
                     let newGraphPoints = [];
                     snapshot.docs.forEach(doc => {
-                        let weekDifference = getWeekFromDate(new Date(), new Date(doc.data().date.toDate()));
+                        let weekDifference = getWeekFromDate(selectedDate, new Date(doc.data().date.toDate()));
 
                         if (!weekDifference) {
                             newGraphPoints.push(doc.data());
@@ -578,6 +580,8 @@ export default function GrowthPage({ childOptions }) {
     };
 
     useEffect(() => {
+        setChartsAreLoading(true);
+
         if (auth?.currentUser?.uid) {
             if (childOptions && childOptions.length) {
                 setSelectedChildOption(childOptions[0].value);
@@ -617,6 +621,7 @@ export default function GrowthPage({ childOptions }) {
 
                         setCircumferenceGraphPoints(options);
                         setLatestHCPointID(index);
+                        setChartsAreLoading(false)
                     });
             }
             else {
@@ -634,147 +639,173 @@ export default function GrowthPage({ childOptions }) {
                 justifyContent="center"
                 display="flex"
             >
-                <HStack spacing={10}>
-                    <VStack
-                        h={450}
-                    >
-                        <VictoryChart
-                            theme={VictoryTheme.material}
+                {chartsAreLoading ? 
+                    <Spinner /> 
+                    : 
+                    <HStack spacing={10}>
+                        <VStack
+                            h={450}
                         >
-                            {getUniquePoints(weightGraphPoints).length > 1 ?
-                                <VictoryLine
-                                    style={{
-                                        data: { stroke: "#c43a31" },
-                                        parent: { border: "1px solid #ccc" }
-                                    }}
-                                    data={getSortedPoints(weightGraphPoints)}
+                            <VictoryChart
+                                theme={VictoryTheme.material}
+                            >
+                                <VictoryAxis 
+                                    fixLabelOverlap
                                 />
+                                <VictoryAxis
+                                    dependentAxis
+                                    fixLabelOverlap
+                                />
+                                {getUniquePoints(weightGraphPoints).length > 1 ?
+                                    <VictoryLine
+                                        style={{
+                                            data: { stroke: "#c43a31" },
+                                            parent: { border: "1px solid #ccc" }
+                                        }}
+                                        data={getSortedPoints(weightGraphPoints)}
+                                    />
+                                    :
+                                    <VictoryScatter
+                                        style={{
+                                            data: { fill: "#c43a31" },
+                                            parent: { border: "1px solid #ccc" },
+                                        }}
+                                        data={getSortedPoints(weightGraphPoints)}
+                                        size={7}
+                                    />
+                                }
+                                <VictoryLabel
+                                    x={150}
+                                    y={325}
+                                    dy={10}
+                                    text="Weight"
+                                    style={{ fill: textColor }}
+                                />
+                            </VictoryChart>
+                            {childOptions && childOptions.length ?
+                                <HStack>
+                                    <Button onClick={addWeightPoint} isLoading={weightButtonIsLoading}>Plot Weight</Button>
+                                    <Button onClick={handleDeleteWeightPoint} isLoading={deleteWeightPointIsLoading}>Delete Weight</Button>
+                                </HStack>
                                 :
-                                <VictoryScatter
-                                    style={{
-                                        data: { fill: "#c43a31" },
-                                        parent: { border: "1px solid #ccc" },
-                                    }}
-                                    data={getSortedPoints(weightGraphPoints)}
-                                    size={7}
-                                />
+                                <HStack>
+                                    <Icon as={InfoOutlineIcon} />
+                                    <Text>
+                                        Add a child to plot points!
+                                    </Text>
+                                </HStack>
                             }
-                            <VictoryLabel
-                                x={150}
-                                y={325}
-                                dy={10}
-                                text="Weight"
-                                style={{ fill: textColor }}
-                            />
-                        </VictoryChart>
-                        {childOptions && childOptions.length ?
-                            <HStack>
-                                <Button onClick={addWeightPoint} isLoading={weightButtonIsLoading}>Plot Weight</Button>
-                                <Button onClick={handleDeleteWeightPoint} isLoading={deleteWeightPointIsLoading}>Delete Weight</Button>
-                            </HStack>
-                            :
-                            <HStack>
-                                <Icon as={InfoOutlineIcon} />
-                                <Text>
-                                    Add a child to plot points!
-                                </Text>
-                            </HStack>
-                        }
-                    </VStack>
-                    <VStack
-                        h={450}
-                    >
-                        <VictoryChart
-                            theme={VictoryTheme.material}
+                        </VStack>
+                        <VStack
+                            h={450}
                         >
-                            {getUniquePoints(circumferenceGraphPoints).length > 1 ?
-                                <VictoryLine
-                                    style={{
-                                        data: { stroke: "#c43a31" },
-                                        parent: { border: "1px solid #ccc" }
-                                    }}
-                                    data={getSortedPoints(circumferenceGraphPoints)}
+                            <VictoryChart
+                                theme={VictoryTheme.material}
+                            >
+                                <VictoryAxis 
+                                    fixLabelOverlap
                                 />
-                                :
-                                <VictoryScatter
-                                    style={{
-                                        data: { fill: "#c43a31" },
-                                        parent: { border: "1px solid #ccc" },
-                                    }}
-                                    data={getSortedPoints(circumferenceGraphPoints)}
-                                    size={7}
+                                <VictoryAxis
+                                    dependentAxis
+                                    fixLabelOverlap
                                 />
-                            }
-                            <VictoryLabel
-                                x={150}
-                                y={325}
-                                dy={10}
-                                text="Circumference"
-                                style={{ fill: textColor }}
+                                {getUniquePoints(circumferenceGraphPoints).length > 1 ?
+                                    <VictoryLine
+                                        style={{
+                                            data: { stroke: "#c43a31" },
+                                            parent: { border: "1px solid #ccc" }
+                                        }}
+                                        data={getSortedPoints(circumferenceGraphPoints)}
+                                    />
+                                    :
+                                    <VictoryScatter
+                                        style={{
+                                            data: { fill: "#c43a31" },
+                                            parent: { border: "1px solid #ccc" },
+                                        }}
+                                        data={getSortedPoints(circumferenceGraphPoints)}
+                                        size={7}
+                                    />
+                                }
+                                <VictoryLabel
+                                    x={150}
+                                    y={325}
+                                    dy={10}
+                                    text="Circumference"
+                                    style={{ fill: textColor }}
 
-                            />
-                        </VictoryChart>
-                        {childOptions && childOptions.length ?
-                            <HStack>
-                                <Button onClick={addCircumferenceGraphPoint} isLoading={circumferenceButtonIsLoading}>Plot Head Circumference</Button>
-                                <Button onClick={handleDeleteHeightPoint} isLoading={deleteHeadCircumferenceIsLoading}>Delete Head Circumference</Button>
-                            </HStack>
-                            :
-                            <HStack>
-                                <Icon as={InfoOutlineIcon} />
-                                <Text>
-                                    Add a child to plot points!
-                                </Text>
-                            </HStack>
-                        }
-                    </VStack>
-                    <VStack
-                        h={450}
-                    >
-                        <VictoryChart
-                            theme={VictoryTheme.material}
-                        >
-                            {getUniquePoints(lengthGraphPoints).length > 1 ?
-                                <VictoryLine
-                                    style={{
-                                        data: { stroke: "#c43a31" },
-                                        parent: { border: "1px solid #ccc" }
-                                    }}
-                                    data={getSortedPoints(lengthGraphPoints)}
                                 />
+                            </VictoryChart>
+                            {childOptions && childOptions.length ?
+                                <HStack>
+                                    <Button onClick={addCircumferenceGraphPoint} isLoading={circumferenceButtonIsLoading}>Plot Head Circumference</Button>
+                                    <Button onClick={handleDeleteHeightPoint} isLoading={deleteHeadCircumferenceIsLoading}>Delete Head Circumference</Button>
+                                </HStack>
                                 :
-                                <VictoryScatter
-                                    style={{
-                                        data: { fill: "#c43a31" },
-                                        parent: { border: "1px solid #ccc" },
-                                    }}
-                                    data={getSortedPoints(lengthGraphPoints)}
-                                    size={7}
-                                />
+                                <HStack>
+                                    <Icon as={InfoOutlineIcon} />
+                                    <Text>
+                                        Add a child to plot points!
+                                    </Text>
+                                </HStack>
                             }
-                            <VictoryLabel
-                                x={150}
-                                y={325}
-                                dy={10}
-                                text="Length"
-                                style={{ fill: textColor }}
-                            />
-                        </VictoryChart>
-                        {childOptions && childOptions.length ?
-                            <HStack>
-                                <Button onClick={addLengthPoint} isLoading={lengthButtonIsLoading}>Plot Length</Button>
-                                <Button onClick={handleDeleteLengthPoint} isLoading={deleteLengthButtonIsLoading}>Delete Length</Button>
-                            </HStack>
-                            :
-                            <HStack>
-                                <Icon as={InfoOutlineIcon} />
-                                <Text>
-                                    Add a child to plot points!
-                                </Text>
-                            </HStack>
-                        }
-                    </VStack>
-                </HStack>
+                        </VStack>
+                        <VStack
+                            h={450}
+                        >
+                            <VictoryChart
+                                theme={VictoryTheme.material}
+                            >
+                                <VictoryAxis 
+                                    fixLabelOverlap
+                                />
+                                <VictoryAxis
+                                    dependentAxis
+                                    fixLabelOverlap
+                                />
+                                {getUniquePoints(lengthGraphPoints).length > 1 ?
+                                    <VictoryLine
+                                        style={{
+                                            data: { stroke: "#c43a31" },
+                                            parent: { border: "1px solid #ccc" }
+                                        }}
+                                        data={getSortedPoints(lengthGraphPoints)}
+                                    />
+                                    :
+                                    <VictoryScatter
+                                        style={{
+                                            data: { fill: "#c43a31" },
+                                            parent: { border: "1px solid #ccc" },
+                                        }}
+                                        data={getSortedPoints(lengthGraphPoints)}
+                                        size={7}
+                                    />
+                                }
+                                <VictoryLabel
+                                    x={150}
+                                    y={325}
+                                    dy={10}
+                                    text="Length"
+                                    style={{ fill: textColor }}
+                                />
+                            </VictoryChart>
+                            {childOptions && childOptions.length ?
+                                <HStack>
+                                    <Button onClick={addLengthPoint} isLoading={lengthButtonIsLoading}>Plot Length</Button>
+                                    <Button onClick={handleDeleteLengthPoint} isLoading={deleteLengthButtonIsLoading}>Delete Length</Button>
+                                </HStack>
+                                :
+                                <HStack>
+                                    <Icon as={InfoOutlineIcon} />
+                                    <Text>
+                                        Add a child to plot points!
+                                    </Text>
+                                </HStack>
+                            }
+                        </VStack>
+                    </HStack>
+                
+                }
             </Box>
             <VStack
                 justifyContent="space-between"

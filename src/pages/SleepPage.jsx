@@ -127,14 +127,14 @@ export default function SleepPage({ childOptions }) {
         // Step 1: Keep count of entries with duplicate x keys
         let counts = {};
         let graphPointsWithCount = points.map((point) => {
-            let x = point.x;
-            counts[x] = counts[x] ? counts[x] + 1 : 1;
-            return { ...point, count: counts[x] };
+            let key = point.x + "_" + point.y;
+            counts[key] = counts[key] ? counts[key] + 1 : 1;
+            return { ...point, count: counts[key] };
         });
 
         // Step 2: Get only unique entries and make sure the object with the highest count is kept
         let uniqueNewGraphPoints = graphPointsWithCount.reduce((acc, curr) => {
-            let existing = acc.find(item => item.x === curr.x);
+            let existing = acc.find(item => (item.x === curr.x && item.y === curr.y));
             if (existing) {
                 existing.count = Math.max(existing.count, curr.count);
             } else {
@@ -142,6 +142,8 @@ export default function SleepPage({ childOptions }) {
             }
             return acc;
         }, []);
+
+        console.log(uniqueNewGraphPoints)
 
         return uniqueNewGraphPoints;
     };
