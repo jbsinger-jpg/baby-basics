@@ -327,11 +327,8 @@ export default function ProgressPage() {
                     <TabPanel>
                         <GraphPage
                             childOptions={childOptions}
-                            searchBarIsOpen={graphSearchBarIsOpen}
-                            setSearchBarIsOpen={setGraphSearchBarIsOpen}
                         />
                         <FloatingActionButtonsGrowthAndSleep
-                            setSearchBarIsOpen={setGraphSearchBarIsOpen}
                             setChildDrawerVisible={setChildDrawerVisible}
                         />
                     </TabPanel>
