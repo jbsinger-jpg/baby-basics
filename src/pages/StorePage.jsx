@@ -83,8 +83,6 @@ export default function StorePage() {
     const [bathDataIsLoading, setBathDataIsLoading] = useState(true);
 
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
-    const [screenHeight, setScreenHeight] = useState(window.innerHeight);
-    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
     const [babyImagesModalIsOpen, setBabyImagesModalIsOpen] = useState(false);
     const [searchInProgress, setSearchInProgress] = useState(false);
@@ -227,24 +225,9 @@ export default function StorePage() {
             });
     }, []);
 
-    useEffect(() => {
-        function handleResize() {
-            setScreenHeight(window.innerHeight);
-            setScreenWidth(window.innerWidth);
-        }
-
-        window.addEventListener("resize", handleResize);
-
-        return () => {
-            window.removeEventListener("resize", handleResize);
-        };
-    }, [screenHeight, screenWidth]);
-
     return (
         <Box
             bg={_screenBackground}
-            h={screenHeight}
-            w={screenWidth}
             overflowX="hidden"
         >
             {/* IF CONTENT IS LOADING DISPLAY SPINNER ICON */}
