@@ -150,6 +150,7 @@ export default function ScreeningPage() {
                 bottom="0"
                 position="fixed"
                 w="90vw"
+                pb="2"
             >
                 <Button onClick={handleBackButtonPress}>
                     Back

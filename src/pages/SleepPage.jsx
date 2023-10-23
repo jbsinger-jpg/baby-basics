@@ -143,7 +143,7 @@ export default function SleepPage({ childOptions }) {
             return acc;
         }, []);
 
-        console.log(uniqueNewGraphPoints)
+        console.log(uniqueNewGraphPoints);
 
         return uniqueNewGraphPoints;
     };
@@ -206,8 +206,10 @@ export default function SleepPage({ childOptions }) {
                 w="90vw"
                 alignItems="stretch"
                 spacing="1"
-                pl="2"
-                pr="2"
+                p="2"
+                position="fixed"
+                bottom="0"
+                left="0"
             >
                 <VStack
                     alignItems="start"

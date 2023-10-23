@@ -101,7 +101,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                         fluidOunces: Number(breastFluidOunces),
                         leftBreastTime: Number(leftTeetTimerValue),
                         rightBreastTime: Number(rightTeetTimerValue),
-                    })
+                    });
 
                 setBreastFeedingRows([...breastFeedingRows, {
                     timeStamp: `${new Date().toLocaleDateString().replace(/\//g, '-')}`,
@@ -293,7 +293,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
     };
 
     useEffect(() => {
-        if (selectedChildOption && selectedDateOption) {   
+        if (selectedChildOption && selectedDateOption) {
             firestore.collection("users")
                 .doc(auth?.currentUser?.uid)
                 .collection("children")
@@ -606,6 +606,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                             bottom="0"
                             left="0"
                             pl="10"
+                            pb="2"
                             w="100vw"
                         >
                             <form onSubmit={addTabRow}>
