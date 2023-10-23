@@ -143,8 +143,6 @@ export default function SleepPage({ childOptions }) {
             return acc;
         }, []);
 
-        console.log(uniqueNewGraphPoints);
-
         return uniqueNewGraphPoints;
     };
 
