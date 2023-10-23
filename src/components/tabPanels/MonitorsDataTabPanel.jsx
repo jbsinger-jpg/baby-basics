@@ -10,7 +10,7 @@ export default function MonitorsDataTabPanel({ monitorData, monitorDataIsLoading
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
 
     return (
-        <HStack flexWrap={"wrap"} marginTop="20" spacing="12" bg={_screenBackground}>
+        <HStack flexWrap={"wrap"} marginTop="20" spacing="10" bg={_screenBackground} w="90vw" justifyContent="space-evenly">
             {monitorData && monitorData.length > 0 && monitorData.map((monitor, index) => {
                 return (
                     <MonitorRow

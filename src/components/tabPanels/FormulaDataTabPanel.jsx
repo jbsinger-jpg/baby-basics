@@ -10,7 +10,7 @@ export default function FormulaDataTabPanel({ formulaData, formulaDataIsLoading,
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
 
     return (
-        <HStack flexWrap={"wrap"} marginTop="20" spacing="12" bg={_screenBackground}>
+        <HStack flexWrap={"wrap"} marginTop="20" spacing="10" bg={_screenBackground} w="90vw" justifyContent="space-evenly">
             {formulaData && formulaData.length > 0 && formulaData.map((formula, index) => {
                 return (
                     <FormulaRow

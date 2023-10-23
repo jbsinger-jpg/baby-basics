@@ -10,7 +10,7 @@ export default function DiaperDataTabPanel({ diaperData, isDiapersLoading, tabIn
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
 
     return (
-        <HStack flexWrap={"wrap"} marginTop="20" spacing="12" bg={_screenBackground}>
+        <HStack flexWrap={"wrap"} marginTop="20" spacing="10" bg={_screenBackground} w="90vw" justifyContent="space-evenly">
             {diaperData && diaperData.map((diaper, index) => {
                 return (
                     <DiaperRow
