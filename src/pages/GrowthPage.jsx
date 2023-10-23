@@ -183,12 +183,21 @@ export default function GrowthPage({ childOptions }) {
         }
     };
 
-    const getWeekFromDate = (dateStr1, dateStr2) => {
-        const date1 = new Date(dateStr1);
-        const date2 = new Date(dateStr2);
-        const difference = Math.abs(date2 - date1);
-        const weeks = Math.floor(difference / (1000 * 60 * 60 * 24 * 7));
-        return Number(weeks);
+    const getWeekFromDate = (date) => {
+        const startDate = new Date(date.getFullYear(), 0, 1);
+        const days = Math.floor((date - startDate) / (24 * 60 * 60 * 1000));
+        const weekNumber = Number(Math.ceil(days / 7));
+        return weekNumber;
+    };
+
+    const getIsSameWeekFromDate = (date1, date2) => {
+        const _date1 = new Date(date1);
+        const _date2 = new Date(date2);
+
+        const weekNumber1 = getWeekFromDate(_date1);
+        const weekNumber2 = getWeekFromDate(_date2);
+
+        return Boolean(Number(weekNumber1) - Number(weekNumber2));
     };
 
     const handleWeeklyGraphDataChange = (event) => {
@@ -208,7 +217,7 @@ export default function GrowthPage({ childOptions }) {
                 .then(snapshot => {
                     let newGraphPoints = [];
                     snapshot.docs.forEach(doc => {
-                        let weekDifference = getWeekFromDate(selectedDate, new Date(doc.data().date.toDate()));
+                        let weekDifference = getIsSameWeekFromDate(selectedDate, new Date(doc.data().date.toDate()));
 
                         if (!weekDifference) {
                             newGraphPoints.push(doc.data());
@@ -228,7 +237,7 @@ export default function GrowthPage({ childOptions }) {
                 .then(snapshot => {
                     let newGraphPoints = [];
                     snapshot.docs.forEach(doc => {
-                        let weekDifference = getWeekFromDate(selectedDate, new Date(doc.data().date.toDate()));
+                        let weekDifference = getIsSameWeekFromDate(selectedDate, new Date(doc.data().date.toDate()));
 
                         if (!weekDifference) {
                             newGraphPoints.push(doc.data());
@@ -248,7 +257,7 @@ export default function GrowthPage({ childOptions }) {
                 .then(snapshot => {
                     let newGraphPoints = [];
                     snapshot.docs.forEach(doc => {
-                        let weekDifference = getWeekFromDate(selectedDate, new Date(doc.data().date.toDate()));
+                        let weekDifference = getIsSameWeekFromDate(selectedDate, new Date(doc.data().date.toDate()));
 
                         if (!weekDifference) {
                             newGraphPoints.push(doc.data());
@@ -621,7 +630,7 @@ export default function GrowthPage({ childOptions }) {
 
                         setCircumferenceGraphPoints(options);
                         setLatestHCPointID(index);
-                        setChartsAreLoading(false)
+                        setChartsAreLoading(false);
                     });
             }
             else {
@@ -639,9 +648,9 @@ export default function GrowthPage({ childOptions }) {
                 justifyContent="center"
                 display="flex"
             >
-                {chartsAreLoading ? 
-                    <Spinner /> 
-                    : 
+                {chartsAreLoading ?
+                    <Spinner />
+                    :
                     <HStack spacing={10}>
                         <VStack
                             h={450}
@@ -649,7 +658,7 @@ export default function GrowthPage({ childOptions }) {
                             <VictoryChart
                                 theme={VictoryTheme.material}
                             >
-                                <VictoryAxis 
+                                <VictoryAxis
                                     fixLabelOverlap
                                 />
                                 <VictoryAxis
@@ -702,7 +711,7 @@ export default function GrowthPage({ childOptions }) {
                             <VictoryChart
                                 theme={VictoryTheme.material}
                             >
-                                <VictoryAxis 
+                                <VictoryAxis
                                     fixLabelOverlap
                                 />
                                 <VictoryAxis
@@ -756,7 +765,7 @@ export default function GrowthPage({ childOptions }) {
                             <VictoryChart
                                 theme={VictoryTheme.material}
                             >
-                                <VictoryAxis 
+                                <VictoryAxis
                                     fixLabelOverlap
                                 />
                                 <VictoryAxis
@@ -804,7 +813,7 @@ export default function GrowthPage({ childOptions }) {
                             }
                         </VStack>
                     </HStack>
-                
+
                 }
             </Box>
             <VStack
