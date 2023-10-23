@@ -1,5 +1,4 @@
 // module imports
-import { VStack } from '@chakra-ui/react';
 import HomeIcon from '@mui/icons-material/Home';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';

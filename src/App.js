@@ -16,7 +16,6 @@ import AppointmentForumPage from "./pages/AppointmentForumPage";
 import GoodsAndServicesForumPage from "./pages/GoodsAndServicesForumPage";
 import BabyPicturePage from "./pages/BabyPicturePage";
 import GraphPage from "./pages/GraphPage";
-import BabySleepPage from "./pages/BabySleepPage";
 import DiaperTrackingPage from "./pages/DiaperTrackingPage";
 import BabyFeedTrackingPage from "./pages/BabyFeedTrackingPage";
 import LandingPage from "./pages/LandingPage";
@@ -44,7 +43,6 @@ function App() {
         <Route path="milestone" element={<MilestonePage />} />
         <Route path="maternal" element={<MaternalResourcesPage />} />
         <Route path="graph" element={<GraphPage />} />
-        <Route path="sleep" element={<BabySleepPage />} />
         <Route path="diaper-tracking" element={<DiaperTrackingPage />} />
         <Route path="feed-tracking" element={<BabyFeedTrackingPage />} />
         <Route path="progress" element={<ProgressPage />} />

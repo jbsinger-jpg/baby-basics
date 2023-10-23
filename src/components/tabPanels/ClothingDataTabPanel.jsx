@@ -10,7 +10,7 @@ export default function ClothingDataTabPanel({ clothingData, clothingDataLoaded,
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
 
     return (
-        <HStack flexWrap={"wrap"} marginTop="20" spacing="10" bg={_screenBackground}>
+        <HStack flexWrap={"wrap"} marginTop="20" spacing="10" bg={_screenBackground} w="90vw" justifyContent="space-evenly">
             {clothingData && clothingData.map((clothing, index) => {
                 return (
                     <ClothingRow

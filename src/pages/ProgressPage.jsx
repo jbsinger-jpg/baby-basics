@@ -23,7 +23,6 @@ export default function ProgressPage() {
     const [progressModalVisible, setProgressModalVisible] = useState(false);
     const [feedingDiaperOption, setFeedingDiaperOption] = useState("feeding");
     const [searchBarIsOpen, setSearchBarIsOpen] = useState(false);
-    const [graphSearchBarIsOpen, setGraphSearchBarIsOpen] = useState(false);
     const [childOptions, setChildOptions] = useState(null);
     const [selectedChildOption, setSelectedChildOption] = useState("");
 

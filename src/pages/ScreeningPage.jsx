@@ -2,7 +2,6 @@
 import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Divider, Heading, HStack, IconButton, Text, Tooltip, useColorModeValue, useToast, VStack } from '@chakra-ui/react';
 import { DeleteIcon } from '@chakra-ui/icons';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 // relative imports
 import FormQuestion from '../components/FormQuestion';
@@ -16,7 +15,6 @@ export default function ScreeningPage() {
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [answerButtonIsLoading, setAnswerButtonIsLoading] = useState(false);
     const [screeningAlertDialogVisibile, setScreeningAlertDialogVisibile] = useState(false);
-    const navigate = useNavigate();
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
     const [questions, setQuestions] = useState([
         {
