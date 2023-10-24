@@ -1,6 +1,6 @@
 import { Box, Button, FormLabel, HStack, Icon, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Text, VStack, useColorModeValue } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { VictoryChart, VictoryLabel, VictoryScatter, VictoryTheme } from 'victory';
+import { VictoryBar, VictoryChart, VictoryLabel, VictoryScatter, VictoryTheme } from 'victory';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import { auth, firestore } from '../firebaseConfig';
 import DatePicker from "react-datepicker";
@@ -146,6 +146,30 @@ export default function SleepPage({ childOptions }) {
         return uniqueNewGraphPoints;
     };
 
+    const formatBarData = (data) => {
+        let uniqueData = {};
+        const dataCopy = [...data];
+
+        // format the bar graph to have x: sleep hours, y: frequency
+        for (let i = 0; i < dataCopy.length; i++) {
+            let tempY = dataCopy[i].y;
+            dataCopy[i].y = dataCopy[i].count;
+            dataCopy[i].x = tempY;
+        }
+
+        dataCopy.forEach(item => {
+            if (uniqueData[item.x]) {
+                uniqueData[item.x].y += item.count;
+            }
+            else {
+                uniqueData[item.x] = { ...item };
+            }
+        });
+
+        let resultArray = Object.values(uniqueData);
+        return resultArray;
+    };
+
     return (
         <>
             <Box
@@ -155,48 +179,61 @@ export default function SleepPage({ childOptions }) {
                 <HStack
                     spacing={10}
                 >
-                    <VStack
-                        h={450}
+                    <HStack
                         w="100vw"
                         alignContent="center"
                         justifyContent="center"
                     >
-                        <VictoryChart
-                            theme={VictoryTheme.material}
+                        <VStack
+                            h={450}
                         >
-                            <VictoryScatter
-                                style={{
-                                    data: { fill: "#c43a31" },
-                                    parent: { border: "1px solid #ccc" },
-                                    labels: { fill: "white", fontSize: 18, }
-                                }}
-                                size={7}
-                                data={formatSleepPoints(getSortedPoints(sleepPoints))}
-                                labels={({ datum }) => datum.count}
+                            <VictoryChart
+                                theme={VictoryTheme.material}
                             >
-                            </VictoryScatter>
-                            <VictoryLabel
-                                x={150}
-                                y={325}
-                                dy={10}
-                                text="Sleep (hrs)"
-                                style={{ fill: textColor }}
-                            />
-                        </VictoryChart>
-                        {childOptions && childOptions.length ?
-                            <HStack>
-                                <Button onClick={addPoint} isLoading={buttonIsLoading}>Plot Sleep</Button>
-                                <Button onClick={handleDeletePoint} isLoading={deletePointButttonIsLoading}>Delete Sleep</Button>
-                            </HStack>
-                            :
-                            <HStack>
-                                <Icon as={InfoOutlineIcon} />
-                                <Text>
-                                    Add a child to plot points!
-                                </Text>
-                            </HStack>
-                        }
-                    </VStack>
+                                <VictoryScatter
+                                    style={{
+                                        data: { fill: "#c43a31" },
+                                        parent: { border: "1px solid #ccc" },
+                                        labels: { fill: "white", fontSize: 18, }
+                                    }}
+                                    size={7}
+                                    data={formatSleepPoints(getSortedPoints(sleepPoints))}
+                                    labels={({ datum }) => datum.count}
+                                />
+                                <VictoryLabel
+                                    x={150}
+                                    y={325}
+                                    dy={10}
+                                    text="Sleep (hrs)"
+                                    style={{ fill: textColor }}
+                                />
+                            </VictoryChart>
+                            {childOptions && childOptions.length ?
+                                <HStack>
+                                    <Button onClick={addPoint} isLoading={buttonIsLoading}>Plot Sleep</Button>
+                                    <Button onClick={handleDeletePoint} isLoading={deletePointButttonIsLoading}>Delete Sleep</Button>
+                                </HStack>
+                                :
+                                <HStack>
+                                    <Icon as={InfoOutlineIcon} />
+                                    <Text>
+                                        Add a child to plot points!
+                                    </Text>
+                                </HStack>
+                            }
+                        </VStack>
+                        <VStack
+                            h={450}
+                        >
+                            <VictoryChart
+                                theme={VictoryTheme.material}
+                            >
+                                <VictoryBar
+                                    data={formatBarData(formatSleepPoints(getSortedPoints(sleepPoints)))}
+                                />
+                            </VictoryChart>
+                        </VStack>
+                    </HStack>
                 </HStack>
             </Box>
             <VStack
