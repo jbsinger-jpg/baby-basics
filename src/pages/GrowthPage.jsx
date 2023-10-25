@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { auth, firestore } from '../firebaseConfig';
-import { VictoryAxis, VictoryChart, VictoryLabel, VictoryLine, VictoryScatter, VictoryTheme } from 'victory';
+import { VictoryAxis, VictoryBar, VictoryChart, VictoryLabel, VictoryLine, VictoryScatter, VictoryTheme } from 'victory';
 import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Checkbox, CheckboxGroup, FormLabel, HStack, Heading, Icon, Image, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Spinner, Text, VStack, useColorModeValue } from '@chakra-ui/react';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import StyledSelect from '../components/StyledSelect';
@@ -45,6 +45,7 @@ export default function GrowthPage({ childOptions }) {
     const [latestLengthID, setLatestLengthID] = useState(0);
 
     const [chartsAreLoading, setChartsAreLoading] = useState(false);
+    const [barGraphIsVisible, setBarGraphIsVisible] = useState(false);
 
     const getSortedPoints = (data) => {
         if (data && data.length) {
@@ -584,8 +585,11 @@ export default function GrowthPage({ childOptions }) {
             }, []);
         }
 
-
         return uniqueNewGraphPoints;
+    };
+
+    const showBarGraphs = () => {
+        setBarGraphIsVisible(!barGraphIsVisible);
     };
 
     useEffect(() => {
@@ -665,7 +669,12 @@ export default function GrowthPage({ childOptions }) {
                                     dependentAxis
                                     fixLabelOverlap
                                 />
-                                {getUniquePoints(weightGraphPoints).length > 1 ?
+                                {barGraphIsVisible &&
+                                    <VictoryBar
+                                        data={getSortedPoints(weightGraphPoints)}
+                                    />
+                                }
+                                {(getUniquePoints(weightGraphPoints).length > 1 && !barGraphIsVisible) &&
                                     <VictoryLine
                                         style={{
                                             data: { stroke: "#c43a31" },
@@ -673,7 +682,8 @@ export default function GrowthPage({ childOptions }) {
                                         }}
                                         data={getSortedPoints(weightGraphPoints)}
                                     />
-                                    :
+                                }
+                                {(getUniquePoints(weightGraphPoints).length <= 1 && !barGraphIsVisible) &&
                                     <VictoryScatter
                                         style={{
                                             data: { fill: "#c43a31" },
@@ -718,7 +728,12 @@ export default function GrowthPage({ childOptions }) {
                                     dependentAxis
                                     fixLabelOverlap
                                 />
-                                {getUniquePoints(circumferenceGraphPoints).length > 1 ?
+                                {barGraphIsVisible &&
+                                    <VictoryBar
+                                        data={getSortedPoints(circumferenceGraphPoints)}
+                                    />
+                                }
+                                {(getUniquePoints(circumferenceGraphPoints).length > 1 && !barGraphIsVisible) &&
                                     <VictoryLine
                                         style={{
                                             data: { stroke: "#c43a31" },
@@ -726,7 +741,8 @@ export default function GrowthPage({ childOptions }) {
                                         }}
                                         data={getSortedPoints(circumferenceGraphPoints)}
                                     />
-                                    :
+                                }
+                                {(getUniquePoints(circumferenceGraphPoints).length <= 1 && !barGraphIsVisible) &&
                                     <VictoryScatter
                                         style={{
                                             data: { fill: "#c43a31" },
@@ -772,7 +788,12 @@ export default function GrowthPage({ childOptions }) {
                                     dependentAxis
                                     fixLabelOverlap
                                 />
-                                {getUniquePoints(lengthGraphPoints).length > 1 ?
+                                {barGraphIsVisible &&
+                                    <VictoryBar
+                                        data={getSortedPoints(lengthGraphPoints)}
+                                    />
+                                }
+                                {(getUniquePoints(lengthGraphPoints).length > 1 && !barGraphIsVisible) &&
                                     <VictoryLine
                                         style={{
                                             data: { stroke: "#c43a31" },
@@ -780,7 +801,8 @@ export default function GrowthPage({ childOptions }) {
                                         }}
                                         data={getSortedPoints(lengthGraphPoints)}
                                     />
-                                    :
+                                }
+                                {(getUniquePoints(lengthGraphPoints).length <= 1 && !barGraphIsVisible) &&
                                     <VictoryScatter
                                         style={{
                                             data: { fill: "#c43a31" },
@@ -923,6 +945,7 @@ export default function GrowthPage({ childOptions }) {
                 <HStack bottom="0" position="fixed" justifyContent="space-between" w="85vw" pb="2">
                     <Button onClick={showGrowthChartDialog}>View Growth Chart</Button>
                     <Button onClick={() => setShowConversionDialog(true)}>Make Conversions</Button>
+                    <Button onClick={showBarGraphs}>Show Bar Graphs</Button>
                 </HStack>
             </VStack>
             {/* Alert Dialog triggered for showing user growth charts */}
