@@ -1,6 +1,6 @@
 import { Box, Button, FormLabel, HStack, Icon, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Text, VStack, useColorModeValue } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { VictoryBar, VictoryChart, VictoryLabel, VictoryScatter, VictoryTheme } from 'victory';
+import { VictoryAxis, VictoryBar, VictoryChart, VictoryLabel, VictoryScatter, VictoryTheme } from 'victory';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
 import { auth, firestore } from '../firebaseConfig';
 import DatePicker from "react-datepicker";
@@ -200,12 +200,16 @@ export default function SleepPage({ childOptions }) {
                                     data={formatSleepPoints(getSortedPoints(sleepPoints))}
                                     labels={({ datum }) => datum.count}
                                 />
-                                <VictoryLabel
-                                    x={150}
-                                    y={325}
-                                    dy={10}
-                                    text="Sleep (hrs)"
-                                    style={{ fill: textColor }}
+                                <VictoryAxis
+                                    fixLabelOverlap
+                                    label={"Date"}
+                                    axisLabelComponent={<VictoryLabel dy={20} style={{ fontSize: 15, fill: textColor }} />}
+                                />
+                                <VictoryAxis
+                                    dependentAxis
+                                    fixLabelOverlap
+                                    label={"Sleep Hrs"}
+                                    axisLabelComponent={<VictoryLabel dy={-30} style={{ fontSize: 15, fill: textColor }} />}
                                 />
                             </VictoryChart>
                             {childOptions && childOptions.length ?
@@ -230,6 +234,17 @@ export default function SleepPage({ childOptions }) {
                             >
                                 <VictoryBar
                                     data={formatBarData(formatSleepPoints(getSortedPoints(sleepPoints)))}
+                                />
+                                <VictoryAxis
+                                    fixLabelOverlap
+                                    label={"Sleep Hrs"}
+                                    axisLabelComponent={<VictoryLabel dy={20} style={{ fontSize: 15, fill: textColor }} />}
+                                />
+                                <VictoryAxis
+                                    dependentAxis
+                                    fixLabelOverlap
+                                    label={"Quantity"}
+                                    axisLabelComponent={<VictoryLabel dy={-30} style={{ fontSize: 15, fill: textColor }} />}
                                 />
                             </VictoryChart>
                         </VStack>

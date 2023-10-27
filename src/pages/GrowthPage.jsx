@@ -57,6 +57,28 @@ export default function GrowthPage({ childOptions }) {
             return [];
         }
     };
+    const formatGraphPoints = (points) => {
+        // Step 1: Keep count of entries with duplicate x keys
+        let counts = {};
+        let graphPointsWithCount = points.map((point) => {
+            let key = point.x + "_" + point.y;
+            counts[key] = counts[key] ? counts[key] + 1 : 1;
+            return { ...point, count: counts[key] };
+        });
+
+        // Step 2: Get only unique entries and make sure the object with the highest count is kept
+        let uniqueNewGraphPoints = graphPointsWithCount.reduce((acc, curr) => {
+            let existing = acc.find(item => (item.x === curr.x && item.y === curr.y));
+            if (existing) {
+                existing.count = Math.max(existing.count, curr.count);
+            } else {
+                acc.push(curr);
+            }
+            return acc;
+        }, []);
+
+        return uniqueNewGraphPoints;
+    };
 
     const handleMonthlyGraphDataChange = (event) => {
         setMonthlyGraphPointsVisible(event.target.checked);
@@ -588,6 +610,30 @@ export default function GrowthPage({ childOptions }) {
         return uniqueNewGraphPoints;
     };
 
+    const formatBarData = (data) => {
+        let uniqueData = {};
+        const dataCopy = [...data];
+
+        // format the bar graph to have x: sleep hours, y: frequency
+        for (let i = 0; i < dataCopy.length; i++) {
+            let tempY = dataCopy[i].y;
+            dataCopy[i].y = dataCopy[i].count;
+            dataCopy[i].x = tempY;
+        }
+
+        dataCopy.forEach(item => {
+            if (uniqueData[item.x]) {
+                uniqueData[item.x].y += item.count;
+            }
+            else {
+                uniqueData[item.x] = { ...item };
+            }
+        });
+
+        let resultArray = Object.values(uniqueData);
+        return resultArray;
+    };
+
     const showBarGraphs = () => {
         setBarGraphIsVisible(!barGraphIsVisible);
     };
@@ -664,14 +710,18 @@ export default function GrowthPage({ childOptions }) {
                             >
                                 <VictoryAxis
                                     fixLabelOverlap
+                                    label={barGraphIsVisible ? "Weight" : "Date"}
+                                    axisLabelComponent={<VictoryLabel dy={20} style={{ fontSize: 15, fill: textColor }} />}
                                 />
                                 <VictoryAxis
                                     dependentAxis
                                     fixLabelOverlap
+                                    label={barGraphIsVisible ? "Quantity" : "Weight"}
+                                    axisLabelComponent={<VictoryLabel dy={-30} style={{ fontSize: 15, fill: textColor }} />}
                                 />
                                 {barGraphIsVisible &&
                                     <VictoryBar
-                                        data={getSortedPoints(weightGraphPoints)}
+                                        data={formatBarData(formatGraphPoints(getSortedPoints(weightGraphPoints)))}
                                     />
                                 }
                                 {(getUniquePoints(weightGraphPoints).length > 1 && !barGraphIsVisible) &&
@@ -693,13 +743,6 @@ export default function GrowthPage({ childOptions }) {
                                         size={7}
                                     />
                                 }
-                                <VictoryLabel
-                                    x={150}
-                                    y={325}
-                                    dy={10}
-                                    text="Weight"
-                                    style={{ fill: textColor }}
-                                />
                             </VictoryChart>
                             {childOptions && childOptions.length ?
                                 <HStack>
@@ -723,14 +766,18 @@ export default function GrowthPage({ childOptions }) {
                             >
                                 <VictoryAxis
                                     fixLabelOverlap
+                                    label={barGraphIsVisible ? "Circumference" : "Date"}
+                                    axisLabelComponent={<VictoryLabel dy={20} style={{ fontSize: 15, fill: textColor }} />}
                                 />
                                 <VictoryAxis
                                     dependentAxis
                                     fixLabelOverlap
+                                    label={barGraphIsVisible ? "Quantity" : "Circumference"}
+                                    axisLabelComponent={<VictoryLabel dy={-30} style={{ fontSize: 15, fill: textColor }} />}
                                 />
                                 {barGraphIsVisible &&
                                     <VictoryBar
-                                        data={getSortedPoints(circumferenceGraphPoints)}
+                                        data={formatBarData(formatGraphPoints(getSortedPoints(circumferenceGraphPoints)))}
                                     />
                                 }
                                 {(getUniquePoints(circumferenceGraphPoints).length > 1 && !barGraphIsVisible) &&
@@ -752,14 +799,6 @@ export default function GrowthPage({ childOptions }) {
                                         size={7}
                                     />
                                 }
-                                <VictoryLabel
-                                    x={150}
-                                    y={325}
-                                    dy={10}
-                                    text="Circumference"
-                                    style={{ fill: textColor }}
-
-                                />
                             </VictoryChart>
                             {childOptions && childOptions.length ?
                                 <HStack>
@@ -783,14 +822,18 @@ export default function GrowthPage({ childOptions }) {
                             >
                                 <VictoryAxis
                                     fixLabelOverlap
+                                    label={barGraphIsVisible ? "Length" : "Date"}
+                                    axisLabelComponent={<VictoryLabel dy={20} style={{ fontSize: 15, fill: textColor }} />}
                                 />
                                 <VictoryAxis
                                     dependentAxis
                                     fixLabelOverlap
+                                    label={barGraphIsVisible ? "Quantity" : "Length"}
+                                    axisLabelComponent={<VictoryLabel dy={-30} style={{ fontSize: 15, fill: textColor }} />}
                                 />
                                 {barGraphIsVisible &&
                                     <VictoryBar
-                                        data={getSortedPoints(lengthGraphPoints)}
+                                        data={formatBarData(formatGraphPoints(getSortedPoints(lengthGraphPoints)))}
                                     />
                                 }
                                 {(getUniquePoints(lengthGraphPoints).length > 1 && !barGraphIsVisible) &&
@@ -812,13 +855,6 @@ export default function GrowthPage({ childOptions }) {
                                         size={7}
                                     />
                                 }
-                                <VictoryLabel
-                                    x={150}
-                                    y={325}
-                                    dy={10}
-                                    text="Length"
-                                    style={{ fill: textColor }}
-                                />
                             </VictoryChart>
                             {childOptions && childOptions.length ?
                                 <HStack>
