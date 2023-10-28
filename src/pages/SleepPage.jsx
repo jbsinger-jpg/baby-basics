@@ -1,4 +1,4 @@
-import { Box, Button, FormLabel, HStack, Icon, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Text, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, FormLabel, HStack, Icon, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Text, VStack, useColorModeValue } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { VictoryAxis, VictoryBar, VictoryChart, VictoryLabel, VictoryScatter, VictoryTheme } from 'victory';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
@@ -6,6 +6,7 @@ import { auth, firestore } from '../firebaseConfig';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import StyledSelect from '../components/StyledSelect';
+import MotionButton from '../components/animated/MotionButton';
 
 export default function SleepPage({ childOptions }) {
     const textColor = useColorModeValue("black", "white");
@@ -214,8 +215,8 @@ export default function SleepPage({ childOptions }) {
                             </VictoryChart>
                             {childOptions && childOptions.length ?
                                 <HStack>
-                                    <Button onClick={addPoint} isLoading={buttonIsLoading}>Plot Sleep</Button>
-                                    <Button onClick={handleDeletePoint} isLoading={deletePointButttonIsLoading}>Delete Sleep</Button>
+                                    <MotionButton onClick={addPoint} isLoading={buttonIsLoading} title="Plot Sleep" />
+                                    <MotionButton onClick={handleDeletePoint} isLoading={deletePointButttonIsLoading} title="Delete Sleep" />
                                 </HStack>
                                 :
                                 <HStack>

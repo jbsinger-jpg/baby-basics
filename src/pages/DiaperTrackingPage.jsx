@@ -11,8 +11,10 @@ import { auth, firestore } from '../firebaseConfig';
 import WaterDropIcon from '../components/staticPageData/WaterDropIcon';
 import PoopIcon from '../components/staticPageData/PoopIcon';
 import MissingDataMessage from '../components/MissingDataMessage';
+import MotionButton from '../components/animated/MotionButton';
 
-export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen, selectedChildOption, setDrawerVisible, seelctedDateOption }) {
+export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen, selectedChildOption, setDrawerVisible }) {
+    const [submitButtonLoading, setSubmitButtonLoading] = useState(false);
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
 
@@ -222,6 +224,8 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
 
     const addRowEntry = async (event) => {
         event.preventDefault();
+        setSubmitButtonLoading(true);
+
         const peeDuplicate = await peeTabAliasDuplicateFound();
         const pooDuplicate = await pooTabAliasDuplicateFound();
         const dryDuplicate = await dryTabAliasDuplicateFound();
@@ -238,6 +242,8 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                             alias: String(peeTabAlias).trim(),
                             notes: peeTabNotes,
                             timeStampDate: new Date().toLocaleDateString(),
+                        }).finally(() => {
+                            setSubmitButtonLoading(false);
                         });
 
                     setPeeTabData(
@@ -258,6 +264,8 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                         duration: 3000,
                         isClosable: true,
                     });
+
+                    setSubmitButtonLoading(false);
                 }
             }
             else if (tabIndex === 1) {
@@ -279,6 +287,8 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                         .collection("poo-tracking")
                         .doc(String(pooTabAlias).trim()).set({
                             ...newEntry
+                        }).finally(() => {
+                            setSubmitButtonLoading(false);
                         });
 
                     setPooTabData([...pooTabData, newEntry]);
@@ -291,6 +301,8 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                         duration: 3000,
                         isClosable: true,
                     });
+
+                    setSubmitButtonLoading(false);
                 }
             }
             else if (tabIndex === 2) {
@@ -304,6 +316,8 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                             alias: String(dryTabAlias).trim(),
                             notes: dryTabNotes,
                             timeStampDate: new Date().toLocaleDateString(),
+                        }).finally(() => {
+                            setSubmitButtonLoading(false);
                         });
 
                     setDryTabData(
@@ -322,6 +336,8 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                         duration: 3000,
                         isClosable: true,
                     });
+
+                    setSubmitButtonLoading(false);
                 }
             }
         }
@@ -818,8 +834,8 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                         </FormControl>
                     </HStack>
                     <HStack alignItems="start" w="90vw" justifyContent="space-between">
-                        <Button onClick={handleClearNotes}>Clear</Button>
-                        <Button type='submit'>Save</Button>
+                        <MotionButton onClick={handleClearNotes} title="Clear" isLoading={submitButtonLoading} />
+                        <MotionButton type='submit' title="Submit" isLoading={submitButtonLoading} />
                     </HStack>
                 </VStack>
             </form>
@@ -880,6 +896,6 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                     </DrawerFooter>
                 </DrawerContent>
             </Drawer>
-        </Box>
+        </Box >
     );
 }

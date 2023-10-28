@@ -10,6 +10,7 @@ import { cardBackground, screenBackground } from '../defaultStyle';
 import { auth, firestore } from '../firebaseConfig';
 import FloatingActionButtonsDiaperTracking from '../components/floatingActionButtons/FloatingActionButtonsDiaperTracking';
 import ProgressTabFormatter from '../components/ProgressTabFormatter';
+import MotionButton from '../components/animated/MotionButton';
 
 export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChildOption, setDrawerVisible, selectedDateOption, searchBarIsOpen }) {
     const [tabIndex, setTabIndex] = useState(0);
@@ -35,6 +36,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
     const [queryFluidOunces, setQueryFluidOunces] = useState(0);
     const [queryAlias, setQueryAlias] = useState(0);
     const toast = useToast();
+    const [buttonIsLoading, setButtonIsLoading] = useState(false);
 
     const handleTabsChange = (index) => {
         setTabIndex(index);
@@ -83,6 +85,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
 
     const addTabRow = async (event) => {
         event.preventDefault();
+        setButtonIsLoading(true);
+
         const breastDuplicate = await breastAliasDuplicateFound();
         const bottleDuplicate = await bottleAliasDuplicateFound();
         const pumpDuplicate = await pumpAliasDuplicateFound();
@@ -101,6 +105,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                         fluidOunces: Number(breastFluidOunces),
                         leftBreastTime: Number(leftTeetTimerValue),
                         rightBreastTime: Number(rightTeetTimerValue),
+                    }).finally(() => {
+                        setButtonIsLoading(false);
                     });
 
                 setBreastFeedingRows([...breastFeedingRows, {
@@ -119,6 +125,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                     duration: 3000,
                     isClosable: true,
                 });
+
+                setButtonIsLoading(false);
             }
         }
         else if (tabIndex === 1) {
@@ -133,6 +141,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                         timeStamp: `${new Date().toLocaleDateString().replace(/\//g, '-')}`,
                         alias: String(bottleRowAlias).trim(),
                         fluidOunces: Number(bottleRowFluidOunces)
+                    }).finally(() => {
+                        setButtonIsLoading(false);
                     });
 
                 setBottleFeedingRows([...bottleFeedingRows, {
@@ -149,6 +159,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                     duration: 3000,
                     isClosable: true,
                 });
+
+                setButtonIsLoading(false);
             }
         }
         else if (tabIndex === 2) {
@@ -165,6 +177,8 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                         fluidOunces: Number(pumpFluidOunces),
                         leftBreastTime: Number(leftTeetTimerValue),
                         rightBreastTime: Number(rightTeetTimerValue),
+                    }).finally(() => {
+                        setButtonIsLoading(false);
                     });
 
                 setPumpFeedingRows([...pumpFeedingRows, {
@@ -183,8 +197,12 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                     duration: 3000,
                     isClosable: true,
                 });
+
+                setButtonIsLoading(false);
             }
         }
+
+
     };
 
     const getTabAlias = () => {
@@ -299,7 +317,6 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                 .collection("children")
                 .doc(selectedChildOption)
                 .collection("breast-feed-tracking")
-                .where("timeStamp", "==", selectedDateOption)
                 .get()
                 .then(snapshot => {
                     let options = [];
@@ -316,7 +333,6 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                 .collection("children")
                 .doc(selectedChildOption)
                 .collection("bottle-feed-tracking")
-                .where("timeStamp", "==", selectedDateOption)
                 .get()
                 .then(snapshot => {
                     let options = [];
@@ -333,7 +349,6 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                 .collection("children")
                 .doc(selectedChildOption)
                 .collection("pump-feed-tracking")
-                .where("timeStamp", "==", selectedDateOption)
                 .get().then(snapshot => {
                     let options = [];
                     snapshot.docs.forEach(doc => {
@@ -535,7 +550,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                                             </NumberInput>
                                         </FormControl>
                                     </HStack>
-                                    <Button type="submit">Submit</Button>
+                                    <MotionButton title="Submit" type="submit" isLoading={buttonIsLoading} />
                                 </HStack>
                             </form>
                         </VStack>
@@ -584,7 +599,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                                             </NumberInput>
                                         </FormControl>
                                     </HStack>
-                                    <Button type="submit">Submit</Button>
+                                    <MotionButton title="Submit" type="submit" isLoading={buttonIsLoading} />
                                 </HStack>
                             </form>
                         </VStack>
@@ -625,13 +640,13 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                                             <Input value={getTabFluidOunces()} onChange={handleFluidOunceChange} />
                                         </FormControl>
                                     </HStack>
-                                    <Button type="submit">Submit</Button>
+                                    <MotionButton title="Submit" type="submit" isLoading={buttonIsLoading} />
                                 </HStack>
                             </form>
                         </VStack>
                     </TabPanel>
                 </TabPanels>
-            </Tabs>
+            </Tabs >
             <Drawer
                 onClose={() => setSearchBarIsOpen(false)}
                 bg={_cardBackground}
