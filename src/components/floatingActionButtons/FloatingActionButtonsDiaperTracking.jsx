@@ -3,7 +3,6 @@ import HomeIcon from '@mui/icons-material/Home';
 import { useNavigate } from 'react-router-dom';
 import ColorModeToggleButton from '../ColorModeToggleButton';
 import { AddIcon, ChevronDownIcon, ChevronUpIcon, SearchIcon } from '@chakra-ui/icons';
-
 import FloatingActionButtonContainer from './FloatingActionButtonContainer';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import BabyProgressModal from '../modals/BabyProgressModal';

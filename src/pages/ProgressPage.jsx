@@ -14,7 +14,6 @@ import GraphPage from './GraphPage';
 import { auth, firestore } from '../firebaseConfig';
 import { childBirthOptions, childGenderOptions, childRelationshipOptions } from '../components/staticPageData/child-options';
 import MissingDataMessage from '../components/MissingDataMessage';
-import FloatingActionButtonsFeedingDiaper from '../components/floatingActionButtons/FloatingActionButtonsFeedingDiaper';
 
 export default function ProgressPage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
@@ -258,9 +257,6 @@ export default function ProgressPage() {
                 </TabList>
                 <TabPanels>
                     <TabPanel>
-                        <FloatingActionButtonsFeedingDiaper
-                            setChildDrawerVisible={setChildDrawerVisible}
-                        />
                         <HStack>
                             <StyledSelect
                                 options={childOptions}
