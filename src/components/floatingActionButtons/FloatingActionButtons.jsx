@@ -1,12 +1,13 @@
 // module imports
-import { SearchIcon } from '@chakra-ui/icons';
-import { VStack } from '@chakra-ui/react';
+import { ChevronDownIcon, ChevronUpIcon, SearchIcon } from '@chakra-ui/icons';
 
 // relative imports
 import ColorModeToggleButton from '../ColorModeToggleButton';
 import SearchBarAlertDialog from '../modals/SearchBarModal';
 import FabTemplate from './StandardFab';
 import FloatingActionButtonContainer from './FloatingActionButtonContainer';
+import MotionContainerFAB from '../animated/MotionContainerFAB';
+import { useState } from 'react';
 
 export default function FloatingActionButtons({
     setSearchBarIsOpen,
@@ -28,9 +29,22 @@ export default function FloatingActionButtons({
     setSearchInProgress,
 }) {
 
+    const [buttonPressed, setButtonPressed] = useState(false);
 
     return (
         <FloatingActionButtonContainer left>
+            <MotionContainerFAB isPressed={buttonPressed}>
+                <ColorModeToggleButton />
+                <FabTemplate
+                    icon={<SearchIcon height="30px" width="30px" />}
+                    onClick={() => setSearchBarIsOpen(true)}
+                    label={"Search"}
+                />
+            </MotionContainerFAB>
+            <FabTemplate
+                icon={buttonPressed ? <ChevronUpIcon boxSize={8} /> : <ChevronDownIcon boxSize={8} />}
+                onClick={() => setButtonPressed(!buttonPressed)}
+            />
             <SearchBarAlertDialog
                 searchBarIsOpen={searchBarIsOpen}
                 setSearchBarIsOpen={setSearchBarIsOpen}
@@ -50,14 +64,6 @@ export default function FloatingActionButtons({
                 setTabIndex={setTabIndex}
                 setSearchInProgress={setSearchInProgress}
             />
-            <VStack>
-                <ColorModeToggleButton />
-                <FabTemplate
-                    icon={<SearchIcon height="30px" width="30px" />}
-                    onClick={() => setSearchBarIsOpen(true)}
-                    label={"Search"}
-                />
-            </VStack>
         </FloatingActionButtonContainer>
     );
 }

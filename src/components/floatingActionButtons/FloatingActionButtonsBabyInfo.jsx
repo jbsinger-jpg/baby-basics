@@ -7,12 +7,13 @@ import React, { useEffect, useState } from 'react';
 import ColorModeToggleButton from '../ColorModeToggleButton';
 import FabTemplate from './StandardFab';
 import { auth, firestore } from '../../firebaseConfig';
-import { AddIcon, InfoIcon } from '@chakra-ui/icons';
+import { AddIcon, ChevronDownIcon, ChevronUpIcon, InfoIcon } from '@chakra-ui/icons';
 import { cardBackground } from '../../defaultStyle';
 import { Delete } from '@mui/icons-material';
 import FloatingActionButtonContainer from './FloatingActionButtonContainer';
 import { useNavigate } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
+import MotionContainerFAB from '../animated/MotionContainerFAB';
 
 export default function FloatingActionButtonsBabyInfo({ setProgressModalVisible, selectedAgeRange, progressConfirmed, setChildDrawerVisible, childOption, setChildOptions, setPopoverVisible, popoverVisible }) {
     const [milestones, setMilestones] = useState([]);
@@ -21,6 +22,7 @@ export default function FloatingActionButtonsBabyInfo({ setProgressModalVisible,
     const [feeding, setFeeding] = useState([]);
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
     const [deleteButtonIsLoading, setDeleteButtonIsLoading] = useState(false);
+    const [buttonPressed, setButtonPressed] = useState(false);
 
     useEffect(() => {
         if (selectedAgeRange && childOption) {
@@ -241,115 +243,121 @@ export default function FloatingActionButtonsBabyInfo({ setProgressModalVisible,
 
     return (
         <FloatingActionButtonContainer>
-            <ColorModeToggleButton />
-            <FabTemplate
-                icon={<HomeIcon fontSize="large" />}
-                onClick={() => navigate("/")}
-                label={"Home"}
-            />
-            <FabTemplate
-                label="Document Progress"
-                onClick={handleDocumentProgress}
-                icon={<FormatListBulletedIcon fontSize="large" />}
-            />
-            <FabTemplate
-                label="Add Child"
-                onClick={handleDrawerVisible}
-                icon={<AddIcon fontSize="large" />}
-            />
-            {popoverVisible &&
-                <>
-                    <FabTemplate
-                        label="Remove Child"
-                        onClick={handleDeleteChild}
-                        icon={<Delete fontSize="large" />}
-                        isLoading={deleteButtonIsLoading}
-                    />
-                    <Popover
-                        placement="right"
-                    >
-                        <PopoverTrigger>
-                            <IconButton
-                                borderRadius="50%"
-                                width="56px"
-                                height="56px"
-                                icon={<InfoIcon w="25px" h="25px" />}
-                            />
-                        </PopoverTrigger>
-                        <PopoverContent
-                            bg={_cardBackground}
+            <MotionContainerFAB isPressed={buttonPressed}>
+                <ColorModeToggleButton />
+                <FabTemplate
+                    icon={<HomeIcon fontSize="large" />}
+                    onClick={() => navigate("/")}
+                    label={"Home"}
+                />
+                <FabTemplate
+                    label="Document Progress"
+                    onClick={handleDocumentProgress}
+                    icon={<FormatListBulletedIcon fontSize="large" />}
+                />
+                <FabTemplate
+                    label="Add Child"
+                    onClick={handleDrawerVisible}
+                    icon={<AddIcon fontSize="large" />}
+                />
+                {popoverVisible &&
+                    <>
+                        <FabTemplate
+                            label="Remove Child"
+                            onClick={handleDeleteChild}
+                            icon={<Delete fontSize="large" />}
+                            isLoading={deleteButtonIsLoading}
+                        />
+                        <Popover
+                            placement="right"
                         >
-                            <PopoverArrow />
-                            <PopoverCloseButton />
-                            <PopoverHeader>Progress</PopoverHeader>
-                            <PopoverBody>
-                                <VStack>
-                                    <HStack
-                                        w="190px"
-                                        justifyContent="space-between"
-                                    >
-                                        <Heading fontSize="m">Milestones: </Heading>
-                                        <Tag
-                                            borderRadius='full'
-                                            variant='outline'
-                                            colorScheme={determineMilestoneCount().colorScheme}
+                            <PopoverTrigger>
+                                <IconButton
+                                    borderRadius="50%"
+                                    width="56px"
+                                    height="56px"
+                                    icon={<InfoIcon w="25px" h="25px" />}
+                                />
+                            </PopoverTrigger>
+                            <PopoverContent
+                                bg={_cardBackground}
+                            >
+                                <PopoverArrow />
+                                <PopoverCloseButton />
+                                <PopoverHeader>Progress</PopoverHeader>
+                                <PopoverBody>
+                                    <VStack>
+                                        <HStack
+                                            w="190px"
+                                            justifyContent="space-between"
                                         >
-                                            <TagLabel>
-                                                {determineMilestoneCount().tagName}
-                                            </TagLabel>
-                                        </Tag>
-                                    </HStack>
-                                    <HStack
-                                        w="190px"
-                                        justifyContent="space-between"
-                                    >
-                                        <Heading fontSize="m">Communication: </Heading>
-                                        <Tag
-                                            borderRadius='full'
-                                            variant='outline'
-                                            colorScheme={determineCommunicationCount().colorScheme}
+                                            <Heading fontSize="m">Milestones: </Heading>
+                                            <Tag
+                                                borderRadius='full'
+                                                variant='outline'
+                                                colorScheme={determineMilestoneCount().colorScheme}
+                                            >
+                                                <TagLabel>
+                                                    {determineMilestoneCount().tagName}
+                                                </TagLabel>
+                                            </Tag>
+                                        </HStack>
+                                        <HStack
+                                            w="190px"
+                                            justifyContent="space-between"
                                         >
-                                            <TagLabel>
-                                                {determineCommunicationCount().tagName}
-                                            </TagLabel>
-                                        </Tag>
-                                    </HStack>
-                                    <HStack
-                                        w="190px"
-                                        justifyContent="space-between"
-                                    >
-                                        <Heading fontSize="m">Feeding: </Heading>
-                                        <Tag
-                                            borderRadius='full'
-                                            variant='outline'
-                                            colorScheme={determineFeedingCount().colorScheme}
+                                            <Heading fontSize="m">Communication: </Heading>
+                                            <Tag
+                                                borderRadius='full'
+                                                variant='outline'
+                                                colorScheme={determineCommunicationCount().colorScheme}
+                                            >
+                                                <TagLabel>
+                                                    {determineCommunicationCount().tagName}
+                                                </TagLabel>
+                                            </Tag>
+                                        </HStack>
+                                        <HStack
+                                            w="190px"
+                                            justifyContent="space-between"
                                         >
-                                            <TagLabel>
-                                                {determineFeedingCount().tagName}
-                                            </TagLabel>
-                                        </Tag>
-                                    </HStack>
-                                    <HStack
-                                        w="190px"
-                                        justifyContent="space-between"
-                                    >
-                                        <Heading fontSize="m">Sensory: </Heading>
-                                        <Tag
-                                            borderRadius='full'
-                                            variant='outline'
-                                            colorScheme={determineSensoryCount().colorScheme}
+                                            <Heading fontSize="m">Feeding: </Heading>
+                                            <Tag
+                                                borderRadius='full'
+                                                variant='outline'
+                                                colorScheme={determineFeedingCount().colorScheme}
+                                            >
+                                                <TagLabel>
+                                                    {determineFeedingCount().tagName}
+                                                </TagLabel>
+                                            </Tag>
+                                        </HStack>
+                                        <HStack
+                                            w="190px"
+                                            justifyContent="space-between"
                                         >
-                                            <TagLabel>
-                                                {determineSensoryCount().tagName}
-                                            </TagLabel>
-                                        </Tag>
-                                    </HStack>
-                                </VStack>
-                            </PopoverBody>
-                        </PopoverContent>
-                    </Popover>
-                </>
-            }
+                                            <Heading fontSize="m">Sensory: </Heading>
+                                            <Tag
+                                                borderRadius='full'
+                                                variant='outline'
+                                                colorScheme={determineSensoryCount().colorScheme}
+                                            >
+                                                <TagLabel>
+                                                    {determineSensoryCount().tagName}
+                                                </TagLabel>
+                                            </Tag>
+                                        </HStack>
+                                    </VStack>
+                                </PopoverBody>
+                            </PopoverContent>
+                        </Popover>
+                    </>
+                }
+            </MotionContainerFAB>
+            <FabTemplate
+                icon={buttonPressed ? <ChevronUpIcon boxSize={8} /> : <ChevronDownIcon boxSize={8} />}
+                onClick={() => setButtonPressed(!buttonPressed)}
+            />
         </FloatingActionButtonContainer>
     );
 }

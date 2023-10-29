@@ -1,15 +1,18 @@
 import { useToast } from '@chakra-ui/react';
 import { GoogleAuthProvider } from 'firebase/auth';
-import { UnlockIcon } from '@chakra-ui/icons';
+import { ChevronDownIcon, ChevronUpIcon, UnlockIcon } from '@chakra-ui/icons';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { useState } from 'react';
 
 import { auth, firestore } from '../../firebaseConfig';
 import ColorModeToggleButton from '../ColorModeToggleButton';
 import FabTemplate from './StandardFab';
 import FloatingActionButtonContainer from './FloatingActionButtonContainer';
+import MotionContainerFAB from '../animated/MotionContainerFAB';
 
 export default function FloatingActionButtonsUser({ setSignInLoading, setCurrentUser }) {
     const toast = useToast();
+    const [buttonPressed, setButtonPressed] = useState(false);
 
     const handleSignInGoogle = () => {
         setSignInLoading(true);
@@ -71,16 +74,22 @@ export default function FloatingActionButtonsUser({ setSignInLoading, setCurrent
 
     return (
         <FloatingActionButtonContainer>
-            <ColorModeToggleButton />
+            <MotionContainerFAB isPressed={buttonPressed}>
+                <ColorModeToggleButton />
+                <FabTemplate
+                    icon={<UnlockIcon height="30px" width="30px" />}
+                    onClick={handleSignInGoogle}
+                    label={"Log In"}
+                />
+                <FabTemplate
+                    icon={<LogoutIcon fontSize='medium' />}
+                    onClick={handleSignOut}
+                    label={"Log Out"}
+                />
+            </MotionContainerFAB>
             <FabTemplate
-                icon={<UnlockIcon height="30px" width="30px" />}
-                onClick={handleSignInGoogle}
-                label={"Log In"}
-            />
-            <FabTemplate
-                icon={<LogoutIcon fontSize='medium' />}
-                onClick={handleSignOut}
-                label={"Log Out"}
+                icon={buttonPressed ? <ChevronUpIcon boxSize={8} /> : <ChevronDownIcon boxSize={8} />}
+                onClick={() => setButtonPressed(!buttonPressed)}
             />
         </FloatingActionButtonContainer>
     );
