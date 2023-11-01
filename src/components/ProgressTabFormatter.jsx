@@ -3,10 +3,12 @@ import { Box, HStack, Spinner, VStack } from '@chakra-ui/react';
 import Timer from './Timer';
 import MissingDataMessage from './MissingDataMessage';
 
-export default function ProgressTabFormatter({ rows, setRows, selectedChildOption, selectedDateOption, tabIndex, submittingTimerValues, setLeftTeetTimerValue, setRightTeetTimerValue, TabPanel }) {
+export default function ProgressTabFormatter({ rows, setRows, selectedChildOption, selectedDateOption, tabIndex, submittingTimerValues, setLeftTeetTimerValue, setRightTeetTimerValue, TabPanel, h = "60vh" }) {
     return (
         <VStack
             alignItems="start"
+            h="100%"
+            w="100%"
         >
             {!rows ?
                 <Box
@@ -23,8 +25,8 @@ export default function ProgressTabFormatter({ rows, setRows, selectedChildOptio
                     {submittingTimerValues !== undefined &&
                         <HStack
                             alignItems="start"
-                            justifyContent="space-evenly"
-                            w="100vw"
+                            justifyContent="space-between"
+                            w="90vw"
                         >
                             <Timer title="L" setValue={setLeftTeetTimerValue} pauseTimer={submittingTimerValues} tabIndex={tabIndex} />
                             <Timer title="R" setValue={setRightTeetTimerValue} pauseTimer={submittingTimerValues} tabIndex={tabIndex} />
@@ -32,7 +34,7 @@ export default function ProgressTabFormatter({ rows, setRows, selectedChildOptio
                     }
                     <VStack
                         overflowY="auto"
-                        h="60vh"
+                        h={h}
                         w="100vw"
                         alignItems="start"
                     >
@@ -58,5 +60,6 @@ export default function ProgressTabFormatter({ rows, setRows, selectedChildOptio
                     </VStack>
                 </>
             }
-        </VStack>);
+        </VStack>
+    );
 }

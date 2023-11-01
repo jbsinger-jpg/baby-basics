@@ -564,6 +564,7 @@ export default function BabyFeedTrackingPage({ setSearchBarIsOpen, selectedChild
                             setRows={setBottleFeedingRows}
                             selectedChildOption={selectedChildOption}
                             tabIndex={tabIndex}
+                            h="80vh"
                         />
                         <VStack
                             position="fixed"
