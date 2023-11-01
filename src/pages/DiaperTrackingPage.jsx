@@ -12,6 +12,7 @@ import WaterDropIcon from '../components/staticPageData/WaterDropIcon';
 import PoopIcon from '../components/staticPageData/PoopIcon';
 import MissingDataMessage from '../components/MissingDataMessage';
 import MotionButton from '../components/animated/MotionButton';
+import StyledSelect from '../components/StyledSelect';
 
 export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen, selectedChildOption, setDrawerVisible }) {
     const [submitButtonLoading, setSubmitButtonLoading] = useState(false);
@@ -42,6 +43,7 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
     const [peeSearchDateYear, setPeeSearchDateYear] = useState("");
 
     const [peeSearchAlias, setPeeSearchAlias] = useState("");
+    const [peeSearchColor, setPeeSearchColor] = useState("");
 
     const [pooSearchDateMonth, setPooSearchDateMonth] = useState("");
     const [pooSearchDateDay, setPooSearchDateDay] = useState("");
@@ -55,6 +57,27 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
     const [drySearchDateDay, setDrySearchDateDay] = useState("");
     const [drySearchDateYear, setDrySearchDateYear] = useState("");
     const [drySearchAlias, setDrySearchAlias] = useState("");
+
+
+    const colorOptions = [
+        { key: 0, value: "yellow", label: "Yellow" },
+        { key: 1, value: "brown", label: "Brown" },
+        { key: 2, value: "black", label: "Black" },
+        { key: 3, value: "green", label: "Green" },
+        { key: 4, value: "orange", label: "Orange" },
+        { key: 5, value: "red", label: "Red" },
+        { key: 6, value: "white", label: "White" },
+    ];
+
+    const consistencyOptions = [
+        { key: 0, value: "sticky", label: "Sticky" },
+        { key: 1, value: "mushy", label: "Mushy" },
+        { key: 2, value: "well-formed", label: "Well-Formed" },
+        { key: 3, value: "watery", label: "Watery" },
+        { key: 4, value: "hard", label: "Hard" },
+        { key: 5, value: "chalky", label: "Chalky" },
+        { key: 6, value: "soft", label: "Soft" },
+    ];
 
     const handleTabsChange = (index) => {
         setTabIndex(index);
@@ -242,6 +265,8 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                             alias: String(peeTabAlias).trim(),
                             notes: peeTabNotes,
                             timeStampDate: new Date().toLocaleDateString(),
+                            color: colorValue,
+                            colorStatus: getPeeStatusForColor(),
                         }).finally(() => {
                             setSubmitButtonLoading(false);
                         });
@@ -436,6 +461,14 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                     <FormLabel htmlFor="alias">Alias</FormLabel>
                     <Input id="alias" value={peeSearchAlias} onChange={(event) => setPeeSearchAlias(event.target.value)} />
                 </VStack>
+                <VStack alignItems="start" w="100%">
+                    <FormLabel htmlFor="color">Color</FormLabel>
+                    <StyledSelect
+                        options={colorOptions}
+                        value={peeSearchColor}
+                        onChange={(event) => setPeeSearchColor(event.target.value)}
+                    />
+                </VStack>
             </VStack>
         );
     };
@@ -458,12 +491,20 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                     <Input id="alias" value={pooSearchAlias} onChange={(event) => setPooSearchAlias(event.target.value)} />
                 </VStack>
                 <VStack alignItems="start" w="100%">
-                    <FormLabel htmlFor="consistency">Consistency</FormLabel>
-                    <Input id="consistency" value={pooSearchConsistency} onChange={(event) => setPooSearchConsistency(event.target.value)} />
+                    <FormLabel htmlFor="color">Color</FormLabel>
+                    <StyledSelect
+                        options={colorOptions}
+                        value={pooSearchColor}
+                        onChange={(event) => setPooSearchColor(event.target.value)}
+                    />
                 </VStack>
                 <VStack alignItems="start" w="100%">
-                    <FormLabel htmlFor="color">Color</FormLabel>
-                    <Input id="color" value={pooSearchColor} onChange={(event) => setPooSearchColor(event.target.value)} />
+                    <FormLabel htmlFor="consistency">Consistency</FormLabel>
+                    <StyledSelect
+                        options={consistencyOptions}
+                        value={pooSearchConsistency}
+                        onChange={(event) => setPooSearchConsistency(event.target.value)}
+                    />
                 </VStack>
             </VStack>
         );
@@ -509,6 +550,10 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
 
                 if (peeSearchAlias) {
                     peeQueryFilters.push({ dbField: "alias", operator: "==", operand: peeSearchAlias });
+                }
+
+                if (peeSearchColor) {
+                    peeQueryFilters.push({ dbField: "color", operator: "==", operand: peeSearchColor });
                 }
 
                 for (let i = 0; i < peeQueryFilters.length; i++) {
