@@ -716,6 +716,7 @@ export default function GrowthPage({ childOptions }) {
                             >
                                 <VictoryChart
                                     theme={VictoryTheme.material}
+                                    domainPadding={14}
                                 >
                                     <VictoryAxis
                                         fixLabelOverlap
@@ -785,6 +786,7 @@ export default function GrowthPage({ childOptions }) {
                             >
                                 <VictoryChart
                                     theme={VictoryTheme.material}
+                                    domainPadding={14}
                                 >
                                     <VictoryAxis
                                         fixLabelOverlap
@@ -854,6 +856,7 @@ export default function GrowthPage({ childOptions }) {
                             >
                                 <VictoryChart
                                     theme={VictoryTheme.material}
+                                    domainPadding={14}
                                 >
                                     <VictoryAxis
                                         fixLabelOverlap

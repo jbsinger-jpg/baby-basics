@@ -232,6 +232,7 @@ export default function SleepPage({ childOptions }) {
                         >
                             <VictoryChart
                                 theme={VictoryTheme.material}
+                                domainPadding={12}
                             >
                                 <VictoryBar
                                     data={formatBarData(formatSleepPoints(getSortedPoints(sleepPoints)))}
