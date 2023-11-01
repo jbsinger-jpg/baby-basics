@@ -712,59 +712,68 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                         </TabList>
                         <TabPanels>
                             <TabPanel>
-                                <VStack
-                                    alignItems="start"
-                                    pl="2"
-                                    pr="2"
-                                    overflowY="auto"
-                                >
+                                <VStack alignItems="start">
                                     <Button onClick={showColorationDialog}>Color</Button>
-                                    {(peeTabData && peeTabData.length) ? peeTabData.map((peeRow, index) => {
-                                        return (
-                                            <GenericDiaperTrackingTabPanel
-                                                alias={peeRow.alias}
-                                                notes={peeRow.notes}
-                                                color={peeRow.color}
-                                                colorStatus={peeRow.colorStatus}
-                                                timeStampDate={peeRow.timeStampDate}
-                                                handleDeleteRow={handleDeletePeeRow}
-                                                index={index}
-                                            />
-                                        );
-                                    })
-                                        :
-                                        <MissingDataMessage message="No entries, add one!" />
-                                    }
+                                    <VStack
+                                        alignItems="start"
+                                        pl="2"
+                                        pr="2"
+                                        h="65vh"
+                                        overflowY="auto"
+                                    >
+                                        {(peeTabData && peeTabData.length) ? peeTabData.map((peeRow, index) => {
+                                            return (
+                                                <GenericDiaperTrackingTabPanel
+                                                    alias={peeRow.alias}
+                                                    notes={peeRow.notes}
+                                                    color={peeRow.color}
+                                                    colorStatus={peeRow.colorStatus}
+                                                    timeStampDate={peeRow.timeStampDate}
+                                                    handleDeleteRow={handleDeletePeeRow}
+                                                    index={index}
+                                                />
+                                            );
+                                        })
+                                            :
+                                            <MissingDataMessage message="No entries, add one!" />
+                                        }
+                                    </VStack>
                                 </VStack>
                             </TabPanel>
                             <TabPanel>
                                 <VStack
                                     alignItems="start"
-                                    pl="2"
-                                    pr="2"
                                 >
                                     <Button onClick={showColorationDialog}>Color and/or Consistency</Button>
-                                    {(pooTabData && pooTabData.length) ? pooTabData.map((pooRow, index) => {
-                                        return (
-                                            <PooTabPanel
-                                                alias={pooRow.alias}
-                                                color={pooRow.color}
-                                                consistency={pooRow.consistency}
-                                                description={pooRow.description}
-                                                notes={pooRow.notes}
-                                                status={pooRow.status}
-                                                timeStampDate={pooRow.timeStampDate}
-                                                data={pooTabData}
-                                                setData={setPooTabData}
-                                                index={index}
-                                                colorStatus={pooRow.colorStatus}
-                                                consistencyStatus={pooRow.consistencyStatus}
-                                            />
-                                        );
-                                    })
-                                        :
-                                        <MissingDataMessage message="No entries, add one!" />
-                                    }
+                                    <VStack
+                                        alignItems="start"
+                                        pl="2"
+                                        pr="2"
+                                        h="65vh"
+                                        overflowY="auto"
+                                    >
+                                        {(pooTabData && pooTabData.length) ? pooTabData.map((pooRow, index) => {
+                                            return (
+                                                <PooTabPanel
+                                                    alias={pooRow.alias}
+                                                    color={pooRow.color}
+                                                    consistency={pooRow.consistency}
+                                                    description={pooRow.description}
+                                                    notes={pooRow.notes}
+                                                    status={pooRow.status}
+                                                    timeStampDate={pooRow.timeStampDate}
+                                                    data={pooTabData}
+                                                    setData={setPooTabData}
+                                                    index={index}
+                                                    colorStatus={pooRow.colorStatus}
+                                                    consistencyStatus={pooRow.consistencyStatus}
+                                                />
+                                            );
+                                        })
+                                            :
+                                            <MissingDataMessage message="No entries, add one!" />
+                                        }
+                                    </VStack>
                                 </VStack>
                             </TabPanel>
                             <TabPanel>
@@ -772,6 +781,8 @@ export default function DiaperTrackingPage({ searchBarIsOpen, setSearchBarIsOpen
                                     alignItems="start"
                                     pl="2"
                                     pr="2"
+                                    h="65vh"
+                                    overflowY="auto"
                                 >
                                     {dryTabData && dryTabData.length ? dryTabData.map((dryRow, index) => {
                                         return (
