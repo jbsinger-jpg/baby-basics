@@ -1,4 +1,4 @@
-import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, FormControl, FormHelperText, FormLabel, Input, VStack, useColorModeValue } from '@chakra-ui/react';
+import { AlertDialog, AlertDialogBody, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, FormControl, FormHelperText, FormLabel, Input, VStack, useColorModeValue, useToast } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { cardBackground } from '../../defaultStyle';
 import { auth, firestore, storage } from '../../firebaseConfig';
@@ -11,6 +11,7 @@ export default function BabyImagesModal({ babyImagesModalIsOpen, setBabyImagesMo
     const [selectedFile, setSelectedFile] = useState(null);
     const [selectedAgeOption, setSelectedAgeOption] = useState(null);
     const [selectedTagOption, setSelectedTagOption] = useState(null);
+    const toast = useToast();
 
     const ageOptions = [
         { value: "0-3M", label: "0-3M", key: 0 },
@@ -32,7 +33,7 @@ export default function BabyImagesModal({ babyImagesModalIsOpen, setBabyImagesMo
         setSelectedFile(event.target.files[0]);
     };
 
-    const handleSubmitPicture = (event) => {
+    const handleSubmitPicture = async (event) => {
         event.preventDefault();
         const currentUser = auth?.currentUser?.uid;
 
@@ -41,9 +42,23 @@ export default function BabyImagesModal({ babyImagesModalIsOpen, setBabyImagesMo
             const userRef = storageRef.child(currentUser);
             const fileRef = userRef.child(selectedFile.name);
 
+            await firestore.collection("users").doc(currentUser).collection("uploaded-images").doc(selectedFile.name).get().then((doc) => {
+                if (doc.exists) {
+                    toast({
+                        title: 'Image with name already exists.',
+                        description: JSON.stringify(doc.data().name),
+                        status: 'error',
+                        duration: 9000,
+                        isClosable: true,
+                    });
+
+                    return;
+                }
+            });
+
             fileRef.put(selectedFile).then(() => {
                 userRef.list().then((result) => {
-                    result.items[0].getDownloadURL().then((url) => {
+                    result.items[(result.items.length - 1)].getDownloadURL().then((url) => {
                         firestore.collection("users")
                             .doc(currentUser)
                             .collection("uploaded-images")
