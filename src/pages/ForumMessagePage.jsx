@@ -59,9 +59,6 @@ function ForumMessagePage() {
 
                 setMessages(options);
             })
-            .catch(error => {
-                console.log(error);
-            })
             .finally(() => {
                 setSearchButtonLoading(false);
             });

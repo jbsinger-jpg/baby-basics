@@ -43,8 +43,6 @@ export default function AnimatedCard({
                     else {
                         setCheckboxValues([]);
                     }
-                }).catch((error) => {
-                    console.log(error);
                 });
         else {
             setCheckboxValues([]);
@@ -63,8 +61,6 @@ export default function AnimatedCard({
                     else {
                         setCheckboxValues([]);
                     }
-                }).catch((error) => {
-                    console.log(error);
                 });
         else {
             setCheckboxValues([]);

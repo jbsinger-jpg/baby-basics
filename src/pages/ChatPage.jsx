@@ -52,9 +52,6 @@ export default function ChatPage() {
 
         if (groupAlias)
             navigate(`/forum_${groupAlias}`);
-        else {
-            console.log("Could not redirect to the forum page wanted.");
-        }
     };
 
     return (
