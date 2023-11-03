@@ -17,6 +17,11 @@ export default function PostPartumPage() {
         setLifeStyleRadio("");
         setBleedingRadio("");
         setIncisionRadio("");
+
+        setSelfCareTextBox("");
+        setLifeStyleTextBox("");
+        setBleedingTextBox("");
+        setIncisionTextBox("");
     };
 
     const handleFormSubmission = (event) => {
