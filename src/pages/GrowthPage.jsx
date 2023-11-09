@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { VictoryAxis, VictoryBar, VictoryChart, VictoryLabel, VictoryLine, VictoryScatter, VictoryTheme } from 'victory';
-import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Checkbox, CheckboxGroup, FormLabel, HStack, Heading, Icon, Image, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Spinner, Text, VStack, useColorModeValue, useMediaQuery } from '@chakra-ui/react';
-import { InfoOutlineIcon } from '@chakra-ui/icons';
+import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Box, Button, Checkbox, CheckboxGroup, FormLabel, HStack, Heading, Icon, IconButton, Image, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper, Spinner, Text, VStack, useColorModeValue, useMediaQuery } from '@chakra-ui/react';
+import { ChevronLeftIcon, ChevronRightIcon, InfoOutlineIcon } from '@chakra-ui/icons';
 import DatePicker from "react-datepicker";
 
 import StyledSelect from '../components/StyledSelect';
@@ -950,9 +950,10 @@ export default function GrowthPage({ childOptions }) {
                                 justifyContent={"space-between"}
                                 w="90vw"
                             >
-                                <Button onClick={handleViewPortGraphButtonPress}>
-                                    Toggle
-                                </Button>
+                                <IconButton
+                                    onClick={handleViewPortGraphButtonPress}
+                                    icon={<ChevronLeftIcon />}
+                                />
                                 {selectedChartOption === CHART_ENUMS.LENGTH && 
                                     <VStack
                                         h={450}
@@ -1025,13 +1026,157 @@ export default function GrowthPage({ childOptions }) {
                                         }
                                     </VStack>
                                 }
-                                <Button onClick={handleViewPortGraphButtonPress}>
-                                    Toggle
-                                </Button>
+                                {selectedChartOption === CHART_ENUMS.HEIGHT && 
+                                    <VStack
+                                        h={450}
+                                    >
+                                        <MotionContainer
+                                            isPressed={buttonPressed}
+                                            setIsPressed={setButtonPressed}
+                                        >
+                                            <VictoryChart
+                                                theme={VictoryTheme.material}
+                                                domainPadding={14}
+                                            >
+                                                <VictoryAxis
+                                                    fixLabelOverlap
+                                                    label={barGraphIsVisible ? "Circumference" : "Date"}
+                                                    axisLabelComponent={<VictoryLabel dy={20} style={{ fontSize: 15, fill: textColor }} />}
+                                                />
+                                                <VictoryAxis
+                                                    dependentAxis
+                                                    fixLabelOverlap
+                                                    label={barGraphIsVisible ? "Quantity" : "Circumference"}
+                                                    axisLabelComponent={<VictoryLabel dy={-30} style={{ fontSize: 15, fill: textColor }} />}
+                                                />
+                                                {barGraphIsVisible &&
+                                                    <VictoryBar
+                                                        data={formatBarData(formatGraphPoints(getSortedPoints(circumferenceGraphPoints)))}
+                                                    />
+                                                }
+                                                {(getUniquePoints(circumferenceGraphPoints).length > 1 && !barGraphIsVisible) &&
+                                                    <VictoryLine
+                                                        style={{
+                                                            data: { stroke: "#c43a31" },
+                                                            parent: { border: "1px solid #ccc" }
+                                                        }}
+                                                        data={getSortedPoints(circumferenceGraphPoints)}
+                                                    />
+                                                }
+                                                {(getUniquePoints(circumferenceGraphPoints).length <= 1 && !barGraphIsVisible) &&
+                                                    <VictoryScatter
+                                                        style={{
+                                                            data: { fill: "#c43a31" },
+                                                            parent: { border: "1px solid #ccc" },
+                                                        }}
+                                                        data={getSortedPoints(circumferenceGraphPoints)}
+                                                        size={7}
+                                                    />
+                                                }
+                                            </VictoryChart>
+                                        </MotionContainer>
+                                        {childOptions && childOptions.length ?
+                                            <HStack>
+                                                <MotionButton
+                                                    onClick={addCircumferenceGraphPoint}
+                                                    isLoading={circumferenceButtonIsLoading}
+                                                    title="Plot Head Circumference"
+                                                />
+                                                <MotionButton
+                                                    onClick={handleDeleteHeightPoint}
+                                                    isLoading={deleteHeadCircumferenceIsLoading}
+                                                    title="Delete Head Circumference"
+                                                />
+                                            </HStack>
+                                            :
+                                            <HStack>
+                                                <Icon as={InfoOutlineIcon} />
+                                                <Text>
+                                                    Add a child to plot points!
+                                                </Text>
+                                            </HStack>
+                                        }
+                                    </VStack>
+                                }
+                                {selectedChartOption === CHART_ENUMS.WEIGHT &&
+                                    <VStack
+                                        h={450}
+                                    >
+                                        <MotionContainer
+                                            isPressed={buttonPressed}
+                                            setIsPressed={setButtonPressed}
+                                        >
+                                            <VictoryChart
+                                                theme={VictoryTheme.material}
+                                                domainPadding={14}
+                                            >
+                                                <VictoryAxis
+                                                    fixLabelOverlap
+                                                    label={barGraphIsVisible ? "Weight" : "Date"}
+                                                    axisLabelComponent={<VictoryLabel dy={20} style={{ fontSize: 15, fill: textColor }} />}
+                                                />
+                                                <VictoryAxis
+                                                    dependentAxis
+                                                    fixLabelOverlap
+                                                    label={barGraphIsVisible ? "Quantity" : "Weight"}
+                                                    axisLabelComponent={<VictoryLabel dy={-30} style={{ fontSize: 15, fill: textColor }} />}
+                                                />
+                                                {barGraphIsVisible &&
+                                                    <VictoryBar
+                                                        data={formatBarData(formatGraphPoints(getSortedPoints(weightGraphPoints)))}
+                                                    />
+                                                }
+                                                {(getUniquePoints(weightGraphPoints).length > 1 && !barGraphIsVisible) &&
+                                                    <VictoryLine
+                                                        style={{
+                                                            data: { stroke: "#c43a31" },
+                                                            parent: { border: "1px solid #ccc" }
+                                                        }}
+                                                        data={getSortedPoints(weightGraphPoints)}
+                                                    />
+                                                }
+                                                {(getUniquePoints(weightGraphPoints).length <= 1 && !barGraphIsVisible) &&
+                                                    <VictoryScatter
+                                                        style={{
+                                                            data: { fill: "#c43a31" },
+                                                            parent: { border: "1px solid #ccc" },
+                                                        }}
+                                                        data={getSortedPoints(weightGraphPoints)}
+                                                        size={7}
+                                                    />
+                                                }
+                                            </VictoryChart>
+                                        </MotionContainer>
+                                        {childOptions && childOptions.length ?
+                                            <HStack>
+                                                <MotionButton
+                                                    onClick={addWeightPoint}
+                                                    isLoading={weightButtonIsLoading}
+                                                    title="Plot Weight"
+                                                />
+                                                <MotionButton
+                                                    onClick={handleDeleteWeightPoint}
+                                                    isLoading={deleteWeightPointIsLoading}
+                                                    title="Delete Weight"
+                                                />
+                                            </HStack>
+                                            :
+                                            <HStack>
+                                                <Icon as={InfoOutlineIcon} />
+                                                <Text>
+                                                    Add a child to plot points!
+                                                </Text>
+                                            </HStack>
+                                        }
+                                    </VStack>
+                                }
+                                <IconButton
+                                    onClick={handleViewPortGraphButtonPress}
+                                    icon={<ChevronRightIcon />}
+                                />
                             </HStack>
                         }
                     </>
-
                 }
             </Box>
             <VStack
