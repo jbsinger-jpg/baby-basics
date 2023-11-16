@@ -1,6 +1,6 @@
 // module imports
 import { CheckIcon, CloseIcon, Icon, StarIcon } from '@chakra-ui/icons';
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, CircularProgress, Divider, HStack, Heading, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, CircularProgress, Divider, GridItem, HStack, Heading, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import ReactImageMagnify from '@blacklab/react-image-magnify';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
@@ -95,12 +95,9 @@ export default function VitaminRow({ vitamin, vitaminDataIsLoading, tabIndex, ml
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
 
     return (
-        <VStack
+        <GridItem
             key={vitamin.id}
-            h="500px"
-            spacing="3"
-            paddingBottom="10"
-            ml={ml}
+            colSpan={1}
         >
             <SkeletonCircle size='10' isLoaded={!vitaminDataIsLoading} />
             <SkeletonText isLoaded={!vitaminDataIsLoading}>
@@ -313,6 +310,6 @@ export default function VitaminRow({ vitamin, vitaminDataIsLoading, tabIndex, ml
                     </VStack>
                 </HStack>
             </SkeletonText>
-        </VStack>
+        </GridItem>
     );
 }

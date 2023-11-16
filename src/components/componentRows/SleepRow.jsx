@@ -1,5 +1,5 @@
 import { CheckIcon, CloseIcon, StarIcon } from '@chakra-ui/icons';
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, CircularProgress, Divider, HStack, Heading, Icon, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, CircularProgress, Divider, GridItem, HStack, Heading, Icon, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 import { firestore } from '../../firebaseConfig';
@@ -93,12 +93,9 @@ export default function SleepRow({ sleep, sleepDataIsLoading, ml, tabIndex }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
 
     return (
-        <VStack
-            key={sleep?.id}
-            h="500px"
-            spacing="3"
-            paddingBottom="10"
-            ml={ml}
+        <GridItem
+            key={sleep.id}
+            colSpan={1}
         >
             <SkeletonCircle size='10' isLoaded={!sleepDataIsLoading} />
             <SkeletonText isLoaded={!sleepDataIsLoading}>
@@ -310,6 +307,6 @@ export default function SleepRow({ sleep, sleepDataIsLoading, ml, tabIndex }) {
                     </VStack>
                 </HStack>
             </SkeletonText>
-        </VStack>
+        </GridItem>
     );
 }

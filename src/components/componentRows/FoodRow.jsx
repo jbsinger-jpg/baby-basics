@@ -1,7 +1,7 @@
 // module imports
 import ReactImageMagnify from '@blacklab/react-image-magnify';
 import { CheckIcon, CloseIcon, StarIcon } from '@chakra-ui/icons';
-import { Divider, HStack, SkeletonCircle, SkeletonText, Text, VStack, Icon, Stack, Box, Button, Card, CardBody, Tooltip, Heading, Tag, TagLabel, useColorModeValue, CardHeader, CardFooter, CircularProgress } from '@chakra-ui/react';
+import { Divider, HStack, SkeletonCircle, SkeletonText, Text, VStack, Icon, Stack, Box, Button, Card, CardBody, Tooltip, Heading, Tag, TagLabel, useColorModeValue, CardHeader, CardFooter, CircularProgress, GridItem } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 
@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { cardBackground } from '../../defaultStyle';
 import { firestore } from '../../firebaseConfig';
 
-export default function FoodRow({ food, isFoodDataLoading, tabIndex, ml }) {
+export default function FoodRow({ food, isFoodDataLoading, tabIndex }) {
     const MotionBox = motion(Box);
     const MotionButton = motion(Button);
     const [flippedCards, setFlippedCards] = useState(false);
@@ -95,12 +95,9 @@ export default function FoodRow({ food, isFoodDataLoading, tabIndex, ml }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
 
     return (
-        <VStack
+        <GridItem
             key={food.id}
-            h="500px"
-            spacing="3"
-            paddingBottom="10"
-            ml={ml}
+            colSpan={1}
         >
             <SkeletonCircle size='10' isLoaded={!isFoodDataLoading} />
             <SkeletonText isLoaded={!isFoodDataLoading}>
@@ -305,6 +302,7 @@ export default function FoodRow({ food, isFoodDataLoading, tabIndex, ml }) {
                                 <TagLabel>{"$" + food.price?.toFixed()}</TagLabel>
                             </Tag>
                         </VStack>
+                        <Divider />
                         <VStack alignItems="start">
                             <Text as="b" fontSize="13">Stage</Text>
                             <Tag
@@ -319,6 +317,6 @@ export default function FoodRow({ food, isFoodDataLoading, tabIndex, ml }) {
                     </VStack>
                 </HStack>
             </SkeletonText>
-        </VStack>
+        </GridItem>
     );
 }

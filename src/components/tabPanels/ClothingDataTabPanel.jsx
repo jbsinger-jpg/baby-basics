@@ -1,5 +1,5 @@
 // module imports
-import { HStack, useColorModeValue } from '@chakra-ui/react';
+import { Grid, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
 
 // relative imports
@@ -10,11 +10,15 @@ export default function ClothingDataTabPanel({ clothingData, clothingDataLoaded,
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
 
     return (
-        <HStack flexWrap={"wrap"} marginTop="20" spacing="10" bg={_screenBackground} w="90vw" justifyContent="space-evenly">
-            {clothingData && clothingData.map((clothing, index) => {
+        <Grid
+            templateRows='repeat(1, 1fr)'
+            templateColumns='repeat(4, 1fr)'
+            gap="5"
+            bg={_screenBackground}
+        >
+            {clothingData && clothingData.map((clothing) => {
                 return (
                     <ClothingRow
-                        ml={index === 0 && "10"}
                         key={clothing.id}
                         clothing={clothing}
                         clothingDataLoaded={clothingDataLoaded}
@@ -22,6 +26,6 @@ export default function ClothingDataTabPanel({ clothingData, clothingDataLoaded,
                     />
                 );
             })}
-        </HStack>
+        </Grid>
     );
 }
