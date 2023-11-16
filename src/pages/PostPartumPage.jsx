@@ -1,5 +1,7 @@
-import { Box, Button, FormControl, FormLabel, HStack, Heading, Radio, RadioGroup, Tab, TabList, TabPanel, TabPanels, Tabs, Textarea, VStack } from '@chakra-ui/react';
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Button, Card, CardBody, FormControl, FormLabel, Grid, GridItem, HStack, Heading, Radio, RadioGroup, Tab, TabList, TabPanel, TabPanels, Tabs, Textarea, VStack } from '@chakra-ui/react';
 import { useState } from 'react';
+import { auth, firestore } from '../firebaseConfig';
+import { useEffect } from 'react';
 
 export default function PostPartumPage() {
     const [selfcareRadio, setSelfcareRadio] = useState("");
@@ -11,6 +13,8 @@ export default function PostPartumPage() {
     const [lifeStyleTextBox, setLifeStyleTextBox] = useState("");
     const [bleedingTextBox, setBleedingTextBox] = useState("");
     const [incisionTextBox, setIncisionTextBox] = useState("");
+
+    const [previousEntryData, setPreviousEntryData] = useState([]);
 
     const handleClearRadioOptions = () => {
         setSelfcareRadio("");
@@ -24,10 +28,29 @@ export default function PostPartumPage() {
         setIncisionTextBox("");
     };
 
-    const handleFormSubmission = (event) => {
+    const handleFormSubmission = async (event) => {
         event.preventDefault();
-        // TODO: Add logic to backend to handle this event.
-        console.log("Form submitted: ", event);
+
+        if (selfCareTextBox || lifeStyleTextBox || bleedingTextBox || incisionTextBox) {
+            setPreviousEntryData([...previousEntryData, {
+                selfCare: selfCareTextBox,
+                lifeStyle: lifeStyleTextBox,
+                bleeding: bleedingTextBox,
+                incision: incisionTextBox,
+            }]);
+
+            await firestore.collection("users")
+                .doc(auth?.currentUser?.uid)
+                .collection("post-partum")
+                .add({
+                    selfCare: selfCareTextBox,
+                    lifeStyle: lifeStyleTextBox,
+                    bleeding: bleedingTextBox,
+                    incision: incisionTextBox,
+                });
+        } else {
+            console.log("Cannot add an empty entry!");
+        }
     };
 
     const getNewTabPanelContent = () => {
@@ -137,8 +160,48 @@ export default function PostPartumPage() {
         );
     };
 
+    useEffect(() => {
+        if (auth && auth.currentUser) {
+            firestore.collection("users").doc(auth?.currentUser?.uid).collection("post-partum")
+                .get()
+                .then((snapshot) => {
+                    let options = [];
+                    snapshot.docs.forEach(doc => {
+                        options.push(doc.data());
+                    });
+
+                    setPreviousEntryData(options);
+                });
+        }
+        // eslint-disable-next-line
+    }, [auth.currentUser]);
+
+
+    const getAccordianItem = (title, data) => {
+        return (
+            <Accordion
+                allowToggle
+                alignItems={"start"}
+            >
+                <AccordionItem>
+                    <AccordionButton>
+                        <AccordionIcon />
+                        <Heading size="md" alignSelf={"center"} w="100%">
+                            {title}
+                        </Heading>
+                    </AccordionButton>
+                    <AccordionPanel>
+                        <Heading size="sm" textAlign={"center"}>
+                            {data ? data : "No Entry"}
+                        </Heading>
+                    </AccordionPanel>
+                </AccordionItem>
+            </Accordion>
+        );
+    };
+
     return (
-        <Box h="100vh" w="100vw" display="flex" justifyContent="center">
+        <Box h="100vh" w="100vw" display="flex" justifyContent="center" overflowX={"hidden"}>
             {/* TODO: Create a tab entry one tab for filling out the form another for seeing visual data */}
             <Tabs isFitted w="100vw">
                 <TabList>
@@ -154,7 +217,50 @@ export default function PostPartumPage() {
                         {getNewTabPanelContent()}
                     </TabPanel>
                     <TabPanel>
-                        Previous Panel
+                        <Grid
+                            templateColumns='repeat(1, 1fr)'
+                            gap="5"
+                        >
+                            {previousEntryData && previousEntryData.map(data => {
+                                return (
+                                    <GridItem>
+                                        <Card>
+                                            <CardBody>
+                                                <Grid
+                                                    templateColumns='repeat(2, 1fr)'
+                                                    gap="0.5"
+                                                >
+                                                    <GridItem
+                                                        bg={"blackAlpha.100"}
+                                                        padding="2"
+                                                    >
+                                                        {getAccordianItem("Incision", data.incision)}
+                                                    </GridItem>
+                                                    <GridItem
+                                                        bg={"blackAlpha.100"}
+                                                        padding="2"
+                                                    >
+                                                        {getAccordianItem("Bleeding", data.bleeding)}
+                                                    </GridItem>
+                                                    <GridItem
+                                                        bg={"blackAlpha.100"}
+                                                        padding="2"
+                                                    >
+                                                        {getAccordianItem("Life Style", data.lifeStyle)}
+                                                    </GridItem>
+                                                    <GridItem
+                                                        bg={"blackAlpha.100"}
+                                                        padding="2"
+                                                    >
+                                                        {getAccordianItem("Self Care", data.selfCare)}
+                                                    </GridItem>
+                                                </Grid>
+                                            </CardBody>
+                                        </Card>
+                                    </GridItem>
+                                );
+                            })}
+                        </Grid>
                     </TabPanel>
                 </TabPanels>
             </Tabs>
