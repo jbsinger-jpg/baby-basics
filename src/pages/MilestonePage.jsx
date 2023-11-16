@@ -323,12 +323,11 @@ export default function MilestonePage() {
                     justifyContent={!initialStage ? "center" : "space-between"}
                     alignItems="center"
                     display="flex"
-                    flexDirection={isLargerThan1300 || cardRotated ? "row" : "column"}
+                    flexDirection={isLargerThan1300 ? "row" : "column"}
                     w="100vw"
                     px="2"
 
                 >
-
                     <IconButton
                         onClick={() => setCardRotated(!cardRotated)}
                         icon={<ChevronLeftIcon />}
