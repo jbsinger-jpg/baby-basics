@@ -1,6 +1,6 @@
 // Module imports
 import { CloseIcon, TimeIcon } from '@chakra-ui/icons';
-import { Box, Card, CardBody, CardHeader, FormLabel, HStack, Heading, IconButton, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Card, CardBody, CardHeader, FormLabel, HStack, Heading, IconButton, Text, useColorModeValue, useMediaQuery } from '@chakra-ui/react';
 
 // Relative imports
 import { cardBackground } from '../../defaultStyle';
@@ -12,6 +12,7 @@ export default function PumpRowTabPanel({ alias, index, timeStamp, leftBreastTim
     const [rightTime, setRightTime] = useState(rightBreastTime);
     const [leftTime, setLeftTime] = useState(leftBreastTime);
     const [isTimeInMinutes, setIsTimeInMinutes] = useState(false);
+    const [isLargerThan1300] = useMediaQuery("(min-width: 1300px)");
 
     const handleDeleteRow = () => {
         const updatedArray = [...data];
@@ -50,7 +51,7 @@ export default function PumpRowTabPanel({ alias, index, timeStamp, leftBreastTim
         <Box>
             <Card
                 bg={_cardBackground}
-                w="90vw"
+                w={isLargerThan1300 ? "90vw" : "60vw"}
             >
                 <CardHeader>
                     <HStack

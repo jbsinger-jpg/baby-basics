@@ -1,9 +1,11 @@
-import { Box, HStack, Spinner, VStack } from '@chakra-ui/react';
+import { Box, HStack, Spinner, VStack, useMediaQuery } from '@chakra-ui/react';
 
 import Timer from './Timer';
 import MissingDataMessage from './MissingDataMessage';
 
 export default function ProgressTabFormatter({ rows, setRows, selectedChildOption, selectedDateOption, tabIndex, submittingTimerValues, setLeftTeetTimerValue, setRightTeetTimerValue, TabPanel, h = "60vh" }) {
+    const [isLargerThan1300] = useMediaQuery("(min-width: 1300px)");
+
     return (
         <VStack
             alignItems="start"
@@ -26,7 +28,7 @@ export default function ProgressTabFormatter({ rows, setRows, selectedChildOptio
                         <HStack
                             alignItems="start"
                             justifyContent="space-between"
-                            w="90vw"
+                            w={isLargerThan1300 ? "90vw" : "60vw"}
                         >
                             <Timer title="L" setValue={setLeftTeetTimerValue} pauseTimer={submittingTimerValues} tabIndex={tabIndex} />
                             <Timer title="R" setValue={setRightTeetTimerValue} pauseTimer={submittingTimerValues} tabIndex={tabIndex} />

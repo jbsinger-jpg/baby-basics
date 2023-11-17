@@ -1,5 +1,5 @@
 import { CloseIcon, TimeIcon } from '@chakra-ui/icons';
-import { Box, Card, CardBody, CardHeader, FormLabel, HStack, Heading, IconButton, Text, useColorModeValue } from '@chakra-ui/react';
+import { Box, Card, CardBody, CardHeader, FormLabel, HStack, Heading, IconButton, Text, useColorModeValue, useMediaQuery } from '@chakra-ui/react';
 import { cardBackground } from '../../defaultStyle';
 import { auth, firestore } from '../../firebaseConfig';
 import { useState } from 'react';
@@ -41,11 +41,13 @@ export default function BreastRowTabPanel({ leftBreastTime, rightBreastTime, ali
         }
     };
 
+    const [isLargerThan1300] = useMediaQuery("(min-width: 1300px)");
+
     return (
         <Box>
             <Card
                 bg={_cardBackground}
-                w="90vw"
+                w={isLargerThan1300 ? "90vw" : "60vw"}
             >
                 <CardHeader>
                     <HStack
