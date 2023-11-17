@@ -109,7 +109,6 @@ export default function MilestonePage() {
     };
 
     const [cardRotated, setCardRotated] = useState(false);
-    const [initialStage, setInitialStage] = useState(false);
 
     const handleAddChild = async () => {
         setDrawerSubmissionButtonLoading(true);
@@ -320,7 +319,7 @@ export default function MilestonePage() {
                 </Box> :
                 <Box
                     flexWrap="wrap"
-                    justifyContent={!initialStage ? "center" : "space-between"}
+                    justifyContent="center"
                     alignItems="center"
                     display="flex"
                     flexDirection={isLargerThan1300 ? "row" : "column"}

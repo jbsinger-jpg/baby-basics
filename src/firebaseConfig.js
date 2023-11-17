@@ -5,13 +5,13 @@ import 'firebase/compat/firestore';
 import 'firebase/compat/storage';
 
 export const app = firebase.initializeApp({
-    apiKey: "AIzaSyCaBInpvfxrqGf2KGZKJPZz_fShPNQ8QTc",
-    authDomain: "baby-buyer.firebaseapp.com",
-    projectId: "baby-buyer",
-    storageBucket: "baby-buyer.appspot.com",
-    messagingSenderId: "42092723486",
-    appId: "1:42092723486:web:f2089dee96c1206bed9d0f",
-    measurementId: "G-9VTWLZS392"
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_MESSAGE_SENDER_ID,
+    appId: process.env.REACT_APP_APP_ID,
+    measurementId: process.env.REACT_APP_MEASUREMENT_ID
 });
 
 export const auth = firebase.auth();

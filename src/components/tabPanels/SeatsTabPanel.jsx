@@ -1,5 +1,5 @@
 // module imports
-import { Grid, HStack, useColorModeValue } from '@chakra-ui/react';
+import { Grid, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
 
 // relative imports
