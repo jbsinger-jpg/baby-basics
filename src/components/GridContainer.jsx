@@ -3,10 +3,15 @@ import { screenBackground } from '../defaultStyle';
 
 export default function GridContainer({ children }) {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
+    const [isLargerThan700] = useMediaQuery("(min-width: 700px)");
     const [isLargerThan900] = useMediaQuery("(min-width: 900px)");
     const [isLargerThan1300] = useMediaQuery("(min-width: 1300px)");
 
     const getTemplateColumns = () => {
+        if (!isLargerThan700) {
+            return 'repeat(1, 1fr)';
+        }
+
         if (!isLargerThan900) {
             return 'repeat(2, 1fr)';
         }
