@@ -62,7 +62,6 @@ export default function BabyProgressModal({ progressModalVisible, setProgressMod
     };
 
     const getTagOptions = () => {
-        // TODO: Generate tag options that the user has inputted
         let options = [];
 
         if (selectedAgeOption && userTagData) {

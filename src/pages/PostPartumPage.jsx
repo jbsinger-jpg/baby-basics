@@ -202,7 +202,6 @@ export default function PostPartumPage() {
 
     return (
         <Box h="100vh" w="100vw" display="flex" justifyContent="center" overflowX={"hidden"}>
-            {/* TODO: Create a tab entry one tab for filling out the form another for seeing visual data */}
             <Tabs isFitted w="100vw">
                 <TabList>
                     <Tab>

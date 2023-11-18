@@ -12,10 +12,10 @@ import MotionContainer from '../components/animated/MotionContainer';
 import { auth, firestore } from '../firebaseConfig';
 
 export default function GrowthPage({ childOptions }) {
-    const CHART_ENUMS = { 
+    const CHART_ENUMS = {
         LENGTH: "length",
-        WEIGHT: "weight", 
-        HEIGHT: "height" 
+        WEIGHT: "weight",
+        HEIGHT: "height"
     };
 
     const [selectedLength, setSelectedLength] = useState(1);
@@ -663,10 +663,7 @@ export default function GrowthPage({ childOptions }) {
         else if (selectedChartOption === CHART_ENUMS.HEIGHT) {
             setSelectedChartOption(CHART_ENUMS.LENGTH);
         }
-    }
-
-    // TODO: If the page sets isLargerThan1300 to false, then render the VictoryCharts to be 
-    // conditionally rendered similar to what we have for the milestone page.
+    };
 
     useEffect(() => {
         setChartsAreLoading(true);
@@ -732,7 +729,7 @@ export default function GrowthPage({ childOptions }) {
                     <Spinner />
                     :
                     <>
-                        {isLargerThan1300 ? 
+                        {isLargerThan1300 ?
                             <HStack spacing={10}>
                                 <VStack
                                     h={450}
@@ -954,7 +951,7 @@ export default function GrowthPage({ childOptions }) {
                                     onClick={handleViewPortGraphButtonPress}
                                     icon={<ChevronLeftIcon />}
                                 />
-                                {selectedChartOption === CHART_ENUMS.LENGTH && 
+                                {selectedChartOption === CHART_ENUMS.LENGTH &&
                                     <VStack
                                         h={450}
                                     >
@@ -1026,7 +1023,7 @@ export default function GrowthPage({ childOptions }) {
                                         }
                                     </VStack>
                                 }
-                                {selectedChartOption === CHART_ENUMS.HEIGHT && 
+                                {selectedChartOption === CHART_ENUMS.HEIGHT &&
                                     <VStack
                                         h={450}
                                     >
@@ -1187,8 +1184,8 @@ export default function GrowthPage({ childOptions }) {
                 pr="2"
                 spacing={{ base: "-1", sm: "-1", md: "0.5", lg: "1" }}
             >
-                <VStack 
-                    alignItems="start" 
+                <VStack
+                    alignItems="start"
                 >
                     <FormLabel>Date</FormLabel>
                     <HStack>

@@ -133,7 +133,6 @@ export default function CustomPopOver({ cardHeight }) {
     ];
 
     const getTagOptions = () => {
-        // TODO: Generate tag options that the user has inputted
         let options = [];
 
         if (selectedAgeOption && userTagData) {

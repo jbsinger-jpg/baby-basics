@@ -32,12 +32,12 @@ export default function GenericDiaperTrackingTabPanel({ notes, timeStampDate, al
         <Box>
             <Card
                 bg={_cardBackground}
-                w={isLargerThan1300 ? "100vw" : "70vw"}
+                w={isLargerThan1300 ? "90vw" : "70vw"}
             >
                 <CardHeader>
                     <HStack
                         justifyContent="space-between"
-                        w={isLargerThan1300 ? "90vw" : "60vw"}
+                        w={isLargerThan1300 ? "85vw" : "60vw"}
                     >
                         <Box alignSelf="start" justifyContent="flex-start">
                             <Heading size='md'>{alias}</Heading>
@@ -71,7 +71,7 @@ export default function GenericDiaperTrackingTabPanel({ notes, timeStampDate, al
                             </Box>
                         </HStack>
                         <HStack
-                            w={isLargerThan1300 ? "90vw" : "60vw"}
+                            w={isLargerThan1300 ? "85vw" : "60vw"}
                             justifyContent="space-between"
                         >
                             <HStack spacing="-1" justifyContent="center" alignItems="end">
