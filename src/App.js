@@ -22,6 +22,7 @@ import LandingPage from "./pages/LandingPage";
 import ProgressPage from "./pages/ProgressPage";
 import EventsPage from "./pages/EventsPage";
 import StorePage from "./pages/StorePage";
+import PostPartumPage from "./pages/PostPartumPage";
 
 function App() {
   const [state, setState] = useState(null);
@@ -47,6 +48,7 @@ function App() {
         <Route path="feed-tracking" element={<BabyFeedTrackingPage />} />
         <Route path="progress" element={<ProgressPage />} />
         <Route path="events" element={<EventsPage />} />
+        <Route path="postpartum" element={<PostPartumPage />} />
       </Routes>
     </Context.Provider>
   );

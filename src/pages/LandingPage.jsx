@@ -8,6 +8,7 @@ import PregnantWomanOutlinedIcon from '@mui/icons-material/PregnantWomanOutlined
 import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
 import EventIcon from '@mui/icons-material/Event';
 import PendingIcon from '@mui/icons-material/Pending';
+import HealingIcon from '@mui/icons-material/Healing';
 
 // Relative Imports
 import StorePage from './StorePage';
@@ -63,7 +64,12 @@ export default function LandingPage() {
             handleClick: () => navigate("/progress"),
             label: "Go to Progress Page",
             icon: <PendingIcon fontSize="large" />
-        }
+        },
+        {
+            handleClick: () => navigate("/postpartum"),
+            label: "Go to Postpartum Page",
+            icon: <HealingIcon fontSize="large" />
+        },
     ];
     const userCardHeight = `${(100 / userPanelOptions.length) - 5}vh`;
     const handleSocialPageOptionChange = (event) => {

@@ -147,6 +147,11 @@ export default function BabyImagesModal({ babyImagesModalIsOpen, setBabyImagesMo
                             >
                                 Submit
                             </Button>
+                            <Button
+                                onClick={() => setBabyImagesModalIsOpen(false)}
+                            >
+                                Close
+                            </Button>
                             {!onPage &&
                                 <Button
                                     onClick={() => navigate("/pictures")}

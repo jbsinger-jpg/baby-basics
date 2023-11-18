@@ -1,7 +1,7 @@
 // module imports
 import ReactImageMagnify from '@blacklab/react-image-magnify';
 import { CheckIcon, CloseIcon, StarIcon } from '@chakra-ui/icons';
-import { Box, Button, Divider, HStack, SkeletonCircle, SkeletonText, Text, VStack, Icon, Stack, Card, CardBody, Tooltip, Heading, Tag, TagLabel, useColorModeValue, CardFooter, CardHeader, CircularProgress } from '@chakra-ui/react';
+import { Box, Button, Divider, HStack, SkeletonCircle, SkeletonText, Text, VStack, Icon, Stack, Card, CardBody, Tooltip, Heading, Tag, TagLabel, useColorModeValue, CardFooter, CardHeader, CircularProgress, GridItem } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 
@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { cardBackground } from '../../defaultStyle';
 import { firestore } from '../../firebaseConfig';
 
-export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex, ml }) {
+export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex }) {
     const MotionBox = motion(Box);
     const MotionButton = motion(Button);
     const [flippedCards, setFlippedCards] = useState(false);
@@ -90,12 +90,9 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex, ml
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
 
     return (
-        <VStack
+        <GridItem
             key={clothing.id}
-            h="500px"
-            spacing="3"
-            paddingBottom="10"
-            ml={ml}
+            colSpan={1}
         >
             <SkeletonCircle size='10' isLoaded={!clothingDataLoaded} />
             <SkeletonText isLoaded={!clothingDataLoaded}>
@@ -340,6 +337,6 @@ export default function ClothingRow({ clothing, clothingDataLoaded, tabIndex, ml
                     </VStack>
                 </HStack>
             </SkeletonText>
-        </VStack>
+        </GridItem>
     );
 }

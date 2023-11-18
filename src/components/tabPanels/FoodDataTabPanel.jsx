@@ -1,5 +1,5 @@
 // module imports
-import { HStack, useColorModeValue } from '@chakra-ui/react';
+import { Grid, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
 
 // relative imports
@@ -10,18 +10,22 @@ export default function FoodDataTabPanel({ foodData, isFoodDataLoading, tabIndex
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
 
     return (
-        <HStack flexWrap={"wrap"} marginTop="20" spacing="10" bg={_screenBackground} w="90vw" justifyContent="space-evenly">
-            {foodData && foodData.length > 0 && foodData.map((food, index) => {
+        <Grid
+            templateRows='repeat(1, 1fr)'
+            templateColumns='repeat(4, 1fr)'
+            gap="5"
+            bg={_screenBackground}
+        >
+            {foodData && foodData.length > 0 && foodData.map((food) => {
                 return (
                     <FoodRow
                         key={food.id}
                         food={food}
                         isFoodDataLoading={isFoodDataLoading}
                         tabIndex={tabIndex}
-                        ml={index === 0 && "12"}
                     />
                 );
             })}
-        </HStack>
+        </Grid>
     );
 }

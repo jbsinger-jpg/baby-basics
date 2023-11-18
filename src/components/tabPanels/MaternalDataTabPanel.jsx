@@ -1,5 +1,5 @@
 // module imports
-import { HStack, useColorModeValue } from '@chakra-ui/react';
+import { Grid, useColorModeValue } from '@chakra-ui/react';
 import React from 'react';
 
 // relative imports
@@ -10,18 +10,22 @@ export default function MaternalDataTabPanel({ maternialData, maternialDataLoadi
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
 
     return (
-        <HStack flexWrap={"wrap"} marginTop="20" spacing="10" bg={_screenBackground} w="90vw" justifyContent="space-evenly">
-            {maternialData && maternialData.length > 0 && maternialData.map((maternial, index) => {
+        <Grid
+            templateRows='repeat(1, 1fr)'
+            templateColumns='repeat(4, 1fr)'
+            gap="5"
+            bg={_screenBackground}
+        >
+            {maternialData && maternialData.length > 0 && maternialData.map((maternial) => {
                 return (
                     <MaternialRow
-                        key={index}
+                        key={maternial.id}
                         maternial={maternial}
                         maternialDataLoading={maternialDataLoading}
                         tabIndex={tabIndex}
-                        ml={index === 0 && "12"}
                     />
                 );
             })}
-        </HStack>
+        </Grid>
     );
 }

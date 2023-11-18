@@ -164,8 +164,7 @@ export default function ChatMessage({ message, fontSize }) {
                 snapshot.docs.forEach(doc => {
                     recieverDoc = { ...doc.data() };
                 });
-            })
-            .catch(error => { console.log(error); });
+            });
 
         // update the pending friend requests with the sender of the friend request.
         const pendingFriendRef = usersRef.doc(recieverDoc.id).collection("pendingFriends");

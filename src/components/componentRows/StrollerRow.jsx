@@ -1,7 +1,7 @@
 // module imports
 import ReactImageMagnify from '@blacklab/react-image-magnify';
 import { CheckIcon, CloseIcon, StarIcon } from '@chakra-ui/icons';
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, CircularProgress, Divider, HStack, Heading, Icon, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, CircularProgress, Divider, GridItem, HStack, Heading, Icon, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 
@@ -96,12 +96,9 @@ export default function StrollerRow({ stroller, strollerDataIsLoading, tabIndex,
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
 
     return (
-        <VStack
+        <GridItem
             key={stroller.id}
-            h="500px"
-            spacing="3"
-            paddingBottom="10"
-            ml={ml}
+            colSpan={1}
         >
             <SkeletonCircle size='10' isLoaded={!strollerDataIsLoading} />
             <SkeletonText isLoaded={!strollerDataIsLoading}>
@@ -314,6 +311,6 @@ export default function StrollerRow({ stroller, strollerDataIsLoading, tabIndex,
                     </VStack>
                 </HStack>
             </SkeletonText>
-        </VStack>
+        </GridItem>
     );
 }

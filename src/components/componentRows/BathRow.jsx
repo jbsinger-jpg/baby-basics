@@ -1,12 +1,12 @@
 import { CheckIcon, CloseIcon, StarIcon } from '@chakra-ui/icons';
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, CircularProgress, Divider, HStack, Heading, Icon, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, CircularProgress, Divider, GridItem, HStack, Heading, Icon, SkeletonCircle, SkeletonText, Stack, Tag, TagLabel, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { firestore } from '../../firebaseConfig';
 import { cardBackground } from '../../defaultStyle';
 import ReactImageMagnify from '@blacklab/react-image-magnify';
 
-export default function BathRow({ bath, bathDataIsLoading, tabIndex, ml }) {
+export default function BathRow({ bath, bathDataIsLoading, tabIndex }) {
     const MotionBox = motion(Box);
     const MotionButton = motion(Button);
 
@@ -93,12 +93,9 @@ export default function BathRow({ bath, bathDataIsLoading, tabIndex, ml }) {
     const _cardBackground = useColorModeValue(cardBackground.light, cardBackground.dark);
 
     return (
-        <VStack
+        <GridItem
             key={bath.id}
-            h="500px"
-            spacing="3"
-            paddingBottom="10"
-            ml={ml}
+            colSpan={1}
         >
             <SkeletonCircle size='10' isLoaded={!bathDataIsLoading} />
             <SkeletonText isLoaded={!bathDataIsLoading}>
@@ -310,6 +307,6 @@ export default function BathRow({ bath, bathDataIsLoading, tabIndex, ml }) {
                     </VStack>
                 </HStack>
             </SkeletonText>
-        </VStack>
+        </GridItem>
     );
 }
