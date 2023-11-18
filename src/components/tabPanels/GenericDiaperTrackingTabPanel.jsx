@@ -1,5 +1,5 @@
 import { CheckCircleIcon, ChevronDownIcon, ChevronUpIcon, CloseIcon, InfoOutlineIcon, NotAllowedIcon } from '@chakra-ui/icons';
-import { Box, Card, CardBody, CardHeader, Collapse, FormLabel, HStack, Heading, IconButton, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Card, CardBody, CardHeader, Collapse, FormLabel, GridItem, HStack, Heading, IconButton, Text, Tooltip, VStack, useColorModeValue, useMediaQuery } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { STATUS } from '../staticPageData/baby-color-consistency-info';
 import { cardBackground } from '../../defaultStyle';
@@ -26,16 +26,18 @@ export default function GenericDiaperTrackingTabPanel({ notes, timeStampDate, al
             <Box h="30px" w="30px" bg={color} borderColor="black" border="1px" borderRadius={"50%"}></Box>
         );
     };
+    const [isLargerThan1300] = useMediaQuery("(min-width: 1300px)");
 
     return (
         <Box>
             <Card
                 bg={_cardBackground}
+                w={isLargerThan1300 ? "100vw" : "70vw"}
             >
                 <CardHeader>
                     <HStack
-                        w="90vw"
                         justifyContent="space-between"
+                        w={isLargerThan1300 ? "90vw" : "60vw"}
                     >
                         <Box alignSelf="start" justifyContent="flex-start">
                             <Heading size='md'>{alias}</Heading>
@@ -69,7 +71,7 @@ export default function GenericDiaperTrackingTabPanel({ notes, timeStampDate, al
                             </Box>
                         </HStack>
                         <HStack
-                            w="90vw"
+                            w={isLargerThan1300 ? "90vw" : "60vw"}
                             justifyContent="space-between"
                         >
                             <HStack spacing="-1" justifyContent="center" alignItems="end">
@@ -87,7 +89,7 @@ export default function GenericDiaperTrackingTabPanel({ notes, timeStampDate, al
                     <Box>
                         <Collapse in={showAllNotes} animateOpacity>
                             <Box
-                                w="90vw"
+                                w={isLargerThan1300 ? "90vw" : "60vw"}
                                 whiteSpace="pre-wrap"
                                 bg="blackAlpha.200"
                                 p="5"

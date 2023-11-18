@@ -1,5 +1,5 @@
 import { CheckCircleIcon, ChevronDownIcon, ChevronUpIcon, CloseIcon, InfoOutlineIcon, NotAllowedIcon } from '@chakra-ui/icons';
-import { Box, Card, CardBody, CardHeader, Collapse, FormLabel, HStack, Heading, IconButton, Text, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Card, CardBody, CardHeader, Collapse, FormLabel, HStack, Heading, IconButton, Text, Tooltip, VStack, useColorModeValue, useMediaQuery } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { auth, firestore } from '../../firebaseConfig';
 import { STATUS } from '../staticPageData/baby-color-consistency-info';
@@ -35,14 +35,14 @@ export default function PooTabPanel({ setData, data, index, notes, color, consis
         setData(updatedArray);
     };
 
+    const [isLargerThan1300] = useMediaQuery("(min-width: 1300px)");
+
     return (
-        <Card
-            bg={_cardBackground}
-        >
+        <Card>
             <CardHeader>
                 <HStack
-                    w="90vw"
                     justifyContent="space-between"
+                    w={isLargerThan1300 ? "90vw" : "60vw"}
                 >
                     <VStack>
                         <Box alignSelf="start" justifyContent="flex-start">
@@ -55,7 +55,7 @@ export default function PooTabPanel({ setData, data, index, notes, color, consis
             <CardBody>
                 <VStack>
                     <HStack
-                        w="90vw"
+                        w={isLargerThan1300 ? "90vw" : "60vw"}
                     >
                         <HStack alignItems="flex-start" spacing="5">
                             <Box>
@@ -112,7 +112,7 @@ export default function PooTabPanel({ setData, data, index, notes, color, consis
                         </HStack>
                     </HStack>
                     <HStack
-                        w="90vw"
+                        w={isLargerThan1300 ? "90vw" : "60vw"}
                         justifyContent="space-between"
                     >
                         <HStack spacing="-1" justifyContent="center" alignItems="end">
@@ -127,7 +127,7 @@ export default function PooTabPanel({ setData, data, index, notes, color, consis
                                 bg="blackAlpha.200"
                                 p="5"
                                 borderRadius={"1%"}
-                                w="90vw"
+                                w={isLargerThan1300 ? "90vw" : "60vw"}
                             >
                                 {notes}
                             </Box>
