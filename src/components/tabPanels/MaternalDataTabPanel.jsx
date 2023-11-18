@@ -1,21 +1,14 @@
 // module imports
-import { Grid, useColorModeValue } from '@chakra-ui/react';
-import React from 'react';
+// None
 
 // relative imports
 import MaternialRow from '../componentRows/MaternialRow';
-import { screenBackground } from '../../defaultStyle';
+import GridContainer from '../GridContainer';
 
 export default function MaternalDataTabPanel({ maternialData, maternialDataLoading, tabIndex }) {
-    const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
-
     return (
-        <Grid
-            templateRows='repeat(1, 1fr)'
-            templateColumns='repeat(4, 1fr)'
-            gap="5"
-            bg={_screenBackground}
-        >
+        <GridContainer>
+
             {maternialData && maternialData.length > 0 && maternialData.map((maternial) => {
                 return (
                     <MaternialRow
@@ -26,6 +19,6 @@ export default function MaternalDataTabPanel({ maternialData, maternialDataLoadi
                     />
                 );
             })}
-        </Grid>
+        </GridContainer>
     );
 }

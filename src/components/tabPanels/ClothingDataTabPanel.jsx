@@ -1,21 +1,13 @@
 // module imports
-import { Grid, useColorModeValue } from '@chakra-ui/react';
-import React from 'react';
+// none
 
 // relative imports
 import ClothingRow from '../componentRows/ClothingRow';
-import { screenBackground } from '../../defaultStyle';
+import GridContainer from '../GridContainer';
 
 export default function ClothingDataTabPanel({ clothingData, clothingDataLoaded, tabIndex }) {
-    const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
-
     return (
-        <Grid
-            templateRows='repeat(1, 1fr)'
-            templateColumns='repeat(4, 1fr)'
-            gap="5"
-            bg={_screenBackground}
-        >
+        <GridContainer>
             {clothingData && clothingData.map((clothing) => {
                 return (
                     <ClothingRow
@@ -26,6 +18,6 @@ export default function ClothingDataTabPanel({ clothingData, clothingDataLoaded,
                     />
                 );
             })}
-        </Grid>
+        </GridContainer>
     );
 }

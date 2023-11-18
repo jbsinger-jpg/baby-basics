@@ -1,21 +1,13 @@
 // module imports
-import { Grid, useColorModeValue } from '@chakra-ui/react';
-import React from 'react';
+// None
 
 // relative imports
 import FormulaRow from '../componentRows/FormulaRow';
-import { screenBackground } from '../../defaultStyle';
+import GridContainer from '../GridContainer';
 
 export default function FormulaDataTabPanel({ formulaData, formulaDataIsLoading, tabIndex }) {
-    const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
-
     return (
-        <Grid
-            templateRows='repeat(1, 1fr)'
-            templateColumns='repeat(4, 1fr)'
-            gap="5"
-            bg={_screenBackground}
-        >
+        <GridContainer>
             {formulaData && formulaData.length > 0 && formulaData.map((formula) => {
                 return (
                     <FormulaRow
@@ -26,6 +18,6 @@ export default function FormulaDataTabPanel({ formulaData, formulaDataIsLoading,
                     />
                 );
             })}
-        </Grid>
+        </GridContainer>
     );
 }

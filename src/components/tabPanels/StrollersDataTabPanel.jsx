@@ -1,21 +1,13 @@
 // module imports
-import { Grid, useColorModeValue } from '@chakra-ui/react';
-import React from 'react';
+// None
 
 // relative imports
 import StrollerRow from '../componentRows/StrollerRow';
-import { screenBackground } from '../../defaultStyle';
+import GridContainer from '../GridContainer';
 
 export default function StrollersDataTabPanel({ strollerData, strollerDataIsLoading, tabIndex }) {
-    const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
-
     return (
-        <Grid
-            templateRows='repeat(1, 1fr)'
-            templateColumns='repeat(4, 1fr)'
-            gap="5"
-            bg={_screenBackground}
-        >
+        <GridContainer>
             {strollerData && strollerData.length > 0 && strollerData.map((stroller, index) => {
                 return (
                     <StrollerRow
@@ -26,6 +18,6 @@ export default function StrollersDataTabPanel({ strollerData, strollerDataIsLoad
                     />
                 );
             })}
-        </Grid>
+        </GridContainer>
     );
 }

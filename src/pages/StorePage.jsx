@@ -1,5 +1,5 @@
 // module imports
-import { Box, Spinner, TabPanel, TabPanels, Tabs, useColorModeValue, useMediaQuery } from '@chakra-ui/react';
+import { Box, Spinner, TabPanel, TabPanels, Tabs, useColorModeValue } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 
 // relative imports
@@ -22,9 +22,6 @@ import SleepTabPanel from '../components/tabPanels/SleepTabPanel';
 import BathTabPanel from '../components/tabPanels/BathTabPanel';
 
 export default function StorePage() {
-    // hooks
-    const [isLargerThan768] = useMediaQuery("(min-width: 768px)");
-
     // firebase data
     const currentUser = auth.currentUser;
 
@@ -248,7 +245,6 @@ export default function StorePage() {
                         variant='enclosed'
                         index={tabIndex}
                         bg={_screenBackground}
-                        orientation={isLargerThan768 ? "horizontal" : "vertical"}
                         isFitted={true}
                         w="95vw"
                     >
