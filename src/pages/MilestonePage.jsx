@@ -15,7 +15,7 @@ import BabyProgressModal from '../components/modals/BabyProgressModal';
 import { childBirthOptions, childGenderOptions, childRelationshipOptions } from '../components/staticPageData/child-options';
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons';
 
-export default function MilestonePage() {
+export default function MilestonePage({ informationPageOption, setInformationPageOption }) {
     // card option props
     const [selectedAge, setSelectedAge] = useState("");
     const [selectedActivities, setSelectedActivities] = useState(promptOptions[0].activities);
@@ -282,6 +282,8 @@ export default function MilestonePage() {
                 childOptions={childOptions}
                 popoverVisible={popoverVisible}
                 setPopoverVisible={setPopoverVisible}
+                informationPageOption={informationPageOption}
+                setInformationPageOption={setInformationPageOption}
             />
             <HStack
                 alignItems="center"

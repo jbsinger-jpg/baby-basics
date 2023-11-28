@@ -9,8 +9,9 @@ import FabTemplate from './StandardFab';
 import FloatingActionButtonContainer from './FloatingActionButtonContainer';
 import MotionContainerFAB from '../animated/MotionContainerFAB';
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
+import PregnantWomanOutlinedIcon from '@mui/icons-material/PregnantWomanOutlined';
 
-export default function FloatingActionButtonsMaternalInfo() {
+export default function FloatingActionButtonsMaternalInfo({ informationPageOption, setInformationPageOption }) {
     const navigate = useNavigate();
     const handleGoToHome = () => {
         navigate("/");
@@ -19,12 +20,24 @@ export default function FloatingActionButtonsMaternalInfo() {
 
     return (
         <FloatingActionButtonContainer>
-            <MotionContainerFAB isPressed={buttonPressed} >
+            <MotionContainerFAB isPressed={buttonPressed}>
                 <ColorModeToggleButton />
                 <FabTemplate
                     label="Home"
                     onClick={handleGoToHome}
                     icon={<HomeIcon fontSize="large" />}
+                />
+                <FabTemplate
+                    onClick={() => {
+                        if (informationPageOption === "maternial") {
+                            setInformationPageOption("milestone");
+                        }
+                        else {
+                            setInformationPageOption("maternial");
+                        }
+                    }}
+                    icon={<PregnantWomanOutlinedIcon fontSize="large" />}
+                    label="Go to Milestone Page"
                 />
             </MotionContainerFAB>
             <FabTemplate

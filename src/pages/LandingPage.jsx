@@ -18,12 +18,12 @@ import FloatingActionButtonsUser from '../components/floatingActionButtons/Float
 import BabyPicturePage from './BabyPicturePage';
 import StyledSelect from '../components/StyledSelect';
 import ScreeningPage from './ScreeningPage';
-import FloatingActionButtonContainer from '../components/floatingActionButtons/FloatingActionButtonContainer';
-import ColorModeToggleButton from '../components/ColorModeToggleButton';
 import ChatPage from './ChatPage';
 import { auth } from '../firebaseConfig';
 import MissingDataMessage from '../components/MissingDataMessage';
-import { Spinner } from '@chakra-ui/react';
+import { Button, Spinner } from '@chakra-ui/react';
+import MaternalResourcesPage from './MaternalResourcesPage';
+import MilestonePage from './MilestonePage';
 
 export default function LandingPage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
@@ -39,6 +39,7 @@ export default function LandingPage() {
     ];
 
     const [socialPageOption, setSocialPageOption] = useState("chatWithPeeps");
+    const [informationPageOption, setInformationPageOption] = useState("maternial");
     const navigate = useNavigate();
 
     const informationPanelOptions = [
@@ -135,24 +136,18 @@ export default function LandingPage() {
                     <TabPanels>
                         {auth?.currentUser?.uid &&
                             <TabPanel>
-                                <VStack
-                                    alignItems="start"
-                                >
-                                    {informationPanelOptions && informationPanelOptions.map((panelOption, index) => {
-                                        return (
-                                            <FabTemplate
-                                                key={index}
-                                                height={informationCardHeight}
-                                                icon={panelOption.icon}
-                                                onClick={panelOption.handleClick}
-                                                label={panelOption.label}
-                                            />
-                                        );
-                                    })}
-                                </VStack>
-                                <FloatingActionButtonContainer>
-                                    <ColorModeToggleButton />
-                                </FloatingActionButtonContainer>
+                                {informationPageOption === "maternial" &&
+                                    <MaternalResourcesPage
+                                        informationPageOption={informationPageOption}
+                                        setInformationPageOption={setInformationPageOption}
+                                    />
+                                }
+                                {informationPageOption === "milestone" &&
+                                    <MilestonePage
+                                        informationPageOption={informationPageOption}
+                                        setInformationPageOption={setInformationPageOption}
+                                    />
+                                }
                             </TabPanel>
                         }
                         <TabPanel>

@@ -15,7 +15,7 @@ import { trimesterPhaseInformation } from '../components/staticPageData/baby-mat
 import { screenBackground } from '../defaultStyle';
 import { auth } from '../firebaseConfig';
 
-export default function MaternalResourcesPage() {
+export default function MaternalResourcesPage({ informationPageOption, setInformationPageOption }) {
   const [stage, setStage] = useState(trimesterPhaseInformation[0].stage);
 
   // recommendations
@@ -102,7 +102,7 @@ export default function MaternalResourcesPage() {
   };
 
   return (
-    <Box bg={_screenBackground} paddingTop="2" h={isLargerThan1300 || cardRotated ? "100vh" : "100%"}>
+    <Box bg={_screenBackground} paddingTop="2" h={isLargerThan1300 || cardRotated ? "90vh" : "100%"}>
       <HStack alignItems="start" w="100vw" paddingLeft="5" spacing="5" marginTop="5" paddingBottom="10">
         <AnimatedButton
           title={"Trimester 1"}
@@ -131,14 +131,12 @@ export default function MaternalResourcesPage() {
         />
       </HStack>
       <Box
-        flexWrap="wrap"
         justifyContent={!initialStage ? "center" : "space-between"}
         alignItems="center"
         display="flex"
         flexDirection={isLargerThan1300 || cardRotated ? "row" : "column"}
-        w="100vw"
-        px="2"
-
+        w="98vw"
+        gap={4}
       >
         {stage &&
           <IconButton
@@ -181,7 +179,7 @@ export default function MaternalResourcesPage() {
               cardButtonPressed={babyDevelopmentButtonPressed}
               setCardButtonPressed={setBabyDevelopmentButtonPressed}
               selectedCardData={selectedBabyDevelopment}
-              title={"Baby Development"}
+              title={"Development"}
             />
           </>
           :
@@ -204,6 +202,8 @@ export default function MaternalResourcesPage() {
       </Box>
       <FloatingActionButtonsMaternalInfo
         handleSearchPlacesDialogOpen={handleSearchPlacesDialogOpen}
+        informationPageOption={informationPageOption}
+        setInformationPageOption={setInformationPageOption}
       />
       <GoogleMapsModal
         searchPlaces={searchPlaces}

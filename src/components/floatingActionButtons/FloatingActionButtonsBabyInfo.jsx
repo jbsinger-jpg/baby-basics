@@ -14,8 +14,10 @@ import FloatingActionButtonContainer from './FloatingActionButtonContainer';
 import { useNavigate } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
 import MotionContainerFAB from '../animated/MotionContainerFAB';
+import BabyChangingStationIcon from '@mui/icons-material/BabyChangingStation';
 
-export default function FloatingActionButtonsBabyInfo({ setProgressModalVisible, selectedAgeRange, progressConfirmed, setChildDrawerVisible, childOption, setChildOptions, setPopoverVisible, popoverVisible }) {
+
+export default function FloatingActionButtonsBabyInfo({ setProgressModalVisible, selectedAgeRange, progressConfirmed, setChildDrawerVisible, childOption, setChildOptions, setPopoverVisible, popoverVisible, informationPageOption, setInformationPageOption }) {
     const [milestones, setMilestones] = useState([]);
     const [communications, setCommunications] = useState([]);
     const [sensory, setSensory] = useState([]);
@@ -259,6 +261,18 @@ export default function FloatingActionButtonsBabyInfo({ setProgressModalVisible,
                     label="Add Child"
                     onClick={handleDrawerVisible}
                     icon={<AddIcon fontSize="large" />}
+                />
+                <FabTemplate
+                    onClick={() => {
+                        if (informationPageOption === "maternial") {
+                            setInformationPageOption("milestone");
+                        }
+                        else {
+                            setInformationPageOption("maternial");
+                        }
+                    }}
+                    icon={<BabyChangingStationIcon fontSize="large" />}
+                    label="Go to Maternal Page"
                 />
                 {popoverVisible &&
                     <>
