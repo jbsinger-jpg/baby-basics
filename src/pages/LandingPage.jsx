@@ -24,6 +24,7 @@ import MissingDataMessage from '../components/MissingDataMessage';
 import { Button, Spinner } from '@chakra-ui/react';
 import MaternalResourcesPage from './MaternalResourcesPage';
 import MilestonePage from './MilestonePage';
+import MotionContainer from '../components/animated/MotionContainer';
 
 export default function LandingPage() {
     const _screenBackground = useColorModeValue(screenBackground.light, screenBackground.dark);
@@ -41,20 +42,6 @@ export default function LandingPage() {
     const [socialPageOption, setSocialPageOption] = useState("chatWithPeeps");
     const [informationPageOption, setInformationPageOption] = useState("maternial");
     const navigate = useNavigate();
-
-    const informationPanelOptions = [
-        {
-            handleClick: () => navigate("/maternal"),
-            label: "Go to Maternal Page",
-            icon: <PregnantWomanOutlinedIcon fontSize="large" />
-        },
-        {
-            handleClick: () => navigate("/milestone"),
-            label: "Go to Milestone Page",
-            icon: <BabyChangingStationIcon fontSize="large" />
-        }
-    ];
-    const informationCardHeight = `${(100 / informationPanelOptions.length) - 5}vh`;
     const userPanelOptions = [
         {
             handleClick: () => navigate("/events"),
@@ -137,16 +124,20 @@ export default function LandingPage() {
                         {auth?.currentUser?.uid &&
                             <TabPanel>
                                 {informationPageOption === "maternial" &&
-                                    <MaternalResourcesPage
-                                        informationPageOption={informationPageOption}
-                                        setInformationPageOption={setInformationPageOption}
-                                    />
+                                    <MotionContainer>
+                                        <MaternalResourcesPage
+                                            informationPageOption={informationPageOption}
+                                            setInformationPageOption={setInformationPageOption}
+                                        />
+                                    </MotionContainer>
                                 }
                                 {informationPageOption === "milestone" &&
-                                    <MilestonePage
-                                        informationPageOption={informationPageOption}
-                                        setInformationPageOption={setInformationPageOption}
-                                    />
+                                    <MotionContainer>
+                                        <MilestonePage
+                                            informationPageOption={informationPageOption}
+                                            setInformationPageOption={setInformationPageOption}
+                                        />
+                                    </MotionContainer>
                                 }
                             </TabPanel>
                         }
