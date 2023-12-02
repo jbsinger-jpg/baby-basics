@@ -226,7 +226,7 @@ export default function PostPartumPage() {
                                         <Card>
                                             <CardBody>
                                                 <Grid
-                                                    templateColumns='repeat(2, 1fr)'
+                                                    templateColumns='repeat(1, 1fr)'
                                                     gap="0.5"
                                                 >
                                                     <GridItem
