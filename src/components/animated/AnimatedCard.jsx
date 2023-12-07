@@ -1,6 +1,7 @@
 // module imports
-import { Box, Button, ButtonGroup, Card, CardBody, CardFooter, Checkbox, CheckboxGroup, HStack, Heading, Icon, Link, ListItem, Stack, Text, Tooltip, UnorderedList, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, Card, CardBody, CardFooter, Checkbox, CheckboxGroup, HStack, Heading, Icon, Image, Link, ListItem, Stack, Text, Tooltip, UnorderedList, VStack, useColorModeValue } from '@chakra-ui/react';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
 
@@ -118,14 +119,39 @@ export default function AnimatedCard({
                                             onChange={(event) => setSelectedVideo(event.target.value)}
                                             options={videos}
                                         />
-                                        <iframe
+                                        {selectedVideo ? <iframe
                                             height="197px"
                                             width="350px"
-                                            src={selectedVideo || require('../../devbackground.png')}
+                                            src={selectedVideo}
                                             title="YouTube video player"
                                             allowFullScreen
                                             style={{ borderRadius: "5%" }}
                                         />
+                                            :
+                                            <Box
+                                                w="100%"
+                                                h="100%"
+                                                alignItems="center"
+                                                justifyContent="center"
+                                                display="flex"
+                                            >
+                                                <Box
+                                                    bg={"blackAlpha.200"}
+                                                    w="40%"
+                                                    h="157px"
+                                                    borderRadius="20%"
+                                                    alignItems="center"
+                                                    justifyContent="center"
+                                                    display="flex"
+                                                >
+                                                    <Icon
+                                                        as={SupervisedUserCircleIcon}
+                                                        w={20}
+                                                        h={20}
+                                                    />
+                                                </Box>
+                                            </Box>
+                                        }
                                     </>
                                     :
                                     <MotionIcon
