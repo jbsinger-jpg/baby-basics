@@ -1,5 +1,5 @@
 // module imports
-import { Box, Button, ButtonGroup, Card, CardBody, CardFooter, Checkbox, CheckboxGroup, HStack, Heading, Icon, Image, Link, ListItem, Stack, Text, Tooltip, UnorderedList, VStack, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, ButtonGroup, Card, CardBody, CardFooter, Checkbox, CheckboxGroup, HStack, Heading, Icon, Link, ListItem, Stack, Text, Tooltip, UnorderedList, VStack, useColorModeValue } from '@chakra-ui/react';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import { motion } from 'framer-motion';
