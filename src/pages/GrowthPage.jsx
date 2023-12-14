@@ -10,6 +10,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import MotionButton from '../components/animated/MotionButton';
 import MotionContainer from '../components/animated/MotionContainer';
 import { auth, firestore } from '../firebaseConfig';
+import growthChartImage from '../../src/components/staticPageData/growth-chart-for-girls.jpg';
 
 export default function GrowthPage({ childOptions }) {
     const CHART_ENUMS = {
@@ -22,7 +23,7 @@ export default function GrowthPage({ childOptions }) {
     const [selectedWeight, setSelectedWeight] = useState(1);
     const [headCircumference, setHeadCircumference] = useState(1);
     const [graphDialogIsOpen, setGraphDialogIsOpen] = useState(false);
-    const [growthChartRelativePath, setGrowthChartRelativePath] = useState(require("../../src/components/staticPageData/growth-chart-for-girls.jpg"));
+    const [growthChartRelativePath, setGrowthChartRelativePath] = useState(growthChartImage);
     const [allGraphPointsIsVisible, setAllGraphPointsIsVisible] = useState(true);
 
     const [weightButtonIsLoading, setWeightButtonIsLoading] = useState(false);
@@ -413,11 +414,11 @@ export default function GrowthPage({ childOptions }) {
     };
 
     const handleChangeGrowthChart = () => {
-        if (growthChartRelativePath === require("../../src/components/staticPageData/growth-chart-for-boys.jpg")) {
-            setGrowthChartRelativePath(require("../../src/components/staticPageData/growth-chart-for-girls.jpg"));
+        if (growthChartRelativePath === growthChartImage) {
+            setGrowthChartRelativePath(growthChartImage);
         }
         else {
-            setGrowthChartRelativePath(require("../../src/components/staticPageData/growth-chart-for-boys.jpg"));
+            setGrowthChartRelativePath(growthChartImage);
         }
     };
 

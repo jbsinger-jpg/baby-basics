@@ -1,4 +1,4 @@
-const Filter = require('bad-words');
+import Filter from 'bad-words';
 const wordFilter = new Filter();
 const badwords = [
     "4r5e", "5h1t", "5hit", "a55", "anal", "anus", "ar5e",

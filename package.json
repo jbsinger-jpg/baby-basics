@@ -12,6 +12,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@vitejs/plugin-react": "^4.2.1",
     "bad-words": "^3.0.4",
     "firebase": "^9.17.2",
     "framer-motion": "^10.2.4",
@@ -20,18 +21,19 @@
     "react-dom": "^18.2.0",
     "react-firebase-hooks": "^5.1.1",
     "react-router-dom": "^6.8.2",
-    "react-scripts": "^5.0.1",
     "react-time-picker": "^6.2.0",
     "stripe": "^11.14.0",
     "validator": "^13.9.0",
     "victory": "^36.6.11",
+    "vite": "^5.0.9",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "vite",
+    "start": "vite",
+    "build": "vite build",
+    "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
   },
   "eslintConfig": {
     "extends": [
