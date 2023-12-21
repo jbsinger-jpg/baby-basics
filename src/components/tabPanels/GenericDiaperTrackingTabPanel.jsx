@@ -1,5 +1,5 @@
 import { CheckCircleIcon, ChevronDownIcon, ChevronUpIcon, CloseIcon, InfoOutlineIcon, NotAllowedIcon } from '@chakra-ui/icons';
-import { Box, Card, CardBody, CardHeader, Collapse, FormLabel, GridItem, HStack, Heading, IconButton, Text, Tooltip, VStack, useColorModeValue, useMediaQuery } from '@chakra-ui/react';
+import { Box, Card, CardBody, CardHeader, Collapse, FormLabel, HStack, Heading, IconButton, Text, Tooltip, VStack, useColorModeValue, useMediaQuery } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { STATUS } from '../staticPageData/baby-color-consistency-info';
 import { cardBackground } from '../../defaultStyle';
