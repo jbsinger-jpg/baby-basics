@@ -1,6 +1,7 @@
 import os
 import pathlib
 
+import config
 import google.auth.transport.requests
 from flask import (
     Flask,
@@ -12,8 +13,6 @@ from flask import (
 )
 from google.oauth2 import id_token
 from google_auth_oauthlib.flow import Flow
-
-import config
 
 app = Flask("Google Login App")
 
@@ -68,7 +67,7 @@ def callback():
     credentials = flow.credentials
     token_request = google.auth.transport.requests.Request()
 
-    id_info = id_token.verify_oauth2_token(
+    id_info: dict = id_token.verify_oauth2_token(
         id_token=credentials._id_token,
         request=token_request,
         audience=config.toml['secret']['client_id']
@@ -76,6 +75,8 @@ def callback():
 
     session["google_id"] = id_info.get("sub")
     session["name"] = id_info.get("name")
+    session["picture"] = id_info.get("picture")
+    print("id_info:" + str(id_info))
 
     return redirect("/protected_area")
 
@@ -95,7 +96,8 @@ def index():
 def protected_area():
     return render_template("protected.html", **{
         "session_name":
-        session['name']
+        session['name'],
+        "picture": session["picture"]
     })
 
 

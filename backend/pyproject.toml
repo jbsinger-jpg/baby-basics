@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "Baby-Basics-Backend"
+version = "2024.06.01"
+dependencies = [
+    "google-auth",
+    "google-auth-oauthlib"
+]
+requires-python = ">= 3.11"
+authors = [{ name = "Jacob Singer", email = "jacobbradleysinger@gmail.com" }]
+description = "Sentiment Analysis Model"
+readme = "README.md"
+classifiers = ["Programming Language :: Python"]
+
+
+[tool.setuptools]
+packages = ['config', 'templates']
