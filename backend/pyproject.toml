@@ -7,9 +7,10 @@ name = "Baby-Basics-Backend"
 version = "2024.06.01"
 dependencies = [
     "google-auth",
-    "google-auth-oauthlib"
+    "google-auth-oauthlib",
+    "pyodbc"
 ]
-requires-python = ">= 3.11"
+requires-python = ">= 3.10"
 authors = [{ name = "Jacob Singer", email = "jacobbradleysinger@gmail.com" }]
 description = "Sentiment Analysis Model"
 readme = "README.md"
