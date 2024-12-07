@@ -1,5 +1,5 @@
 import pytest
-from schemas import Bath
+from schemas import Bath, CarSeat, Clothing
 
 
 @pytest.fixture
@@ -27,3 +27,19 @@ def bath_results() -> list[Bath]:
     })
 
     return [bath1, bath2]
+
+
+@pytest.fixture
+def car_seat_results() -> list[CarSeat]:
+    cs1 = CarSeat()
+    cs2 = CarSeat()
+
+    return [cs1, cs2]
+
+
+@pytest.fixture
+def clothing_search_results() -> list[Clothing]:
+    cl1 = Clothing()
+    cl2 = Clothing()
+
+    return [cl1, cl2]

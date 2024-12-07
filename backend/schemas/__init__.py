@@ -1,1 +1,1 @@
-from schemas.schemas import Bath
+from schemas.schemas import Bath, CarSeat, Clothing
