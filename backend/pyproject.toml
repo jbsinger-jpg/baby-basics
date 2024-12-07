@@ -8,7 +8,9 @@ version = "2024.06.01"
 dependencies = [
     "google-auth",
     "google-auth-oauthlib",
-    "pyodbc"
+    "pyodbc",
+    "pytest",
+    "pydantic"
 ]
 requires-python = ">= 3.10"
 authors = [{ name = "Jacob Singer", email = "jacobbradleysinger@gmail.com" }]
