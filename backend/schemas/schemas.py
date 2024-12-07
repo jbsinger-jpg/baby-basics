@@ -37,3 +37,26 @@ class Clothing(BaseModel):
     query_sizes: list[str]
     title: str
     type: str
+
+
+class Diaper(BaseModel):
+    affiliateLink: str
+    brand: str
+    description: str
+    id: int
+    image: str
+    price: float
+    size: int
+    title: str
+
+
+class Food(BaseModel):
+    affiliateLink: str
+    brand: str
+    description: str
+    id: int
+    image: str
+    price: float
+    stage: int
+    title: str
+    type: str
