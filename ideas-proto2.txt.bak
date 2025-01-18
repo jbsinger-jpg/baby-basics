@@ -1,0 +1,51 @@
+<VStack justifyContent="start" w="30vw" spacing="4" h="60vh">
+                    <Heading textDecoration="underline">Feeding</Heading>
+                    <Card w="400px" h="450px" bg={_cardBackground}>
+                        <CardBody>
+                            <Stack mt='6' spacing='3' alignItems="center">
+                                {!flippedFeedingCard ?
+                                    <MotionIcon
+                                        as={LocalCafeIcon}
+                                        borderRadius='lg'
+                                        initial={feedingButtonPressed ? { scale: 0, rotate: 180 } : { rotate: 0, scale: 1 }}
+                                        animate={{ rotate: 0, scale: 1 }}
+                                        onAnimationComplete={() => setFeedingButtonPressed(false)}
+                                        transition={{
+                                            type: "spring",
+                                            stiffness: 260,
+                                            damping: 20
+                                        }}
+                                        style={{ width: 300, height: 300, resizeMode: 'cover' }}
+                                    />
+                                    :
+                                    <>
+                                        <Heading size='md'> Key Points </Heading>
+                                        <MotionBox
+                                            initial={feedingButtonPressed ? { scale: 0 } : { scale: 1 }}
+                                            animate={{ scale: 1 }}
+                                            onAnimationComplete={() => setFeedingButtonPressed(false)}
+                                            overflowY="auto" w="100%" h="260px" alignItems="start" flexDir="column" display="flex">
+                                            <UnorderedList spacing="2" paddingLeft="2">
+                                                {selectedFeedingMilestones.length > 0 && selectedFeedingMilestones.map((milestone, index) => {
+                                                    return (<ListItem key={index}>{milestone}</ListItem>);
+                                                })}
+                                            </UnorderedList>
+                                        </MotionBox>
+                                    </>
+                                }
+                            </Stack>
+                        </CardBody>
+                        <CardFooter>
+                            <ButtonGroup spacing='2' justifyContent={"space-between"}>
+                                <Button
+                                    leftIcon={<RefreshIcon />}
+                                    onClick={() => {
+                                        setFlippedFeedingCard(!flippedFeedingCard);
+                                        setFeedingButtonPressed(true);
+                                    }}>
+                                    flip
+                                </Button>
+                            </ButtonGroup>
+                        </CardFooter>
+                    </Card>
+                </VStack>
