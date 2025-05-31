@@ -5,7 +5,7 @@
   "dependencies": {
     "@blacklab/react-image-magnify": "^4.1.1",
     "@chakra-ui/icons": "^2.0.17",
-    "@chakra-ui/react": "^2.5.1",
+    "@chakra-ui/react": "^3.19.1",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@mui/icons-material": "^5.11.11",
