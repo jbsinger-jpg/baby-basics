@@ -1,4 +1,4 @@
-from python:3.12-bookworm
+from python:3.13-bookworm
 
 run mkdir /src
 workdir /src
