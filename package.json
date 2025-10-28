@@ -23,7 +23,7 @@
     "react-router-dom": "^6.8.2",
     "react-time-picker": "^6.2.0",
     "stripe": "^11.14.0",
-    "validator": "^13.9.0",
+    "validator": "^13.15.20",
     "victory": "^36.6.11",
     "vite": "^5.0.9",
     "web-vitals": "^2.1.4"
